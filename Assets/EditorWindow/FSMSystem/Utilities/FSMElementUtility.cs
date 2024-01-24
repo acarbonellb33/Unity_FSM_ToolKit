@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 
@@ -16,6 +17,33 @@ public static class FSMElementUtility
             textField.RegisterValueChangedCallback(onValueChanged);
         }
         return textField;
+    }
+    
+    public static PopupField<string> CreatePopupField(List<string> choices, int index = 0, EventCallback<ChangeEvent<string>> onValueChanged = null)
+    {
+        PopupField<string> popupField = new PopupField<string>()
+        {
+            choices = choices,
+            index = index
+        };
+        if (onValueChanged != null)
+        {
+            popupField.RegisterValueChangedCallback(onValueChanged);
+        }
+        return popupField;
+    }
+
+    public static Label CreateLabel(string text = null, EventCallback<ChangeEvent<string>> onValueChanged = null)
+    {
+        Label label = new Label()
+        {
+            text = text
+        };
+        if (onValueChanged != null)
+        {
+            label.RegisterValueChangedCallback(onValueChanged);
+        }
+        return label;
     }
 
     public static TextField CreateTextArea(string value = null, string label = null,

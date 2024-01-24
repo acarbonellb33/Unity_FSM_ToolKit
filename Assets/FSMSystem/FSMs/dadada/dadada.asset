@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7b1ca387027062478ec3e0de58f6412, type: 3}
-  m_Name: New FSM
+  m_Name: dadada
   m_EditorClassIdentifier: 
-  <FileName>k__BackingField: New FSM
+  <FileName>k__BackingField: dadada
   <GroupedNodes>k__BackingField:
     list: []
   <UngroupedNodes>k__BackingField:
-  - {fileID: 11400000, guid: 97da0802f4502cf4aaa3c543fb7abadf, type: 2}
-  - {fileID: 11400000, guid: 5e879f53f24a0c94f8bf1197fecd6bc7, type: 2}
+  - {fileID: 11400000, guid: f7cffadc6cb388d42a64c2139df258f7, type: 2}

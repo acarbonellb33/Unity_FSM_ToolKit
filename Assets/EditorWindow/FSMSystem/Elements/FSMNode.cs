@@ -16,15 +16,19 @@ public class FSMNode : Node
     public FSMGroup Group { get; set; }
     
     private FSMGraphView _graphView;
+    
+    private int _popupIndex;
+    private VisualElement _tempElement;
 
-    public virtual void Initialize(FSMGraphView graphView, Vector2 postition)
+    public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
         Id = Guid.NewGuid().ToString();
-        StateName = "New State";
+        StateName = nodeName;
         Choices = new List<FSMConnectionSaveData>();
         _graphView = graphView;
         SetPosition(new Rect(postition, Vector2.zero));
-        
+        _tempElement = null;
+        _popupIndex = 0;
         AddManipulators();
     }
     
@@ -73,16 +77,82 @@ public class FSMNode : Node
         foldout.Add(textField);*/
     
         ObjectField objectField = new ObjectField("Enemy State");
-        objectField.objectType = typeof(ScriptableObject);
-        
-        List<string> choices = new List<string>() {"Patrol", "Idle", "Attack"};
-        PopupField<string> popupField = new PopupField<string>(choices, 0);
+        objectField.objectType = typeof(AttackState);
 
-        foldout.Add(objectField);
+        List<string> choices = new List<string>() {"Patrol", "Attack", "Idle"};
+        List<EnemyState> scriptableObjects = new List<EnemyState>() {ScriptableObject.CreateInstance<PatrolState>(), ScriptableObject.CreateInstance<AttackState>()};
+
+        PopupField<string> popupField = FSMElementUtility.CreatePopupField(choices, _popupIndex, callback =>
+        {
+            if (_popupIndex != choices.IndexOf(callback.newValue))
+            {
+                _popupIndex = choices.IndexOf(callback.newValue);
+                _tempElement.Clear();
+                CreateStateAttribute(scriptableObjects[_popupIndex].InspectVariables(), foldout);
+            }
+        });
+        foldout.Add(popupField);
         customDataContainer.Add(foldout);
+        
+        CreateStateAttribute(scriptableObjects[_popupIndex].InspectVariables(), foldout);
+        
         extensionContainer.Add(customDataContainer);
 
         RefreshExpandedState();
+    }
+
+    private void CreateStateAttribute(List<string> attributes, Foldout foldout)
+    {
+        VisualElement stateAttributeContainer = new VisualElement();
+        stateAttributeContainer.AddToClassList("fsm-node_state-attribute-container");
+
+        foreach(string attribute in attributes)
+        {
+            string[] result = attribute.Split(',');
+            
+            Label stateAttributeLabel = new Label(result[0]);
+            stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
+            stateAttributeContainer.Add(stateAttributeLabel);
+
+            switch (result[1])
+            {
+                case "System.Single":
+                    FloatField floatField = new FloatField()
+                    {
+                        value = float.Parse(result[2])
+                    };
+                    floatField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(floatField);
+                    break;
+                case "System.Int32":
+                    IntegerField integerField = new IntegerField()
+                    {
+                        value = int.Parse(result[2])
+                    };
+                    integerField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(integerField);
+                    break;
+                case "System.Boolean":
+                    Toggle toggle = new Toggle()
+                    {
+                        value = bool.Parse(result[2])
+                    };
+                    toggle.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(toggle);
+                    break;
+                case "System.String":
+                    TextField textField = new TextField()
+                    {
+                        value = result[2]
+                    };
+                    textField.AddToClassList("fsm-node_state-attribute-field");
+                    break;
+                default:
+                    break;
+            }
+        }
+        _tempElement = stateAttributeContainer;
+        foldout.Add(stateAttributeContainer);
     }
 
     private void AddManipulators()

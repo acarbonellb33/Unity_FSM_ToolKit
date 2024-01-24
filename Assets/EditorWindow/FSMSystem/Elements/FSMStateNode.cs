@@ -6,9 +6,9 @@ using UnityEngine.UIElements;
 
 public class FSMStateNode : FSMNode
 {
-    public override void Initialize(FSMGraphView graphView,Vector2 postition)
+    public override void Initialize(string nodeName, FSMGraphView graphView,Vector2 postition)
     {
-        base.Initialize(graphView, postition);
+        base.Initialize(nodeName, graphView, postition);
         DialogueType = FSMDialogueType.State;
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
@@ -25,7 +25,7 @@ public class FSMStateNode : FSMNode
     {
         base.Draw();
         
-        Button addChoiceButton = FSMElementUtility.CreateButton("Add Transition", () =>
+        /*Button addChoiceButton = FSMElementUtility.CreateButton("Add Transition", () =>
         {
             FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
             {
@@ -45,6 +45,18 @@ public class FSMStateNode : FSMNode
             Port outputPort = CreateTransitionPort(choice);
             outputContainer.Add(outputPort);
         }
+        RefreshExpandedState();*/
+        
+        
+        foreach (FSMConnectionSaveData connection in Choices)
+        {
+            Port connectionPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output, Port.Capacity.Multi);
+
+            connectionPort.userData = connection;
+
+            outputContainer.Add(connectionPort);
+        }
+        
         RefreshExpandedState();
     }
 

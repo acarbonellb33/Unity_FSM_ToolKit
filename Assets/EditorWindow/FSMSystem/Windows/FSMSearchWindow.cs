@@ -21,18 +21,18 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
             new SearchTreeGroupEntry(new GUIContent("Create Node")),
             new SearchTreeEntry(new GUIContent("State Node", _indentationIcon))
             {
-                level = 1,
-                userData = FSMDialogueType.State
+                userData = FSMDialogueType.State,
+                level = 1
             },
             new SearchTreeEntry(new GUIContent("Transition Node", _indentationIcon))
             {
-                level = 1,
-                userData = FSMDialogueType.Transition
+                userData = FSMDialogueType.Transition,
+                level = 1
             },
             new SearchTreeEntry(new GUIContent("Create Group", _indentationIcon))
             {
-                level = 1,
-                userData = new Group()
+                userData = new Group(),
+                level = 1
             }
         };
         return tree;
@@ -44,11 +44,11 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
         switch (searchTreeEntry.userData)
         {
             case FSMDialogueType.State:
-                FSMStateNode stateNode = _graphView.CreateState(localMousePosition);
+                FSMStateNode stateNode = (FSMStateNode) _graphView.CreateNode("StateName",localMousePosition, FSMDialogueType.State);
                 _graphView.AddElement(stateNode);
                 return true;
             case FSMDialogueType.Transition:
-                FSMTransitionNode transitionNode = _graphView.CreateTransition(localMousePosition);
+                FSMTransitionNode transitionNode = (FSMTransitionNode) _graphView.CreateNode("TransitionName",localMousePosition, FSMDialogueType.Transition);
                 _graphView.AddElement(transitionNode);
                 return true;
             case Group _:

@@ -11,6 +11,8 @@ public class FSMGraphView : GraphView
     private FSMSearchWindow _searchWindow;
     private FSMEditorWindow _window;
     
+    private MiniMap _miniMap;
+    
     private SerializableDictionary<string, FSMNodeErrorData> _ungroupedNodes;
     private SerializableDictionary<string, FSMGroupErrorData> _groups;
     private SerializableDictionary<Group, SerializableDictionary<string, FSMNodeErrorData>> _groupedNodes;
@@ -43,15 +45,16 @@ public class FSMGraphView : GraphView
         _groupedNodes = new SerializableDictionary<Group, SerializableDictionary<string, FSMNodeErrorData>>();
         AddManipulators();
         AddSearchWindow();
+        AddMiniMap();
         AddGridBackground();
         OnElementsDeleted();
         OnGroupElementsAdded();
         OnGroupElementsRemoved();
         OnGroupRenamed();
         OnGraphViewChanged();
-        Debug.Log("FSMGraphView constructor");
-        
+
         AddStyles();
+        AddMiniMapStyles();
     }
     
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -68,14 +71,30 @@ public class FSMGraphView : GraphView
         return compatiblePorts;
     }
     
-    public FSMStateNode CreateState(Vector2 position)
+    public FSMNode CreateNode(string nodeName, Vector2 position, FSMDialogueType dialogueType, bool shouldDraw = true)
     {
-        FSMStateNode node = new FSMStateNode();
+        Type nodeType = Type.GetType($"FSM{dialogueType}Node");
+        FSMNode node = (FSMNode) Activator.CreateInstance(nodeType);
+        
+        node.Initialize(nodeName, this, position);
+
+        if (shouldDraw)
+        {
+            node.Draw();
+        }
+        ;
+        AddUngroupedNode(node);
+        return node;
+    }
+    
+    /*public FSMTransitionNode CreateTransition(Vector2 position)
+    {
+        FSMTransitionNode node = new FSMTransitionNode();
         node.Initialize(this, position);
         node.Draw();
         AddUngroupedNode(node);
         return node;
-    }
+    }*/
 
     public FSMGroup CreateGroup(string title, Vector2 localMousePosition)
     {
@@ -93,16 +112,7 @@ public class FSMGraphView : GraphView
         }
         return group;
     }
-    
-    public FSMTransitionNode CreateTransition(Vector2 position)
-    {
-        FSMTransitionNode node = new FSMTransitionNode();
-        node.Initialize(this, position);
-        node.Draw();
-        AddUngroupedNode(node);
-        return node;
-    }
-    
+
     public void AddUngroupedNode(FSMNode node)
     {
         string nodeName = node.StateName;
@@ -388,6 +398,17 @@ public class FSMGraphView : GraphView
         }
     }
     
+    private void AddMiniMap()
+    {
+        _miniMap = new MiniMap()
+        {
+            anchored = true
+        };
+        _miniMap.SetPosition(new Rect(10, 45, 200, 140));
+        Add(_miniMap);
+        
+        _miniMap.visible = false;
+    }
     
     private void AddGridBackground()
     {
@@ -399,6 +420,18 @@ public class FSMGraphView : GraphView
     private void AddStyles()
     {
         this.AddStyleSheets("FSMSystem/FSMGraphViewStyle.uss","FSMSystem/FSMNodeStyle.uss");
+    }
+    
+    private void AddMiniMapStyles()
+    {
+        StyleColor backgroundColor = new StyleColor(new Color32(29, 29, 30, 255));
+        StyleColor borderColor = new StyleColor(new Color32(51, 51, 51, 255));
+        
+        _miniMap.style.backgroundColor = backgroundColor;
+        _miniMap.style.borderBottomColor = borderColor;
+        _miniMap.style.borderLeftColor = borderColor;
+        _miniMap.style.borderRightColor = borderColor;
+        _miniMap.style.borderTopColor = borderColor;
     }
     
     private void AddManipulators()
@@ -435,7 +468,7 @@ public class FSMGraphView : GraphView
     private IManipulator CreateNodeContextualMenu()
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-        menuEvent => menuEvent.menu.AppendAction("Create State", menuActionEvent => AddElement(CreateState(GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition)))));
+        menuEvent => menuEvent.menu.AppendAction("Create State", menuActionEvent => AddElement(CreateNode("StateName",GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.State))));
         
         return contextualMenuManipulator;
     }
@@ -443,7 +476,7 @@ public class FSMGraphView : GraphView
     private IManipulator CreateTransitionNodeMenu()
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-            menuEvent => menuEvent.menu.AppendAction("Create Transition", menuActionEvent => AddElement(CreateTransition(GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition)))));
+            menuEvent => menuEvent.menu.AppendAction("Create Transition", menuActionEvent => AddElement(CreateNode("TransitionName",GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.Transition))));
         
         return contextualMenuManipulator;
     }
@@ -457,5 +490,20 @@ public class FSMGraphView : GraphView
         }
         Vector2 localMousePosition = contentViewContainer.WorldToLocal(worldMousePosition);
         return localMousePosition;
+    }
+
+    public void ClearGraph()
+    {
+        graphElements.ForEach(graphElement => RemoveElement(graphElement));
+        _groups.Clear();
+        _groupedNodes.Clear();
+        _ungroupedNodes.Clear();
+        
+        repeatedNameCount = 0;
+    }
+
+    public void ToggleMiniMap()
+    {
+        _miniMap.visible = !_miniMap.visible;
     }
 }

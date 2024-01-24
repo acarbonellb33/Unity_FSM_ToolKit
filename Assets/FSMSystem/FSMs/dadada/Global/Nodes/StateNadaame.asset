@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: t
+  m_Name: StateNadaame
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: t
+  <NodeName>k__BackingField: StateNadaame
   <Text>k__BackingField: Text
   <Connections>k__BackingField:
-  - <Text>k__BackingField: 
-    <NextNode>k__BackingField: {fileID: 11400000, guid: fb7057e1f86b69b4b83e222977770237, type: 2}
-  <NodeType>k__BackingField: 1
+  - <Text>k__BackingField: New Transition
+    <NextNode>k__BackingField: {fileID: 0}
+  <NodeType>k__BackingField: 0
   <IsStartingNode>k__BackingField: 0

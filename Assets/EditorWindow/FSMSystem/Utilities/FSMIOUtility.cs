@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public static class FSMIOUtility
@@ -16,6 +17,9 @@ public static class FSMIOUtility
 
     private static Dictionary<string, FSMNodeGroupSO> _createdNodeGroups;
     private static Dictionary<string, FSMNodeSO> _createdNodes;
+    
+    private static Dictionary<string, FSMGroup> _loadedGroups;
+    private static Dictionary<string, FSMNode> _loadedNodes;
 
     public static void Initialize(string graphName, FSMGraphView fsmGraphView)
     {
@@ -28,8 +32,10 @@ public static class FSMIOUtility
         
         _createdNodeGroups = new Dictionary<string, FSMNodeGroupSO>();
         _createdNodes = new Dictionary<string, FSMNodeSO>();
+        _loadedGroups = new Dictionary<string, FSMGroup>();
+        _loadedNodes = new Dictionary<string, FSMNode>();
     }
-    
+
     #region SaveMethods
     public static void Save()
     {
@@ -128,17 +134,8 @@ public static class FSMIOUtility
     }
     private static void SaveNodeToGraph(FSMNode node, FSMGraphSaveData graphSaveData)
     {
-        List<FSMConnectionSaveData> connections = new List<FSMConnectionSaveData>();
-        foreach(FSMConnectionSaveData connection in node.Choices)
-        {
-            FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
-            {
-                //for adding all my custom values in each node
-                NodeId = connection.NodeId,
-            };
-            connections.Add(connectionSaveData);
-        }
-        
+        List<FSMConnectionSaveData> connections = CloneNodeConnections(node.Choices);
+
         FSMNodeSaveData nodeSaveData = new FSMNodeSaveData()
         {
             Id = node.Id,
@@ -189,22 +186,16 @@ public static class FSMIOUtility
     }
     private static void UpdateNodeConnections()
     {
-        Debug.Log(_nodes.Count);
         foreach(FSMNode node in _nodes)
         {
-            Debug.Log("a");
             FSMNodeSO nodeSelected = _createdNodes[node.Id];
             for(int index = 0; index < node.Choices.Count; index++)
             {
-                Debug.Log("b");
                 FSMConnectionSaveData connection = node.Choices[index];
                 if(string.IsNullOrEmpty(connection.NodeId))
                 {
-                    Debug.Log("c");
                     continue;
                 }
-                Debug.Log("d");
-                Debug.Log(_createdNodes[connection.NodeId]);
                 nodeSelected.Connections[index].NextNode = _createdNodes[connection.NodeId];
                 SaveAsset(nodeSelected);
             }
@@ -247,6 +238,88 @@ public static class FSMIOUtility
     
     #endregion
 
+    #region LoadMethods
+
+    public static void Load()
+    {
+        FSMGraphSaveData graphSaveData = LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs", _graphName);
+        if (graphSaveData == null)
+        {
+            EditorUtility.DisplayDialog(
+                "Error loading the graph", 
+                "The file at the following path could not be found:\n\n" +
+                $"Assets/EditorWindow/FSMSystem/Graphs/{_graphName}\n\n",
+                $"Ok");
+            return;
+        }
+        FSMEditorWindow.UpdateFileName(graphSaveData.FileName);
+        LoadGroups(graphSaveData.Groups);
+        LoadNodes(graphSaveData.Nodes);
+        LoadConnections();
+    }
+    private static void LoadGroups(List<FSMGroupSaveData> groups)
+    {
+        foreach(FSMGroupSaveData groupData in groups)
+        {
+            FSMGroup group = _graphView.CreateGroup(groupData.Name, groupData.Position);
+            group.Id = groupData.Id;
+            _loadedGroups.Add(group.Id, group);
+        }
+    }
+    private static void LoadNodes(List<FSMNodeSaveData> nodes)
+    {
+        foreach(FSMNodeSaveData nodeData in nodes)
+        {
+            List<FSMConnectionSaveData> connections = CloneNodeConnections(nodeData.Connections);
+
+            FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.DialogueType, false);
+            node.Id = nodeData.Id;
+            node.Choices = connections;
+            
+            //node.StateName = nodeData.Name;
+            //node.DialogueType = nodeData.DialogueType;
+            //node.Group = _loadedGroups[nodeData.GroupId];
+            
+            node.Draw();
+            _graphView.AddElement(node);
+            _loadedNodes.Add(node.Id, node);
+            
+            if(string.IsNullOrEmpty(nodeData.GroupId))
+            {
+                continue;
+            }
+            FSMGroup group = _loadedGroups[nodeData.GroupId];
+            node.Group = group;
+            group.AddElement(node);
+        }
+    }
+    private static void LoadConnections()
+    {
+        foreach (KeyValuePair<string, FSMNode> loadedNode in _loadedNodes)
+        {
+            foreach (Port choicePort in loadedNode.Value.outputContainer.Children())
+            {
+                FSMConnectionSaveData choiceData = (FSMConnectionSaveData) choicePort.userData;
+                if (string.IsNullOrEmpty(choiceData.NodeId))
+                {
+                    continue;
+                }
+
+                FSMNode nextNode = _loadedNodes[choiceData.NodeId];
+
+                Port nextNodeInputPort = (Port) nextNode.inputContainer.Children().First();
+
+                Edge edge = choicePort.ConnectTo(nextNodeInputPort);
+
+                _graphView.AddElement(edge);
+
+                loadedNode.Value.RefreshPorts();
+            }
+        }
+    }
+
+    #endregion
+
     #region CreationMethods
     private static void CreateStaticFolders()
     {
@@ -257,11 +330,11 @@ public static class FSMIOUtility
         CreateFolder(_containerFolderPath, "Global");
         CreateFolder(_containerFolderPath, "Groups");
         CreateFolder($"{_containerFolderPath}/Global", "Nodes");
-    } 
+    }
     #endregion
 
     #region UtilityMethods
-    private static void CreateFolder(string path, string folderName)
+    public static void CreateFolder(string path, string folderName)
     {
         if (AssetDatabase.IsValidFolder($"{path}/{folderName}"))
         {
@@ -269,15 +342,15 @@ public static class FSMIOUtility
         }
         AssetDatabase.CreateFolder(path, folderName);
     }
-    private static void RemoveFolder(string path)
+    public static void RemoveFolder(string path)
     {
         FileUtil.DeleteFileOrDirectory($"{path}.meta");
         FileUtil.DeleteFileOrDirectory($"{path}/");
     }
-    private static T CreateAsset<T>(string path, string assetName) where T : ScriptableObject
+    public static T CreateAsset<T>(string path, string assetName) where T : ScriptableObject
     {
         string assetPathAndName = $"{path}/{assetName}.asset";
-        T asset = AssetDatabase.LoadAssetAtPath<T>(assetPathAndName);
+        T asset = LoadAsset<T>(path, assetName);
         if (asset == null)
         {
             asset = ScriptableObject.CreateInstance<T>();
@@ -285,15 +358,34 @@ public static class FSMIOUtility
         }
         return asset;
     }
-    private static void RemoveAsset(string path, string assetName)
+    public static void RemoveAsset(string path, string assetName)
     {
         AssetDatabase.DeleteAsset($"{path}/{assetName}.asset");
     }
-    private static void SaveAsset(UnityEngine.Object asset)
+    public static void SaveAsset(UnityEngine.Object asset)
     {
         EditorUtility.SetDirty(asset);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+    }
+    public static T LoadAsset<T>(string path, string assetName) where T : ScriptableObject
+    {
+        string assetPathAndName = $"{path}/{assetName}.asset";
+        return AssetDatabase.LoadAssetAtPath<T>(assetPathAndName);
+    }
+    private static List<FSMConnectionSaveData> CloneNodeConnections(List<FSMConnectionSaveData> connections)
+    {
+        List<FSMConnectionSaveData> clonedConnections = new List<FSMConnectionSaveData>();
+        foreach(FSMConnectionSaveData connection in connections)
+        {
+            FSMConnectionSaveData clonedConnection = new FSMConnectionSaveData()
+            {
+                NodeId = connection.NodeId
+            };
+            clonedConnections.Add(clonedConnection);
+        }
+
+        return clonedConnections;
     }
     #endregion
     

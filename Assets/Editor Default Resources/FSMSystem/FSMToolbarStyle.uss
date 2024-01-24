@@ -40,3 +40,8 @@ TextField:focus > .unity-text-field__label
 .unity-text-field__input:focus {
     color: var(--fsm-colors-window-yellow);
 }
+
+.fsm-toolbar__button__selected
+{
+    color: var(--fsm-colors-window-yellow);
+}

@@ -10,32 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b664ecc41c97a804395c2672b001d2d7, type: 3}
-  m_Name: New FSM
+  m_Name: dadada
   m_EditorClassIdentifier: 
-  <FileName>k__BackingField: New FSM
+  <FileName>k__BackingField: dadada
   <Nodes>k__BackingField:
-  - <Id>k__BackingField: d7d686c7-7df8-476b-ad25-1a140e9e2383
-    <Name>k__BackingField: StateName
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: 
-      <NodeId>k__BackingField: c9284802-6c21-425b-9f57-3e56ab2b2050
-    <GroupId>k__BackingField: 
-    <DialogueType>k__BackingField: 0
-    <Position>k__BackingField: {x: 260, y: 233}
-  - <Id>k__BackingField: c9284802-6c21-425b-9f57-3e56ab2b2050
-    <Name>k__BackingField: TransitionName
+  - <Id>k__BackingField: dbd8dacc-fc10-4c9c-a1f5-08b3be679c0b
+    <Name>k__BackingField: StateNadaame
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: 
       <NodeId>k__BackingField: 
     <GroupId>k__BackingField: 
-    <DialogueType>k__BackingField: 1
-    <Position>k__BackingField: {x: 693, y: 351}
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 298, y: 271}
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
-  - StateName
-  - TransitionName
+  - StateNadaame
   <OldGroupedNodeNames>k__BackingField:
     list: []

@@ -8,7 +8,7 @@
     --fsm-colors-window-dark-grey-4: #232527;
     --fsm-colors-window-dark-grey-5: #252729;
     --fsm-colors-window-dark-grey-6: #27292C;
-    --ds-colors-window-dark-yellow: #FDD057;
+    --fsm-colors-window-yellow: #FDD057;
     
     --fsm-metrics-grid-25: 25;
 }

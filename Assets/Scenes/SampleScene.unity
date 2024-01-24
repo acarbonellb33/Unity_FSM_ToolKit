@@ -350,12 +350,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1694758707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9120299b296eb524a8397326a56fa99d, type: 3}
+  m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolState: {fileID: 11400000, guid: 3edfcbebc9e13fe4b94ad1e6486c2d29, type: 2}
-  patrolSpeed: 5
-  patrolRadius: 10
+  graphContainer: {fileID: 11400000, guid: 25f564df2d74fd847bdc6e73efd8c04b, type: 2}
+  graphGroup: {fileID: 11400000, guid: 9a82feef37b7de84f92f24a2d6df49c1, type: 2}
+  graph: {fileID: 11400000, guid: f7cffadc6cb388d42a64c2139df258f7, type: 2}
+  groupedStates: 1
+  selectedStatesGroupIndex: 0
+  selectedStateIndex: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

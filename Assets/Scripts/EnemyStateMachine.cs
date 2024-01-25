@@ -17,13 +17,6 @@ public class EnemyStateMachine : MonoBehaviour
 	{
 	}
 
-	public void Patrol()
-	{
-		patrolState.Execute();
-		if (hearingCondition.Condition())
-		{
-			//ttack();
-		}
-	}
+	
 
 }

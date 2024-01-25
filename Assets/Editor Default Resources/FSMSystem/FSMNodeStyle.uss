@@ -93,6 +93,11 @@ TextField{
     margin-top: 8px;
 }
 
+.fsm-node_state-attribute-label{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 /*BUILD IN*/
 .unity-toggle_text{
     margin-left: 2px;

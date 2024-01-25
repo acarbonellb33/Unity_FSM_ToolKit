@@ -123,6 +123,56 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &247574059
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247574061}
+  - component: {fileID: 247574060}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &247574060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247574059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphContainer: {fileID: 11400000, guid: 91bb6f1a00674dd4ebb312c49042fd1c, type: 2}
+  graphGroup: {fileID: 0}
+  graph: {fileID: 11400000, guid: a1a9e3580ab39ef4e9a978bbe14ab279, type: 2}
+  groupedStates: 0
+  selectedStatesGroupIndex: 0
+  selectedStateIndex: 0
+--- !u!4 &247574061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247574059}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,10 +403,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphContainer: {fileID: 11400000, guid: 25f564df2d74fd847bdc6e73efd8c04b, type: 2}
+  graphContainer: {fileID: 11400000, guid: 413e3ac2d2a4f1646b8e7a5f304e6deb, type: 2}
   graphGroup: {fileID: 11400000, guid: 9a82feef37b7de84f92f24a2d6df49c1, type: 2}
-  graph: {fileID: 11400000, guid: f7cffadc6cb388d42a64c2139df258f7, type: 2}
-  groupedStates: 1
+  graph: {fileID: 11400000, guid: a9d4a2adb1c5b2a4d922d8fc8523df57, type: 2}
+  groupedStates: 0
   selectedStatesGroupIndex: 0
   selectedStateIndex: 0
 --- !u!1660057539 &9223372036854775807
@@ -365,4 +415,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 963194228}
   - {fileID: 705507995}
+  - {fileID: 247574061}
   - {fileID: 1694758708}

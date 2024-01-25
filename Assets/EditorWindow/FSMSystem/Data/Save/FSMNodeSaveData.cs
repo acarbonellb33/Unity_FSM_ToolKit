@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 [Serializable]
 public class FSMNodeSaveData
@@ -13,4 +14,5 @@ public class FSMNodeSaveData
     [field: SerializeField] public string GroupId { get; set; }
     [field: SerializeField] public FSMDialogueType DialogueType { get; set; }
     [field: SerializeField] public Vector2 Position { get; set; }
+    [field: SerializeField] public State ScriptableObject { get; set; }
 }

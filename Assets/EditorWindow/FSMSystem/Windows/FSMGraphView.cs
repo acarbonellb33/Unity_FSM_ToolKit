@@ -440,9 +440,9 @@ public class FSMGraphView : GraphView
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
-        this.AddManipulator(CreateNodeContextualMenu());
-        this.AddManipulator(CreateTransitionNodeMenu());
-        
+        this.AddManipulator(CreateStateItemMenu("Attack"));
+        this.AddManipulator(CreateStateItemMenu("Patrol"));
+        this.AddManipulator(CreateTransitionItemMenu("Hearing"));
         this.AddManipulator(CreateGroupContextualMenu());
     }
     
@@ -460,23 +460,27 @@ public class FSMGraphView : GraphView
     private IManipulator CreateGroupContextualMenu()
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-            menuEvent => menuEvent.menu.AppendAction("Create Group", menuActionEvent => CreateGroup("State Group", GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition))));
+            menuEvent => menuEvent.menu.AppendAction("Create Group", 
+                menuActionEvent => CreateGroup("State Group", GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition)))
+            );
         
         return contextualMenuManipulator;
     }
     
-    private IManipulator CreateNodeContextualMenu()
+    private IManipulator CreateStateItemMenu(string nodeName)
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-        menuEvent => menuEvent.menu.AppendAction("Create State", menuActionEvent => AddElement(CreateNode("StateName",GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.State))));
+            menuEvent => menuEvent.menu.AppendAction($"Create State/{nodeName}", menuActionEvent => 
+                AddElement(CreateNode(nodeName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.State))));
         
         return contextualMenuManipulator;
     }
     
-    private IManipulator CreateTransitionNodeMenu()
+    private IManipulator CreateTransitionItemMenu(string transitionName)
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-            menuEvent => menuEvent.menu.AppendAction("Create Transition", menuActionEvent => AddElement(CreateNode("TransitionName",GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.Transition))));
+            menuEvent => menuEvent.menu.AppendAction($"Create Transition/{transitionName}", menuActionEvent => 
+                AddElement(CreateNode(transitionName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.Transition))));
         
         return contextualMenuManipulator;
     }

@@ -14,20 +14,33 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
         _indentationIcon.SetPixel(0, 0, Color.clear);
         _indentationIcon.Apply();
     }
+    
     public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
     {
         List<SearchTreeEntry> tree = new List<SearchTreeEntry>()
         {
             new SearchTreeGroupEntry(new GUIContent("Create Node")),
-            new SearchTreeEntry(new GUIContent("State Node", _indentationIcon))
+            new SearchTreeGroupEntry(new GUIContent("State Nodes"), 1),
+            new SearchTreeEntry(new GUIContent("Attack", _indentationIcon))
             {
                 userData = FSMDialogueType.State,
-                level = 1
+                level = 2,
+                
+            },new SearchTreeEntry(new GUIContent("Patrol", _indentationIcon))
+            {
+                userData = FSMDialogueType.State,
+                level = 2
             },
-            new SearchTreeEntry(new GUIContent("Transition Node", _indentationIcon))
+            new SearchTreeEntry(new GUIContent("Idle", _indentationIcon))
+            {
+                userData = FSMDialogueType.State,
+                level = 2
+            },
+            new SearchTreeGroupEntry(new GUIContent("Transition Node"), 1),
+            new SearchTreeEntry(new GUIContent("Hearing", _indentationIcon))
             {
                 userData = FSMDialogueType.Transition,
-                level = 1
+                level = 2
             },
             new SearchTreeEntry(new GUIContent("Create Group", _indentationIcon))
             {
@@ -44,11 +57,11 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
         switch (searchTreeEntry.userData)
         {
             case FSMDialogueType.State:
-                FSMStateNode stateNode = (FSMStateNode) _graphView.CreateNode("StateName",localMousePosition, FSMDialogueType.State);
+                FSMStateNode stateNode = (FSMStateNode) _graphView.CreateNode(searchTreeEntry.name,localMousePosition, FSMDialogueType.State);
                 _graphView.AddElement(stateNode);
                 return true;
             case FSMDialogueType.Transition:
-                FSMTransitionNode transitionNode = (FSMTransitionNode) _graphView.CreateNode("TransitionName",localMousePosition, FSMDialogueType.Transition);
+                FSMTransitionNode transitionNode = (FSMTransitionNode) _graphView.CreateNode(searchTreeEntry.name,localMousePosition, FSMDialogueType.Transition);
                 _graphView.AddElement(transitionNode);
                 return true;
             case Group _:

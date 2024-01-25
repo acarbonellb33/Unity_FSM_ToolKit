@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b664ecc41c97a804395c2672b001d2d7, type: 3}
+  m_Name: New
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: New
+  <Nodes>k__BackingField:
+  - <Id>k__BackingField: 19d2f5f3-2a87-4494-b69a-9c1a707e7ab7
+    <Name>k__BackingField: Patrol
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: 
+      <NodeId>k__BackingField: 
+    <GroupId>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 734, y: 274}
+    <ScriptableObject>k__BackingField: {fileID: 0}
+  - <Id>k__BackingField: c2c51169-bf5a-4e39-a63d-6d01fd6ccdb7
+    <Name>k__BackingField: Hearing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: 
+      <NodeId>k__BackingField: 19d2f5f3-2a87-4494-b69a-9c1a707e7ab7
+    <GroupId>k__BackingField: 87e35b5b-7fdf-45e7-a96a-064dc117351a
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 469, y: 227}
+    <ScriptableObject>k__BackingField: {fileID: 0}
+  - <Id>k__BackingField: ad0bce5c-c2ff-4916-af43-f519116934e4
+    <Name>k__BackingField: Attack
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: 
+      <NodeId>k__BackingField: c2c51169-bf5a-4e39-a63d-6d01fd6ccdb7
+    <GroupId>k__BackingField: 87e35b5b-7fdf-45e7-a96a-064dc117351a
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 197, y: 157}
+    <ScriptableObject>k__BackingField: {fileID: 0}
+  <Groups>k__BackingField:
+  - <Id>k__BackingField: 87e35b5b-7fdf-45e7-a96a-064dc117351a
+    <Name>k__BackingField: First zone
+    <Position>k__BackingField: {x: 172, y: 98}
+  <OldGroupedNames>k__BackingField:
+  - First zone
+  <OldUngroupedNames>k__BackingField:
+  - Patrol
+  <OldGroupedNodeNames>k__BackingField:
+    list: []

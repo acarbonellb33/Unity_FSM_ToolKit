@@ -1,15 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class FSMStateNode : FSMNode
 {
+    private List<State> _scriptableObjects;
     public override void Initialize(string nodeName, FSMGraphView graphView,Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
         DialogueType = FSMDialogueType.State;
+        
+        _scriptableObjects = new List<State>() {ScriptableObject.CreateInstance<PatrolState>(), ScriptableObject.CreateInstance<AttackState>()};
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
@@ -24,30 +29,7 @@ public class FSMStateNode : FSMNode
     public override void Draw()
     {
         base.Draw();
-        
-        /*Button addChoiceButton = FSMElementUtility.CreateButton("Add Transition", () =>
-        {
-            FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
-            {
-                Text = "New Transition",
-            };
-            Choices.Add(connectionSaveData);
-            
-            Port outputPort = CreateTransitionPort("New Transition");
-            outputContainer.Add(outputPort);
-        });
-        addChoiceButton.AddToClassList("fsm-node_button");
-        
-        mainContainer.Insert(1,addChoiceButton);
 
-        foreach (FSMConnectionSaveData choice in Choices)
-        {
-            Port outputPort = CreateTransitionPort(choice);
-            outputContainer.Add(outputPort);
-        }
-        RefreshExpandedState();*/
-        
-        
         foreach (FSMConnectionSaveData connection in Choices)
         {
             Port connectionPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output, Port.Capacity.Multi);
@@ -57,28 +39,124 @@ public class FSMStateNode : FSMNode
             outputContainer.Add(connectionPort);
         }
         
+        VisualElement customDataContainer = new VisualElement();
+        //customDataContainer.AddToClassList("fsm-node_custom-data-container");
+
+        GetScriptableObject();
+
+        CreateStateAttribute(StateScriptableObject.InspectVariables(), customDataContainer);
+        
+        extensionContainer.Add(customDataContainer);
+
         RefreshExpandedState();
     }
-
-    #region CreateTransitionPort
-    private Port CreateTransitionPort(object userData)
+    
+    #region ScriptableObject Attributes
+    private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
     {
-        Port port = this.CreatePort("", Orientation.Horizontal, Direction.Output, Port.Capacity.Multi);
-        port.userData = userData;
-        FSMConnectionSaveData connectionData = (FSMConnectionSaveData) userData;
-                
-        Button deleteChoiceButton = FSMElementUtility.CreateButton("X");
-        deleteChoiceButton.AddToClassList("fsm-node_button");
-               
-        TextField choiceTextField = FSMElementUtility.CreateTextField(connectionData.Text, null, callback =>
-        {
-            connectionData.Text = callback.newValue;
-        });
-        choiceTextField.AddClasses("fsm-node_textfield", "fsm-node_choice-textfield", "fsm-node_textfield_hidden");
 
-        port.Add(choiceTextField);
-        port.Add(deleteChoiceButton);
-        return port;
+        VisualElement stateAttributeContainer = new VisualElement();
+        stateAttributeContainer.AddToClassList("fsm-node_state-attribute-container");
+    
+        foreach(string attribute in attributes)
+        {
+            string[] result = attribute.Split(',');
+                
+            Label stateAttributeLabel = new Label(UpdateNameStyle(result[0]));
+            stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
+            stateAttributeContainer.Add(stateAttributeLabel);
+    
+            switch (result[1])
+            {
+                case "System.Single":
+                    FloatField floatField = new FloatField()
+                    {
+                        value = float.Parse(result[2])
+                        
+                    };
+                    floatField.RegisterCallback<InputEvent>(evt =>
+                    {
+                        StateScriptableObject.SetVariableValue(result[0], floatField.value);
+                    });
+                    floatField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(floatField);
+                    _attributesValues.Add(floatField.name);
+                    break;
+                case "System.Int32":
+                    IntegerField integerField = new IntegerField()
+                    {
+                        value = int.Parse(result[2])
+                    };
+                    integerField.RegisterCallback<InputEvent>(evt =>
+                    {
+                        StateScriptableObject.SetVariableValue(result[0], integerField.value);
+                    });
+                    integerField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(integerField);
+                    _attributesValues.Add(integerField.name);
+                    break;
+                case "System.Boolean":
+                    Toggle toggle = new Toggle()
+                    { 
+                        value = bool.Parse(result[2])
+                    };
+                    toggle.RegisterCallback<ClickEvent>(evt =>
+                    {
+                        StateScriptableObject.SetVariableValue(result[0], toggle.value);
+                    });
+                    toggle.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(toggle);
+                    _attributesValues.Add(toggle.name);
+                    break;
+                case "System.String":
+                    TextField textField = new TextField()
+                    {
+                        value = result[2]
+                    };
+                    textField.RegisterCallback<InputEvent>(evt =>
+                    {
+                        StateScriptableObject.SetVariableValue(result[0], textField.value);
+                    });
+                    textField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(textField);
+                    _attributesValues.Add(textField.name);
+                    break;
+                default:
+                    break;
+            }
+        }
+        customDataContainer.Add(stateAttributeContainer);
     }
+    private void GetScriptableObject()
+    {
+        if(StateScriptableObject != null) return;
+           
+        foreach (State enemyState in _scriptableObjects)
+        {
+            if (enemyState.GetStateName() == StateName)
+            {
+                StateScriptableObject = enemyState;
+            }
+        }
+    }
+    private string UpdateNameStyle(string name)
+    {
+        string[] fullName = Regex.Split(name, @"(?=[A-Z])");
+        string resultString = "";
+
+        for(int i = 0; i < fullName.Length; i++)
+        {
+            if (i == 0)
+            {
+                resultString = char.ToUpper(fullName[i][0]) + fullName[i].Substring(1);
+            }
+            else
+            {
+                resultString += " " + fullName[i];
+            }
+        }
+        return resultString;
+    }
+
     #endregion
 }

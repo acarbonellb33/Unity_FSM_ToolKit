@@ -143,7 +143,8 @@ public static class FSMIOUtility
             Connections = connections,
             GroupId = node.Group?.Id,
             DialogueType = node.DialogueType,
-            Position = node.GetPosition().position
+            Position = node.GetPosition().position,
+            ScriptableObject = node.StateScriptableObject
         };
         graphSaveData.Nodes.Add(nodeSaveData);
     }
@@ -166,7 +167,7 @@ public static class FSMIOUtility
             "Text",
             ConvertNodeConnection(node.Choices),
             node.DialogueType,
-            false
+            node.StateScriptableObject
         );
         _createdNodes.Add(node.Id, nodeSo);
         SaveAsset(nodeSo);
@@ -275,7 +276,13 @@ public static class FSMIOUtility
             FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.DialogueType, false);
             node.Id = nodeData.Id;
             node.Choices = connections;
-            
+            node.StateScriptableObject = nodeData.ScriptableObject;
+
+            for (int i = 0; i < nodeData.ScriptableObject.GetVariablesValues().Count; i++)
+            {
+                //Debug.Log(node.StateScriptableObject.GetVariablesValues()[i]);
+            }
+
             //node.StateName = nodeData.Name;
             //node.DialogueType = nodeData.DialogueType;
             //node.Group = _loadedGroups[nodeData.GroupId];
@@ -380,6 +387,7 @@ public static class FSMIOUtility
         {
             FSMConnectionSaveData clonedConnection = new FSMConnectionSaveData()
             {
+                Text = connection.Text,
                 NodeId = connection.NodeId
             };
             clonedConnections.Add(clonedConnection);

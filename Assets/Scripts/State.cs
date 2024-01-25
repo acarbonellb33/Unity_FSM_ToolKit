@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Object = UnityEngine.Object;
-
+[Serializable]
 public abstract class State : ScriptableObject
 {
     private string stateName;

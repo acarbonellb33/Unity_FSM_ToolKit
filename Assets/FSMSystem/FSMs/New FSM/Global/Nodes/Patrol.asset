@@ -18,4 +18,4 @@ MonoBehaviour:
   - <Text>k__BackingField: New Transition
     <NextNode>k__BackingField: {fileID: 0}
   <NodeType>k__BackingField: 0
-  <ScriptableObject>k__BackingField: {fileID: 0}
+  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: f81b078cf3adc794c8b541b97c037d19, type: 2}

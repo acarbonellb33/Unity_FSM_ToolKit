@@ -362,7 +362,7 @@ public static class FSMIOUtility
         {
             state.SetVariableValue(variable.Key, variable.Value);
         }
-
+        SaveAsset(state);
         return state;
     }
     

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1940871718b2bec4d8e4c1c24b864f14, type: 3}
   m_Name: AttackState
   m_EditorClassIdentifier: 
-  <attackDamage>k__BackingField: 213
-  <attackRange>k__BackingField: 321
-  <attackCooldown>k__BackingField: 31231
-  <canAttack>k__BackingField: 1
+  attackDamage: 324234
+  attackRange: 4324
+  attackCooldown: 4243
+  canAttack: 1

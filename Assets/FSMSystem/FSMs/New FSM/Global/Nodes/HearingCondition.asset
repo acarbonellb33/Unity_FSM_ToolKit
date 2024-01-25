@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b7af712f0eb0b5408c50374df93bcf7, type: 3}
-  m_Name: State Group
+  m_Script: {fileID: 11500000, guid: a326b1538fdd7114b809265b469c1a03, type: 3}
+  m_Name: HearingCondition
   m_EditorClassIdentifier: 
-  <GroupName>k__BackingField: State Group
+  hearingRange: 4234324

@@ -14,43 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <FileName>k__BackingField: New FSM
   <Nodes>k__BackingField:
-  - <Id>k__BackingField: e831ad63-045e-4fc4-b69c-2a663d63898f
-    <Name>k__BackingField: Hearing
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: New State
-      <NodeId>k__BackingField: 1fc2bd6b-a43b-40c9-8955-f1073512789a
-    <GroupId>k__BackingField: 
-    <DialogueType>k__BackingField: 1
-    <Position>k__BackingField: {x: 530, y: 306}
-    <ScriptableObject>k__BackingField: {fileID: 0}
-  - <Id>k__BackingField: 1fc2bd6b-a43b-40c9-8955-f1073512789a
+  - <Id>k__BackingField: 24f0b03c-c0a3-4df3-b5b8-e1540e559bb3
     <Name>k__BackingField: Patrol
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: New Transition
       <NodeId>k__BackingField: 
-    <GroupId>k__BackingField: bc63c901-edae-4cf6-a228-fb283148ddf6
+    <GroupId>k__BackingField: 
     <DialogueType>k__BackingField: 0
-    <Position>k__BackingField: {x: 808, y: 178}
-    <ScriptableObject>k__BackingField: {fileID: 0}
-  - <Id>k__BackingField: 8516e423-f61e-4f3b-b8bd-dbb84ff10384
+    <Position>k__BackingField: {x: 875, y: 300}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: f81b078cf3adc794c8b541b97c037d19, type: 2}
+  - <Id>k__BackingField: e3e05d8a-95f3-4985-ba34-3cb7d45301c6
+    <Name>k__BackingField: Hearing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: 24f0b03c-c0a3-4df3-b5b8-e1540e559bb3
+    <GroupId>k__BackingField: 
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 584, y: 128}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 2b41f1baf0cb66d41bc623e60d97396b, type: 2}
+  - <Id>k__BackingField: 777c461a-cf28-4069-a498-f157b5642ad6
     <Name>k__BackingField: Attack
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: New Transition
-      <NodeId>k__BackingField: e831ad63-045e-4fc4-b69c-2a663d63898f
+      <NodeId>k__BackingField: e3e05d8a-95f3-4985-ba34-3cb7d45301c6
     <GroupId>k__BackingField: 
     <DialogueType>k__BackingField: 0
-    <Position>k__BackingField: {x: 204, y: 193}
-    <ScriptableObject>k__BackingField: {fileID: 0}
-  <Groups>k__BackingField:
-  - <Id>k__BackingField: bc63c901-edae-4cf6-a228-fb283148ddf6
-    <Name>k__BackingField: State Group
-    <Position>k__BackingField: {x: 783, y: 119}
-  <OldGroupedNames>k__BackingField:
-  - State Group
+    <Position>k__BackingField: {x: 274, y: 206}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 6e83014df04ce77408f212cf30280386, type: 2}
+  <Groups>k__BackingField: []
+  <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
+  - Patrol
   - Hearing
   - Attack
   <OldGroupedNodeNames>k__BackingField:

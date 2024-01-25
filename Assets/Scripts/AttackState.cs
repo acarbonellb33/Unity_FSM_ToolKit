@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewAttackState", menuName = "Enemy States/Attack State")]

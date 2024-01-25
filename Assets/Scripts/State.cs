@@ -39,6 +39,20 @@ public abstract class State : ScriptableObject
         return values;
     }
     
+    public Dictionary<string, object> GetVariables()
+    {
+        Dictionary<string, object> variables = new Dictionary<string, object>();
+        Type type = GetType();
+        FieldInfo[] fields = type.GetFields();
+
+        foreach (FieldInfo field in fields)
+        {
+            object value = field.GetValue(this);
+            variables.Add(field.Name, value);
+        }
+        return variables;
+    }
+
     public void SetVariableValue(string variableName, object newValue)
     {
         // Use reflection to set the value of the variable with the given name

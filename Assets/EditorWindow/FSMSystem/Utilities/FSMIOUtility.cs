@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -20,6 +21,8 @@ public static class FSMIOUtility
     
     private static Dictionary<string, FSMGroup> _loadedGroups;
     private static Dictionary<string, FSMNode> _loadedNodes;
+    
+    private static State _stateScriptableObject;
 
     public static void Initialize(string graphName, FSMGraphView fsmGraphView)
     {
@@ -135,7 +138,8 @@ public static class FSMIOUtility
     private static void SaveNodeToGraph(FSMNode node, FSMGraphSaveData graphSaveData)
     {
         List<FSMConnectionSaveData> connections = CloneNodeConnections(node.Choices);
-
+        _stateScriptableObject = CreateScriptableObjects(node);
+        
         FSMNodeSaveData nodeSaveData = new FSMNodeSaveData()
         {
             Id = node.Id,
@@ -144,13 +148,14 @@ public static class FSMIOUtility
             GroupId = node.Group?.Id,
             DialogueType = node.DialogueType,
             Position = node.GetPosition().position,
-            ScriptableObject = node.StateScriptableObject
+            ScriptableObject = _stateScriptableObject
         };
         graphSaveData.Nodes.Add(nodeSaveData);
     }
     private static void SaveNodeToScriptableObject(FSMNode node, FSMNodesContainerSO nodesContainer)
     {
         FSMNodeSO nodeSo;
+        State state;
         if (node.Group != null)
         {
             nodeSo = CreateAsset<FSMNodeSO>($"{_containerFolderPath}/Groups/{node.Group.title}/Nodes", node.StateName);
@@ -160,14 +165,15 @@ public static class FSMIOUtility
         {
             nodeSo = CreateAsset<FSMNodeSO>($"{_containerFolderPath}/Global/Nodes", node.StateName);
             nodesContainer.UngroupedNodes.Add(nodeSo);
+
         }
-        
+        state = CreateScriptableObjects(node);
         nodeSo.Initialize(
             node.StateName,
             "Text",
             ConvertNodeConnection(node.Choices),
             node.DialogueType,
-            node.StateScriptableObject
+            state
         );
         _createdNodes.Add(node.Id, nodeSo);
         SaveAsset(nodeSo);
@@ -277,12 +283,6 @@ public static class FSMIOUtility
             node.Id = nodeData.Id;
             node.Choices = connections;
             node.StateScriptableObject = nodeData.ScriptableObject;
-
-            for (int i = 0; i < nodeData.ScriptableObject.GetVariablesValues().Count; i++)
-            {
-                //Debug.Log(node.StateScriptableObject.GetVariablesValues()[i]);
-            }
-
             //node.StateName = nodeData.Name;
             //node.DialogueType = nodeData.DialogueType;
             //node.Group = _loadedGroups[nodeData.GroupId];
@@ -338,6 +338,34 @@ public static class FSMIOUtility
         CreateFolder(_containerFolderPath, "Groups");
         CreateFolder($"{_containerFolderPath}/Global", "Nodes");
     }
+    private static State CreateScriptableObjects(FSMNode node)
+    {
+        State state;
+
+        MethodInfo createAssetMethod = typeof(FSMIOUtility).GetMethod("CreateAsset");
+
+        Type classType = node.DialogueType == FSMDialogueType.State ? Type.GetType(node.StateName+"State") : Type.GetType(node.StateName+"Condition");
+        string className = node.DialogueType == FSMDialogueType.State ? node.StateName+"State" : node.StateName+"Condition";
+                
+        MethodInfo genericCreateAssetMethod = createAssetMethod.MakeGenericMethod(classType);
+
+        state = (State) genericCreateAssetMethod.Invoke(null, new object[]
+        {
+            $"{_containerFolderPath}/Global/Nodes", 
+            className
+        });
+        
+        Dictionary<string,object> variables = new Dictionary<string, object>();
+        variables = state.GetVariables();
+        
+        foreach (var variable in variables)
+        {
+            state.SetVariableValue(variable.Key, variable.Value);
+        }
+
+        return state;
+    }
+    
     #endregion
 
     #region UtilityMethods
@@ -356,6 +384,7 @@ public static class FSMIOUtility
     }
     public static T CreateAsset<T>(string path, string assetName) where T : ScriptableObject
     {
+        Debug.Log(typeof(T));
         string assetPathAndName = $"{path}/{assetName}.asset";
         T asset = LoadAsset<T>(path, assetName);
         if (asset == null)

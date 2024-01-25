@@ -18,8 +18,7 @@ public class FSMNode : Node
     
     private FSMGraphView _graphView;
     public State StateScriptableObject { get; set; }
-    protected List<object> _attributesValues;
-    
+
     public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
         Id = Guid.NewGuid().ToString();
@@ -27,8 +26,7 @@ public class FSMNode : Node
         Choices = new List<FSMConnectionSaveData>();
         _graphView = graphView;
         SetPosition(new Rect(postition, Vector2.zero));
-
-        _attributesValues = new List<object>();
+        
         StateScriptableObject = null;
 
         AddManipulators();
@@ -63,29 +61,8 @@ public class FSMNode : Node
         
         Port inputPort = this.CreatePort("Connection", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);
         inputContainer.Add(inputPort);
-        
-        /*VisualElement customDataContainer = new VisualElement();
-        //customDataContainer.AddToClassList("fsm-node_custom-data-container");
-
-        GetScriptableObject();
-        
-        CreateStateAttribute(enemyScriptableObject.InspectVariables(), customDataContainer);
-        
-        extensionContainer.Add(customDataContainer);
-
-        RefreshExpandedState();*/
     }
 
-    public State UpdateScriptableObject()
-    {
-        List<object> _finalAttributesValues = new List<object>();
-        for (int i = 0; i < _attributesValues.Count; i++)
-        {
-            _finalAttributesValues.Add(_attributesValues[i]);
-        }
-        return null;
-    }
-    
     #region Ports
     public void DisconnectAllPorts()
     {

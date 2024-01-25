@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using OpenCover.Framework.Model;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -124,6 +126,8 @@ public class FSMTransitionNode : FSMNode
     }
     private void GetScriptableObject()
     {
+        if(StateScriptableObject != null) return;
+        
         foreach (State conditionState in _scriptableObjects)
         {
             if (conditionState.GetStateName() == StateName)

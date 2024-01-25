@@ -80,7 +80,6 @@ public class FSMStateNode : FSMNode
                     });
                     floatField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(floatField);
-                    _attributesValues.Add(floatField.name);
                     break;
                 case "System.Int32":
                     IntegerField integerField = new IntegerField()
@@ -93,7 +92,6 @@ public class FSMStateNode : FSMNode
                     });
                     integerField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(integerField);
-                    _attributesValues.Add(integerField.name);
                     break;
                 case "System.Boolean":
                     Toggle toggle = new Toggle()
@@ -106,7 +104,6 @@ public class FSMStateNode : FSMNode
                     });
                     toggle.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(toggle);
-                    _attributesValues.Add(toggle.name);
                     break;
                 case "System.String":
                     TextField textField = new TextField()
@@ -119,7 +116,6 @@ public class FSMStateNode : FSMNode
                     });
                     textField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(textField);
-                    _attributesValues.Add(textField.name);
                     break;
                 default:
                     break;

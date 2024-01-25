@@ -10,14 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7b1ca387027062478ec3e0de58f6412, type: 3}
-  m_Name: New FSM
+  m_Name: FSM
   m_EditorClassIdentifier: 
-  <FileName>k__BackingField: New FSM
+  <FileName>k__BackingField: FSM
   <GroupedNodes>k__BackingField:
-    list:
-    - Key: {fileID: 11400000, guid: 91912adea89da884290282c6d611ec11, type: 2}
-      Value:
-      - {fileID: 11400000, guid: 7b667bb97762d99499ab14d7c75ec040, type: 2}
+    list: []
   <UngroupedNodes>k__BackingField:
-  - {fileID: 11400000, guid: 8c3639707b4806d499571e55191c0eea, type: 2}
-  - {fileID: 11400000, guid: 784943419740b1344aded88b76b7071b, type: 2}
+  - {fileID: 11400000, guid: b56df1e5bedd09e4c90cd7d3291f7a33, type: 2}

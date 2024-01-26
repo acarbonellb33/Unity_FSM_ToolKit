@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PatrolState
   m_EditorClassIdentifier: 
   patrolSpeed: 423423
-  patrolRadius: 234
+  patrolRadius: 23

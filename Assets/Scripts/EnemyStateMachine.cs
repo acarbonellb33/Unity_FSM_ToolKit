@@ -1,25 +1,50 @@
 using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 
 public class EnemyStateMachine : MonoBehaviour
 {
-	[Header("Patrol")]
+	[Header("Attack")]
 	[SerializeField]
-	private System.Single patrolSpeed = 423423;
-	[SerializeField]
-	private System.Int32 patrolRadius = 234;
+	public AttackState attack;
 
 	[Header("Hearing")]
 	[SerializeField]
-	private System.Single hearingRange = 4234324;
+	public HearingCondition hearing;
 
-	[Header("Attack")]
+	[Header("Patrol")]
 	[SerializeField]
-	private System.Single attackDamage = 324234;
-	[SerializeField]
-	private System.Single attackRange = 4324;
-	[SerializeField]
-	private System.Single attackCooldown = 4243;
-	[SerializeField]
-	private System.Boolean canAttack = true;
+	public PatrolState patrol;
 
+	public Dictionary<string, object> GetVariables()
+	{
+		Dictionary<string, object> variables = new Dictionary<string, object>();
+		Type type = GetType();
+		FieldInfo[] fields = type.GetFields();
+
+		foreach (FieldInfo field in fields)
+		{
+			object value = field.GetValue(this);
+			variables.Add(field.Name, value);
+		}
+		return variables;
+	}
+
+	public void SetVariableValue(string variableName, object newValue)
+	{
+		// Use reflection to set the value of the variable with the given name
+		System.Type type = GetType();
+		System.Reflection.FieldInfo field = type.GetField(variableName);
+
+		if (field != null)
+		{
+			field.SetValue(this, newValue);
+		}
+		else
+		{
+			Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
+		}
+	}
 }

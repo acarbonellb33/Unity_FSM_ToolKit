@@ -403,13 +403,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9120299b296eb524a8397326a56fa99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 423423
-  patrolRadius: 234
-  hearingRange: 4234324
-  attackDamage: 324234
-  attackRange: 4324
-  attackCooldown: 4243
-  canAttack: 1
+  attack: {fileID: 11400000, guid: 6e83014df04ce77408f212cf30280386, type: 2}
+  hearing: {fileID: 11400000, guid: 2b41f1baf0cb66d41bc623e60d97396b, type: 2}
+  patrol: {fileID: 11400000, guid: f81b078cf3adc794c8b541b97c037d19, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

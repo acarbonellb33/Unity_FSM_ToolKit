@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <FileName>k__BackingField: New FSM
   <GroupedNodes>k__BackingField:
-    list:
-    - Key: {fileID: 11400000, guid: 59d23fb73452db14f8f05e8436012d20, type: 2}
-      Value:
-      - {fileID: 11400000, guid: d806a0316a3eea94d86d8aad9b0b26fb, type: 2}
+    list: []
   <UngroupedNodes>k__BackingField:
-  - {fileID: 11400000, guid: 049e7606f4a26c744b5e31db2d873848, type: 2}
+  - {fileID: 11400000, guid: 784943419740b1344aded88b76b7071b, type: 2}
   - {fileID: 11400000, guid: 8c3639707b4806d499571e55191c0eea, type: 2}
+  - {fileID: 11400000, guid: 049e7606f4a26c744b5e31db2d873848, type: 2}

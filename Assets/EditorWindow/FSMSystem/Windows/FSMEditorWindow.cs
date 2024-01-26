@@ -12,6 +12,7 @@ public class FSMEditorWindow : EditorWindow
     private Button _saveButton;
     private Button _miniMapButton;
     private Button _generateScriptButton;
+    private ObjectField _gameObjectField;
     
     [MenuItem("Window/FSM/FSM Graph")]
     public static void Open()
@@ -53,7 +54,9 @@ public class FSMEditorWindow : EditorWindow
         Button resetButton = FSMElementUtility.CreateButton("Reset", () => ResetGraph());
         _miniMapButton = FSMElementUtility.CreateButton("MiniMap", () => ToggleMiniMap());
         _generateScriptButton = FSMElementUtility.CreateButton("Generate Script", () => GenerateScript());
-        
+        _gameObjectField = new ObjectField("Game Object:");
+        _gameObjectField.objectType = typeof(GameObject);
+
         toolbar.Add(_fileNameTextField);
         toolbar.Add(_saveButton);
         toolbar.Add(loadButton);
@@ -61,6 +64,7 @@ public class FSMEditorWindow : EditorWindow
         toolbar.Add(resetButton);
         toolbar.Add(_miniMapButton);
         toolbar.Add(_generateScriptButton);
+        toolbar.Add(_gameObjectField);
         
         toolbar.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
         rootVisualElement.Add(toolbar);
@@ -108,7 +112,7 @@ public class FSMEditorWindow : EditorWindow
     {
         Save();
         FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileNameTextField.value);
-        EnemyStateMachineEditor.GenerateScript(saveData);
+        EnemyStateMachineEditor.GenerateScript(saveData, (GameObject)_gameObjectField.value);
     }
     #endregion
 

@@ -13,9 +13,9 @@ public class FSMGraphView : GraphView
     
     private MiniMap _miniMap;
     
-    private SerializableDictionary<string, FSMNodeErrorData> _ungroupedNodes;
+    public SerializableDictionary<string, FSMNodeErrorData> _ungroupedNodes;
     private SerializableDictionary<string, FSMGroupErrorData> _groups;
-    private SerializableDictionary<Group, SerializableDictionary<string, FSMNodeErrorData>> _groupedNodes;
+    public SerializableDictionary<Group, SerializableDictionary<string, FSMNodeErrorData>> _groupedNodes;
 
     private int repeatedNameCount;
     public int RepeatedNameCount

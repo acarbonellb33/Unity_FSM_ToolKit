@@ -40,15 +40,18 @@ MonoBehaviour:
     <Connections>k__BackingField:
     - <Text>k__BackingField: New Transition
       <NodeId>k__BackingField: e3e05d8a-95f3-4985-ba34-3cb7d45301c6
-    <GroupId>k__BackingField: 
+    <GroupId>k__BackingField: a5eda057-de3d-4eac-8147-7c17d526bad6
     <DialogueType>k__BackingField: 0
     <Position>k__BackingField: {x: 274, y: 206}
     <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 6e83014df04ce77408f212cf30280386, type: 2}
-  <Groups>k__BackingField: []
-  <OldGroupedNames>k__BackingField: []
+  <Groups>k__BackingField:
+  - <Id>k__BackingField: a5eda057-de3d-4eac-8147-7c17d526bad6
+    <Name>k__BackingField: State Group
+    <Position>k__BackingField: {x: 249, y: 147}
+  <OldGroupedNames>k__BackingField:
+  - State Group
   <OldUngroupedNames>k__BackingField:
   - Patrol
   - Hearing
-  - Attack
   <OldGroupedNodeNames>k__BackingField:
     list: []

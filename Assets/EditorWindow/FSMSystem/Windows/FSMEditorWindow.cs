@@ -1,6 +1,7 @@
 using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class FSMEditorWindow : EditorWindow
@@ -10,6 +11,7 @@ public class FSMEditorWindow : EditorWindow
     private static TextField _fileNameTextField;
     private Button _saveButton;
     private Button _miniMapButton;
+    private Button _generateScriptButton;
     
     [MenuItem("Window/FSM/FSM Graph")]
     public static void Open()
@@ -50,6 +52,7 @@ public class FSMEditorWindow : EditorWindow
         Button clearButton = FSMElementUtility.CreateButton("Clear", () => Clear());
         Button resetButton = FSMElementUtility.CreateButton("Reset", () => ResetGraph());
         _miniMapButton = FSMElementUtility.CreateButton("MiniMap", () => ToggleMiniMap());
+        _generateScriptButton = FSMElementUtility.CreateButton("Generate Script", () => GenerateScript());
         
         toolbar.Add(_fileNameTextField);
         toolbar.Add(_saveButton);
@@ -57,6 +60,7 @@ public class FSMEditorWindow : EditorWindow
         toolbar.Add(clearButton);
         toolbar.Add(resetButton);
         toolbar.Add(_miniMapButton);
+        toolbar.Add(_generateScriptButton);
         
         toolbar.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
         rootVisualElement.Add(toolbar);
@@ -100,6 +104,12 @@ public class FSMEditorWindow : EditorWindow
         _graphView.ToggleMiniMap();
         _miniMapButton.ToggleInClassList("fsm-toolbar__button__selected");
     }
+    private void GenerateScript()
+    {
+        Save();
+        FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileNameTextField.value);
+        EnemyStateMachineEditor.GenerateScript(saveData);
+    }
     #endregion
 
     #region Utilities
@@ -110,12 +120,14 @@ public class FSMEditorWindow : EditorWindow
     public void EnableSaving()
     {
         _saveButton.SetEnabled(true);
+        _generateScriptButton.SetEnabled(true);
     }
     public void DisableSaving()
     {
         _saveButton.SetEnabled(false);
+        _generateScriptButton.SetEnabled(false);
     }
-
+    
     #endregion
     
 }

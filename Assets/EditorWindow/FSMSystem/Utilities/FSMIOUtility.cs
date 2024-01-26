@@ -384,7 +384,6 @@ public static class FSMIOUtility
     }
     public static T CreateAsset<T>(string path, string assetName) where T : ScriptableObject
     {
-        Debug.Log(typeof(T));
         string assetPathAndName = $"{path}/{assetName}.asset";
         T asset = LoadAsset<T>(path, assetName);
         if (asset == null)

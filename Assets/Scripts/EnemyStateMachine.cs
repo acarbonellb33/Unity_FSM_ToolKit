@@ -2,21 +2,24 @@ using UnityEngine;
 
 public class EnemyStateMachine : MonoBehaviour
 {
+	[Header("Patrol")]
+	[SerializeField]
+	private System.Single patrolSpeed = 423423;
+	[SerializeField]
+	private System.Int32 patrolRadius = 234;
 
-	public PatrolState patrolState;
+	[Header("Hearing")]
+	[SerializeField]
+	private System.Single hearingRange = 4234324;
 
-	[Header("Patrol Settings")]
-
-	public System.Single patrolSpeed = 5;
-	public System.Int32 patrolRadius = 10;
-
-	private HearingCondition hearingCondition;
-
-	
-	public void Update()
-	{
-	}
-
-	
+	[Header("Attack")]
+	[SerializeField]
+	private System.Single attackDamage = 324234;
+	[SerializeField]
+	private System.Single attackRange = 4324;
+	[SerializeField]
+	private System.Single attackCooldown = 4243;
+	[SerializeField]
+	private System.Boolean canAttack = true;
 
 }

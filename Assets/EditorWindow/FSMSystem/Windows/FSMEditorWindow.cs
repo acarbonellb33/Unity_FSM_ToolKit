@@ -12,7 +12,7 @@ public class FSMEditorWindow : EditorWindow
     private Button _saveButton;
     private Button _miniMapButton;
     private Button _generateScriptButton;
-    private ObjectField _gameObjectField;
+    private static ObjectField _gameObjectField;
     
     [MenuItem("Window/FSM/FSM Graph")]
     public static void Open()
@@ -82,7 +82,16 @@ public class FSMEditorWindow : EditorWindow
             );
             return;
         }
-        FSMIOUtility.Initialize(_fileNameTextField.value, _graphView);
+        if(_gameObjectField.value == null)
+        {
+            EditorUtility.DisplayDialog(
+                "Missing GameObject!",
+                "Please enter a valid game object.",
+                "OK"
+            );
+            return;
+        }
+        FSMIOUtility.Initialize(_fileNameTextField.value, (GameObject)_gameObjectField.value, _graphView);
         FSMIOUtility.Save();
     }
     private void Clear()
@@ -99,7 +108,7 @@ public class FSMEditorWindow : EditorWindow
         string filePath = EditorUtility.OpenFilePanel("FSM Graphs", "Assets/EditorWindow/FSMSystem/Graphs", "asset");
         if (string.IsNullOrEmpty(filePath))return;
         Clear();
-        FSMIOUtility.Initialize(Path.GetFileNameWithoutExtension(filePath), _graphView);
+        FSMIOUtility.Initialize(Path.GetFileNameWithoutExtension(filePath), (GameObject)_gameObjectField.value, _graphView);
         FSMIOUtility.Load();
     }
     
@@ -112,7 +121,8 @@ public class FSMEditorWindow : EditorWindow
     {
         Save();
         FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileNameTextField.value);
-        EnemyStateMachineEditor.GenerateScript(saveData, (GameObject)_gameObjectField.value);
+      
+        EnemyStateMachineEditor.GenerateScript(saveData);
     }
     #endregion
 
@@ -120,6 +130,10 @@ public class FSMEditorWindow : EditorWindow
     public static void UpdateFileName(string fileName)
     {
         _fileNameTextField.value = fileName;
+    }
+    public static void UpdateGameObjectField(GameObject gameObject)
+    {
+        _gameObjectField.value = gameObject;
     }
     public void EnableSaving()
     {

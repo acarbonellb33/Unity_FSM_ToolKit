@@ -24,6 +24,7 @@ MonoBehaviour:
     <DialogueType>k__BackingField: 0
     <Position>k__BackingField: {x: 175, y: 145}
     <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 6e83014df04ce77408f212cf30280386, type: 2}
+    <GameObject>k__BackingField: {fileID: 0}
   - <Id>k__BackingField: d5de6b90-b479-4c8b-bec3-919cc4a89e90
     <Name>k__BackingField: Hearing
     <Text>k__BackingField: 
@@ -34,6 +35,7 @@ MonoBehaviour:
     <DialogueType>k__BackingField: 1
     <Position>k__BackingField: {x: 438, y: 197}
     <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 2b41f1baf0cb66d41bc623e60d97396b, type: 2}
+    <GameObject>k__BackingField: {fileID: 0}
   - <Id>k__BackingField: 1a4db65c-6e97-4419-b7ca-85cdaa0da74d
     <Name>k__BackingField: Patrol
     <Text>k__BackingField: 
@@ -44,6 +46,7 @@ MonoBehaviour:
     <DialogueType>k__BackingField: 0
     <Position>k__BackingField: {x: 710, y: 244}
     <ScriptableObject>k__BackingField: {fileID: 11400000, guid: f81b078cf3adc794c8b541b97c037d19, type: 2}
+    <GameObject>k__BackingField: {fileID: 0}
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
@@ -52,3 +55,4 @@ MonoBehaviour:
   - Patrol
   <OldGroupedNodeNames>k__BackingField:
     list: []
+  <GameObject>k__BackingField: {fileID: 0}

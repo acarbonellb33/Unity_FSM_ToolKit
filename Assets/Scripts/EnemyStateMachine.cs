@@ -4,19 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-public class EnemyStateMachine : MonoBehaviour
+public class EnemyStateMachine : EnemyMachine
 {
-	[Header("Attack")]
+	[Header("Patrol")]
 	[SerializeField]
-	public AttackState attack;
+	public PatrolState patrol;
 
 	[Header("Hearing")]
 	[SerializeField]
 	public HearingCondition hearing;
-
-	[Header("Patrol")]
-	[SerializeField]
-	public PatrolState patrol;
 
 	public Dictionary<string, object> GetVariables()
 	{

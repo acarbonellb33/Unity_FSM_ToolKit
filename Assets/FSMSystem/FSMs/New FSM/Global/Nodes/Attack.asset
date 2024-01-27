@@ -19,3 +19,4 @@ MonoBehaviour:
     <NextNode>k__BackingField: {fileID: 11400000, guid: 8c3639707b4806d499571e55191c0eea, type: 2}
   <NodeType>k__BackingField: 0
   <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 6e83014df04ce77408f212cf30280386, type: 2}
+  <GameObject>k__BackingField: {fileID: 0}

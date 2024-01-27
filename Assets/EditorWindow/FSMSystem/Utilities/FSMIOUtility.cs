@@ -23,11 +23,13 @@ public static class FSMIOUtility
     private static Dictionary<string, FSMNode> _loadedNodes;
     
     private static State _stateScriptableObject;
+    private static GameObject _gameObject;
 
-    public static void Initialize(string graphName, FSMGraphView fsmGraphView)
+    public static void Initialize(string graphName, GameObject gameObject, FSMGraphView fsmGraphView)
     {
         _graphView = fsmGraphView;
         _graphName = graphName;
+        _gameObject = gameObject;
         _containerFolderPath = $"Assets/FSMSystem/FSMs/{graphName}";
         
         _groups = new List<FSMGroup>();
@@ -45,7 +47,7 @@ public static class FSMIOUtility
         CreateStaticFolders();
         GetElementsFromGraphView();
         FSMGraphSaveData graphSaveData = CreateAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs", _graphName);
-        graphSaveData.Initialize(_graphName);
+        graphSaveData.Initialize(_graphName,_gameObject);
         FSMNodesContainerSO nodesContainer = CreateAsset<FSMNodesContainerSO>(_containerFolderPath, _graphName);
         nodesContainer.Initialize(_graphName);
         
@@ -148,7 +150,7 @@ public static class FSMIOUtility
             GroupId = node.Group?.Id,
             DialogueType = node.DialogueType,
             Position = node.GetPosition().position,
-            ScriptableObject = _stateScriptableObject
+            ScriptableObject = _stateScriptableObject,
         };
         graphSaveData.Nodes.Add(nodeSaveData);
     }
@@ -260,6 +262,7 @@ public static class FSMIOUtility
             return;
         }
         FSMEditorWindow.UpdateFileName(graphSaveData.FileName);
+        FSMEditorWindow.UpdateGameObjectField(graphSaveData.GameObject);
         LoadGroups(graphSaveData.Groups);
         LoadNodes(graphSaveData.Nodes);
         LoadConnections();

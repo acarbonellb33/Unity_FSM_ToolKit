@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b664ecc41c97a804395c2672b001d2d7, type: 3}
+  m_Name: fadadaddadadadada
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: fadadaddadadadada
+  <Nodes>k__BackingField:
+  - <Id>k__BackingField: 33149ba9-3cf0-424e-ace2-8e1bbd541445
+    <Name>k__BackingField: Hearing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: 6244b5ed-ce09-456c-a7f4-4369beb5fa32
+    <GroupId>k__BackingField: 
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 594, y: 271}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 9155aac941d5f9d48b7da69cbd7c36d0, type: 2}
+  - <Id>k__BackingField: 4a5c3515-5c77-401c-a3e5-db715b2e209b
+    <Name>k__BackingField: Attack
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New Transition
+      <NodeId>k__BackingField: 33149ba9-3cf0-424e-ace2-8e1bbd541445
+    <GroupId>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 321, y: 144}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 77dc0f943a6d0574d93dee7bb2a7688b, type: 2}
+  - <Id>k__BackingField: 6244b5ed-ce09-456c-a7f4-4369beb5fa32
+    <Name>k__BackingField: Patrol
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New Transition
+      <NodeId>k__BackingField: 
+    <GroupId>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 896, y: 144}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: c691002b53a4d47438b5f1ec842e1b2e, type: 2}
+  <Groups>k__BackingField: []
+  <OldGroupedNames>k__BackingField: []
+  <OldUngroupedNames>k__BackingField:
+  - Hearing
+  - Attack
+  - Patrol
+  <OldGroupedNodeNames>k__BackingField:
+    list: []
+  <GameObject>k__BackingField: {fileID: 0}

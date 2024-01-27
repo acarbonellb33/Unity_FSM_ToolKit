@@ -1,93 +1,100 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.CSharp;
 using UnityEngine;
 using UnityEditor;
 
 public static class EnemyStateMachineEditor
 {
-    public class EnemyState : ScriptableObject
-    {
-        public string name;
-        public string condition;
-        public string nextState;
-
-        public static EnemyState CreateInstance()
-        {
-            return CreateInstance<EnemyState>();
-        }
-    }
-
-    // Serialized data for the overall enemy state machine
-    public class EnemyStateMachineData : ScriptableObject
-    {
-        public List<EnemyState> states = new List<EnemyState>();
-        
-        public List<string> stateNames = new List<string>();
-        
-        public List<string> proximityConditionNames = new List<string>();
-
-        public void AddState(string name)
-        {
-            stateNames.Add(name);
-        }
-        
-        public void AddProximityCondition(string name)
-        {
-            proximityConditionNames.Add(name);
-        }
-    }
-
-    private static EnemyStateMachineData _stateMachineData;
-
-    public static void Initialize()
-    {
-        if (_stateMachineData == null)
-        {
-            // Load or create the data asset
-            _stateMachineData = AssetDatabase.LoadAssetAtPath<EnemyStateMachineData>("Assets/Editor/EnemyStateMachineData.asset");
-
-            if (_stateMachineData == null)
-            {
-                //_stateMachineData = CreateInstance<EnemyStateMachineData>();
-                _stateMachineData.AddState("PatrolState");
-                _stateMachineData.AddState("AttackState");
-                _stateMachineData.AddProximityCondition("HearingCondition");
-                AssetDatabase.CreateAsset(_stateMachineData, "Assets/Editor/EnemyStateMachineData.asset");
-                AssetDatabase.SaveAssets();
-            }
-        }
-    }
-
-    public static void GenerateScript(FSMGraphSaveData saveData, GameObject gameObject)
+    public static void GenerateScript(FSMGraphSaveData saveData)
     {
         string scriptContent = GenerateScriptContent(saveData);
 
-        string scriptPath = "Assets/Scripts/EnemyStateMachine.cs";
+        string scriptPath = $"Assets/EditorWindow/FSMSystem/BehaviorScripts/{saveData.FileName}.cs";
         
         File.WriteAllText(scriptPath, scriptContent);
         
         AssetDatabase.Refresh();
         
-        AssignScriptableObjectReferences(gameObject, saveData);
+        //AssignScriptableObjectReferences(saveData);
+        CompileAndCreateScript(scriptContent, saveData.GameObject, saveData);
             
         Debug.Log($"Script generated at: {scriptPath}");
     }
-    
-    static FieldInfo[] GetPublicVariables(ScriptableObject scriptableObject)
-    {
-        Type type = scriptableObject.GetType();
-        return type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-    }
 
-    private static void AssignScriptableObjectReferences(GameObject gameObject, FSMGraphSaveData saveData)
+    private static void AssignScriptableObjectReferences(FSMGraphSaveData saveData)
     {
-        EnemyStateMachine enemyStateMachine = gameObject.GetComponent<EnemyStateMachine>();
+        EnemyStateMachine enemyStateMachine = saveData.GameObject.GetComponent<EnemyStateMachine>();
+        if (enemyStateMachine == null)
+        {
+            enemyStateMachine = saveData.GameObject.AddComponent<EnemyStateMachine>();
+        }
+
         for (int i = 0; i < saveData.Nodes.Count; i++)
         {
             enemyStateMachine.SetVariableValue(char.ToLowerInvariant(saveData.Nodes[i].Name[0]) + saveData.Nodes[i].Name.Substring(1), saveData.Nodes[i].ScriptableObject);
+        }
+    }
+    
+    static void CompileAndCreateScript(string scriptCode, GameObject gameObject, FSMGraphSaveData saveData)
+    {
+        // Compile the script dynamically
+        CodeDomProvider provider = new CSharpCodeProvider();
+        CompilerParameters parameters = new CompilerParameters();
+
+        /*string systemRuntimePath = Path.Combine(EditorApplication.applicationContentsPath, "Tools/netcorerun", "System.Runtime.dll");
+        parameters.ReferencedAssemblies.Add(systemRuntimePath);
+        
+        string netstandardPath = Path.Combine(EditorApplication.applicationContentsPath, "Tools/netcorerun", "netstandard.dll");
+        parameters.ReferencedAssemblies.Add(netstandardPath);
+        
+        string systemCollectionsPath = Path.Combine(EditorApplication.applicationContentsPath, "Tools/netcorerun", "System.Private.CoreLib.dll");
+        parameters.ReferencedAssemblies.Add(systemCollectionsPath);
+        
+        string coreModulePath = Path.Combine(EditorApplication.applicationContentsPath, "Managed/UnityEngine", "UnityEngine.CoreModule.dll");
+        parameters.ReferencedAssemblies.Add(coreModulePath);
+        
+        parameters.ReferencedAssemblies.Add("Library/ScriptAssemblies/Assembly-CSharp.dll");*/
+
+        parameters.GenerateInMemory = true;
+        //parameters.GenerateExecutable = false;
+        CompilerResults results = provider.CompileAssemblyFromSource(parameters, scriptCode);
+        
+        if (results.Errors.HasErrors)
+        {
+            foreach (CompilerError error in results.Errors)
+            {
+                Debug.LogError($"Error {error.ErrorNumber}: {error.ErrorText}");
+            }
+        }
+        else
+        {
+            // Get the compiled type
+            Type newScriptType = results.CompiledAssembly.GetType(saveData.FileName);
+
+            if (newScriptType != null)
+            {
+                // Create an instance of the new script type
+                MonoBehaviour newScriptInstance = (MonoBehaviour)gameObject.AddComponent(newScriptType);
+
+                // Call a method on the new script
+                MethodInfo dynamicMethod = newScriptType.GetMethod("SetVariableValue");
+                if (dynamicMethod != null)
+                {
+                    for (int i = 0; i < saveData.Nodes.Count; i++)
+                    {
+                        dynamicMethod.Invoke(newScriptInstance,new object[]{char.ToLowerInvariant(saveData.Nodes[i].Name[0]) + saveData.Nodes[i].Name.Substring(1), saveData.Nodes[i].ScriptableObject});
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("Failed to get the compiled script type.");
+            }
         }
     }
 
@@ -101,7 +108,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "using System.Reflection;\n\n";
         
 
-        scriptContent += "public class EnemyStateMachine : MonoBehaviour\n";
+        scriptContent += $"public class {saveData.FileName} : MonoBehaviour\n";
         scriptContent += "{\n";
 
         List<FSMNodeSaveData> states = new List<FSMNodeSaveData>();   
@@ -141,7 +148,8 @@ public static class EnemyStateMachineEditor
                 scriptContent += $"\tpublic {value.GetType()} {field.Name +" = "+ value};\n";
             }*/
         }
-        
+
+
         scriptContent += $"\tpublic Dictionary<string, object> GetVariables()";
         scriptContent += "\n\t{\n";
         scriptContent += "\t\tDictionary<string, object> variables = new Dictionary<string, object>();\n";

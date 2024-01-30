@@ -8,7 +8,14 @@ using Object = UnityEngine.Object;
 public abstract class State : ScriptableObject
 {
     private string stateName;
-    //public abstract void Execute();
+
+    protected GameObject player;
+    
+    protected void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
+    
     public abstract void Execute();
 
     public List<string> InspectVariables()

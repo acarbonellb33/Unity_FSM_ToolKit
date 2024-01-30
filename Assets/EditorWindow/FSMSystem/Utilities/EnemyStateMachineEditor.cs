@@ -31,7 +31,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "using System.Reflection;\n\n";
         
         scriptContent += "[Serializable]\n";
-        scriptContent += $"public class {saveData.FileName} : MonoBehaviour\n";
+        scriptContent += $"public class {saveData.FileName} : BehaviorScript\n";
         scriptContent += "{\n";
 
         states = new List<FSMNodeSaveData>();   
@@ -48,12 +48,32 @@ public static class EnemyStateMachineEditor
             scriptContent += $"\tpublic {variableName} {char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)};\n";
             scriptContent += "\n";
         }
+
+        scriptContent += "\tprivate FSMStates currentState;\n";
+        scriptContent += "\n";
+        scriptContent += "\tvoid Update()\n";
+        scriptContent += "\t{\n";
+        scriptContent += "\t\tswitch (currentState)\n";
+        scriptContent += "\t\t{\n";
+
+        foreach (var node in states.Distinct())
+        {
+            if (node.NodeType == FSMNodeType.State)
+            {
+                scriptContent += $"\t\t\tcase FSMStates.{node.Name}:\n";
+                scriptContent += $"\t\t\t\tUpdate{node.Name}State();\n";
+                scriptContent += "\t\t\t\tbreak;\n";
+            }
+        }
+        
+        scriptContent += "\t\t}\n";
+        scriptContent += "\t}\n";
         
         foreach (var node in states.Distinct())
         {
             if (node.NodeType == FSMNodeType.State)
             {
-                scriptContent += $"\tpublic void {node.Name}()\n";
+                scriptContent += $"\tpublic void Update{node.Name}State()\n";
                 scriptContent += "\t{\n";
                 scriptContent += $"\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.Execute();\n";
                 
@@ -62,85 +82,22 @@ public static class EnemyStateMachineEditor
                 
                 scriptContent += $"\t\tif({char.ToLowerInvariant(name[0]) + name.Substring(1)}.Condition())\n";
                 scriptContent += "\t\t{\n";  
-                scriptContent += $"\t\t\t{char.ToLowerInvariant(connectionName[0]) + connectionName.Substring(1)}.Execute();\n";
+                scriptContent += $"\t\t\tChange{node.Name}State();\n";
                 scriptContent += "\t\t}\n";
                 scriptContent += "\t}\n";
             }
         }
         
-        scriptContent += $"\tpublic Dictionary<string, object> GetVariables()";
-        scriptContent += "\n\t{\n";
-        scriptContent += "\t\tDictionary<string, object> variables = new Dictionary<string, object>();\n";
-        scriptContent += $"\t\tType type = GetType();\n";
-        scriptContent += $"\t\tFieldInfo[] fields = type.GetFields();\n";
-        scriptContent += "\n";
-        scriptContent += "\t\tforeach (FieldInfo field in fields)\n";
-        scriptContent += "\t\t{\n";
-        scriptContent += "\t\t\tobject value = field.GetValue(this);\n";
-        scriptContent += "\t\t\tvariables.Add(field.Name, value);\n";
-        scriptContent += "\t\t}\n";
-        scriptContent += "\t\treturn variables;\n";
-        scriptContent += "\t}\n";
-            
-        scriptContent += "\n";
-            
-        scriptContent += $"\tpublic void SetVariableValue(string variableName, object newValue)\n";
-        scriptContent += "\t{\n";
-        scriptContent += "\t\t// Use reflection to set the value of the variable with the given name\n";
-        scriptContent += "\t\tSystem.Type type = GetType();\n";
-        scriptContent += "\t\tSystem.Reflection.FieldInfo field = type.GetField(variableName);\n";
-        scriptContent += "\n";
-        scriptContent += "\t\tif (field != null)\n";
-        scriptContent += "\t\t{\n";
-        scriptContent += "\t\t\tfield.SetValue(this, newValue);\n";
-        scriptContent += "\t\t}\n";
-        scriptContent += "\t\telse\n";
-        scriptContent += "\t\t{\n";
-        scriptContent += "\t\t\tDebug.LogError($\"{variableName} does not exist in the ScriptableObject.\");\n";
-        scriptContent += "\t\t}\n";
-        scriptContent += "\t}\n";
-        
-        /*List<string> contidions = new List<string>();   
-        foreach (var state in _stateMachineData.states)
+        foreach (var node in states.Distinct())
         {
-            contidions.Add(state.condition);
-        }
-
-        foreach (var condition in contidions.Distinct())
-        {
-            ScriptableObject actionState = CreateInstance(condition+"Condition");
-            scriptContent += $"\n\tprivate {actionState.GetType()} {char.ToLowerInvariant(condition[0]) + condition.Substring(1) + "Condition"};\n\n";
-        }*/
-        
-        /*scriptContent += "\t\n";
-        scriptContent += $"\tpublic void Update()\n";
-        scriptContent += "\t{\n";
-        scriptContent += "\t}\n\n";
-        
-        List<string> states2 = new List<string>();
-
-        foreach (var state in _stateMachineData.states)
-        {
-            if (!states2.Contains(state.name))
+            if (node.NodeType == FSMNodeType.State)
             {
-                scriptContent += $"\tpublic void {state.name}()\n";
+                scriptContent += $"\tprivate void Change{node.Name}State()\n";
                 scriptContent += "\t{\n";
-                
-                // Generate a call to the SpecificAttackMethod
-                string nameCorrection = char.ToLowerInvariant(state.name[0]) + state.name.Substring(1);
-                string nameCorrection2 = char.ToLowerInvariant(state.condition[0]) + state.condition.Substring(1) + "Condition";
-                            
-                scriptContent += $"\t\t{nameCorrection}State.Execute();\n";
-                scriptContent += $"\t\tif ("+nameCorrection2+".Condition())\n";
-                scriptContent += "\t\t{\n";
-                scriptContent += $"\t\t\t{state.nextState}();\n";
-                scriptContent += "\t\t}\n";
-                scriptContent += "\t}\n\n";
-                
-                states2.Add(state.name);
+                scriptContent += $"\t\tcurrentState = FSMStates.{node.Name};\n";
+                scriptContent += "\t}\n";
             }
-            
-        }*/
+        }
 
         scriptContent += "}\n";
 

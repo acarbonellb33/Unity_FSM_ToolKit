@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Attack
+  m_Name: Distance
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Attack
+  <NodeName>k__BackingField: Distance
   <Text>k__BackingField: Text
   <Connections>k__BackingField:
-  - <Text>k__BackingField: New Transition
-    <NextNode>k__BackingField: {fileID: 0}
-  <NodeType>k__BackingField: 0
-  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 8a9cb47302798a745a9278d52fe427ff, type: 2}
+  - <Text>k__BackingField: New State
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 415164d6abbf97f40a6533085f888ddf, type: 2}
+  <NodeType>k__BackingField: 1
+  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: a41a925fd73194a4b8d466e036ba2611, type: 2}

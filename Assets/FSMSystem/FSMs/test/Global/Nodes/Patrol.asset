@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Attack
+  m_Name: Patrol
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Attack
+  <NodeName>k__BackingField: Patrol
   <Text>k__BackingField: Text
   <Connections>k__BackingField:
   - <Text>k__BackingField: New Transition
-    <NextNode>k__BackingField: {fileID: 0}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 3e1d7ff9a816f354a845f30b623d9ea1, type: 2}
   <NodeType>k__BackingField: 0
-  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 8a9cb47302798a745a9278d52fe427ff, type: 2}
+  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 124d0ea96539aaf4bb367d5d89e45613, type: 2}

@@ -1,10 +1,12 @@
 using System;
 using System.CodeDom.Compiler;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.CSharp;
+using Unity.EditorCoroutines.Editor;
 using UnityEngine;
 using UnityEditor;
 
@@ -21,8 +23,10 @@ public static class EnemyStateMachineEditor
         AssetDatabase.Refresh();
         
         //AssignScriptableObjectReferences(saveData);
+        
+        //YourAction(scriptContent, saveData.GameObject, saveData);
         CompileAndCreateScript(scriptContent, saveData.GameObject, saveData);
-            
+
         Debug.Log($"Script generated at: {scriptPath}");
     }
 
@@ -46,20 +50,14 @@ public static class EnemyStateMachineEditor
         CodeDomProvider provider = new CSharpCodeProvider();
         CompilerParameters parameters = new CompilerParameters();
 
-        /*string systemRuntimePath = Path.Combine(EditorApplication.applicationContentsPath, "Tools/netcorerun", "System.Runtime.dll");
-        parameters.ReferencedAssemblies.Add(systemRuntimePath);
-        
-        string netstandardPath = Path.Combine(EditorApplication.applicationContentsPath, "Tools/netcorerun", "netstandard.dll");
+        string netstandardPath = Path.Combine(EditorApplication.applicationContentsPath, "MonoBleedingEdge/lib/mono/unityaot-win32/Facades", "netstandard.dll");
         parameters.ReferencedAssemblies.Add(netstandardPath);
-        
-        string systemCollectionsPath = Path.Combine(EditorApplication.applicationContentsPath, "Tools/netcorerun", "System.Private.CoreLib.dll");
-        parameters.ReferencedAssemblies.Add(systemCollectionsPath);
-        
+
         string coreModulePath = Path.Combine(EditorApplication.applicationContentsPath, "Managed/UnityEngine", "UnityEngine.CoreModule.dll");
         parameters.ReferencedAssemblies.Add(coreModulePath);
         
-        parameters.ReferencedAssemblies.Add("Library/ScriptAssemblies/Assembly-CSharp.dll");*/
-
+        parameters.ReferencedAssemblies.Add("Library/ScriptAssemblies/Assembly-CSharp.dll");
+        
         parameters.GenerateInMemory = true;
         //parameters.GenerateExecutable = false;
         CompilerResults results = provider.CompileAssemblyFromSource(parameters, scriptCode);
@@ -79,17 +77,24 @@ public static class EnemyStateMachineEditor
             if (newScriptType != null)
             {
                 // Create an instance of the new script type
-                MonoBehaviour newScriptInstance = (MonoBehaviour)gameObject.AddComponent(newScriptType);
+                //MonoBehaviour newScriptInstance = (MonoBehaviour)gameObject.AddComponent(newScriptType);
+                
+                CreateWindow window = ScriptableObject.CreateInstance<CreateWindow>();
+                window.Initialize(newScriptType, saveData);
+                
+                
+                /*Debug.Log($"Created instance of {newScriptType}.");
 
                 // Call a method on the new script
                 MethodInfo dynamicMethod = newScriptType.GetMethod("SetVariableValue");
+
                 if (dynamicMethod != null)
                 {
                     for (int i = 0; i < saveData.Nodes.Count; i++)
                     {
                         dynamicMethod.Invoke(newScriptInstance,new object[]{char.ToLowerInvariant(saveData.Nodes[i].Name[0]) + saveData.Nodes[i].Name.Substring(1), saveData.Nodes[i].ScriptableObject});
                     }
-                }
+                }*/
             }
             else
             {
@@ -107,7 +112,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "using System.Collections.Generic;\n";
         scriptContent += "using System.Reflection;\n\n";
         
-
+        scriptContent += "[Serializable]\n";
         scriptContent += $"public class {saveData.FileName} : MonoBehaviour\n";
         scriptContent += "{\n";
 
@@ -148,6 +153,14 @@ public static class EnemyStateMachineEditor
                 scriptContent += $"\tpublic {value.GetType()} {field.Name +" = "+ value};\n";
             }*/
         }
+        
+        scriptContent += "\n";
+        scriptContent += "\tpublic void test()\n";
+        scriptContent += "\t{\n";
+        scriptContent += "\t\tDebug.Log(\"test\");\n";
+        scriptContent += $"\t\tgameObject.AddComponent<{saveData.FileName}>();\n";
+        scriptContent += "\t}\n";
+        scriptContent += "\n";
 
 
         scriptContent += $"\tpublic Dictionary<string, object> GetVariables()";

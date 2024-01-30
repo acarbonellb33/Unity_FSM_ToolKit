@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b664ecc41c97a804395c2672b001d2d7, type: 3}
+  m_Name: Arcabetest
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: Arcabetest
+  <Nodes>k__BackingField:
+  - <Id>k__BackingField: d1ae1616-d710-48f0-989f-65b9a12cfbbc
+    <Name>k__BackingField: Attack
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New Transition
+      <NodeId>k__BackingField: 865fbf9a-1ac2-4018-ab84-f62cb10dd0b6
+    <GroupId>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 288, y: 157}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: cb63e99d24b3bdc499d36fb893e75d62, type: 2}
+  - <Id>k__BackingField: 865fbf9a-1ac2-4018-ab84-f62cb10dd0b6
+    <Name>k__BackingField: Hearing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: 
+    <GroupId>k__BackingField: 
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 596, y: 258}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: df0f927e1eeec564a9c6334f4fe7af6d, type: 2}
+  <Groups>k__BackingField: []
+  <OldGroupedNames>k__BackingField: []
+  <OldUngroupedNames>k__BackingField:
+  - Attack
+  - Hearing
+  <OldGroupedNodeNames>k__BackingField:
+    list: []
+  <GameObject>k__BackingField: {fileID: 0}

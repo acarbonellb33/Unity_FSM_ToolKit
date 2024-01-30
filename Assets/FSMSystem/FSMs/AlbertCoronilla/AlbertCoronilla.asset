@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7b1ca387027062478ec3e0de58f6412, type: 3}
+  m_Name: AlbertCoronilla
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: AlbertCoronilla
+  <GroupedNodes>k__BackingField:
+    list: []
+  <UngroupedNodes>k__BackingField:
+  - {fileID: 11400000, guid: c5255c5748659f0469ead998a004e658, type: 2}
+  - {fileID: 11400000, guid: 97e1a17209fc7cb4b9c9310f4f8d58ea, type: 2}
+  - {fileID: 11400000, guid: a364806a63ff19f42938f7b663aa66b7, type: 2}
+  - {fileID: 11400000, guid: c9cdd22b75380ea45ac4b0a2b91a5d98, type: 2}

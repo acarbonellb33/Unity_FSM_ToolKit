@@ -13,7 +13,7 @@ public class FSMNode : Node
     public string Id { get; set; }
     public string StateName { get; set; }
     public List<FSMConnectionSaveData> Choices { get; set; }
-    public FSMDialogueType DialogueType { get; set; }
+    public FSMNodeType NodeType { get; set; }
     public FSMGroup Group { get; set; }
     
     private FSMGraphView _graphView;

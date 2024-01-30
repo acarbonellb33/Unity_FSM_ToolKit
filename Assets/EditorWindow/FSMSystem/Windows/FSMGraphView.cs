@@ -71,9 +71,9 @@ public class FSMGraphView : GraphView
         return compatiblePorts;
     }
     
-    public FSMNode CreateNode(string nodeName, Vector2 position, FSMDialogueType dialogueType, bool shouldDraw = true)
+    public FSMNode CreateNode(string nodeName, Vector2 position, FSMNodeType nodeT, bool shouldDraw = true)
     {
-        Type nodeType = Type.GetType($"FSM{dialogueType}Node");
+        Type nodeType = Type.GetType($"FSM{nodeT}Node");
         FSMNode node = (FSMNode) Activator.CreateInstance(nodeType);
         
         node.Initialize(nodeName, this, position);
@@ -443,6 +443,7 @@ public class FSMGraphView : GraphView
         this.AddManipulator(CreateStateItemMenu("Attack"));
         this.AddManipulator(CreateStateItemMenu("Patrol"));
         this.AddManipulator(CreateTransitionItemMenu("Hearing"));
+        this.AddManipulator(CreateTransitionItemMenu("Distance"));
         this.AddManipulator(CreateGroupContextualMenu());
     }
     
@@ -471,7 +472,7 @@ public class FSMGraphView : GraphView
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
             menuEvent => menuEvent.menu.AppendAction($"Create State/{nodeName}", menuActionEvent => 
-                AddElement(CreateNode(nodeName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.State))));
+                AddElement(CreateNode(nodeName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.State))));
         
         return contextualMenuManipulator;
     }
@@ -480,7 +481,7 @@ public class FSMGraphView : GraphView
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
             menuEvent => menuEvent.menu.AppendAction($"Create Transition/{transitionName}", menuActionEvent => 
-                AddElement(CreateNode(transitionName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMDialogueType.Transition))));
+                AddElement(CreateNode(transitionName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.Transition))));
         
         return contextualMenuManipulator;
     }

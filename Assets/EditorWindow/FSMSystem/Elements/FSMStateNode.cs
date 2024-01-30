@@ -12,7 +12,7 @@ public class FSMStateNode : FSMNode
     public override void Initialize(string nodeName, FSMGraphView graphView,Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
-        DialogueType = FSMDialogueType.State;
+        NodeType = FSMNodeType.State;
         
         _scriptableObjects = new List<State>() {ScriptableObject.CreateInstance<PatrolState>(), ScriptableObject.CreateInstance<AttackState>()};
 

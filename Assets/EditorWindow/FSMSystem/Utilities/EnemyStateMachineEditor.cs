@@ -6,6 +6,7 @@ using UnityEditor;
 
 public static class EnemyStateMachineEditor
 {
+    private static List<FSMNodeSaveData> states;
     public static void GenerateScript(FSMGraphSaveData saveData)
     {
         string scriptContent = GenerateScriptContent(saveData);
@@ -33,7 +34,7 @@ public static class EnemyStateMachineEditor
         scriptContent += $"public class {saveData.FileName} : MonoBehaviour\n";
         scriptContent += "{\n";
 
-        List<FSMNodeSaveData> states = new List<FSMNodeSaveData>();   
+        states = new List<FSMNodeSaveData>();   
         foreach (FSMNodeSaveData state in saveData.Nodes)
         {
             states.Add(state);
@@ -42,44 +43,31 @@ public static class EnemyStateMachineEditor
         foreach (var node in states.Distinct())
         {
             scriptContent += $"\t[Header(\"" + node.Name + "\")]\n";
-            foreach (string fullAttribute in node.ScriptableObject.InspectVariables())
-            {
-                /*string[] result = fullAttribute.Split(',');
-                scriptContent += "\t[SerializeField]\n";
-                scriptContent += $"\tprivate {result[1]} {result[0]} = {char.ToLowerInvariant(result[2][0]) + result[2].Substring(1)};\n";*/
-            }
-            
             scriptContent += "\t[SerializeField]\n";
-            string variableName = node.DialogueType == FSMDialogueType.State ? node.Name+"State" : node.Name+"Condition";
+            string variableName = node.NodeType == FSMNodeType.State ? node.Name+"State" : node.Name+"Condition";
             scriptContent += $"\tpublic {variableName} {char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)};\n";
-
             scriptContent += "\n";
-
-
-            /*ScriptableObject actionState = CreateInstance(node.Name+"State");
-            scriptContent += $"\n\tprivate {actionState.GetType()} {char.ToLowerInvariant(stateName[0]) + stateName.Substring(1) + "State"};\n\n";
-            
-            scriptContent += "\t[Header(\""+stateName+" Settings\")]\n\n";
-            
-            FieldInfo[] fields = GetPublicVariables(actionState);
-
-            // Print the names and values of the public variables
-            foreach (FieldInfo field in fields)
-            {
-                var value = field.GetValue(actionState);
-                scriptContent += $"\tpublic {value.GetType()} {field.Name +" = "+ value};\n";
-            }*/
         }
         
-        scriptContent += "\n";
-        scriptContent += "\tpublic void test()\n";
-        scriptContent += "\t{\n";
-        scriptContent += "\t\tDebug.Log(\"test\");\n";
-        scriptContent += $"\t\tgameObject.AddComponent<{saveData.FileName}>();\n";
-        scriptContent += "\t}\n";
-        scriptContent += "\n";
-
-
+        foreach (var node in states.Distinct())
+        {
+            if (node.NodeType == FSMNodeType.State)
+            {
+                scriptContent += $"\tpublic void {node.Name}()\n";
+                scriptContent += "\t{\n";
+                scriptContent += $"\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.Execute();\n";
+                
+                string name = GetState(node.Connections[0].NodeId);
+                string connectionName = GetConnection(node.Connections[0].NodeId);
+                
+                scriptContent += $"\t\tif({char.ToLowerInvariant(name[0]) + name.Substring(1)}.Condition())\n";
+                scriptContent += "\t\t{\n";  
+                scriptContent += $"\t\t\t{char.ToLowerInvariant(connectionName[0]) + connectionName.Substring(1)}.Execute();\n";
+                scriptContent += "\t\t}\n";
+                scriptContent += "\t}\n";
+            }
+        }
+        
         scriptContent += $"\tpublic Dictionary<string, object> GetVariables()";
         scriptContent += "\n\t{\n";
         scriptContent += "\t\tDictionary<string, object> variables = new Dictionary<string, object>();\n";
@@ -157,6 +145,30 @@ public static class EnemyStateMachineEditor
         scriptContent += "}\n";
 
         return scriptContent;
+    }
+    
+    private static string GetState(string id)
+    {
+        foreach (var state in states)
+        {
+            if (state.Id == id)
+            {
+                return state.Name;
+            }
+        }
+        return null;
+    }
+
+    private static string GetConnection(string id)
+    {
+        foreach (var state in states)
+        {
+            if (state.Id == id)
+            {
+                return GetState(state.Connections[0].NodeId);
+            }
+        }
+        return null;
     }
 }
 

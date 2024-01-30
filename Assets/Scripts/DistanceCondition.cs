@@ -1,19 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewHearingCondition", menuName = "States Conditions/Hearing Condition")]
-public class HearingCondition : State
+[CreateAssetMenu(fileName = "NewDistanceCondition", menuName = "States Conditions/Distance Condition")]
+public class DistanceCondition : State
 {
-    private float distanceToPlayer;
-    public float hearingRange = 10f;
+    private float distanceToPlayer = 0f;
+    public float distance = 10f;
     
-    private HearingCondition()
+    private DistanceCondition()
     {
-        SetStateName("Hearing");
+        SetStateName("Distance");
+    }
+
+    private void OnEnable()
+    {
         //distanceToPlayer = Vector3.Distance(GameObject.FindWithTag("Player").transform.position, GameObject.FindWithTag("Enemy").transform.position);
     }
-    
+
     public override void Execute()
     {
         throw new System.NotImplementedException();
@@ -21,7 +26,7 @@ public class HearingCondition : State
 
     public bool Condition()
     {
-        if (distanceToPlayer <= hearingRange)
+        if (distanceToPlayer <= distance)
         {
             return true;
         }

@@ -148,7 +148,7 @@ public static class FSMIOUtility
             Name = node.StateName,
             Connections = connections,
             GroupId = node.Group?.Id,
-            DialogueType = node.DialogueType,
+            NodeType = node.NodeType,
             Position = node.GetPosition().position,
             ScriptableObject = _stateScriptableObject,
         };
@@ -174,7 +174,7 @@ public static class FSMIOUtility
             node.StateName,
             "Text",
             ConvertNodeConnection(node.Choices),
-            node.DialogueType,
+            node.NodeType,
             state
         );
         _createdNodes.Add(node.Id, nodeSo);
@@ -282,7 +282,7 @@ public static class FSMIOUtility
         {
             List<FSMConnectionSaveData> connections = CloneNodeConnections(nodeData.Connections);
 
-            FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.DialogueType, false);
+            FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false);
             node.Id = nodeData.Id;
             node.Choices = connections;
             node.StateScriptableObject = nodeData.ScriptableObject;
@@ -347,8 +347,8 @@ public static class FSMIOUtility
 
         MethodInfo createAssetMethod = typeof(FSMIOUtility).GetMethod("CreateAsset");
 
-        Type classType = node.DialogueType == FSMDialogueType.State ? Type.GetType(node.StateName+"State") : Type.GetType(node.StateName+"Condition");
-        string className = node.DialogueType == FSMDialogueType.State ? node.StateName+"State" : node.StateName+"Condition";
+        Type classType = node.NodeType == FSMNodeType.State ? Type.GetType(node.StateName+"State") : Type.GetType(node.StateName+"Condition");
+        string className = node.NodeType == FSMNodeType.State ? node.StateName+"State" : node.StateName+"Condition";
                 
         MethodInfo genericCreateAssetMethod = createAssetMethod.MakeGenericMethod(classType);
 

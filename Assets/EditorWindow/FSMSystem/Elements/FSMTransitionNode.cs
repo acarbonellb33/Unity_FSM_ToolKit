@@ -16,9 +16,9 @@ public class FSMTransitionNode : FSMNode
     public override void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
-        DialogueType = FSMDialogueType.Transition;
+        NodeType = FSMNodeType.Transition;
         
-        _scriptableObjects = new List<State>() {ScriptableObject.CreateInstance<HearingCondition>()};
+        _scriptableObjects = new List<State>() {ScriptableObject.CreateInstance<HearingCondition>(), ScriptableObject.CreateInstance<DistanceCondition>()};
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {

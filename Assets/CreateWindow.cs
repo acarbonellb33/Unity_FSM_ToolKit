@@ -64,5 +64,6 @@ public class CreateWindow : EditorWindow
                 }
             }
         }
+        GetWindow<CreateWindow>().Close();
     }
 }

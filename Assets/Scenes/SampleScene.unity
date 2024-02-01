@@ -404,7 +404,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &710194560
 Transform:
   m_ObjectHideFlags: 0
@@ -414,7 +414,7 @@ Transform:
   m_GameObject: {fileID: 710194559}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.3423754, y: 4.28, z: 0.0019671875}
+  m_LocalPosition: {x: -0.3423754, y: 4.28, z: 13.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -496,7 +496,7 @@ Transform:
   m_GameObject: {fileID: 869181751}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.25, y: 3.76, z: 0.0019671875}
+  m_LocalPosition: {x: 16.25, y: 3.76, z: -0.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -534,19 +534,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2619ed9a76ceff9449064557e52c1f18, type: 3}
+  m_Script: {fileID: 11500000, guid: f389b1dee87cec34a9c4a1c5c83c16c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   options:
-  - {fileID: 11400000, guid: a41a925fd73194a4b8d466e036ba2611, type: 2}
-  - {fileID: 11400000, guid: b5c5ef0766f3d8746b45aaba18cf64f1, type: 2}
-  - {fileID: 11400000, guid: 124d0ea96539aaf4bb367d5d89e45613, type: 2}
-  - {fileID: 11400000, guid: 16730cf86bb27ac47af247f739ed2a0b, type: 2}
+  - {fileID: 11400000, guid: d6a491ce4b0dd9b49a757eeb4ca0f8af, type: 2}
+  - {fileID: 11400000, guid: 229f3f12317cada44be7e3a086593a19, type: 2}
+  - {fileID: 11400000, guid: 6b365a897ec064e469f93484bbd4f28f, type: 2}
+  - {fileID: 11400000, guid: 18db8afcba919204296453a1ec563f56, type: 2}
   selectedOptionIndex: 0
-  distance: {fileID: 11400000, guid: a41a925fd73194a4b8d466e036ba2611, type: 2}
-  hearing: {fileID: 11400000, guid: b5c5ef0766f3d8746b45aaba18cf64f1, type: 2}
-  patrol: {fileID: 11400000, guid: 124d0ea96539aaf4bb367d5d89e45613, type: 2}
-  attack: {fileID: 11400000, guid: 16730cf86bb27ac47af247f739ed2a0b, type: 2}
+  patrol: {fileID: 11400000, guid: d6a491ce4b0dd9b49a757eeb4ca0f8af, type: 2}
+  chase: {fileID: 11400000, guid: 229f3f12317cada44be7e3a086593a19, type: 2}
+  distance: {fileID: 11400000, guid: 6b365a897ec064e469f93484bbd4f28f, type: 2}
+  hearing: {fileID: 11400000, guid: 18db8afcba919204296453a1ec563f56, type: 2}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e214e96b7031f20479323d8d71e67220, type: 3}
   m_Name: DistanceCondition
   m_EditorClassIdentifier: 
-  distance: 15
+  distance: 20

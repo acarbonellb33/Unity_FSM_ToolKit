@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.AI;
 using Object = UnityEngine.Object;
 [Serializable]
 public abstract class State : ScriptableObject
@@ -10,12 +11,14 @@ public abstract class State : ScriptableObject
     private string stateName;
 
     protected GameObject player;
-    
-    protected void Start()
+    protected NavMeshAgent agent;
+
+    private void OnEnable()
     {
+        agent = GameObject.Find("Enemy").GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
     }
-    
+
     public abstract void Execute();
 
     public List<string> InspectVariables()
@@ -84,5 +87,10 @@ public abstract class State : ScriptableObject
     public string GetStateName()
     {
         return stateName;
+    }
+    
+    public void SetAgent(NavMeshAgent agent)
+    {
+        this.agent = agent;
     }
 }

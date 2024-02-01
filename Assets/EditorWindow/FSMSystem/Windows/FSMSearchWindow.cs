@@ -36,6 +36,11 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
                 userData = FSMNodeType.State,
                 level = 2
             },
+            new SearchTreeEntry(new GUIContent("Chase", _indentationIcon))
+            {
+                userData = FSMNodeType.State,
+                level = 2
+            },
             new SearchTreeGroupEntry(new GUIContent("Transition Node"), 1),
             new SearchTreeEntry(new GUIContent("Hearing", _indentationIcon))
             {

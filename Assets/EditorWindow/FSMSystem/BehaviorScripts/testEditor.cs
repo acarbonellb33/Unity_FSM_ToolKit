@@ -63,7 +63,7 @@ public class testEditor : Editor
             SerializedProperty iterator = selectedObjectSerialized.GetIterator();
             bool nextVisible = iterator.NextVisible(true);
             while (nextVisible)
-            {
+            { 
                 if (iterator.name != "m_Script")
                 {
                     EditorGUILayout.PropertyField(iterator, true);

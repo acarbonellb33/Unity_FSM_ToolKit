@@ -10,10 +10,13 @@ public static class EnemyStateMachineEditor
     public static void GenerateScript(FSMGraphSaveData saveData)
     {
         string scriptContent = GenerateScriptContent(saveData);
+        string editorScriptContent = GenerateEditorScriptContent(saveData);
 
         string scriptPath = $"Assets/EditorWindow/FSMSystem/BehaviorScripts/{saveData.FileName}.cs";
+        string editorScriptPath = $"Assets/EditorWindow/FSMSystem/Inspectors/{saveData.FileName}Editor.cs";
         
         File.WriteAllText(scriptPath, scriptContent);
+        File.WriteAllText(editorScriptPath, editorScriptContent);
         
         AssetDatabase.Refresh();
         
@@ -48,9 +51,7 @@ public static class EnemyStateMachineEditor
             scriptContent += $"\tpublic {variableName} {char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)};\n";
             scriptContent += "\n";
         }
-
-        scriptContent += "\tprivate FSMStates currentState;\n";
-        scriptContent += "\n";
+        
         scriptContent += "\tvoid Update()\n";
         scriptContent += "\t{\n";
         scriptContent += "\t\tswitch (currentState)\n";
@@ -103,7 +104,92 @@ public static class EnemyStateMachineEditor
 
         return scriptContent;
     }
+
+    private static string GenerateEditorScriptContent(FSMGraphSaveData saveData)
+    {
+        string scriptContent = "using System.Collections.Generic;\n";
+        scriptContent += "using UnityEditor;\n";
+        scriptContent += "using System.Collections;\n";
+        scriptContent += "using UnityEngine;\n";
+
+        scriptContent += $"[CustomEditor(typeof({saveData.FileName}))]\n";
+        scriptContent += $"public class {saveData.FileName}Editor : Editor\n";
+        scriptContent += "{\n";
+        
+        states = new List<FSMNodeSaveData>();   
+        foreach (FSMNodeSaveData state in saveData.Nodes)
+        {
+            states.Add(state);
+        }
+        
+        foreach (var node in states.Distinct())
+        {
+            scriptContent += $"\tprivate SerializedProperty {char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}Property;\n";
+        }
+        
+        scriptContent += "\tprivate SerializedProperty optionsProp;\n";
+        scriptContent += "\tprivate SerializedProperty selectedOptionIndexProp;\n";
+        scriptContent += "\tprivate SerializedProperty currentStateProperty;\n";
+        scriptContent += "\tDictionary<string, State> optionToObjectMap = new Dictionary<string, State>();\n";
+        
+        scriptContent += "\tvoid OnEnable()\n";
+        scriptContent += "\t{\n";
+        foreach (var node in states.Distinct())
+        {
+            scriptContent += $"\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}Property = serializedObject.FindProperty(\"{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}\");\n";
+        }
+        scriptContent += "\t\toptionsProp = serializedObject.FindProperty(\"options\");\n";
+        scriptContent += "\t\tselectedOptionIndexProp = serializedObject.FindProperty(\"selectedOptionIndex\");\n";
+        scriptContent += "\t\tcurrentStateProperty = serializedObject.FindProperty(\"currentState\");\n";
+        
+        scriptContent += $"\t\t{saveData.FileName} {char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)} = ({saveData.FileName})target;\n";
+        scriptContent += $"\t\tfor (int i = 0; i < {saveData.FileName}.options.Count; i++)\n";
+        scriptContent += "\t\t{\n";
+        scriptContent += $"\t\t\toptionToObjectMap[{saveData.FileName}.options[i].GetStateName()] = {saveData.FileName}.options[i];\n";
+        scriptContent += "\t\t}\n";
+        scriptContent += "\t}\n";
+        
+        scriptContent += "\tpublic override void OnInspectorGUI()\n";
+        scriptContent += "\t{\n";
+        scriptContent += "\t\tserializedObject.Update();\n";
+        scriptContent += $"\t\t{saveData.FileName} {char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)} = ({saveData.FileName})target;\n";
+        scriptContent += $"\t\tstring[] options = new string[{saveData.FileName}.options.Count];\n";
+        scriptContent += "\t\tfor (int i = 0; i < options.Length; i++)\n";
+        scriptContent += "\t\t{\n";
+        scriptContent += $"\t\t\toptions[i] = {saveData.FileName}.options[i].GetStateName();\n";
+        scriptContent += "\t\t}\n";
+        scriptContent += "\t\tselectedOptionIndexProp.intValue = EditorGUILayout.Popup(\"Selected Option\", selectedOptionIndexProp.intValue, options);\n";
+        scriptContent += "\t\tstring selectedOptionName = options[selectedOptionIndexProp.intValue];\n";
+        scriptContent += "\t\tif (optionToObjectMap.ContainsKey(selectedOptionName))\n";
+        scriptContent += "\t\t{\n";
+        scriptContent += "\t\t\tEditorGUILayout.LabelField($\"{selectedOptionName} Attributes:\");\n";
+        scriptContent += "\t\t\tScriptableObject selectedObject = optionToObjectMap[selectedOptionName];\n";
+        scriptContent += "\t\t\tSerializedObject selectedObjectSerialized = new SerializedObject(selectedObject);\n";
+        scriptContent += "\t\t\tselectedObjectSerialized.Update();\n";
+        scriptContent += "\t\t\tEditorGUI.BeginChangeCheck();\n";
+        scriptContent += "\t\t\tSerializedProperty iterator = selectedObjectSerialized.GetIterator();\n";
+        scriptContent += "\t\t\tbool nextVisible = iterator.NextVisible(true);\n";
+        scriptContent += "\t\t\twhile (nextVisible)\n";
+        scriptContent += "\t\t\t{\n";
+        scriptContent += "\t\t\t\tif (iterator.name != \"m_Script\")\n";
+        scriptContent += "\t\t\t\t{\n";
+        scriptContent += "\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n";
+        scriptContent += "\t\t\t\t}\n";
+        scriptContent += "\t\t\t\tnextVisible = iterator.NextVisible(false);\n";
+        scriptContent += "\t\t\t}\n";
+        scriptContent += "\t\t\tif (EditorGUI.EndChangeCheck())\n";
+        scriptContent += "\t\t\t{\n";
+        scriptContent += "\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
+        scriptContent += "\t\t\t}\n";
+        scriptContent += "\t\t}\n";
+        scriptContent += "\t\tserializedObject.ApplyModifiedProperties();\n";
+        scriptContent += "\t}\n";
+
+        scriptContent += "}\n";
+        return scriptContent;
+    }
     
+    #region Utilities
     private static string GetState(string id)
     {
         foreach (var state in states)
@@ -115,17 +201,18 @@ public static class EnemyStateMachineEditor
         }
         return null;
     }
-
     private static string GetConnection(string id)
     {
         foreach (var state in states)
         {
             if (state.Id == id)
-            {
+            { 
                 return GetState(state.Connections[0].NodeId);
             }
         }
         return null;
     }
+    #endregion
 }
+
 

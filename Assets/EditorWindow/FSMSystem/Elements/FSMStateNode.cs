@@ -14,7 +14,7 @@ public class FSMStateNode : FSMNode
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.State;
         
-        _scriptableObjects = new List<State>() {ScriptableObject.CreateInstance<PatrolState>(), ScriptableObject.CreateInstance<AttackState>()};
+        _scriptableObjects = new List<State>() {State.CreateInstance<PatrolState>(), State.CreateInstance<AttackState>(), State.CreateInstance<ChaseState>()};
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {

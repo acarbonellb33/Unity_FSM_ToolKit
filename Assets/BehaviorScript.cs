@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class BehaviorScript : MonoBehaviour
 {
     public List<State> options;
     public int selectedOptionIndex = 0;
-    protected FSMStates currentState;
+    protected FSMStates currentState = FSMStates.Idle;
     
     public virtual Dictionary<string, object> GetVariables()
     {
@@ -17,7 +18,7 @@ public abstract class BehaviorScript : MonoBehaviour
         FieldInfo[] fields = type.GetFields();
 
         foreach (FieldInfo field in fields)
-        {
+        { 
             object value = field.GetValue(this);
             variables.Add(field.Name, value);
         }
@@ -34,6 +35,7 @@ public abstract class BehaviorScript : MonoBehaviour
             field.SetValue(this, newValue);
             if(options == null)
                 options = new List<State>();
+            ((State)newValue).SetAgent(GetComponent<NavMeshAgent>());
             options.Add((State)newValue);
         }
         else

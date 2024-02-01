@@ -23,8 +23,6 @@ public class test : BehaviorScript
 	[SerializeField]
 	public AttackState attack;
 
-	private FSMStates currentState;
-
 	void Update()
 	{
 		switch (currentState)

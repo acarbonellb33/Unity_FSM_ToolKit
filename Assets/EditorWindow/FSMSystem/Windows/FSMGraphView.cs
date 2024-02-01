@@ -442,6 +442,7 @@ public class FSMGraphView : GraphView
         this.AddManipulator(new RectangleSelector());
         this.AddManipulator(CreateStateItemMenu("Attack"));
         this.AddManipulator(CreateStateItemMenu("Patrol"));
+        this.AddManipulator(CreateStateItemMenu("Chase"));
         this.AddManipulator(CreateTransitionItemMenu("Hearing"));
         this.AddManipulator(CreateTransitionItemMenu("Distance"));
         this.AddManipulator(CreateGroupContextualMenu());

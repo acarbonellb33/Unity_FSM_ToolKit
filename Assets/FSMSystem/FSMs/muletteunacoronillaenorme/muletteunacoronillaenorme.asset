@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7b1ca387027062478ec3e0de58f6412, type: 3}
+  m_Name: muletteunacoronillaenorme
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: muletteunacoronillaenorme
+  <GroupedNodes>k__BackingField:
+    list: []
+  <UngroupedNodes>k__BackingField:
+  - {fileID: 11400000, guid: 7991f4aa28da3bb4a94062a2883a1833, type: 2}
+  - {fileID: 11400000, guid: a5298c7837b3478419854238d74de394, type: 2}
+  - {fileID: 11400000, guid: 6943415267862664ca0871b6ced41e97, type: 2}
+  - {fileID: 11400000, guid: 20a860b434c3c7747a6056bbc0160190, type: 2}

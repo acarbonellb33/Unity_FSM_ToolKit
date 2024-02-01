@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewHearingCondition", menuName = "States Conditions/Hearing Condition")]
 public class HearingCondition : State
 {
-    private float distanceToPlayer;
+    private float distanceToPlayer = 20f;
     public float hearingRange = 10f;
     
     private HearingCondition()

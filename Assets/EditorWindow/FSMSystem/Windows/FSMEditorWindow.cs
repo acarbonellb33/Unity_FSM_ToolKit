@@ -13,7 +13,7 @@ public class FSMEditorWindow : EditorWindow
     private Button _saveButton;
     private Button _miniMapButton;
     private Button _generateScriptButton;
-    private PopupField<string> _popupField;
+    private static PopupField<string> _popupField;
     public static List<string> _stateNames = new List<string>();
 
     [MenuItem("Window/FSM/FSM Graph")]
@@ -72,7 +72,7 @@ public class FSMEditorWindow : EditorWindow
     }
 
     #region Toolbar Actions
-    private void Save()
+    private bool Save()
     {
         if (string.IsNullOrEmpty(_fileNameTextField.value))
         {
@@ -81,7 +81,7 @@ public class FSMEditorWindow : EditorWindow
                 "Please enter a valid file name.",
                 "OK"
             );
-            return;
+            return false;
         }
         if(_popupField.value == null || _popupField.value == "")
         {
@@ -90,10 +90,11 @@ public class FSMEditorWindow : EditorWindow
                 "Please select a valid initial state.",
                 "OK"
             );
-            return;
+            return false;
         }
         FSMIOUtility.Initialize(_fileNameTextField.value, _graphView, _popupField.value);
         FSMIOUtility.Save();
+        return true;
     }
     private void Clear()
     {
@@ -122,10 +123,11 @@ public class FSMEditorWindow : EditorWindow
     }
     private void GenerateScript()
     {
-        Save();
-        FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileNameTextField.value);
-      
-        EnemyStateMachineEditor.GenerateScript(saveData);
+        if (Save())
+        {
+            FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileNameTextField.value);
+            EnemyStateMachineEditor.GenerateScript(saveData);
+        }
     }
     #endregion
 
@@ -134,7 +136,7 @@ public class FSMEditorWindow : EditorWindow
     {
         _fileNameTextField.value = fileName;
     }
-    public static void UpdatePopupField(List<string> stateNames)
+    public static void UpdatePopupField(List<string> stateNames, string initialState)
     {
         _stateNames.Clear();
         foreach (string name in stateNames)
@@ -142,6 +144,10 @@ public class FSMEditorWindow : EditorWindow
             if (!_stateNames.Contains(name))
             {
                 _stateNames.Add(name);
+                if(name.Equals(initialState))
+                {
+                    _popupField.value = name;
+                }
             }
         }
     }

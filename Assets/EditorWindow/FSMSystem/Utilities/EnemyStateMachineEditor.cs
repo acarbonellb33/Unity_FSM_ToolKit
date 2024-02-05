@@ -11,9 +11,12 @@ public static class EnemyStateMachineEditor
     {
         string scriptContent = GenerateScriptContent(saveData);
         string editorScriptContent = GenerateEditorScriptContent(saveData);
+        
+        string stringWithSpaces = saveData.FileName;
+        string stringWithoutSpaces = stringWithSpaces.Replace(" ", "");
 
-        string scriptPath = $"Assets/EditorWindow/FSMSystem/BehaviorScripts/{saveData.FileName}.cs";
-        string editorScriptPath = $"Assets/EditorWindow/FSMSystem/Inspectors/{saveData.FileName}Editor.cs";
+        string scriptPath = $"Assets/EditorWindow/FSMSystem/BehaviorScripts/{stringWithoutSpaces}.cs";
+        string editorScriptPath = $"Assets/EditorWindow/FSMSystem/Inspectors/{stringWithoutSpaces}Editor.cs";
         
         File.WriteAllText(scriptPath, scriptContent);
         File.WriteAllText(editorScriptPath, editorScriptContent);
@@ -34,7 +37,11 @@ public static class EnemyStateMachineEditor
         scriptContent += "using System.Reflection;\n\n";
         
         scriptContent += "[Serializable]\n";
-        scriptContent += $"public class {saveData.FileName} : BehaviorScript\n";
+        
+        string stringWithSpaces = saveData.FileName;
+        string stringWithoutSpaces = stringWithSpaces.Replace(" ", "");
+        
+        scriptContent += $"public class {stringWithoutSpaces} : BehaviorScript\n";
         scriptContent += "{\n";
 
         states = new List<FSMNodeSaveData>();   
@@ -121,8 +128,12 @@ public static class EnemyStateMachineEditor
         scriptContent += "using System.Collections;\n";
         scriptContent += "using UnityEngine;\n";
 
-        scriptContent += $"[CustomEditor(typeof({saveData.FileName}))]\n";
-        scriptContent += $"public class {saveData.FileName}Editor : Editor\n";
+        string stringWithSpaces = saveData.FileName;
+        string stringWithoutSpaces = stringWithSpaces.Replace(" ", "");
+        Debug.Log(stringWithoutSpaces);
+        
+        scriptContent += $"[CustomEditor(typeof({stringWithoutSpaces}))]\n";
+        scriptContent += $"public class {stringWithoutSpaces}Editor : Editor\n";
         scriptContent += "{\n";
         
         states = new List<FSMNodeSaveData>();   
@@ -131,27 +142,29 @@ public static class EnemyStateMachineEditor
             states.Add(state);
         }
         
+        string nameLowerCapital = char.ToLowerInvariant(stringWithoutSpaces[0]) + stringWithoutSpaces.Substring(1);
+        
         scriptContent += "\tprivate SerializedProperty selectedOptionIndexProp;\n";
         scriptContent += "\tDictionary<string, State> optionToObjectMap = new Dictionary<string, State>();\n";
         
         scriptContent += "\tvoid OnEnable()\n";
         scriptContent += "\t{\n";
         scriptContent += "\t\tselectedOptionIndexProp = serializedObject.FindProperty(\"selectedOptionIndex\");\n";
-        scriptContent += $"\t\t{saveData.FileName} {char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)} = ({saveData.FileName})target;\n";
-        scriptContent += $"\t\tfor (int i = 0; i < {saveData.FileName}.options.Count; i++)\n";
+        scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
+        scriptContent += $"\t\tfor (int i = 0; i < {nameLowerCapital}.options.Count; i++)\n";
         scriptContent += "\t\t{\n";
-        scriptContent += $"\t\t\toptionToObjectMap[{saveData.FileName}.options[i].GetStateName()] = {saveData.FileName}.options[i];\n";
+        scriptContent += $"\t\t\toptionToObjectMap[{nameLowerCapital}.options[i].GetStateName()] = {nameLowerCapital}.options[i];\n";
         scriptContent += "\t\t}\n";
         scriptContent += "\t}\n";
         
         scriptContent += "\tpublic override void OnInspectorGUI()\n";
         scriptContent += "\t{\n";
         scriptContent += "\t\tserializedObject.Update();\n";
-        scriptContent += $"\t\t{saveData.FileName} {char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)} = ({saveData.FileName})target;\n";
-        scriptContent += $"\t\tstring[] options = new string[{saveData.FileName}.options.Count];\n";
+        scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
+        scriptContent += $"\t\tstring[] options = new string[{nameLowerCapital}.options.Count];\n";
         scriptContent += "\t\tfor (int i = 0; i < options.Length; i++)\n";
         scriptContent += "\t\t{\n";
-        scriptContent += $"\t\t\toptions[i] = {saveData.FileName}.options[i].GetStateName();\n";
+        scriptContent += $"\t\t\toptions[i] = {nameLowerCapital}.options[i].GetStateName();\n";
         scriptContent += "\t\t}\n";
         scriptContent += "\t\tselectedOptionIndexProp.intValue = EditorGUILayout.Popup(\"Selected Option\", selectedOptionIndexProp.intValue, options);\n";
         scriptContent += "\t\tstring selectedOptionName = options[selectedOptionIndexProp.intValue];\n";
@@ -191,7 +204,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\t\t\t\t\t}\n";
         scriptContent += "\t\t\t\t\t\tif (GUILayout.Button(\"Create and Add a Patrol Point\"))\n";
         scriptContent += "\t\t\t\t\t\t{\n";
-        scriptContent += $"\t\t\t\t\t\t\tCreateAndAddGameObject({char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)}, iterator.arraySize);\n";
+        scriptContent += $"\t\t\t\t\t\t\tCreateAndAddGameObject({nameLowerCapital}, iterator.arraySize);\n";
         scriptContent += "\t\t\t\t\t\t}\n";
         scriptContent += "\t\t\t\t\t}\n";
         scriptContent += "\t\t\t\t\telse\n";
@@ -208,7 +221,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\t}\n";
         scriptContent += "\t\tserializedObject.ApplyModifiedProperties();\n";
         scriptContent += "\t}\n";
-        scriptContent += $"\tprivate void CreateAndAddGameObject({saveData.FileName} {char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)}, int count)\n";
+        scriptContent += $"\tprivate void CreateAndAddGameObject({stringWithoutSpaces} {nameLowerCapital}, int count)\n";
         scriptContent += "\t{\n";
         scriptContent += "\t\tGameObject newGameObject = new GameObject(\"Patrol Point \" + count);\n";
         scriptContent += "\t\tstring prefabPath = \"Assets/Prefabs/PatrolPoint\" + count + \".prefab\";\n";
@@ -218,7 +231,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\tDestroyImmediate(newGameObject);\n";
         scriptContent += "\t\tif (prefabToList != null)\n";
         scriptContent += "\t\t{\n";
-        scriptContent += $"\t\t\t{char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)}.AddObjectToList(prefabToList);\n";
+        scriptContent += $"\t\t\t{nameLowerCapital}.AddObjectToList(prefabToList);\n";
         scriptContent += "\t\t}\n";
         scriptContent += "\t\telse\n";
         scriptContent += "\t\t{\n";
@@ -227,8 +240,8 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t}\n";
         scriptContent += "\tprivate void RemovePatrolPoint(GameObject patrolPoint)\n";
         scriptContent += "\t{\n";
-        scriptContent += $"\t\t{saveData.FileName} {char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)} = ({saveData.FileName})target;\n";
-        scriptContent += $"\t\t{char.ToLowerInvariant(saveData.FileName[0]) + saveData.FileName.Substring(1)}.patrol.RemovePatrolPoint(patrolPoint);\n";
+        scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
+        scriptContent += $"\t\t{nameLowerCapital}.patrol.RemovePatrolPoint(patrolPoint);\n";
         scriptContent += "\t\tif(GameObject.Find(patrolPoint.name) != null)\n";
         scriptContent += "\t\t{\n";
         scriptContent += "\t\t\tDestroyImmediate(patrolPoint);\n";

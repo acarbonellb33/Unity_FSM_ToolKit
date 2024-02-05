@@ -270,7 +270,7 @@ public static class FSMIOUtility
                 stateNames.Add(node.Name);
             }
         }
-        FSMEditorWindow.UpdatePopupField(stateNames);
+        FSMEditorWindow.UpdatePopupField(stateNames, graphSaveData.InitialState);
         LoadGroups(graphSaveData.Groups);
         LoadNodes(graphSaveData.Nodes);
         LoadConnections();

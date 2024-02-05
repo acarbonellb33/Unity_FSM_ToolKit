@@ -12,11 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3ea5a464392d14b9aded3fd0ab99c1, type: 3}
   m_Name: PatrolState
   m_EditorClassIdentifier: 
-  patrolSpeed: 57699
-  patrolRadius: 2147483647
+  patrolSpeed: 5
+  patrolRadius: 10
   patrolPointPrefab: {fileID: 0}
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 602092399291465751, guid: 43d88b1511b597540bf62ff4c2c43b13, type: 3}
-  - {fileID: 8827007000652142841, guid: 5034b2d4731bf8d46b14b3472529997b, type: 3}
-  - {fileID: 8967897226691658751, guid: 7396487b339ae5140a0c9e5271606f02, type: 3}
+  patrolPoints: []

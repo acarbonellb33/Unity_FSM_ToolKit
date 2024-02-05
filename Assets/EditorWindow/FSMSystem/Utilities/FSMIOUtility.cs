@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -170,6 +171,7 @@ public static class FSMIOUtility
 
         }
         state = CreateScriptableObjects(node);
+        SaveToJson(node);
         nodeSo.Initialize(
             node.StateName,
             "Text",
@@ -179,6 +181,34 @@ public static class FSMIOUtility
         );
         _createdNodes.Add(node.Id, nodeSo);
         SaveAsset(nodeSo);
+    }
+
+    private static void SaveToJson(FSMNode node)
+    {
+        Debug.Log(node.StateScriptableObject.name);
+        if(node.StateScriptableObject.name == "PatrolState")
+        {
+            PatrolData patrolData = new PatrolData();
+            patrolData.patrolRadius = ((PatrolState)node.StateScriptableObject).patrolRadius;
+            patrolData.patrolSpeed = ((PatrolState)node.StateScriptableObject).patrolSpeed;
+            patrolData.patrolPointPrefab = ((PatrolState)node.StateScriptableObject).patrolPointPrefab;
+        
+            string json = JsonUtility.ToJson(patrolData, true);
+            File.WriteAllText($"{_containerFolderPath}/Global/Nodes/PatrolDataFile.json", json);
+            Debug.Log("PatrolDataFile.json created");
+        }
+    }
+
+    private static void LoadFromJson(FSMNode node)
+    {
+        string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/PatrolDataFile.json");
+        PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
+        ((PatrolState)node.StateScriptableObject).patrolRadius = patrolData.patrolRadius;
+        ((PatrolState)node.StateScriptableObject).patrolSpeed = patrolData.patrolSpeed;
+        ((PatrolState)node.StateScriptableObject).patrolPointPrefab = patrolData.patrolPointPrefab;
+        
+        Debug.Log("PatrolDataFile.json loaded");
+        
     }
     private static List<FSMNodeConnectionData> ConvertNodeConnection(List<FSMConnectionSaveData> connections)
     {
@@ -298,10 +328,11 @@ public static class FSMIOUtility
             //node.DialogueType = nodeData.DialogueType;
             //node.Group = _loadedGroups[nodeData.GroupId];
             
+            LoadFromJson(node);
             node.Draw();
             _graphView.AddElement(node);
             _loadedNodes.Add(node.Id, node);
-            
+            Debug.Log(((PatrolState)node.StateScriptableObject).patrolPointPrefab);
             if(string.IsNullOrEmpty(nodeData.GroupId))
             {
                 continue;

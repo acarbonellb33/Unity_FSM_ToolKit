@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b664ecc41c97a804395c2672b001d2d7, type: 3}
+  m_Name: testdos
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: testdos
+  <InitialState>k__BackingField: Attack
+  <Nodes>k__BackingField:
+  - <Id>k__BackingField: e2b33af1-5b87-44ce-95eb-c1e79d429c2a
+    <Name>k__BackingField: Attack
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New Transition
+      <NodeId>k__BackingField: 98518f11-ee8f-40ea-8624-098e609a4323
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: -23, y: 161}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 1f486a5e6f0116442a62c4c808b69e91, type: 2}
+  - <Id>k__BackingField: 6e22e0fa-7ee1-4612-99b4-0ef2290f1f3e
+    <Name>k__BackingField: Chase
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New Transition
+      <NodeId>k__BackingField: a0207699-783a-4294-90db-ae3882d5b360
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 647, y: 264}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 8bb28fdfb2bca4f44939ed4cdc9e8c08, type: 2}
+  - <Id>k__BackingField: a0207699-783a-4294-90db-ae3882d5b360
+    <Name>k__BackingField: Distance
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: e2b33af1-5b87-44ce-95eb-c1e79d429c2a
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 310, y: 372}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 7f8d7c27bf9f5624ea1cddca62199a34, type: 2}
+  - <Id>k__BackingField: 98518f11-ee8f-40ea-8624-098e609a4323
+    <Name>k__BackingField: Hearing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: 6e22e0fa-7ee1-4612-99b4-0ef2290f1f3e
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 310, y: 127}
+    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 2764442615cc4434f9434caf05172f41, type: 2}
+  <Groups>k__BackingField: []
+  <OldGroupedNames>k__BackingField: []
+  <OldUngroupedNames>k__BackingField:
+  - Attack
+  - Chase
+  - Distance
+  - Hearing
+  <OldGroupedNodeNames>k__BackingField:
+    list: []
+  <GameObject>k__BackingField: {fileID: 0}

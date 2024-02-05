@@ -166,7 +166,7 @@ public class FSMEditorWindow : EditorWindow
         _saveButton.SetEnabled(false);
         _generateScriptButton.SetEnabled(false);
     }
-    
+
     #endregion
     
 }

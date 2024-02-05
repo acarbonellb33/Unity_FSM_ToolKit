@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -65,14 +66,28 @@ public class FSMStateNode : FSMNode
             Label stateAttributeLabel = new Label(UpdateNameStyle(result[0]));
             stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
             stateAttributeContainer.Add(stateAttributeLabel);
-    
-            switch (result[1])
-            {
+            Debug.Log(attribute);
+
+            switch (result[1]){
+               
+                case "UnityEngine.GameObject":
+                    Debug.Log("GameObject"+GameObject.Find(result[2]));
+                    ObjectField objectField = new ObjectField()
+                    {
+                        objectType = typeof(GameObject),
+                        value = GameObject.Find(result[2].Substring(0,result[2].IndexOf(' ')))
+                    };      
+                    objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
+                    {
+                        StateScriptableObject.SetVariableValue(result[0], objectField.value);
+                    });
+                    objectField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(objectField);
+                    break;
                 case "System.Single":
                     FloatField floatField = new FloatField()
                     {
                         value = float.Parse(result[2])
-                        
                     };
                     floatField.RegisterCallback<InputEvent>(evt =>
                     {

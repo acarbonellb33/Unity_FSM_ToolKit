@@ -10,7 +10,9 @@ public class PatrolState : State
 {
     public float patrolSpeed = 5f;
     public int patrolRadius = 10;
-
+    [SerializeField]
+    public GameObject patrolPointPrefab;
+    
     public List<GameObject> patrolPoints;
     private int counter = 0;
     private PatrolState()

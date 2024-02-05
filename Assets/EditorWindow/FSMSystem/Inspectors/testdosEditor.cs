@@ -2,28 +2,28 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Collections;
 using UnityEngine;
-
-public class testingEditor : Editor
+[CustomEditor(typeof(testdos))]
+public class testdosEditor : Editor
 {
 	private SerializedProperty selectedOptionIndexProp;
 	Dictionary<string, State> optionToObjectMap = new Dictionary<string, State>();
 	void OnEnable()
 	{
 		selectedOptionIndexProp = serializedObject.FindProperty("selectedOptionIndex");
-		testing testing = (testing)target;
-		for (int i = 0; i < testing.options.Count; i++)
+		testdos testdos = (testdos)target;
+		for (int i = 0; i < testdos.options.Count; i++)
 		{
-			optionToObjectMap[testing.options[i].GetStateName()] = testing.options[i];
+			optionToObjectMap[testdos.options[i].GetStateName()] = testdos.options[i];
 		}
 	}
 	public override void OnInspectorGUI()
 	{
 		serializedObject.Update();
-		testing testing = (testing)target;
-		string[] options = new string[testing.options.Count];
+		testdos testdos = (testdos)target;
+		string[] options = new string[testdos.options.Count];
 		for (int i = 0; i < options.Length; i++)
 		{
-			options[i] = testing.options[i].GetStateName();
+			options[i] = testdos.options[i].GetStateName();
 		}
 		selectedOptionIndexProp.intValue = EditorGUILayout.Popup("Selected Option", selectedOptionIndexProp.intValue, options);
 		string selectedOptionName = options[selectedOptionIndexProp.intValue];
@@ -45,8 +45,6 @@ public class testingEditor : Editor
 						EditorGUILayout.Space();
 						EditorGUILayout.LabelField("Create a Patrol Waypoint", EditorStyles.boldLabel);
 						EditorGUILayout.Space();
-						
-						EditorGUILayout.PropertyField(iterator, true);
 						for (int i = 0; i < iterator.arraySize; i++)
 						{
 							EditorGUILayout.BeginHorizontal();
@@ -65,7 +63,7 @@ public class testingEditor : Editor
 						}
 						if (GUILayout.Button("Create and Add a Patrol Point"))
 						{
-							CreateAndAddGameObject(testing, iterator.arraySize);
+							CreateAndAddGameObject(testdos, iterator.arraySize);
 						}
 					}
 					else
@@ -82,7 +80,7 @@ public class testingEditor : Editor
 		}
 		serializedObject.ApplyModifiedProperties();
 	}
-	private void CreateAndAddGameObject(testing testing, int count)
+	private void CreateAndAddGameObject(testdos testdos, int count)
 	{
 		GameObject newGameObject = new GameObject("Patrol Point " + count);
 		string prefabPath = "Assets/Prefabs/PatrolPoint" + count + ".prefab";
@@ -92,7 +90,7 @@ public class testingEditor : Editor
 		DestroyImmediate(newGameObject);
 		if (prefabToList != null)
 		{
-			testing.AddObjectToList(prefabToList);
+			testdos.AddObjectToList(prefabToList);
 		}
 		else
 		{
@@ -101,8 +99,8 @@ public class testingEditor : Editor
 	}
 	private void RemovePatrolPoint(GameObject patrolPoint)
 	{
-		testing testing = (testing)target;
-		testing.patrol.RemovePatrolPoint(patrolPoint);
+		testdos testdos = (testdos)target;
+		//testdos.patrol.RemovePatrolPoint(patrolPoint);
 		if(GameObject.Find(patrolPoint.name) != null)
 		{
 			DestroyImmediate(patrolPoint);

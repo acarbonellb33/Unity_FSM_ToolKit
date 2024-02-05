@@ -10,6 +10,7 @@ using UnityEngine;
 public static class FSMIOUtility
 {
     private static FSMGraphView _graphView;
+    private static string _initialState;
     private static string _graphName;
     private static string _containerFolderPath;
     
@@ -23,13 +24,12 @@ public static class FSMIOUtility
     private static Dictionary<string, FSMNode> _loadedNodes;
     
     private static State _stateScriptableObject;
-    private static GameObject _gameObject;
 
-    public static void Initialize(string graphName, GameObject gameObject, FSMGraphView fsmGraphView)
+    public static void Initialize(string graphName, FSMGraphView fsmGraphView, string initialState)
     {
         _graphView = fsmGraphView;
+        _initialState = initialState;
         _graphName = graphName;
-        _gameObject = gameObject;
         _containerFolderPath = $"Assets/FSMSystem/FSMs/{graphName}";
         
         _groups = new List<FSMGroup>();
@@ -47,7 +47,7 @@ public static class FSMIOUtility
         CreateStaticFolders();
         GetElementsFromGraphView();
         FSMGraphSaveData graphSaveData = CreateAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs", _graphName);
-        graphSaveData.Initialize(_graphName,_gameObject);
+        graphSaveData.Initialize(_graphName, _initialState);
         FSMNodesContainerSO nodesContainer = CreateAsset<FSMNodesContainerSO>(_containerFolderPath, _graphName);
         nodesContainer.Initialize(_graphName);
         
@@ -262,7 +262,15 @@ public static class FSMIOUtility
             return;
         }
         FSMEditorWindow.UpdateFileName(graphSaveData.FileName);
-        FSMEditorWindow.UpdateGameObjectField(graphSaveData.GameObject);
+        List<string> stateNames = new List<string>();
+        foreach(FSMNodeSaveData node in graphSaveData.Nodes)
+        {
+            if(node.NodeType == FSMNodeType.State)
+            {
+                stateNames.Add(node.Name);
+            }
+        }
+        FSMEditorWindow.UpdatePopupField(stateNames);
         LoadGroups(graphSaveData.Groups);
         LoadNodes(graphSaveData.Nodes);
         LoadConnections();

@@ -14,11 +14,6 @@ public class DistanceCondition : State
         SetStateName("Distance");
     }
 
-    private void OnEnable()
-    {
-        //distanceToPlayer = Vector3.Distance(GameObject.FindWithTag("Player").transform.position, GameObject.FindWithTag("Enemy").transform.position);
-    }
-
     public override void Execute()
     {
         throw new System.NotImplementedException();
@@ -26,6 +21,7 @@ public class DistanceCondition : State
 
     public bool Condition()
     {
+        distanceToPlayer = Vector3.Distance(player.transform.position, agent.transform.position);
         if (distanceToPlayer <= distance)
         {
             return true;

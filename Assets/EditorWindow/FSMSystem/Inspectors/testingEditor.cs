@@ -6,12 +6,10 @@ using UnityEngine;
 public class testingEditor : Editor
 {
 	private SerializedProperty selectedOptionIndexProp;
-	private SerializedProperty currentStateProperty;
 	Dictionary<string, State> optionToObjectMap = new Dictionary<string, State>();
 	void OnEnable()
 	{
 		selectedOptionIndexProp = serializedObject.FindProperty("selectedOptionIndex");
-		currentStateProperty = serializedObject.FindProperty("currentState");
 		testing testing = (testing)target;
 		for (int i = 0; i < testing.options.Count; i++)
 		{
@@ -47,7 +45,6 @@ public class testingEditor : Editor
 						EditorGUILayout.Space();
 						EditorGUILayout.LabelField("Create a Patrol Waypoint", EditorStyles.boldLabel);
 						EditorGUILayout.Space();
-						EditorGUILayout.PropertyField(iterator, true);
 						for (int i = 0; i < iterator.arraySize; i++)
 						{
 							EditorGUILayout.BeginHorizontal();
@@ -55,7 +52,8 @@ public class testingEditor : Editor
 							if (gameObjectElementProperty.objectReferenceValue != null)
 							{
 								GameObject gameObject = (GameObject)gameObjectElementProperty.objectReferenceValue;
-								EditorGUILayout.Vector3Field("Position " + i, gameObject.transform.position);
+								Vector3 position = gameObject.transform.position;
+								EditorGUILayout.LabelField("Position " + i, "X: " + position.x + "\tY: " + position.y + "\tZ: " + position.z);
 								if (GUILayout.Button("Remove", GUILayout.Width(70)))
 								{
 									RemovePatrolPoint(gameObject);
@@ -84,13 +82,28 @@ public class testingEditor : Editor
 	}
 	private void CreateAndAddGameObject(testing testing, int count)
 	{
-		GameObject newGameObject = new GameObject("Patrol Point "+count);
-		testing.AddObjectToList(newGameObject);
+		GameObject newGameObject = new GameObject("Patrol Point " + count);
+		string prefabPath = "Assets/Prefabs/PatrolPoint" + count + ".prefab";
+		PrefabUtility.SaveAsPrefabAsset(newGameObject, prefabPath);
+		GameObject prefabToList = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+		GameObject prefab = PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath)) as GameObject;
+		DestroyImmediate(newGameObject);
+		if (prefabToList != null)
+		{
+			testing.AddObjectToList(prefabToList);
+		}
+		else
+		{
+			Debug.LogError("Failed to create a new GameObject");
+		}
 	}
 	private void RemovePatrolPoint(GameObject patrolPoint)
 	{
-		testing script = (testing)target;
-		script.patrol.RemovePatrolPoint(patrolPoint);
-		DestroyImmediate(patrolPoint);
+		testing testing = (testing)target;
+		testing.patrol.RemovePatrolPoint(patrolPoint);
+		if(GameObject.Find(patrolPoint.name) != null)
+		{
+			DestroyImmediate(patrolPoint);
+		}
 	}
 }

@@ -11,12 +11,21 @@ public abstract class State : ScriptableObject
     private string stateName;
 
     protected GameObject player;
-    protected NavMeshAgent agent;
+    protected NavMeshAgent agent = null;
 
     private void OnEnable()
     {
-        agent = GameObject.Find("Enemy").GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        GameObject enemyObject = GameObject.Find("Enemy");
+        if (enemyObject != null)
+        {
+            agent = enemyObject.GetComponent<NavMeshAgent>();
+            
+        }
+        GameObject playerObject = GameObject.Find("Player");
+        if (playerObject != null)
+        {
+            player = playerObject;
+        }
     }
 
     public abstract void Execute();

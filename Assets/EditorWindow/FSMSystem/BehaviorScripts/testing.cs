@@ -27,7 +27,6 @@ public class testing : BehaviorScript
 	{
 		currentState = FSMStates.Patrol;
 	}
-
 	void Update()
 	{
 		switch (currentState)
@@ -45,7 +44,7 @@ public class testing : BehaviorScript
 		patrol.Execute();
 		if(distance.Condition())
 		{
-			ChangePatrolState();
+			ChangeChaseState();
 		}
 	}
 	public void UpdateChaseState()
@@ -53,7 +52,7 @@ public class testing : BehaviorScript
 		chase.Execute();
 		if(hearing.Condition())
 		{
-			ChangeChaseState();
+			ChangePatrolState();
 		}
 	}
 	private void ChangePatrolState()

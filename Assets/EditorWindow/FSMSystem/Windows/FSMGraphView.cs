@@ -82,7 +82,7 @@ public class FSMGraphView : GraphView
         {
             node.Draw();
         }
-        ;
+        if(nodeT == FSMNodeType.State)FSMEditorWindow._stateNames.Add(nodeName);
         AddUngroupedNode(node);
         return node;
     }
@@ -159,7 +159,7 @@ public class FSMGraphView : GraphView
         }
     }
 
-    private void OnElementsDeleted()
+    private void OnElementsDeleted() 
     {
         deleteSelection = (operationName, askUser) =>
         {
@@ -173,6 +173,10 @@ public class FSMGraphView : GraphView
             {
                 if (element is FSMNode node)
                 {
+                    if(element is FSMStateNode n)
+                    {
+                        FSMEditorWindow._stateNames.Remove(n.StateName);
+                    }
                     nodesToDelete.Add(node);
                     continue;
                 }

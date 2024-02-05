@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: testing
   m_EditorClassIdentifier: 
   <FileName>k__BackingField: testing
+  <InitialState>k__BackingField: Patrol
   <Nodes>k__BackingField:
   - <Id>k__BackingField: a438e291-30b2-4630-a55e-eb7553b76235
     <Name>k__BackingField: Patrol

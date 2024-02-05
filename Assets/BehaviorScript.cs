@@ -35,7 +35,6 @@ public abstract class BehaviorScript : MonoBehaviour
             field.SetValue(this, newValue);
             if(options == null)
                 options = new List<State>();
-            ((State)newValue).SetAgent(GetComponent<NavMeshAgent>());
             options.Add((State)newValue);
         }
         else

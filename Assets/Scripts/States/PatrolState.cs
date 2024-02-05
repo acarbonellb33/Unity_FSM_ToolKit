@@ -1,5 +1,6 @@
 // PatrolState scriptable object
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,18 +10,13 @@ public class PatrolState : State
 {
     public float patrolSpeed = 5f;
     public int patrolRadius = 10;
-    
-    public List<GameObject> patrolPoints;
-    
-    private int counter = 0;
-    /*public List<Vector3> patrolPositions = new List<Vector3> { new Vector3(23.5400009f,0.0799999982f,10.4751863f), new Vector3(-28f,0.0799999982f,10.4751863f)
-        ,new Vector3(-28f,0.0799999982f,-13f)
-        ,new Vector3(23.5400009f,0.0799999982f,-13f)};*/
 
+    public List<GameObject> patrolPoints;
+    private int counter = 0;
     private PatrolState()
     {
-        patrolPoints = new List<GameObject>();
         SetStateName("Patrol");
+        patrolPoints = new List<GameObject>();
     }
     public override void Execute()
     {
@@ -32,6 +28,7 @@ public class PatrolState : State
         if(agent.remainingDistance <= 0.1)
         {
             if(counter==patrolPoints.Count)counter=0;
+            if (patrolPoints.Count == 0) return;
             agent.SetDestination(patrolPoints[counter].transform.position);
             counter++;
         }

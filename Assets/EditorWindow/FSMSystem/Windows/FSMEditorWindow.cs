@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -12,8 +13,9 @@ public class FSMEditorWindow : EditorWindow
     private Button _saveButton;
     private Button _miniMapButton;
     private Button _generateScriptButton;
-    private static ObjectField _gameObjectField;
-    
+    private PopupField<string> _popupField;
+    public static List<string> _stateNames = new List<string>();
+
     [MenuItem("Window/FSM/FSM Graph")]
     public static void Open()
     {
@@ -54,8 +56,7 @@ public class FSMEditorWindow : EditorWindow
         Button resetButton = FSMElementUtility.CreateButton("Reset", () => ResetGraph());
         _miniMapButton = FSMElementUtility.CreateButton("MiniMap", () => ToggleMiniMap());
         _generateScriptButton = FSMElementUtility.CreateButton("Generate Script", () => GenerateScript());
-        _gameObjectField = new ObjectField("Game Object:");
-        _gameObjectField.objectType = typeof(GameObject);
+        _popupField = new PopupField<string>("Select Initial State", _stateNames, 0);
 
         toolbar.Add(_fileNameTextField);
         toolbar.Add(_saveButton);
@@ -64,7 +65,7 @@ public class FSMEditorWindow : EditorWindow
         toolbar.Add(resetButton);
         toolbar.Add(_miniMapButton);
         toolbar.Add(_generateScriptButton);
-        toolbar.Add(_gameObjectField);
+        toolbar.Add(_popupField);
         
         toolbar.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
         rootVisualElement.Add(toolbar);
@@ -82,33 +83,35 @@ public class FSMEditorWindow : EditorWindow
             );
             return;
         }
-        if(_gameObjectField.value == null)
+        if(_popupField.value == null || _popupField.value == "")
         {
             EditorUtility.DisplayDialog(
-                "Missing GameObject!",
-                "Please enter a valid game object.",
+                "Invalid Initial State!",
+                "Please select a valid initial state.",
                 "OK"
             );
             return;
         }
-        FSMIOUtility.Initialize(_fileNameTextField.value, (GameObject)_gameObjectField.value, _graphView);
+        FSMIOUtility.Initialize(_fileNameTextField.value, _graphView, _popupField.value);
         FSMIOUtility.Save();
     }
     private void Clear()
     {
         _graphView.ClearGraph();
+        ClearPopupField();
     }
     private void ResetGraph()
     {
         _graphView.ClearGraph();
         UpdateFileName(_fileName);
+        ClearPopupField();
     }
     private void Load()
     {
         string filePath = EditorUtility.OpenFilePanel("FSM Graphs", "Assets/EditorWindow/FSMSystem/Graphs", "asset");
         if (string.IsNullOrEmpty(filePath))return;
         Clear();
-        FSMIOUtility.Initialize(Path.GetFileNameWithoutExtension(filePath), (GameObject)_gameObjectField.value, _graphView);
+        FSMIOUtility.Initialize(Path.GetFileNameWithoutExtension(filePath), _graphView, _popupField.value);
         FSMIOUtility.Load();
     }
     
@@ -131,9 +134,21 @@ public class FSMEditorWindow : EditorWindow
     {
         _fileNameTextField.value = fileName;
     }
-    public static void UpdateGameObjectField(GameObject gameObject)
+    public static void UpdatePopupField(List<string> stateNames)
     {
-        _gameObjectField.value = gameObject;
+        _stateNames.Clear();
+        foreach (string name in stateNames)
+        {
+            if (!_stateNames.Contains(name))
+            {
+                _stateNames.Add(name);
+            }
+        }
+    }
+    private void ClearPopupField()
+    {
+        _popupField.value = null;
+        _stateNames.Clear();
     }
     public void EnableSaving()
     {

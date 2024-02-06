@@ -34,7 +34,7 @@ MonoBehaviour:
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
     <Position>k__BackingField: {x: 672, y: 370}
-    <DataObject>k__BackingField: "{\n    \"distance\": 4564.0\n}"
+    <DataObject>k__BackingField: "{\n    \"distance\": 6.0\n}"
   - <Id>k__BackingField: 3fb4151b-c136-4c26-b6e8-d0da15f768f1
     <Name>k__BackingField: Hearing
     <Text>k__BackingField: 
@@ -44,7 +44,7 @@ MonoBehaviour:
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
     <Position>k__BackingField: {x: 594, y: 114}
-    <DataObject>k__BackingField: "{\n    \"hearingRange\": 15.0\n}"
+    <DataObject>k__BackingField: "{\n    \"hearingRange\": 3.0\n}"
   - <Id>k__BackingField: b2ad4d67-c286-49c9-9010-ab47ddcdc71e
     <Name>k__BackingField: Patrol
     <Text>k__BackingField: 
@@ -54,8 +54,8 @@ MonoBehaviour:
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
     <Position>k__BackingField: {x: 265, y: 240}
-    <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 34.0,\n    \"patrolRadius\":
-      10.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23110\n    },\n   
+    <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 1346.0,\n    \"patrolRadius\":
+      52.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23110\n    },\n   
       \"patrolPoints\": []\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []

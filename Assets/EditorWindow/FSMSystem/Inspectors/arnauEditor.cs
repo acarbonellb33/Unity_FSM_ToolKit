@@ -64,12 +64,34 @@ public class arnauEditor : Editor
 						}
 						if (GUILayout.Button("Create and Add a Patrol Point"))
 						{
-							CreateAndAddGameObject(arnau, iterator.arraySize);
+							CreateAndAddGameObject(arnau);
 						}
 					}
 					else
 					{
+						EditorGUI.BeginChangeCheck();
 						EditorGUILayout.PropertyField(iterator, true);
+						if (EditorGUI.EndChangeCheck())
+						{
+							switch(iterator.type)
+							{
+								case "float":
+									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.floatValue);
+									break;
+								case "int":
+									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.intValue);
+									break;
+								case "bool":
+									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.boolValue);
+									break;
+								case "string":
+									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.stringValue);
+									break;
+								case "PPtr<$GameObject>":
+									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.objectReferenceValue);
+									break;
+							}
+						}
 					}
 				}
 				nextVisible = iterator.NextVisible(false);
@@ -81,22 +103,10 @@ public class arnauEditor : Editor
 		}
 		serializedObject.ApplyModifiedProperties();
 	}
-	private void CreateAndAddGameObject(arnau arnau, int count)
+	private void CreateAndAddGameObject(arnau arnau)
 	{
-		GameObject newGameObject = new GameObject("Patrol Point " + count);
-		string prefabPath = "Assets/Prefabs/PatrolPoint" + count + ".prefab";
-		PrefabUtility.SaveAsPrefabAsset(newGameObject, prefabPath);
-		GameObject prefabToList = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-		GameObject prefab = PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath)) as GameObject;
-		DestroyImmediate(newGameObject);
-		if (prefabToList != null)
-		{
-			arnau.AddObjectToList(prefabToList);
-		}
-		else
-		{
-			Debug.LogError("Failed to create a new GameObject");
-		}
+		GameObject newGameObject = new GameObject("Patrol Point");
+		arnau.AddObjectToList(newGameObject);
 	}
 	private void RemovePatrolPoint(GameObject patrolPoint)
 	{

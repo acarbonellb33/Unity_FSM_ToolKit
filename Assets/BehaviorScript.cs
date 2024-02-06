@@ -30,9 +30,6 @@ public abstract class BehaviorScript : MonoBehaviour
         System.Type type = GetType();
         System.Reflection.FieldInfo field = type.GetField(variableName);
         
-        Debug.Log(field);
-        Debug.Log(variableName);
-        Debug.Log(newValue);
         if (field != null)
         {
             if(options == null)
@@ -44,7 +41,6 @@ public abstract class BehaviorScript : MonoBehaviour
                     foreach (var variable in ((StateScript)newValue).GetVariables())
                     {
                         patrol.SetVariableValue(variable.Key, variable.Value);
-                        Debug.Log( variable.Key + " " + variable.Value);
                     }
                     field.SetValue(this, patrol);
                     options.Add(patrol);

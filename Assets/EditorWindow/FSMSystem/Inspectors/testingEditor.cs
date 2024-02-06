@@ -26,8 +26,6 @@ public class testingEditor : Editor
 			options[i] = testing.options[i].GetStateName();
 		}
 		selectedOptionIndexProp.intValue = EditorGUILayout.Popup("Selected Option", selectedOptionIndexProp.intValue, options);
-		Debug.Log("Selected Option: " + selectedOptionIndexProp.intValue);
-		Debug.Log("Options Length: " + options.Length);
 		string selectedOptionName = options[selectedOptionIndexProp.intValue];
 		if (optionToObjectMap.ContainsKey(selectedOptionName))
 		{

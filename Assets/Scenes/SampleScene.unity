@@ -568,16 +568,15 @@ GameObject:
   m_Component:
   - component: {fileID: 869181753}
   - component: {fileID: 869181755}
-  - component: {fileID: 869181759}
-  - component: {fileID: 869181758}
-  - component: {fileID: 869181757}
-  - component: {fileID: 869181765}
-  - component: {fileID: 869181756}
-  - component: {fileID: 869181770}
+  - component: {fileID: 869181764}
+  - component: {fileID: 869181763}
+  - component: {fileID: 869181762}
+  - component: {fileID: 869181761}
   - component: {fileID: 869181769}
   - component: {fileID: 869181768}
   - component: {fileID: 869181767}
   - component: {fileID: 869181766}
+  - component: {fileID: 869181765}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -623,7 +622,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &869181756
+--- !u!114 &869181761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -635,14 +634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphContainer: {fileID: 0}
-  graphGroup: {fileID: 0}
-  graph: {fileID: 0}
-  selectedOptionIndex: 0
-  groupedStates: 0
-  selectedStatesGroupIndex: 0
-  selectedStateIndex: 0
---- !u!82 &869181757
+  graphContainer: {fileID: 11400000, guid: 8f94c2e81cc11094e91ee98574558696, type: 2}
+--- !u!82 &869181762
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -738,7 +731,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!136 &869181758
+--- !u!136 &869181763
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -761,7 +754,7 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!95 &869181759
+--- !u!95 &869181764
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -791,27 +784,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distance: 10
---- !u!114 &869181766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 869181751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 1343
-  patrolRadius: 10
+  patrolSpeed: 1345
+  patrolRadius: 52
   patrolPointPrefab: {fileID: 869181751}
   patrolPoints: []
---- !u!114 &869181767
+--- !u!114 &869181766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -823,8 +803,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hearingRange: 477
---- !u!114 &869181768
+  hearingRange: 3
+--- !u!114 &869181767
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -836,8 +816,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 456
---- !u!114 &869181769
+  distance: 6
+--- !u!114 &869181768
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -849,7 +829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &869181770
+--- !u!114 &869181769
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -862,15 +842,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   options:
-  - {fileID: 869181769}
   - {fileID: 869181768}
   - {fileID: 869181767}
   - {fileID: 869181766}
-  selectedOptionIndex: 2
-  chase: {fileID: 869181769}
-  hearing: {fileID: 869181767}
-  distance: {fileID: 869181768}
-  patrol: {fileID: 869181766}
+  - {fileID: 869181765}
+  selectedOptionIndex: 3
+  chase: {fileID: 869181768}
+  hearing: {fileID: 869181766}
+  distance: {fileID: 869181767}
+  patrol: {fileID: 869181765}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

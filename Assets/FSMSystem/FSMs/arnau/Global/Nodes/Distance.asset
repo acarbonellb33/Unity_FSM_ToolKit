@@ -17,4 +17,4 @@ MonoBehaviour:
   - <Text>k__BackingField: New State
     <NextNode>k__BackingField: {fileID: 11400000, guid: ba4f1edd34077d8448ba937cae940785, type: 2}
   <NodeType>k__BackingField: 1
-  <DataObject>k__BackingField: "{\n    \"distance\": 4564.0\n}"
+  <DataObject>k__BackingField: "{\n    \"distance\": 6.0\n}"

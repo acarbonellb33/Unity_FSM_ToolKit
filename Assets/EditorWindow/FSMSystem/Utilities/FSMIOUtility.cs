@@ -141,6 +141,8 @@ public static class FSMIOUtility
     {
         List<FSMConnectionSaveData> connections = CloneNodeConnections(node.Choices);
         _stateDataObject = CreateJsonDataObject(node, nodesContainer);
+
+        UpdateComponents();
         
         FSMNodeSaveData nodeSaveData = new FSMNodeSaveData()
         {
@@ -153,6 +155,11 @@ public static class FSMIOUtility
             DataObject = _stateDataObject,
         };
         graphSaveData.Nodes.Add(nodeSaveData);
+    }
+
+    private static void UpdateComponents()
+    {
+        
     }
     private static List<FSMNodeConnectionData> ConvertNodeConnection(List<FSMConnectionSaveData> connections)
     {
@@ -300,7 +307,6 @@ public static class FSMIOUtility
                 ((PatrolStateScript)node.StateScript).patrolRadius = patrolData.patrolRadius;
                 ((PatrolStateScript)node.StateScript).patrolSpeed = patrolData.patrolSpeed;
                 ((PatrolStateScript)node.StateScript).patrolPointPrefab = patrolData.patrolPointPrefab;
-                Debug.Log("Patrol Speed"+((PatrolStateScript)node.StateScript).patrolSpeed);
                 break;
             case "Attack":
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);
@@ -428,6 +434,33 @@ public static class FSMIOUtility
         _createdNodes.Add(node.Id, nodeSo);
         SaveAsset(nodeSo);
         return json;
+    }
+    public static void UpdateJson(string className, string fileName, string variableName, object newValue)
+    {
+        string jsonFilePath = Path.Combine(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes", $"{fileName}DataFile.json");
+        string jsonString = File.ReadAllText(jsonFilePath);
+        
+        int startIndex = jsonString.IndexOf($"\"{variableName}\"") + variableName.Length + 4; // 4 is for ": "
+        
+        if (startIndex > variableName.Length + 4)
+        {
+            // Find the end index of the value
+            int endIndex = jsonString.IndexOf(',', startIndex);
+            if (endIndex == -1)
+            {
+                endIndex = jsonString.IndexOf('}', startIndex);
+            }
+
+            // Construct the new JSON string with the updated value
+            string updatedJsonString = jsonString.Substring(0, startIndex) + newValue.ToString() + jsonString.Substring(endIndex);
+
+            // Write the updated JSON string back to the file
+            File.WriteAllText(jsonFilePath, updatedJsonString);
+        }
+        else
+        {
+            Debug.LogError($"Variable \"{variableName}\" not found in the JSON file.");
+        }
     }
 
     #endregion

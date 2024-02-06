@@ -15,53 +15,55 @@ MonoBehaviour:
   <FileName>k__BackingField: testing
   <InitialState>k__BackingField: Patrol
   <Nodes>k__BackingField:
-  - <Id>k__BackingField: 2bfc676b-c1a3-44f0-b3a1-00da112515e9
-    <Name>k__BackingField: Chase
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: New Transition
-      <NodeId>k__BackingField: 6489872c-3e0e-4b06-8459-d36f7b7c4654
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 600, y: 237}
-    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 229f3f12317cada44be7e3a086593a19, type: 2}
-  - <Id>k__BackingField: ad725258-dc63-457c-96c4-7aa0afd1a81f
-    <Name>k__BackingField: Distance
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: New State
-      <NodeId>k__BackingField: 2bfc676b-c1a3-44f0-b3a1-00da112515e9
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 237, y: 100}
-    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 6b365a897ec064e469f93484bbd4f28f, type: 2}
-  - <Id>k__BackingField: 6489872c-3e0e-4b06-8459-d36f7b7c4654
-    <Name>k__BackingField: Hearing
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: New State
-      <NodeId>k__BackingField: a438e291-30b2-4630-a55e-eb7553b76235
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 284, y: 359}
-    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 18db8afcba919204296453a1ec563f56, type: 2}
-  - <Id>k__BackingField: a438e291-30b2-4630-a55e-eb7553b76235
+  - <Id>k__BackingField: 7a87c729-1d5e-489e-be76-a9add69d5110
     <Name>k__BackingField: Patrol
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: New Transition
-      <NodeId>k__BackingField: ad725258-dc63-457c-96c4-7aa0afd1a81f
+      <NodeId>k__BackingField: 76af1b0a-574c-4a9f-ade3-067fe665139d
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: -55, y: 282}
-    <ScriptableObject>k__BackingField: {fileID: 11400000, guid: d6a491ce4b0dd9b49a757eeb4ca0f8af, type: 2}
+    <Position>k__BackingField: {x: 173, y: 168}
+    <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 3.0,\n    \"patrolRadius\":
+      2.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 0\n    },\n   
+      \"patrolPoints\": []\n}"
+  - <Id>k__BackingField: 76af1b0a-574c-4a9f-ade3-067fe665139d
+    <Name>k__BackingField: Distance
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: db614943-2cdb-42d7-86a3-1e1d4eee7638
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 494, y: 100}
+    <DataObject>k__BackingField: "{\n    \"distance\": 45.0\n}"
+  - <Id>k__BackingField: db614943-2cdb-42d7-86a3-1e1d4eee7638
+    <Name>k__BackingField: Chase
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New Transition
+      <NodeId>k__BackingField: e403eaaf-a987-4183-b93b-a28579c2569f
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 787, y: 228}
+    <DataObject>k__BackingField: '{}'
+  - <Id>k__BackingField: e403eaaf-a987-4183-b93b-a28579c2569f
+    <Name>k__BackingField: Hearing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: 7a87c729-1d5e-489e-be76-a9add69d5110
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 474, y: 369}
+    <DataObject>k__BackingField: "{\n    \"hearingRange\": 56.0\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
-  - Chase
-  - Distance
-  - Hearing
   - Patrol
+  - Distance
+  - Chase
+  - Hearing
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: {fileID: 0}

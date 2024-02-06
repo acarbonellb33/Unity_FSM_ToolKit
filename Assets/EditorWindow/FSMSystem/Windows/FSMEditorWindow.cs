@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 public class FSMEditorWindow : EditorWindow
 {
-    private FSMGraphView _graphView;
+    private static FSMGraphView _graphView;
     private readonly string _fileName = "New FSM";
     private static TextField _fileNameTextField;
     private Button _saveButton;
@@ -20,6 +20,15 @@ public class FSMEditorWindow : EditorWindow
     public static void Open()
     {
         GetWindow<FSMEditorWindow>("FSM Graph");
+    }
+    
+    public static void OpenWithSaveData(FSMGraphSaveData saveData)
+    {
+        FSMEditorWindow window = GetWindow<FSMEditorWindow>("FSM Graph");
+        string assetPath = $"Assets/EditorWindow/FSMSystem/Graphs/{saveData.FileName}.asset";
+        if (string.IsNullOrEmpty(assetPath))return;
+        FSMIOUtility.Initialize(saveData.FileName, _graphView, _popupField.value);
+        FSMIOUtility.Load();
     }
     
     private void OnEnable()

@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public abstract class BehaviorScript : MonoBehaviour
 {
-    public List<State> options;
+    public List<StateScript> options;
     public int selectedOptionIndex = 0;
     protected FSMStates currentState = FSMStates.Idle;
     
@@ -32,10 +32,27 @@ public abstract class BehaviorScript : MonoBehaviour
 
         if (field != null)
         {
-            field.SetValue(this, newValue);
+            field.SetValue(this, null);
             if(options == null)
-                options = new List<State>();
-            options.Add((State)newValue);
+                options = new List<StateScript>();
+            switch (newValue)
+            {
+                case PatrolStateScript:
+                    options.Add(gameObject.AddComponent<PatrolStateScript>());
+                    break;
+                case ChaseStateScript:
+                    options.Add(gameObject.AddComponent<ChaseStateScript>());
+                    break;
+                case AttackStateScript:
+                    options.Add(gameObject.AddComponent<AttackStateScript>());
+                    break;
+                case HearingConditionScript:
+                    options.Add(gameObject.AddComponent<HearingConditionScript>());
+                    break;
+                case DistanceConditionScript:
+                    options.Add(gameObject.AddComponent<DistanceConditionScript>());
+                    break;
+            }
         }
         else
         {

@@ -17,7 +17,7 @@ public class FSMNode : Node
     public FSMGroup Group { get; set; }
     
     private FSMGraphView _graphView;
-    public State StateScriptableObject { get; set; }
+    public StateScript StateScript { get; set; }
 
     public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
@@ -27,7 +27,7 @@ public class FSMNode : Node
         _graphView = graphView;
         SetPosition(new Rect(postition, Vector2.zero));
         
-        StateScriptableObject = null;
+        StateScript = null;
 
         AddManipulators();
     }

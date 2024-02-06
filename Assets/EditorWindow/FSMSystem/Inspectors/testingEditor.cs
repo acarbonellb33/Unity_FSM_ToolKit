@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Collections;
 using UnityEngine;
-
+[CustomEditor(typeof(testing))]
 public class testingEditor : Editor
 {
 	private SerializedProperty selectedOptionIndexProp;
-	Dictionary<string, State> optionToObjectMap = new Dictionary<string, State>();
+	Dictionary<string, StateScript> optionToObjectMap = new Dictionary<string, StateScript>();
 	void OnEnable()
 	{
 		selectedOptionIndexProp = serializedObject.FindProperty("selectedOptionIndex");
@@ -30,7 +30,7 @@ public class testingEditor : Editor
 		if (optionToObjectMap.ContainsKey(selectedOptionName))
 		{
 			EditorGUILayout.LabelField($"{selectedOptionName} Attributes:");
-			ScriptableObject selectedObject = optionToObjectMap[selectedOptionName];
+			StateScript selectedObject = optionToObjectMap[selectedOptionName];
 			SerializedObject selectedObjectSerialized = new SerializedObject(selectedObject);
 			selectedObjectSerialized.Update();
 			EditorGUI.BeginChangeCheck();
@@ -45,8 +45,6 @@ public class testingEditor : Editor
 						EditorGUILayout.Space();
 						EditorGUILayout.LabelField("Create a Patrol Waypoint", EditorStyles.boldLabel);
 						EditorGUILayout.Space();
-						
-						EditorGUILayout.PropertyField(iterator, true);
 						for (int i = 0; i < iterator.arraySize; i++)
 						{
 							EditorGUILayout.BeginHorizontal();

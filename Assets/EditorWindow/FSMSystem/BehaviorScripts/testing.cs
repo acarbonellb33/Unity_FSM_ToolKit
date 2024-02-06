@@ -9,19 +9,19 @@ public class testing : BehaviorScript
 {
 	[Header("Patrol")]
 	[SerializeField]
-	public PatrolState patrol;
-
-	[Header("Chase")]
-	[SerializeField]
-	public ChaseState chase;
+	public PatrolStateScript patrol;
 
 	[Header("Distance")]
 	[SerializeField]
-	public DistanceCondition distance;
+	public DistanceConditionScript distance;
+
+	[Header("Chase")]
+	[SerializeField]
+	public ChaseStateScript chase;
 
 	[Header("Hearing")]
 	[SerializeField]
-	public HearingCondition hearing;
+	public HearingConditionScript hearing;
 
 	private void Start()
 	{

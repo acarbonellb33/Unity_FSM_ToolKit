@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Chase
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Chase
-  <Text>k__BackingField: Text
   <Connections>k__BackingField:
   - <Text>k__BackingField: New Transition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 4788d88bb0ff62a4cb3c2c2ec8f7066e, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: ca9585a40a33c4740a390aaccbf2bae9, type: 2}
   <NodeType>k__BackingField: 0
-  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 229f3f12317cada44be7e3a086593a19, type: 2}
+  <DataObject>k__BackingField: '{}'

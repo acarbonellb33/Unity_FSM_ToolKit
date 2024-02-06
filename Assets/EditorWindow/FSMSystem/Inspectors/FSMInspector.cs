@@ -4,8 +4,9 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(FSMGraph))]
-public class DSInspector : Editor
+public class FSMInspector : Editor
 {
+    public GameObject graphContainer;
     /* Dialogue Scriptable Objects */
     private SerializedProperty graphContainerProperty;
     private SerializedProperty graphGroupProperty;
@@ -35,18 +36,24 @@ public class DSInspector : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        
+
         DrawGraphContainerArea();
         
-        FSMNodesContainerSO currentGraphContainer = (FSMNodesContainerSO) graphContainerProperty.objectReferenceValue;
+        FSMGraphSaveData currentGraphContainer = (FSMGraphSaveData) graphContainerProperty.objectReferenceValue;
 
         if (currentGraphContainer == null)
         {
             StopDrawing("Select a FSM Graph Container to see the rest of the Inspector.");
             return;
         }
+        
+        //Add a button to open the FSM Graph 
+        if (GUILayout.Button("Open FSM Graph"))
+        {
+            FSMEditorWindow.OpenWithSaveData(currentGraphContainer);
+        }
 
-        DrawFiltersArea();
+        /*DrawFiltersArea();
 
         List<string> stateNames;
         string graphFolderPath = $"Assets/FSMSystem/FSMs/{currentGraphContainer.FileName}";
@@ -78,7 +85,7 @@ public class DSInspector : Editor
             return;
         }
         
-        DrawStatesArea(stateNames, graphFolderPath);
+        DrawStatesArea(stateNames, graphFolderPath);*/
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -171,4 +178,33 @@ public class DSInspector : Editor
     } 
 
     #endregion
+    
+    [MenuItem("Assets/Create/ScriptableObjects/FSMNodesContainer")]
+    public static void CreateFSMNodesContainer()
+    {
+        FSMNodesContainerSO asset = ScriptableObject.CreateInstance<FSMNodesContainerSO>();
+
+        string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+        if (string.IsNullOrEmpty(path))
+        {
+            path = "Assets";
+        }
+        else if (!string.IsNullOrEmpty(System.IO.Path.GetExtension(path)))
+        {
+            path = path.Replace(System.IO.Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+        }
+
+        string fileName = asset.FileName;
+        if (string.IsNullOrEmpty(fileName))
+        {
+            fileName = "NewFSMNodesContainer";
+        }
+        string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + fileName + ".asset");
+
+        AssetDatabase.CreateAsset(asset, assetPathAndName);
+
+        AssetDatabase.SaveAssets();
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
 }

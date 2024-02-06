@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7b1ca387027062478ec3e0de58f6412, type: 3}
+  m_Name: arnau
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: arnau
+  <GroupedNodes>k__BackingField:
+    list: []
+  <UngroupedNodes>k__BackingField:
+  - {fileID: 11400000, guid: 922ec753e0c03b5499c1e07b7e6894dd, type: 2}
+  - {fileID: 11400000, guid: aca7960f881e6db48b4135e04d1ea3bc, type: 2}
+  - {fileID: 11400000, guid: df36151159db85d409f48f50b9845500, type: 2}
+  - {fileID: 11400000, guid: ba4f1edd34077d8448ba937cae940785, type: 2}

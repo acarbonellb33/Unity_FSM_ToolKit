@@ -3,7 +3,7 @@
 public class FSMGraph : MonoBehaviour
 {
     /* Dialogue Scriptable Objects */
-    [SerializeField] private FSMNodesContainerSO graphContainer;
+    [SerializeField] private FSMGraphSaveData graphContainer;
     [SerializeField] private FSMNodeGroupSO graphGroup;
     [SerializeField] private FSMNodeSO graph;
 

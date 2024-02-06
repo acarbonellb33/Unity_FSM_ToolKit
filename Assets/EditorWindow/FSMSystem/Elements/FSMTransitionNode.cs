@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using OpenCover.Framework.Model;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -12,14 +13,14 @@ using Toggle = UnityEngine.UIElements.Toggle;
 
 public class FSMTransitionNode : FSMNode
 {
-    private List<State> _scriptableObjects;
+    private List<StateScript> _dataObjects;
     public override void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.Transition;
         
-        _scriptableObjects = new List<State>() {ScriptableObject.CreateInstance<HearingCondition>(), ScriptableObject.CreateInstance<DistanceCondition>()};
-
+        _dataObjects = new List<StateScript>(){new DistanceConditionScript(), new HearingConditionScript()};
+     
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
             Text = "New State",
@@ -47,7 +48,7 @@ public class FSMTransitionNode : FSMNode
 
         GetScriptableObject();
         
-        CreateStateAttribute(StateScriptableObject.InspectVariables(), customDataContainer);
+        CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
         extensionContainer.Add(customDataContainer);
         
@@ -70,6 +71,23 @@ public class FSMTransitionNode : FSMNode
     
             switch (result[1])
             {
+                case "UnityEngine.GameObject":
+
+                    string input = result[2];
+                    string output = Regex.Replace(input, @"\s*\([^()]*\)", "");
+                    
+                    ObjectField objectField = new ObjectField()
+                    {
+                        objectType = typeof(GameObject),
+                        value = GameObject.Find(output)
+                    };      
+                    objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
+                    {
+                        StateScript.SetVariableValue(result[0], objectField.value);
+                    });
+                    objectField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(objectField);
+                    break;
                 case "System.Single":
                     FloatField floatField = new FloatField()
                     {
@@ -77,7 +95,7 @@ public class FSMTransitionNode : FSMNode
                     };
                     floatField.RegisterCallback<InputEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], floatField.value);
+                        StateScript.SetVariableValue(result[0], floatField.value);
                     });
                     floatField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(floatField);
@@ -89,7 +107,7 @@ public class FSMTransitionNode : FSMNode
                     };
                     integerField.RegisterCallback<InputEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], integerField.value);
+                        StateScript.SetVariableValue(result[0], integerField.value);
                     });
                     integerField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(integerField);
@@ -101,7 +119,7 @@ public class FSMTransitionNode : FSMNode
                     };
                     toggle.RegisterCallback<ClickEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], toggle.value);
+                        StateScript.SetVariableValue(result[0], toggle.value);
                     });
                     toggle.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(toggle);
@@ -113,7 +131,7 @@ public class FSMTransitionNode : FSMNode
                     };
                     textField.RegisterCallback<InputEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], textField.value);
+                        StateScript.SetVariableValue(result[0], textField.value);
                     });
                     textField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(textField);
@@ -126,13 +144,18 @@ public class FSMTransitionNode : FSMNode
     }
     private void GetScriptableObject()
     {
-        if(StateScriptableObject != null) return;
-        
-        foreach (State conditionState in _scriptableObjects)
+        try
         {
-            if (conditionState.GetStateName() == StateName)
+            StateScript.GetStateName();
+        }
+        catch (NullReferenceException e)
+        {
+            foreach (StateScript enemyState in _dataObjects)
             {
-                StateScriptableObject = conditionState;
+                if (enemyState.GetStateName() == StateName)
+                {
+                    StateScript = enemyState;
+                }
             }
         }
     }

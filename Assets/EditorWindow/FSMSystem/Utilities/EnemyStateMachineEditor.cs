@@ -55,7 +55,7 @@ public static class EnemyStateMachineEditor
             scriptContent += $"\t[Header(\"" + node.Name + "\")]\n";
             scriptContent += "\t[SerializeField]\n";
             string variableName = node.NodeType == FSMNodeType.State ? node.Name+"State" : node.Name+"Condition";
-            scriptContent += $"\tpublic {variableName} {char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)};\n";
+            scriptContent += $"\tpublic {variableName}Script {char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)};\n";
             scriptContent += "\n";
         }
         
@@ -92,7 +92,6 @@ public static class EnemyStateMachineEditor
                 
                 string name = GetState(node.Connections[0].NodeId);
                 string connectionName = GetConnection(node.Connections[0].NodeId);
-                
                 scriptContent += $"\t\tif({char.ToLowerInvariant(name[0]) + name.Substring(1)}.Condition())\n";
                 scriptContent += "\t\t{\n";  
                 scriptContent += $"\t\t\tChange{connectionName}State();\n";
@@ -130,8 +129,7 @@ public static class EnemyStateMachineEditor
 
         string stringWithSpaces = saveData.FileName;
         string stringWithoutSpaces = stringWithSpaces.Replace(" ", "");
-        Debug.Log(stringWithoutSpaces);
-        
+    
         scriptContent += $"[CustomEditor(typeof({stringWithoutSpaces}))]\n";
         scriptContent += $"public class {stringWithoutSpaces}Editor : Editor\n";
         scriptContent += "{\n";
@@ -145,7 +143,7 @@ public static class EnemyStateMachineEditor
         string nameLowerCapital = char.ToLowerInvariant(stringWithoutSpaces[0]) + stringWithoutSpaces.Substring(1);
         
         scriptContent += "\tprivate SerializedProperty selectedOptionIndexProp;\n";
-        scriptContent += "\tDictionary<string, State> optionToObjectMap = new Dictionary<string, State>();\n";
+        scriptContent += "\tDictionary<string, StateScript> optionToObjectMap = new Dictionary<string, StateScript>();\n";
         
         scriptContent += "\tvoid OnEnable()\n";
         scriptContent += "\t{\n";
@@ -171,7 +169,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\tif (optionToObjectMap.ContainsKey(selectedOptionName))\n";
         scriptContent += "\t\t{\n";
         scriptContent += "\t\t\tEditorGUILayout.LabelField($\"{selectedOptionName} Attributes:\");\n";
-        scriptContent += "\t\t\tScriptableObject selectedObject = optionToObjectMap[selectedOptionName];\n";
+        scriptContent += "\t\t\tStateScript selectedObject = optionToObjectMap[selectedOptionName];\n";
         scriptContent += "\t\t\tSerializedObject selectedObjectSerialized = new SerializedObject(selectedObject);\n";
         scriptContent += "\t\t\tselectedObjectSerialized.Update();\n";
         scriptContent += "\t\t\tEditorGUI.BeginChangeCheck();\n";

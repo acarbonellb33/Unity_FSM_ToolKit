@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Patrol
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Patrol
-  <Text>k__BackingField: Text
   <Connections>k__BackingField:
   - <Text>k__BackingField: New Transition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 63c8e9e44641c3f4da366a2b3d27aa47, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: a0e666923b617a741b6b463c82c4e04d, type: 2}
   <NodeType>k__BackingField: 0
-  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: d6a491ce4b0dd9b49a757eeb4ca0f8af, type: 2}
+  <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 3.0,\n    \"patrolRadius\":
+    2.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 0\n    },\n    \"patrolPoints\":
+    []\n}"

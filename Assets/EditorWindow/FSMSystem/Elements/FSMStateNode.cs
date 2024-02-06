@@ -9,13 +9,13 @@ using UnityEngine.UIElements;
 
 public class FSMStateNode : FSMNode
 {
-    private List<State> _scriptableObjects;
+    private List<StateScript> _dataObjects;
     public override void Initialize(string nodeName, FSMGraphView graphView,Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.State;
         
-        _scriptableObjects = new List<State>() {State.CreateInstance<PatrolState>(), State.CreateInstance<AttackState>(), State.CreateInstance<ChaseState>()};
+        _dataObjects = new List<StateScript>(){new PatrolStateScript(), new ChaseStateScript(), new AttackStateScript()};
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
@@ -42,10 +42,10 @@ public class FSMStateNode : FSMNode
         
         VisualElement customDataContainer = new VisualElement();
         //customDataContainer.AddToClassList("fsm-node_custom-data-container");
-
+        
         GetScriptableObject();
 
-        CreateStateAttribute(StateScriptableObject.InspectVariables(), customDataContainer);
+        CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
         
         extensionContainer.Add(customDataContainer);
 
@@ -66,20 +66,22 @@ public class FSMStateNode : FSMNode
             Label stateAttributeLabel = new Label(UpdateNameStyle(result[0]));
             stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
             stateAttributeContainer.Add(stateAttributeLabel);
-            Debug.Log(attribute);
 
             switch (result[1]){
                
                 case "UnityEngine.GameObject":
-                    Debug.Log("GameObject"+GameObject.Find(result[2]));
+
+                    string input = result[2];
+                    string output = Regex.Replace(input, @"\s*\([^()]*\)", "");
+                    
                     ObjectField objectField = new ObjectField()
                     {
                         objectType = typeof(GameObject),
-                        value = GameObject.Find(result[2].Substring(0,result[2].IndexOf(' ')))
+                        value = GameObject.Find(output)
                     };      
                     objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], objectField.value);
+                        StateScript.SetVariableValue(result[0], objectField.value);
                     });
                     objectField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(objectField);
@@ -91,7 +93,7 @@ public class FSMStateNode : FSMNode
                     };
                     floatField.RegisterCallback<InputEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], floatField.value);
+                        StateScript.SetVariableValue(result[0], floatField.value);
                     });
                     floatField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(floatField);
@@ -103,7 +105,7 @@ public class FSMStateNode : FSMNode
                     };
                     integerField.RegisterCallback<InputEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], integerField.value);
+                        StateScript.SetVariableValue(result[0], integerField.value);
                     });
                     integerField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(integerField);
@@ -115,7 +117,7 @@ public class FSMStateNode : FSMNode
                     };
                     toggle.RegisterCallback<ClickEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], toggle.value);
+                        StateScript.SetVariableValue(result[0], toggle.value);
                     });
                     toggle.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(toggle);
@@ -127,7 +129,7 @@ public class FSMStateNode : FSMNode
                     };
                     textField.RegisterCallback<InputEvent>(evt =>
                     {
-                        StateScriptableObject.SetVariableValue(result[0], textField.value);
+                        StateScript.SetVariableValue(result[0], textField.value);
                     });
                     textField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(textField);
@@ -140,13 +142,18 @@ public class FSMStateNode : FSMNode
     }
     private void GetScriptableObject()
     {
-        if(StateScriptableObject != null) return;
-           
-        foreach (State enemyState in _scriptableObjects)
+        try
         {
-            if (enemyState.GetStateName() == StateName)
+            StateScript.GetStateName();
+        }
+        catch (NullReferenceException e)
+        {
+            foreach (StateScript enemyState in _dataObjects)
             {
-                StateScriptableObject = enemyState;
+                if (enemyState.GetStateName() == StateName)
+                {
+                    StateScript = enemyState;
+                }
             }
         }
     }

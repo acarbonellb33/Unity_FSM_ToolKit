@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Hearing
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Hearing
-  <Text>k__BackingField: Text
   <Connections>k__BackingField:
   - <Text>k__BackingField: New State
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 0cdca6c28bd236745865bc7e3eed14e0, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 116bce885ddf9c54691a4576843021ec, type: 2}
   <NodeType>k__BackingField: 1
-  <ScriptableObject>k__BackingField: {fileID: 11400000, guid: 18db8afcba919204296453a1ec563f56, type: 2}
+  <DataObject>k__BackingField: "{\n    \"hearingRange\": 56.0\n}"

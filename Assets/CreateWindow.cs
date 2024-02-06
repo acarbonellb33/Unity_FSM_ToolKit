@@ -39,31 +39,41 @@ public class CreateWindow : EditorWindow
     
     private void AddComponentToGameObject()
     {
-        string[] guids = AssetDatabase.FindAssets("t:Script " + className);
-        if (guids.Length > 0)
+        MonoScript script = GetScript(className);
+        if (script != null)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            MonoScript script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-            if (script != null)
+            if (_gameObjectField.value != null)
             {
-                if (_gameObjectField.value != null)
+                foreach (var node in saveData.Nodes)
                 {
-                    MonoBehaviour newScriptInstance = (MonoBehaviour)((GameObject)_gameObjectField.value).AddComponent(script.GetClass());
-                    MethodInfo dynamicMethod = script.GetClass().GetMethod("SetVariableValue");
+                    MonoBehaviour instance = (MonoBehaviour)((GameObject)_gameObjectField.value).AddComponent(GetScript(node.Name).GetClass());
+                }
+                MonoBehaviour newScriptInstance = (MonoBehaviour)((GameObject)_gameObjectField.value).AddComponent(script.GetClass());
+                MethodInfo dynamicMethod = script.GetClass().GetMethod("SetVariableValue");
                     
-                    if (dynamicMethod != null)
+                if (dynamicMethod != null)
+                {
+                    for (int i = 0; i < saveData.Nodes.Count; i++)
                     {
-                        for (int i = 0; i < saveData.Nodes.Count; i++)
+                        Debug.Log("Adding new value to options: "+FSMIOUtility.LoadNode(saveData.Nodes[i]).StateScript.GetStateName());
+                        dynamicMethod.Invoke(newScriptInstance,new object[]
                         {
-                            dynamicMethod.Invoke(newScriptInstance,new object[]
-                            {
-                                char.ToLowerInvariant(saveData.Nodes[i].Name[0]) + saveData.Nodes[i].Name.Substring(1), saveData.Nodes[i].ScriptableObject
-                            });
-                        }
+                            char.ToLowerInvariant(saveData.Nodes[i].Name[0]) + saveData.Nodes[i].Name.Substring(1), FSMIOUtility.LoadNode(saveData.Nodes[i]).StateScript
+                        });
                     }
                 }
             }
         }
         GetWindow<CreateWindow>().Close();
+    }
+    private MonoScript GetScript(string className)
+    {
+        string[] guids = AssetDatabase.FindAssets("t:Script " + className);
+        if (guids.Length > 0)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            return AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+        }
+        return null;
     }
 }

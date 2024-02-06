@@ -24,7 +24,7 @@ public static class FSMIOUtility
     private static Dictionary<string, FSMGroup> _loadedGroups;
     private static Dictionary<string, FSMNode> _loadedNodes;
     
-    private static State _stateScriptableObject;
+    private static string _stateDataObject;
 
     public static void Initialize(string graphName, FSMGraphView fsmGraphView, string initialState)
     {
@@ -123,8 +123,7 @@ public static class FSMIOUtility
         
         foreach(FSMNode node in _nodes)
         {
-            SaveNodeToGraph(node, graphSaveData);
-            SaveNodeToScriptableObject(node, nodesContainer);
+            SaveNodeToGraph(node, graphSaveData, nodesContainer);
             if(node.Group != null)
             {
                 groupedNodeNames.AddItem(node.Group.title, node.StateName);
@@ -138,10 +137,10 @@ public static class FSMIOUtility
         UpdateOldGroupedNodes(groupedNodeNames, graphSaveData);
         UpdateOldUngroupedNodes(ungroupedNodeNames, graphSaveData);
     }
-    private static void SaveNodeToGraph(FSMNode node, FSMGraphSaveData graphSaveData)
+    private static void SaveNodeToGraph(FSMNode node, FSMGraphSaveData graphSaveData, FSMNodesContainerSO nodesContainer)
     {
         List<FSMConnectionSaveData> connections = CloneNodeConnections(node.Choices);
-        _stateScriptableObject = CreateScriptableObjects(node);
+        _stateDataObject = CreateJsonDataObject(node, nodesContainer);
         
         FSMNodeSaveData nodeSaveData = new FSMNodeSaveData()
         {
@@ -151,64 +150,9 @@ public static class FSMIOUtility
             GroupId = node.Group?.Id,
             NodeType = node.NodeType,
             Position = node.GetPosition().position,
-            ScriptableObject = _stateScriptableObject,
+            DataObject = _stateDataObject,
         };
         graphSaveData.Nodes.Add(nodeSaveData);
-    }
-    private static void SaveNodeToScriptableObject(FSMNode node, FSMNodesContainerSO nodesContainer)
-    {
-        FSMNodeSO nodeSo;
-        State state;
-        if (node.Group != null)
-        {
-            nodeSo = CreateAsset<FSMNodeSO>($"{_containerFolderPath}/Groups/{node.Group.title}/Nodes", node.StateName);
-            nodesContainer.GroupedNodes.AddItem(_createdNodeGroups[node.Group.Id], nodeSo);
-        }
-        else
-        {
-            nodeSo = CreateAsset<FSMNodeSO>($"{_containerFolderPath}/Global/Nodes", node.StateName);
-            nodesContainer.UngroupedNodes.Add(nodeSo);
-
-        }
-        state = CreateScriptableObjects(node);
-        SaveToJson(node);
-        nodeSo.Initialize(
-            node.StateName,
-            "Text",
-            ConvertNodeConnection(node.Choices),
-            node.NodeType,
-            state
-        );
-        _createdNodes.Add(node.Id, nodeSo);
-        SaveAsset(nodeSo);
-    }
-
-    private static void SaveToJson(FSMNode node)
-    {
-        Debug.Log(node.StateScriptableObject.name);
-        if(node.StateScriptableObject.name == "PatrolState")
-        {
-            PatrolData patrolData = new PatrolData();
-            patrolData.patrolRadius = ((PatrolState)node.StateScriptableObject).patrolRadius;
-            patrolData.patrolSpeed = ((PatrolState)node.StateScriptableObject).patrolSpeed;
-            patrolData.patrolPointPrefab = ((PatrolState)node.StateScriptableObject).patrolPointPrefab;
-        
-            string json = JsonUtility.ToJson(patrolData, true);
-            File.WriteAllText($"{_containerFolderPath}/Global/Nodes/PatrolDataFile.json", json);
-            Debug.Log("PatrolDataFile.json created");
-        }
-    }
-
-    private static void LoadFromJson(FSMNode node)
-    {
-        string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/PatrolDataFile.json");
-        PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
-        ((PatrolState)node.StateScriptableObject).patrolRadius = patrolData.patrolRadius;
-        ((PatrolState)node.StateScriptableObject).patrolSpeed = patrolData.patrolSpeed;
-        ((PatrolState)node.StateScriptableObject).patrolPointPrefab = patrolData.patrolPointPrefab;
-        
-        Debug.Log("PatrolDataFile.json loaded");
-        
     }
     private static List<FSMNodeConnectionData> ConvertNodeConnection(List<FSMConnectionSaveData> connections)
     {
@@ -323,16 +267,10 @@ public static class FSMIOUtility
             FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false);
             node.Id = nodeData.Id;
             node.Choices = connections;
-            node.StateScriptableObject = nodeData.ScriptableObject;
-            //node.StateName = nodeData.Name;
-            //node.DialogueType = nodeData.DialogueType;
-            //node.Group = _loadedGroups[nodeData.GroupId];
-            
-            LoadFromJson(node);
+            node.StateScript = LoadFromJson(node);
             node.Draw();
             _graphView.AddElement(node);
             _loadedNodes.Add(node.Id, node);
-            Debug.Log(((PatrolState)node.StateScriptableObject).patrolPointPrefab);
             if(string.IsNullOrEmpty(nodeData.GroupId))
             {
                 continue;
@@ -341,6 +279,52 @@ public static class FSMIOUtility
             node.Group = group;
             group.AddElement(node);
         }
+    }
+    public static FSMNode LoadNode(FSMNodeSaveData nodeData)
+    {
+        List<FSMConnectionSaveData> connections = CloneNodeConnections(nodeData.Connections);
+        FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false);
+        node.Id = nodeData.Id;
+        node.Choices = connections;
+        node.StateScript = LoadFromJson(node);
+        return node;
+    }
+    private static StateScript LoadFromJson(FSMNode node)
+    {
+        string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName}DataFile.json");
+        switch (node.StateName)
+        {
+            case "Patrol":
+                PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
+                node.StateScript = new PatrolStateScript();
+                ((PatrolStateScript)node.StateScript).patrolRadius = patrolData.patrolRadius;
+                ((PatrolStateScript)node.StateScript).patrolSpeed = patrolData.patrolSpeed;
+                ((PatrolStateScript)node.StateScript).patrolPointPrefab = patrolData.patrolPointPrefab;
+                break;
+            case "Attack":
+                AttackData attackData = JsonUtility.FromJson<AttackData>(json);
+                node.StateScript = new AttackStateScript();
+                ((AttackStateScript)node.StateScript).attackDamage = attackData.attackDamage;
+                ((AttackStateScript)node.StateScript).attackRange = attackData.attackRange;
+                ((AttackStateScript)node.StateScript).attackCooldown = attackData.attackCooldown;
+                ((AttackStateScript)node.StateScript).canAttack = attackData.canAttack;
+                break;
+            case "Chase":
+                ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);
+                node.StateScript = new ChaseStateScript();
+                break;
+            case "Hearing":
+                HearingData hearingData = JsonUtility.FromJson<HearingData>(json);
+                node.StateScript = new HearingConditionScript();
+                ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
+                break;
+            case "Distance":
+                DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);
+                node.StateScript = new DistanceConditionScript();
+                ((DistanceConditionScript)node.StateScript).distance = distanceData.distance;
+                break;
+        }
+        return node.StateScript;
     }
     private static void LoadConnections()
     {
@@ -380,34 +364,34 @@ public static class FSMIOUtility
         CreateFolder(_containerFolderPath, "Groups");
         CreateFolder($"{_containerFolderPath}/Global", "Nodes");
     }
-    private static State CreateScriptableObjects(FSMNode node)
+    private static string CreateJsonDataObject(FSMNode node, FSMNodesContainerSO nodesContainer)
     {
-        State state;
-
-        MethodInfo createAssetMethod = typeof(FSMIOUtility).GetMethod("CreateAsset");
-
-        Type classType = node.NodeType == FSMNodeType.State ? Type.GetType(node.StateName+"State") : Type.GetType(node.StateName+"Condition");
-        string className = node.NodeType == FSMNodeType.State ? node.StateName+"State" : node.StateName+"Condition";
-                
-        MethodInfo genericCreateAssetMethod = createAssetMethod.MakeGenericMethod(classType);
-
-        state = (State) genericCreateAssetMethod.Invoke(null, new object[]
+        string json = JsonUtility.ToJson(node.StateScript, true);
+        File.WriteAllText($"{_containerFolderPath}/Global/Nodes/{node.StateScript.GetStateName()}DataFile.json", json);
+        FSMNodeSO nodeSo;
+        if (node.Group != null)
         {
-            $"{_containerFolderPath}/Global/Nodes", 
-            className
-        });
-        
-        Dictionary<string,object> variables = new Dictionary<string, object>();
-        variables = state.GetVariables();
-        
-        foreach (var variable in variables)
-        {
-            state.SetVariableValue(variable.Key, variable.Value);
+            nodeSo = CreateAsset<FSMNodeSO>($"{_containerFolderPath}/Groups/{node.Group.title}/Nodes", node.StateName);
+            nodesContainer.GroupedNodes.AddItem(_createdNodeGroups[node.Group.Id], nodeSo);
         }
-        SaveAsset(state);
-        return state;
+        else
+        {
+            nodeSo = CreateAsset<FSMNodeSO>($"{_containerFolderPath}/Global/Nodes", node.StateName);
+            nodesContainer.UngroupedNodes.Add(nodeSo);
+
+        }
+        nodeSo.Initialize(
+            node.StateName,
+            "Text",
+            ConvertNodeConnection(node.Choices),
+            node.NodeType,
+            json
+        );
+        _createdNodes.Add(node.Id, nodeSo);
+        SaveAsset(nodeSo);
+        return json;
     }
-    
+
     #endregion
 
     #region UtilityMethods

@@ -66,6 +66,7 @@ public class FSMStateNode : FSMNode
             Label stateAttributeLabel = new Label(UpdateNameStyle(result[0]));
             stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
             stateAttributeContainer.Add(stateAttributeLabel);
+            Debug.Log(attribute);
 
             switch (result[1]){
                
@@ -85,6 +86,23 @@ public class FSMStateNode : FSMNode
                     });
                     objectField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(objectField);
+                    break;
+                case "System.Collections.Generic.List`1[UnityEngine.GameObject]":
+                    
+                    string inputList = result[2];
+                    string outputList = Regex.Replace(inputList, @"\s*\([^()]*\)", "");
+                    
+                    ObjectField objectListField = new ObjectField()
+                    {
+                        objectType = typeof(GameObject),
+                        value = GameObject.Find(outputList)
+                    };
+                    objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
+                    {
+                        StateScript.SetVariableValue(result[0], objectListField.value);
+                    });
+                    objectListField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(objectListField);
                     break;
                 case "System.Single":
                     FloatField floatField = new FloatField()

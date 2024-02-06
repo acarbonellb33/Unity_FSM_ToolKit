@@ -53,9 +53,9 @@ MonoBehaviour:
       <NodeId>k__BackingField: 3fb4151b-c136-4c26-b6e8-d0da15f768f1
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 265, y: 240}
-    <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 1346.0,\n    \"patrolRadius\":
-      52.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23110\n    },\n   
+    <Position>k__BackingField: {x: 264, y: 239}
+    <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 134.0,\n    \"patrolRadius\":
+      6.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23110\n    },\n   
       \"patrolPoints\": []\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []

@@ -307,6 +307,7 @@ public static class FSMIOUtility
                 ((PatrolStateScript)node.StateScript).patrolRadius = patrolData.patrolRadius;
                 ((PatrolStateScript)node.StateScript).patrolSpeed = patrolData.patrolSpeed;
                 ((PatrolStateScript)node.StateScript).patrolPointPrefab = patrolData.patrolPointPrefab;
+                ((PatrolStateScript)node.StateScript).patrolPoints = patrolData.patrolPoints;
                 break;
             case "Attack":
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);
@@ -344,6 +345,8 @@ public static class FSMIOUtility
                 ((PatrolStateScript)node.StateScript).patrolRadius = patrolData.patrolRadius;
                 ((PatrolStateScript)node.StateScript).patrolSpeed = patrolData.patrolSpeed;
                 ((PatrolStateScript)node.StateScript).patrolPointPrefab = patrolData.patrolPointPrefab;
+                ((PatrolStateScript)node.StateScript).patrolPoints = patrolData.patrolPoints;
+                Debug.Log("Patrol Points: " + patrolData.patrolPoints.Count);
                 break;
             case "Attack":
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);
@@ -435,6 +438,24 @@ public static class FSMIOUtility
         SaveAsset(nodeSo);
         return json;
     }
+    public static void CreateJson(StateScript stateScript, string className)
+    {
+        string json = JsonUtility.ToJson(stateScript, true);
+        File.WriteAllText(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes/{stateScript.GetStateName()}DataFile.json", json);
+        
+        FSMNodeSO node = LoadAsset<FSMNodeSO>($"Assets/FSMSystem/FSMs/{className}/Global/Nodes", stateScript.GetStateName());
+        node.DataObject = json;
+
+        FSMGraphSaveData graphSaveData = LoadAsset<FSMGraphSaveData>($"Assets/EditorWindow/FSMSystem/Graphs", className);
+        foreach(FSMNodeSaveData nodeData in graphSaveData.Nodes)
+        {
+            if (nodeData.Name == node.NodeName)
+            {
+                nodeData.DataObject = json;
+            }
+        }
+    }
+    
     public static void UpdateJson(string className, string fileName, string variableName, object newValue)
     {
         string jsonFilePath = Path.Combine(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes", $"{fileName}DataFile.json");
@@ -450,7 +471,7 @@ public static class FSMIOUtility
             {
                 endIndex = jsonString.IndexOf('}', startIndex);
             }
-
+            Debug.Log("New value: "+ newValue);
             // Construct the new JSON string with the updated value
             string updatedJsonString = jsonString.Substring(0, startIndex) + newValue.ToString() + jsonString.Substring(endIndex);
 

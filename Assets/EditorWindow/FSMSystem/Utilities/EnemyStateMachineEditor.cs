@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.AI;
 
 public static class EnemyStateMachineEditor
 {
@@ -34,7 +35,10 @@ public static class EnemyStateMachineEditor
         scriptContent += "using System;\n";
         scriptContent += "using System.Collections;\n";
         scriptContent += "using System.Collections.Generic;\n";
+        scriptContent += "using UnityEngine.AI;\n";
         scriptContent += "using System.Reflection;\n\n";
+        
+        
         
         scriptContent += "[Serializable]\n";
         

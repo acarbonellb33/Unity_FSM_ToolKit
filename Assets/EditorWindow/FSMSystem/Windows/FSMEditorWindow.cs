@@ -27,6 +27,9 @@ public class FSMEditorWindow : EditorWindow
         FSMEditorWindow window = GetWindow<FSMEditorWindow>("FSM Graph");
         string assetPath = $"Assets/EditorWindow/FSMSystem/Graphs/{saveData.FileName}.asset";
         if (string.IsNullOrEmpty(assetPath))return;
+        _graphView.ClearGraph();
+        _popupField.value = null;
+        _stateNames.Clear();
         FSMIOUtility.Initialize(saveData.FileName, _graphView, _popupField.value);
         FSMIOUtility.Load();
     }

@@ -55,16 +55,16 @@ public class CreateWindow : EditorWindow
                 {
                     for (int i = 0; i < saveData.Nodes.Count; i++)
                     {
-                        Debug.Log("Adding new value to options: "+FSMIOUtility.LoadNode(saveData.Nodes[i]).StateScript.GetStateName());
+                        //Debug.Log("Adding new value to options: "+FSMIOUtility.LoadNode(saveData.Nodes[i]).StateScript.GetStateName());
                         dynamicMethod.Invoke(newScriptInstance,new object[]
                         {
-                            char.ToLowerInvariant(saveData.Nodes[i].Name[0]) + saveData.Nodes[i].Name.Substring(1), FSMIOUtility.LoadNode(saveData.Nodes[i]).StateScript
+                            //char.ToLowerInvariant(saveData.Nodes[i].Name[0]) + saveData.Nodes[i].Name.Substring(1), FSMIOUtility.LoadNode(saveData.Nodes[i]).StateScript
                         });
                     }
                 }
             }
         }
-        GetWindow<CreateWindow>().Close();
+        GetWindow<CreateWindow>().Close(); 
     }
     private MonoScript GetScript(string className)
     {

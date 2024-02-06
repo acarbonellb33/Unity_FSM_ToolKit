@@ -26,6 +26,7 @@ public class arnauEditor : Editor
 			options[i] = arnau.options[i].GetStateName();
 		}
 		selectedOptionIndexProp.intValue = EditorGUILayout.Popup("Selected Option", selectedOptionIndexProp.intValue, options);
+
 		string selectedOptionName = options[selectedOptionIndexProp.intValue];
 		if (optionToObjectMap.ContainsKey(selectedOptionName))
 		{

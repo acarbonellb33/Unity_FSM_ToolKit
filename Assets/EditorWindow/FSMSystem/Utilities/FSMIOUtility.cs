@@ -280,14 +280,52 @@ public static class FSMIOUtility
             group.AddElement(node);
         }
     }
-    public static FSMNode LoadNode(FSMNodeSaveData nodeData)
+    public static FSMNode LoadNode(FSMNodeSaveData nodeData, string fileName)
     {
         List<FSMConnectionSaveData> connections = CloneNodeConnections(nodeData.Connections);
-        FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false);
-        node.Id = nodeData.Id;
+        FSMNode node = new FSMNode();
+        node.Id = nodeData.Id; 
         node.Choices = connections;
-        node.StateScript = LoadFromJson(node);
+        node.StateScript = LoadFromJson(node, nodeData.Name,$"Assets/FSMSystem/FSMs/{fileName}/Global/Nodes/{nodeData.Name}DataFile.json");
         return node;
+    }
+    private static StateScript LoadFromJson(FSMNode node, string nodeName, string path)
+    {
+        string json = File.ReadAllText(path);
+        switch (nodeName)
+        {
+            case "Patrol":
+                PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
+                node.StateScript = new PatrolStateScript();
+                ((PatrolStateScript)node.StateScript).patrolRadius = patrolData.patrolRadius;
+                ((PatrolStateScript)node.StateScript).patrolSpeed = patrolData.patrolSpeed;
+                ((PatrolStateScript)node.StateScript).patrolPointPrefab = patrolData.patrolPointPrefab;
+                Debug.Log("Patrol Speed"+((PatrolStateScript)node.StateScript).patrolSpeed);
+                break;
+            case "Attack":
+                AttackData attackData = JsonUtility.FromJson<AttackData>(json);
+                node.StateScript = new AttackStateScript();
+                ((AttackStateScript)node.StateScript).attackDamage = attackData.attackDamage;
+                ((AttackStateScript)node.StateScript).attackRange = attackData.attackRange;
+                ((AttackStateScript)node.StateScript).attackCooldown = attackData.attackCooldown;
+                ((AttackStateScript)node.StateScript).canAttack = attackData.canAttack;
+                break;
+            case "Chase":
+                ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);
+                node.StateScript = new ChaseStateScript();
+                break;
+            case "Hearing":
+                HearingData hearingData = JsonUtility.FromJson<HearingData>(json);
+                node.StateScript = new HearingConditionScript();
+                ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
+                break;
+            case "Distance":
+                DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);
+                node.StateScript = new DistanceConditionScript();
+                ((DistanceConditionScript)node.StateScript).distance = distanceData.distance;
+                break;
+        }
+        return node.StateScript;
     }
     private static StateScript LoadFromJson(FSMNode node)
     {

@@ -1,8 +1,8 @@
 {
-    "patrolSpeed": 64.0,
+    "patrolSpeed": 34.0,
     "patrolRadius": 10.0,
     "patrolPointPrefab": {
-        "instanceID": 0
+        "instanceID": 23110
     },
     "patrolPoints": []
 }

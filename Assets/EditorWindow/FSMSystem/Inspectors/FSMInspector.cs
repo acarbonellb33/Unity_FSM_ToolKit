@@ -31,15 +31,16 @@ public class FSMInspector : Editor
         if (GUILayout.Button("Open FSM Graph"))
         {
             ((FSMGraphSaveData)graphContainerProperty.objectReferenceValue).GameObject = ((FSMGraph)target).gameObject.name;
-            FSMEditorWindow.OpenWithSaveData(graphContainerProperty.objectReferenceValue as FSMGraphSaveData);
+            FSMEditorWindow.OpenWithSaveData(graphContainerProperty.objectReferenceValue as FSMGraphSaveData, this);
         }
 
         serializedObject.ApplyModifiedProperties();
     }
-    
+
     private void AddComponentToGameObject()
     {
         FSMGraph fsmGraph = (FSMGraph)target;
+        graphContainerData = (FSMGraphSaveData)graphContainerProperty.objectReferenceValue;
         MonoScript script = GetScript(graphContainerData.FileName);
         if (script != null)
         {
@@ -97,6 +98,45 @@ public class FSMInspector : Editor
             if(graphContainerProperty.objectReferenceValue != null)AddComponentToGameObject();
         }
         FSMInspectorUtility.DrawSpace();
+    }
+    
+    public void UpdateComponentOfGameObject(FSMGraphSaveData graph)
+    {
+        FSMGraph fsmGraph = (FSMGraph)target;
+        foreach(Component c in fsmGraph.gameObject.GetComponents<Component>())
+        {
+            if (c is StateScript || c is BehaviorScript)
+            {
+                DestroyImmediate(c);
+            }
+        } 
+
+        if (graph != null)
+        {
+            MonoScript script = GetScript(graph.FileName);
+            if (script != null)
+            {
+                foreach (var node in graph.Nodes)
+                {
+                    MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                }
+                MonoBehaviour newScriptInstance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType(graph.FileName));
+
+                MethodInfo dynamicMethod = script.GetClass().GetMethod("SetVariableValue");
+                    
+                if (dynamicMethod != null)
+                {
+                    for (int i = 0; i < graph.Nodes.Count; i++)
+                    {
+                        dynamicMethod.Invoke(newScriptInstance,new object[]
+                        {
+                            char.ToLowerInvariant(graph.Nodes[i].Name[0]) + graph.Nodes[i].Name.Substring(1), 
+                            FSMIOUtility.LoadNode(graph.Nodes[i], graph.FileName).StateScript
+                        });
+                    }
+                }
+            } 
+        }
     }
 
     private void StopDrawing(string reason, MessageType messageType = MessageType.Info)

@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Patrol
+  m_Name: Chase
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Patrol
+  <NodeName>k__BackingField: Chase
   <Connections>k__BackingField:
   - <Text>k__BackingField: New Transition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: aca7960f881e6db48b4135e04d1ea3bc, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: fb7bd993f89097c4ea6f39fa30d79216, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 1344.0,\n    \"patrolRadius\":
-    6.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23112\n    },\n   
-    \"patrolPoints\": []\n}"
+  <DataObject>k__BackingField: '{}'

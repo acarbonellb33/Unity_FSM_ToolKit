@@ -42,14 +42,21 @@ public abstract class StateScript : MonoBehaviour
             {
                 List<GameObject> list = (List<GameObject>)field.GetValue(this);;
                 object newValue = "";
-                for (int i = 0; i < list.Count; i++)
+                if (list != null && list.Count > 0)
                 {
-                    if(i+1 == list.Count)
-                        newValue += list[i].name;
-                    else
-                        newValue += list[i].name+"/";
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if(i+1 == list.Count)
+                            newValue += list[i].name;
+                        else
+                            newValue += list[i].name+"/";
+                    }
+                    result.Add($"{field.Name},{field.FieldType},{newValue}"); 
                 }
-                result.Add($"{field.Name},{field.FieldType},{newValue}");  
+                else
+                {
+                    result.Add($"{field.Name},{field.FieldType},");
+                }
             }
             else
             {

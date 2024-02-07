@@ -6,23 +6,23 @@ using UnityEngine.AI;
 using System.Reflection;
 
 [Serializable]
-public class arnau : BehaviorScript
+public class test : BehaviorScript
 {
-	[Header("Chase")]
+	[Header("Patrol")]
 	[SerializeField]
-	public ChaseStateScript chase;
+	public PatrolStateScript patrol;
 
-	[Header("Distance")]
+	[Header("Attack")]
 	[SerializeField]
-	public DistanceConditionScript distance;
+	public AttackStateScript attack;
 
 	[Header("Hearing")]
 	[SerializeField]
 	public HearingConditionScript hearing;
 
-	[Header("Patrol")]
+	[Header("Distance")]
 	[SerializeField]
-	public PatrolStateScript patrol;
+	public DistanceConditionScript distance;
 
 	private void Start()
 	{
@@ -32,20 +32,12 @@ public class arnau : BehaviorScript
 	{
 		switch (currentState)
 		{
-			case FSMStates.Chase:
-				UpdateChaseState();
-				break;
 			case FSMStates.Patrol:
 				UpdatePatrolState();
 				break;
-		}
-	}
-	public void UpdateChaseState()
-	{
-		chase.Execute();
-		if(distance.Condition())
-		{
-			ChangePatrolState();
+			case FSMStates.Attack:
+				UpdateAttackState();
+				break;
 		}
 	}
 	public void UpdatePatrolState()
@@ -53,16 +45,24 @@ public class arnau : BehaviorScript
 		patrol.Execute();
 		if(hearing.Condition())
 		{
-			ChangeChaseState();
+			ChangeAttackState();
 		}
 	}
-	private void ChangeChaseState()
+	public void UpdateAttackState()
 	{
-		currentState = FSMStates.Chase;
+		attack.Execute();
+		if(distance.Condition())
+		{
+			ChangePatrolState();
+		}
 	}
 	private void ChangePatrolState()
 	{
 		currentState = FSMStates.Patrol;
+	}
+	private void ChangeAttackState()
+	{
+		currentState = FSMStates.Attack;
 	}
 	public GameObject AddObjectToList()
 	{

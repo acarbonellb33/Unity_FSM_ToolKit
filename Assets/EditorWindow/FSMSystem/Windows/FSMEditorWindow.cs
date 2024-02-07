@@ -17,10 +17,12 @@ public class FSMEditorWindow : EditorWindow
     public static List<string> _stateNames = new List<string>();
     private static FSMEditorWindow _window;
     private static FSMGraphSaveData _saveData;
-    public static void OpenWithSaveData(FSMGraphSaveData saveData)
+    private static FSMInspector _fsmInspector;
+    public static void OpenWithSaveData(FSMGraphSaveData saveData, FSMInspector inspector)
     {
         _saveData = saveData;
         _fileName = saveData.FileName;
+        _fsmInspector = inspector;
         if(_window == null)
         {
             _window = CreateWindow<FSMEditorWindow>("FSM Graph");
@@ -104,6 +106,7 @@ public class FSMEditorWindow : EditorWindow
         }
         FSMIOUtility.Initialize(_fileName, _graphView, _popupField.value);
         FSMIOUtility.Save();
+        _fsmInspector.UpdateComponentOfGameObject(_saveData);
         return true;
     }
     private void Clear()
@@ -111,12 +114,6 @@ public class FSMEditorWindow : EditorWindow
         _graphView.ClearGraph();
         ClearPopupField();
     }
-    /*private void ResetGraph()
-    {
-        _graphView.ClearGraph();
-        UpdateFileName(_fileName);
-        ClearPopupField();
-    }*/
     private void Reload()
     {
         Clear();
@@ -133,8 +130,8 @@ public class FSMEditorWindow : EditorWindow
     {
         if (Save())
         {
-            FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileName);
-            EnemyStateMachineEditor.GenerateScript(saveData);
+            EnemyStateMachineEditor.GenerateScript(_saveData);
+            //_fsmInspector.AddComponentToGameObject();
         }
     }
     #endregion

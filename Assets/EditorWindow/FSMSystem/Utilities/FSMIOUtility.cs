@@ -460,21 +460,17 @@ public static class FSMIOUtility
         string jsonFilePath = Path.Combine(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes", $"{fileName}DataFile.json");
         string jsonString = File.ReadAllText(jsonFilePath);
         
-        int startIndex = jsonString.IndexOf($"\"{variableName}\"") + variableName.Length + 4; // 4 is for ": "
+        int startIndex = jsonString.IndexOf($"\"{variableName}\"") + variableName.Length + 4;
         
         if (startIndex > variableName.Length + 4)
         {
-            // Find the end index of the value
             int endIndex = jsonString.IndexOf(',', startIndex);
             if (endIndex == -1)
             {
                 endIndex = jsonString.IndexOf('}', startIndex);
             }
-            Debug.Log("New value: "+ newValue);
-            // Construct the new JSON string with the updated value
             string updatedJsonString = jsonString.Substring(0, startIndex) + newValue.ToString() + jsonString.Substring(endIndex);
-
-            // Write the updated JSON string back to the file
+            
             File.WriteAllText(jsonFilePath, updatedJsonString);
         }
         else

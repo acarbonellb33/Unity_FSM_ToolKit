@@ -6,23 +6,23 @@ using UnityEngine.AI;
 using System.Reflection;
 
 [Serializable]
-public class arnau : BehaviorScript
+public class enemish : BehaviorScript
 {
+	[Header("Patrol")]
+	[SerializeField]
+	public PatrolStateScript patrol;
+
 	[Header("Chase")]
 	[SerializeField]
 	public ChaseStateScript chase;
-
-	[Header("Distance")]
-	[SerializeField]
-	public DistanceConditionScript distance;
 
 	[Header("Hearing")]
 	[SerializeField]
 	public HearingConditionScript hearing;
 
-	[Header("Patrol")]
+	[Header("Distance")]
 	[SerializeField]
-	public PatrolStateScript patrol;
+	public DistanceConditionScript distance;
 
 	private void Start()
 	{
@@ -32,20 +32,12 @@ public class arnau : BehaviorScript
 	{
 		switch (currentState)
 		{
-			case FSMStates.Chase:
-				UpdateChaseState();
-				break;
 			case FSMStates.Patrol:
 				UpdatePatrolState();
 				break;
-		}
-	}
-	public void UpdateChaseState()
-	{
-		chase.Execute();
-		if(distance.Condition())
-		{
-			ChangePatrolState();
+			case FSMStates.Chase:
+				UpdateChaseState();
+				break;
 		}
 	}
 	public void UpdatePatrolState()
@@ -56,13 +48,21 @@ public class arnau : BehaviorScript
 			ChangeChaseState();
 		}
 	}
-	private void ChangeChaseState()
+	public void UpdateChaseState()
 	{
-		currentState = FSMStates.Chase;
+		chase.Execute();
+		if(distance.Condition())
+		{
+			ChangePatrolState();
+		}
 	}
 	private void ChangePatrolState()
 	{
 		currentState = FSMStates.Patrol;
+	}
+	private void ChangeChaseState()
+	{
+		currentState = FSMStates.Chase;
 	}
 	public GameObject AddObjectToList()
 	{

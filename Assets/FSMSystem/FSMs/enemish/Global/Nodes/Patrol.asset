@@ -15,8 +15,9 @@ MonoBehaviour:
   <NodeName>k__BackingField: Patrol
   <Connections>k__BackingField:
   - <Text>k__BackingField: New Transition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: aca7960f881e6db48b4135e04d1ea3bc, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: f41680b391beec045b72fa5df4b60cdb, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 1344.0,\n    \"patrolRadius\":
-    6.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23112\n    },\n   
-    \"patrolPoints\": []\n}"
+  <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 563.0,\n    \"patrolRadius\":
+    10.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23078\n    },\n   
+    \"patrolPoints\": [\n        {\n            \"instanceID\": -71750\n        }\n   
+    ]\n}"

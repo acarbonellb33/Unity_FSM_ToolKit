@@ -2,28 +2,28 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Collections;
 using UnityEngine;
-[CustomEditor(typeof(arnau))]
-public class arnauEditor : Editor
+[CustomEditor(typeof(enemish))]
+public class enemishEditor : Editor
 {
 	private SerializedProperty selectedOptionIndexProp;
 	Dictionary<string, StateScript> optionToObjectMap = new Dictionary<string, StateScript>();
 	void OnEnable()
 	{
 		selectedOptionIndexProp = serializedObject.FindProperty("selectedOptionIndex");
-		arnau arnau = (arnau)target;
-		for (int i = 0; i < arnau.options.Count; i++)
+		enemish enemish = (enemish)target;
+		for (int i = 0; i < enemish.options.Count; i++)
 		{
-			optionToObjectMap[arnau.options[i].GetStateName()] = arnau.options[i];
+			optionToObjectMap[enemish.options[i].GetStateName()] = enemish.options[i];
 		}
 	}
 	public override void OnInspectorGUI()
 	{
 		serializedObject.Update();
-		arnau arnau = (arnau)target;
-		string[] options = new string[arnau.options.Count];
+		enemish enemish = (enemish)target;
+		string[] options = new string[enemish.options.Count];
 		for (int i = 0; i < options.Length; i++)
 		{
-			options[i] = arnau.options[i].GetStateName();
+			options[i] = enemish.options[i].GetStateName();
 		}
 		selectedOptionIndexProp.intValue = EditorGUILayout.Popup("Selected Option", selectedOptionIndexProp.intValue, options);
 		string selectedOptionName = options[selectedOptionIndexProp.intValue];
@@ -57,13 +57,13 @@ public class arnauEditor : Editor
 								{
 									RemovePatrolPoint(gameObject);
 								}
-							FSMIOUtility.CreateJson(selectedObject, "arnau");
+							FSMIOUtility.CreateJson(selectedObject, "enemish");
 							}
 							EditorGUILayout.EndHorizontal();
 						}
 						if (GUILayout.Button("Create and Add a Patrol Point"))
 						{
-							CreateAndAddGameObject(arnau);
+							CreateAndAddGameObject(enemish);
 						}
 					}
 					else
@@ -75,19 +75,19 @@ public class arnauEditor : Editor
 							switch(iterator.type)
 							{
 								case "float":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.floatValue);
+									FSMIOUtility.UpdateJson("enemish",selectedOptionName, iterator.name, iterator.floatValue);
 									break;
 								case "int":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.intValue);
+									FSMIOUtility.UpdateJson("enemish",selectedOptionName, iterator.name, iterator.intValue);
 									break;
 								case "bool":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.boolValue);
+									FSMIOUtility.UpdateJson("enemish",selectedOptionName, iterator.name, iterator.boolValue);
 									break;
 								case "string":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.stringValue);
+									FSMIOUtility.UpdateJson("enemish",selectedOptionName, iterator.name, iterator.stringValue);
 									break;
 								case "PPtr<$GameObject>":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.objectReferenceValue);
+									FSMIOUtility.UpdateJson("enemish",selectedOptionName, iterator.name, iterator.objectReferenceValue);
 									break;
 							}
 						}
@@ -102,14 +102,14 @@ public class arnauEditor : Editor
 		}
 		serializedObject.ApplyModifiedProperties();
 	}
-	private void CreateAndAddGameObject(arnau arnau)
+	private void CreateAndAddGameObject(enemish enemish)
 	{
-		arnau.AddObjectToList();
+		enemish.AddObjectToList();
 	}
 	private void RemovePatrolPoint(GameObject patrolPoint)
 	{
-		arnau arnau = (arnau)target;
-		arnau.patrol.RemovePatrolPoint(patrolPoint);
+		enemish enemish = (enemish)target;
+		enemish.patrol.RemovePatrolPoint(patrolPoint);
 		if(GameObject.Find(patrolPoint.name) != null)
 		{
 			DestroyImmediate(patrolPoint);

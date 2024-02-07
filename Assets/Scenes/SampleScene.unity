@@ -726,13 +726,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
+  m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 13447
-  patrolRadius: 6
-  patrolPointPrefab: {fileID: 869181751}
-  patrolPoints: []
+  attackDamage: 10
+  attackRange: 5
+  attackCooldown: 2
+  canAttack: 1
 --- !u!114 &869181772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -742,10 +742,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
+  m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hearingRange: 3
+  patrolSpeed: 13447
+  patrolRadius: 6
+  patrolPointPrefab: {fileID: 216584297}
+  patrolPoints: []
 --- !u!114 &869181773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,9 +771,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
+  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hearingRange: 54
 --- !u!114 &869181775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -788,11 +792,11 @@ MonoBehaviour:
   - {fileID: 869181773}
   - {fileID: 869181772}
   - {fileID: 869181771}
-  selectedOptionIndex: 3
-  chase: {fileID: 869181774}
+  selectedOptionIndex: 2
+  hearing: {fileID: 869181774}
   distance: {fileID: 869181773}
-  hearing: {fileID: 869181772}
-  patrol: {fileID: 869181771}
+  patrol: {fileID: 869181772}
+  attack: {fileID: 869181771}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

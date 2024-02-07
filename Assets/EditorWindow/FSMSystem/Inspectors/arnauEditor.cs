@@ -57,7 +57,7 @@ public class arnauEditor : Editor
 								{
 									RemovePatrolPoint(gameObject);
 								}
-							FSMIOUtility.CreateJson(selectedObject, "arnau");
+								FSMIOUtility.CreateJson(selectedObject, "arnau");
 							}
 							EditorGUILayout.EndHorizontal();
 						}
@@ -72,24 +72,8 @@ public class arnauEditor : Editor
 						EditorGUILayout.PropertyField(iterator, true);
 						if (EditorGUI.EndChangeCheck())
 						{
-							switch(iterator.type)
-							{
-								case "float":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.floatValue);
-									break;
-								case "int":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.intValue);
-									break;
-								case "bool":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.boolValue);
-									break;
-								case "string":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.stringValue);
-									break;
-								case "PPtr<$GameObject>":
-									FSMIOUtility.UpdateJson("arnau",selectedOptionName, iterator.name, iterator.objectReferenceValue);
-									break;
-							}
+							selectedObjectSerialized.ApplyModifiedProperties();
+							FSMIOUtility.CreateJson(selectedObject, "arnau");
 						}
 					}
 				}

@@ -15,16 +15,16 @@ MonoBehaviour:
   <FileName>k__BackingField: arnau
   <InitialState>k__BackingField: Patrol
   <Nodes>k__BackingField:
-  - <Id>k__BackingField: 92766499-4134-41e1-9af0-15aac4075a33
-    <Name>k__BackingField: Chase
+  - <Id>k__BackingField: 3fb4151b-c136-4c26-b6e8-d0da15f768f1
+    <Name>k__BackingField: Hearing
     <Text>k__BackingField: 
     <Connections>k__BackingField:
-    - <Text>k__BackingField: New Transition
-      <NodeId>k__BackingField: 0b219722-093c-41c5-894c-bf4601bd6ed9
+    - <Text>k__BackingField: New State
+      <NodeId>k__BackingField: 8bad68d1-0cfa-41f7-91fb-a44cb0be354b
     <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 940, y: 275}
-    <DataObject>k__BackingField: '{}'
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 594, y: 114}
+    <DataObject>k__BackingField: "{\n    \"hearingRange\": 54.0\n}"
   - <Id>k__BackingField: 0b219722-093c-41c5-894c-bf4601bd6ed9
     <Name>k__BackingField: Distance
     <Text>k__BackingField: 
@@ -33,18 +33,8 @@ MonoBehaviour:
       <NodeId>k__BackingField: b2ad4d67-c286-49c9-9010-ab47ddcdc71e
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 672, y: 370}
+    <Position>k__BackingField: {x: 610, y: 402}
     <DataObject>k__BackingField: "{\n    \"distance\": 6.0\n}"
-  - <Id>k__BackingField: 3fb4151b-c136-4c26-b6e8-d0da15f768f1
-    <Name>k__BackingField: Hearing
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: New State
-      <NodeId>k__BackingField: 92766499-4134-41e1-9af0-15aac4075a33
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 594, y: 114}
-    <DataObject>k__BackingField: "{\n    \"hearingRange\": 3.0\n}"
   - <Id>k__BackingField: b2ad4d67-c286-49c9-9010-ab47ddcdc71e
     <Name>k__BackingField: Patrol
     <Text>k__BackingField: 
@@ -53,17 +43,28 @@ MonoBehaviour:
       <NodeId>k__BackingField: 3fb4151b-c136-4c26-b6e8-d0da15f768f1
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 264, y: 239}
+    <Position>k__BackingField: {x: 262, y: 184}
     <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 13447.0,\n    \"patrolRadius\":
-      6.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23112\n    },\n   
+      6.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23132\n    },\n   
       \"patrolPoints\": []\n}"
+  - <Id>k__BackingField: 8bad68d1-0cfa-41f7-91fb-a44cb0be354b
+    <Name>k__BackingField: Attack
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: New Transition
+      <NodeId>k__BackingField: 0b219722-093c-41c5-894c-bf4601bd6ed9
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 891, y: 191}
+    <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackRange\":
+      5.0,\n    \"attackCooldown\": 2.0,\n    \"canAttack\": true\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
-  - Chase
-  - Distance
   - Hearing
+  - Distance
   - Patrol
+  - Attack
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy

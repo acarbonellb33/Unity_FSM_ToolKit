@@ -8,21 +8,21 @@ using System.Reflection;
 [Serializable]
 public class arnau : BehaviorScript
 {
-	[Header("Chase")]
+	[Header("Hearing")]
 	[SerializeField]
-	public ChaseStateScript chase;
+	public HearingConditionScript hearing;
 
 	[Header("Distance")]
 	[SerializeField]
 	public DistanceConditionScript distance;
 
-	[Header("Hearing")]
-	[SerializeField]
-	public HearingConditionScript hearing;
-
 	[Header("Patrol")]
 	[SerializeField]
 	public PatrolStateScript patrol;
+
+	[Header("Attack")]
+	[SerializeField]
+	public AttackStateScript attack;
 
 	private void Start()
 	{
@@ -32,20 +32,12 @@ public class arnau : BehaviorScript
 	{
 		switch (currentState)
 		{
-			case FSMStates.Chase:
-				UpdateChaseState();
-				break;
 			case FSMStates.Patrol:
 				UpdatePatrolState();
 				break;
-		}
-	}
-	public void UpdateChaseState()
-	{
-		chase.Execute();
-		if(distance.Condition())
-		{
-			ChangePatrolState();
+			case FSMStates.Attack:
+				UpdateAttackState();
+				break;
 		}
 	}
 	public void UpdatePatrolState()
@@ -53,16 +45,24 @@ public class arnau : BehaviorScript
 		patrol.Execute();
 		if(hearing.Condition())
 		{
-			ChangeChaseState();
+			ChangeAttackState();
 		}
 	}
-	private void ChangeChaseState()
+	public void UpdateAttackState()
 	{
-		currentState = FSMStates.Chase;
+		attack.Execute();
+		if(distance.Condition())
+		{
+			ChangePatrolState();
+		}
 	}
 	private void ChangePatrolState()
 	{
 		currentState = FSMStates.Patrol;
+	}
+	private void ChangeAttackState()
+	{
+		currentState = FSMStates.Attack;
 	}
 	public GameObject AddObjectToList()
 	{

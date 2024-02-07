@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -12,17 +13,25 @@ public class FSMEditorWindow : EditorWindow
     private static Label _fileNameTextField;
     private Button _saveButton;
     private Button _miniMapButton;
-    private Button _generateScriptButton;
+    //private Button _generateScriptButton;
     private static PopupField<string> _popupField;
     public static List<string> _stateNames = new List<string>();
     private static FSMEditorWindow _window;
     private static FSMGraphSaveData _saveData;
     private static FSMInspector _fsmInspector;
+    
+    private const string SaveDataKey = "FSMSaveData";
+    private const string FSMInspectorKey = "FSMInspectorData";
+    
+    private bool _isCompiling = false;
     public static void OpenWithSaveData(FSMGraphSaveData saveData, FSMInspector inspector)
     {
         _saveData = saveData;
         _fileName = saveData.FileName;
         _fsmInspector = inspector;
+        
+        PlayerPrefs.SetString(FSMInspectorKey, FindGameObjectWithClass<FSMGraph>().ToString());
+        
         if(_window == null)
         {
             _window = CreateWindow<FSMEditorWindow>("FSM Graph");
@@ -39,6 +48,15 @@ public class FSMEditorWindow : EditorWindow
         FSMIOUtility.Initialize(saveData.FileName, _graphView, _popupField.value);
         FSMIOUtility.Load();
     }
+    public static GameObject FindGameObjectWithClass<T>() where T : MonoBehaviour
+    {
+        T[] components = GameObject.FindObjectsOfType<T>();
+        if (components == null || components.Length == 0)
+        {
+            return null;
+        }
+        return components[0].gameObject;
+    }
     
     private void OnEnable()
     {
@@ -47,6 +65,33 @@ public class FSMEditorWindow : EditorWindow
         AddToolbar();
         
         AddStyles();
+
+        EditorApplication.update += OnEditorUpdate;
+    }
+    private void OnDisable()
+    {
+        EditorApplication.update -= OnEditorUpdate;
+    }
+    
+    private void OnEditorUpdate()
+    {
+        if (_isCompiling && !EditorApplication.isCompiling)
+        {
+            _isCompiling = false;
+
+            PerformActionAfterCompilation();
+        }
+    }
+    private void PerformActionAfterCompilation()
+    {
+        string inspectorJson = PlayerPrefs.GetString(FSMInspectorKey);
+        string pattern = @"\s*\([^)]*\)";
+        string result = Regex.Replace(inspectorJson, pattern, "");
+
+        GameObject gameObject = GameObject.Find(result);
+
+        Close();
+        gameObject.GetComponent<FSMGraph>().UpdateComponentOfGameObject();
     }
     
     private void AddGraphView()
@@ -74,7 +119,7 @@ public class FSMEditorWindow : EditorWindow
         Button clearButton = FSMElementUtility.CreateButton("Clear", () => Clear());
         //Button resetButton = FSMElementUtility.CreateButton("Reset", () => ResetGraph());
         _miniMapButton = FSMElementUtility.CreateButton("MiniMap", () => ToggleMiniMap());
-        _generateScriptButton = FSMElementUtility.CreateButton("Generate Script", () => GenerateScript());
+        //_generateScriptButton = FSMElementUtility.CreateButton("Generate Script", () => GenerateScript());
         _popupField = new PopupField<string>("Select Initial State", _stateNames, 0);
         
         toolbar.Add(_fileNameTextField);
@@ -83,7 +128,7 @@ public class FSMEditorWindow : EditorWindow
         toolbar.Add(clearButton);
         //toolbar.Add(resetButton);
         toolbar.Add(_miniMapButton);
-        toolbar.Add(_generateScriptButton);
+        //toolbar.Add(_generateScriptButton);
         toolbar.Add(_popupField);
         
         toolbar.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
@@ -104,9 +149,11 @@ public class FSMEditorWindow : EditorWindow
             );
             return false;
         }
+        _isCompiling = true;
         FSMIOUtility.Initialize(_fileName, _graphView, _popupField.value);
         FSMIOUtility.Save();
-        _fsmInspector.UpdateComponentOfGameObject(_saveData);
+        EnemyStateMachineEditor.GenerateScript(_saveData);
+        //_fsmInspector.UpdateComponentOfGameObject(_saveData);
         return true;
     }
     private void Clear()
@@ -164,12 +211,12 @@ public class FSMEditorWindow : EditorWindow
     public void EnableSaving()
     {
         _saveButton.SetEnabled(true);
-        _generateScriptButton.SetEnabled(true);
+        //_generateScriptButton.SetEnabled(true);
     }
     public void DisableSaving()
     {
         _saveButton.SetEnabled(false);
-        _generateScriptButton.SetEnabled(false);
+        //_generateScriptButton.SetEnabled(false);
     }
     public string GetFileName()
     {

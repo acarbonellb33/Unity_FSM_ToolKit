@@ -11,7 +11,7 @@ public class FSMGraphSaveData : ScriptableObject
     [field: SerializeField] public List<string> OldGroupedNames { get; set; }
     [field: SerializeField] public List<string> OldUngroupedNames { get; set; }
     [field: SerializeField] public SerializableDictionary<string, List<string>> OldGroupedNodeNames { get; set; }
-    [field: SerializeField] public GameObject GameObject { get; set; }
+    [field: SerializeField] public string GameObject { get; set; }
     
     public void Initialize(string fileName, string initialState)
     {

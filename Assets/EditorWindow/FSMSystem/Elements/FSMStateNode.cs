@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -66,7 +69,7 @@ public class FSMStateNode : FSMNode
             Label stateAttributeLabel = new Label(UpdateNameStyle(result[0]));
             stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
             stateAttributeContainer.Add(stateAttributeLabel);
-            Debug.Log(attribute);
+            //Debug.Log(attribute);
 
             switch (result[1]){
                
@@ -90,19 +93,67 @@ public class FSMStateNode : FSMNode
                 case "System.Collections.Generic.List`1[UnityEngine.GameObject]":
                     
                     string inputList = result[2];
-                    string outputList = Regex.Replace(inputList, @"\s*\([^()]*\)", "");
+                    List<GameObject> outputGameObjectsList = new List<GameObject>();
+                    outputGameObjectsList = inputList.Split('/').Select(GameObject.Find).ToList();
+                    foreach (var value in outputGameObjectsList)
+                    {
+                        string outputValue = Regex.Replace(value.ToString(), @"\s*\([^()]*\)", "");
                     
-                    ObjectField objectListField = new ObjectField()
+                        ObjectField objectListField = new ObjectField()
+                        {
+                            objectType = typeof(GameObject),
+                            value = GameObject.Find(outputValue)
+                        };
+                        objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
+                        {
+                            StateScript.SetVariableValue(result[0], objectListField.value);
+                        });
+                        
+                        Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
+                        {
+                            RemovePatrolPoint(objectListField);
+                            stateAttributeContainer.Remove(objectListField);
+                        });
+
+                        deleteChoiceButton.AddToClassList("ds-node__button");
+                        objectListField.AddToClassList("fsm-node_state-attribute-field");
+                        
+                        objectListField.Add(deleteChoiceButton);
+                        stateAttributeContainer.Add(objectListField);
+                    }
+                    Button addChoiceButton = null;
+                    addChoiceButton = FSMElementUtility.CreateButton("Add Patrol Point", () =>
                     {
-                        objectType = typeof(GameObject),
-                        value = GameObject.Find(outputList)
-                    };
-                    objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
-                    {
-                        StateScript.SetVariableValue(result[0], objectListField.value);
+                        int indexToAdd = stateAttributeContainer.IndexOf(addChoiceButton);
+                        if (indexToAdd != -1)
+                        {
+                            ObjectField objectListField = new ObjectField()
+                            {
+                                objectType = typeof(GameObject)
+                            };
+                            objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
+                            {
+                                StateScript.SetVariableValue(result[0], objectListField.value);
+                            });
+
+                            Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
+                            {
+                                RemovePatrolPoint(objectListField);
+                                stateAttributeContainer.Remove(objectListField);
+                            });
+
+                            deleteChoiceButton.AddToClassList("ds-node__button");
+                            objectListField.AddToClassList("fsm-node_state-attribute-field");
+                            
+                            objectListField.Add(deleteChoiceButton);
+                            stateAttributeContainer.Insert(indexToAdd, objectListField);
+                            
+                            CreateAndAddGameObject(objectListField);
+                        }
                     });
-                    objectListField.AddToClassList("fsm-node_state-attribute-field");
-                    stateAttributeContainer.Add(objectListField);
+                    
+                    addChoiceButton.AddToClassList("ds-node__button");
+                    stateAttributeContainer.Add(addChoiceButton);
                     break;
                 case "System.Single":
                     FloatField floatField = new FloatField()
@@ -157,6 +208,62 @@ public class FSMStateNode : FSMNode
             }
         }
         customDataContainer.Add(stateAttributeContainer);
+    }
+    private void CreateAndAddGameObject(ObjectField objectListField)
+    {
+        FSMGraphSaveData graphContainerData = GetGraphData(_graphView.GetWindow().GetFileName());
+        MonoScript script = GetScript(_graphView.GetWindow().GetFileName());
+        if (script != null)
+        {
+            BehaviorScript newScriptInstance = (BehaviorScript)GameObject.Find(graphContainerData.GameObject).GetComponent(Type.GetType(graphContainerData.FileName));
+            MethodInfo dynamicMethod = script.GetClass().GetMethod("AddObjectToList");
+            if (dynamicMethod != null)
+            {
+                object o = dynamicMethod.Invoke(newScriptInstance,new object[] {});
+                if (o != null)
+                {
+                    objectListField.value = (GameObject)o;
+                }
+            }
+        }
+    }
+    private void RemovePatrolPoint(ObjectField objectListField)
+    { 
+        Debug.Log("RemovePatrolPoint");
+        FSMGraphSaveData graphContainerData = GetGraphData(_graphView.GetWindow().GetFileName());
+        MonoScript script = GetScript(_graphView.GetWindow().GetFileName());
+        if (script != null)
+        {
+            BehaviorScript newScriptInstance = (BehaviorScript)GameObject.Find(graphContainerData.GameObject).GetComponent(Type.GetType(graphContainerData.FileName));
+            MethodInfo dynamicMethod = script.GetClass().GetMethod("RemoveObjectFromList");
+            if (dynamicMethod != null)
+            {
+                dynamicMethod.Invoke(newScriptInstance,new object[]
+                {
+                    (GameObject)objectListField.value
+                });
+            }
+        }
+    }
+    private MonoScript GetScript(string className)
+    {
+        string[] guids = AssetDatabase.FindAssets("t:Script " + className);
+        if (guids.Length > 0)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            return AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+        }
+        return null;
+    }
+    private FSMGraphSaveData GetGraphData(string className)
+    {
+        string[] guids = AssetDatabase.FindAssets("t:FSMGraphSaveData  " + className);
+        if (guids.Length > 0)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            return AssetDatabase.LoadAssetAtPath<FSMGraphSaveData>(path);
+        }
+        return null;
     }
     private void GetScriptableObject()
     {

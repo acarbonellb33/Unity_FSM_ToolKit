@@ -38,8 +38,24 @@ public abstract class StateScript : MonoBehaviour
 
         foreach (FieldInfo field in fields)
         {
-            object value = field.GetValue(this);
-            result.Add($"{field.Name},{field.FieldType},{value}");
+            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[UnityEngine.GameObject]")
+            {
+                List<GameObject> list = (List<GameObject>)field.GetValue(this);;
+                object newValue = "";
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if(i+1 == list.Count)
+                        newValue += list[i].name;
+                    else
+                        newValue += list[i].name+"/";
+                }
+                result.Add($"{field.Name},{field.FieldType},{newValue}");  
+            }
+            else
+            {
+              object value = field.GetValue(this);
+              result.Add($"{field.Name},{field.FieldType},{value}");  
+            }
         }
         return result;
     }
@@ -80,7 +96,25 @@ public abstract class StateScript : MonoBehaviour
 
         if (field != null)
         {
-            field.SetValue(this, newValue);
+            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[UnityEngine.GameObject]")
+            {
+                List<GameObject> list = (List<GameObject>)field.GetValue(this);
+                list.Clear();
+                string[] names = newValue.ToString().Split('/');
+                foreach (var name in names)
+                {
+                    GameObject obj = GameObject.Find(name);
+                    if (obj != null)
+                    {
+                        list.Add(obj);
+                    }
+                }
+                field.SetValue(this, list);
+            }
+            else
+            {
+                field.SetValue(this, newValue);
+            }
         }
         else
         {

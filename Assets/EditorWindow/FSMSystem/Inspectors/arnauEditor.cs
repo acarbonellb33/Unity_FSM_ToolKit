@@ -46,7 +46,6 @@ public class arnauEditor : Editor
 						EditorGUILayout.Space();
 						EditorGUILayout.LabelField("Create a Patrol Waypoint", EditorStyles.boldLabel);
 						EditorGUILayout.Space();
-						Debug.Log("iterator.arraySize: " + iterator.arraySize);
 						for (int i = 0; i < iterator.arraySize; i++)
 						{
 							EditorGUILayout.BeginHorizontal();
@@ -61,7 +60,6 @@ public class arnauEditor : Editor
 								{
 									RemovePatrolPoint(gameObject);
 								}
-
 								FSMIOUtility.CreateJson(selectedObject, "arnau");
 							}
 							EditorGUILayout.EndHorizontal();
@@ -109,8 +107,7 @@ public class arnauEditor : Editor
 	}
 	private void CreateAndAddGameObject(arnau arnau)
 	{
-		GameObject newGameObject = new GameObject("Patrol Point");
-		arnau.AddObjectToList(newGameObject);
+		arnau.AddObjectToList();
 	}
 	private void RemovePatrolPoint(GameObject patrolPoint)
 	{

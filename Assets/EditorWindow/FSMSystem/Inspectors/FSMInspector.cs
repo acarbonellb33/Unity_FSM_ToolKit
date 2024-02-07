@@ -30,6 +30,7 @@ public class FSMInspector : Editor
 
         if (GUILayout.Button("Open FSM Graph"))
         {
+            ((FSMGraphSaveData)graphContainerProperty.objectReferenceValue).GameObject = ((FSMGraph)target).gameObject.name;
             FSMEditorWindow.OpenWithSaveData(graphContainerProperty.objectReferenceValue as FSMGraphSaveData);
         }
 
@@ -39,7 +40,6 @@ public class FSMInspector : Editor
     private void AddComponentToGameObject()
     {
         FSMGraph fsmGraph = (FSMGraph)target;
-        Debug.Log("AddComponentToGameObject : " + graphContainerData);
         MonoScript script = GetScript(graphContainerData.FileName);
         if (script != null)
         {

@@ -178,6 +178,10 @@ public class FSMEditorWindow : EditorWindow
         _saveButton.SetEnabled(false);
         _generateScriptButton.SetEnabled(false);
     }
+    public string GetFileName()
+    {
+        return _fileNameTextField.value;
+    }
 
     #endregion
     

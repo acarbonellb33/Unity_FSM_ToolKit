@@ -66,4 +66,4 @@ MonoBehaviour:
   - Patrol
   <OldGroupedNodeNames>k__BackingField:
     list: []
-  <GameObject>k__BackingField: {fileID: 0}
+  <GameObject>k__BackingField: Enemy

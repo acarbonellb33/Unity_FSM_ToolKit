@@ -10,24 +10,22 @@ public class FSMGraphView : GraphView
 {
     private FSMSearchWindow _searchWindow;
     private FSMEditorWindow _window;
-    
+
     private MiniMap _miniMap;
-    
+
     public SerializableDictionary<string, FSMNodeErrorData> _ungroupedNodes;
     private SerializableDictionary<string, FSMGroupErrorData> _groups;
     public SerializableDictionary<Group, SerializableDictionary<string, FSMNodeErrorData>> _groupedNodes;
 
     private int repeatedNameCount;
+
     public int RepeatedNameCount
     {
-        get
-        { 
-            return repeatedNameCount;
-        }
+        get { return repeatedNameCount; }
         set
         {
             repeatedNameCount = value;
-            if(repeatedNameCount == 0)
+            if (repeatedNameCount == 0)
             {
                 _window.EnableSaving();
             }
@@ -37,6 +35,7 @@ public class FSMGraphView : GraphView
             }
         }
     }
+
     public FSMGraphView(FSMEditorWindow window)
     {
         _window = window;
@@ -56,37 +55,38 @@ public class FSMGraphView : GraphView
         AddStyles();
         AddMiniMapStyles();
     }
-    
+
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
     {
         List<Port> compatiblePorts = new List<Port>();
         ports.ForEach((port) =>
         {
-            if(startPort == port)return;
-            if(startPort.node == port.node)return;
-            if(startPort.direction == port.direction)return;
-            if(startPort.node.GetType() == typeof(FSMStateNode) && port.node.GetType() == typeof(FSMStateNode))return;
+            if (startPort == port) return;
+            if (startPort.node == port.node) return;
+            if (startPort.direction == port.direction) return;
+            if (startPort.node.GetType() == typeof(FSMStateNode) && port.node.GetType() == typeof(FSMStateNode)) return;
             compatiblePorts.Add(port);
         });
         return compatiblePorts;
     }
-    
+
     public FSMNode CreateNode(string nodeName, Vector2 position, FSMNodeType nodeT, bool shouldDraw = true)
     {
         Type nodeType = Type.GetType($"FSM{nodeT}Node");
-        FSMNode node = (FSMNode) Activator.CreateInstance(nodeType);
-        
+        FSMNode node = (FSMNode)Activator.CreateInstance(nodeType);
+
         node.Initialize(nodeName, this, position);
 
         if (shouldDraw)
         {
             node.Draw();
         }
-        if(nodeT == FSMNodeType.State)FSMEditorWindow._stateNames.Add(nodeName);
+
+        if (nodeT == FSMNodeType.State) FSMEditorWindow._stateNames.Add(nodeName);
         AddUngroupedNode(node);
         return node;
     }
-    
+
     /*public FSMTransitionNode CreateTransition(Vector2 position)
     {
         FSMTransitionNode node = new FSMTransitionNode();
@@ -101,37 +101,39 @@ public class FSMGraphView : GraphView
         FSMGroup group = new FSMGroup(title, localMousePosition);
         AddGroup(group);
         AddElement(group);
-        foreach(GraphElement selectedElement in selection)
+        foreach (GraphElement selectedElement in selection)
         {
-            if(!(selectedElement is FSMNode))
+            if (!(selectedElement is FSMNode))
             {
-                continue;  
+                continue;
             }
-            FSMNode node = (FSMNode) selectedElement;
+
+            FSMNode node = (FSMNode)selectedElement;
             group.AddElement(node);
         }
+
         return group;
     }
 
     public void AddUngroupedNode(FSMNode node)
     {
         string nodeName = node.StateName;
-        if(!_ungroupedNodes.ContainsKey(nodeName))
+        if (!_ungroupedNodes.ContainsKey(nodeName))
         {
             FSMNodeErrorData nodeErrorData = new FSMNodeErrorData();
             nodeErrorData.Nodes.Add(node);
             _ungroupedNodes.Add(nodeName, nodeErrorData);
             return;
         }
-        
+
         List<FSMNode> ungroupedNodesList = _ungroupedNodes[nodeName].Nodes;
 
         ungroupedNodesList.Add(node);
-        
+
         Color errorColor = _ungroupedNodes[nodeName].ErrorData.Color;
         node.SetErrorStyle(errorColor);
-        
-        if(ungroupedNodesList.Count == 2)
+
+        if (ungroupedNodesList.Count == 2)
         {
             ++RepeatedNameCount;
             ungroupedNodesList[0].SetErrorStyle(errorColor);
@@ -145,8 +147,8 @@ public class FSMGraphView : GraphView
 
         ungroupedNodesList.Remove(node);
         node.ResetStyle();
-        
-        if(ungroupedNodesList.Count == 1)
+
+        if (ungroupedNodesList.Count == 1)
         {
             --RepeatedNameCount;
             ungroupedNodesList[0].ResetStyle();
@@ -159,13 +161,13 @@ public class FSMGraphView : GraphView
         }
     }
 
-    private void OnElementsDeleted() 
+    private void OnElementsDeleted()
     {
         deleteSelection = (operationName, askUser) =>
         {
             Type groupType = typeof(FSMGroup);
             Type edgeType = typeof(Edge);
-            
+
             List<FSMGroup> groupsToDelete = new List<FSMGroup>();
             List<Edge> edgesToDelete = new List<Edge>();
             List<FSMNode> nodesToDelete = new List<FSMNode>();
@@ -173,70 +175,78 @@ public class FSMGraphView : GraphView
             {
                 if (element is FSMNode node)
                 {
-                    if(element is FSMStateNode n)
+                    if (element is FSMStateNode n)
                     {
                         FSMEditorWindow._stateNames.Remove(n.StateName);
                     }
+
                     nodesToDelete.Add(node);
                     continue;
                 }
-                if(element.GetType() == edgeType)
+
+                if (element.GetType() == edgeType)
                 {
-                    edgesToDelete.Add((Edge) element);
+                    edgesToDelete.Add((Edge)element);
                     continue;
                 }
-                if(element.GetType() != groupType)
+
+                if (element.GetType() != groupType)
                 {
                     continue;
                 }
-                FSMGroup group = (FSMGroup) element;
+
+                FSMGroup group = (FSMGroup)element;
                 groupsToDelete.Add(group);
             }
-            
+
             foreach (FSMGroup group in groupsToDelete)
             {
                 List<FSMNode> groupNodes = new List<FSMNode>();
                 foreach (GraphElement element in group.containedElements)
                 {
-                    if(!(element is FSMNode))
+                    if (!(element is FSMNode))
                     {
                         continue;
                     }
-                    FSMNode node = (FSMNode) element;
+
+                    FSMNode node = (FSMNode)element;
                     groupNodes.Add(node);
                 }
+
                 group.RemoveElements(groupNodes);
                 RemoveGroup(group);
                 RemoveElement(group);
             }
 
             DeleteElements(edgesToDelete);
-            
+
             foreach (FSMNode node in nodesToDelete)
             {
-                if(node.Group != null)
+                if (node.Group != null)
                 {
                     node.Group.RemoveElement(node);
                 }
+
                 RemoveUngroupedNode(node);
                 node.DisconnectAllPorts();
                 RemoveElement(node);
             }
         };
     }
-    
+
     private void OnGroupElementsAdded()
     {
         elementsAddedToGroup = (group, elements) =>
         {
             foreach (GraphElement element in elements)
             {
-                if(!(element is FSMNode))
+                if (!(element is FSMNode))
                 {
                     continue;
                 }
+
                 FSMGroup newGroup = (FSMGroup)group;
-                FSMNode node = (FSMNode) element;
+                FSMNode node = (FSMNode)element;
                 RemoveUngroupedNode(node);
                 AddGroupedNode(node, newGroup);
             }
@@ -249,28 +259,29 @@ public class FSMGraphView : GraphView
         {
             foreach (GraphElement element in elements)
             {
-                if(!(element is FSMNode))
+                if (!(element is FSMNode))
                 {
                     continue;
                 }
-                FSMNode node = (FSMNode) element;
+
+                FSMNode node = (FSMNode)element;
                 RemoveGroupedNode(node, group);
                 AddUngroupedNode(node);
             }
         };
     }
-    
+
     private void OnGroupRenamed()
     {
         groupTitleChanged = (group, title) =>
         {
-            FSMGroup fsmGroup = (FSMGroup) group;
+            FSMGroup fsmGroup = (FSMGroup)group;
             RemoveGroup(fsmGroup);
             fsmGroup.PreviousTitle = title;
             AddGroup(fsmGroup);
         };
     }
-    
+
     private void OnGraphViewChanged()
     {
         graphViewChanged = (changes) =>
@@ -279,9 +290,9 @@ public class FSMGraphView : GraphView
             {
                 foreach (Edge edge in changes.edgesToCreate)
                 {
-                    FSMNode nextNode = (FSMNode) edge.input.node;
+                    FSMNode nextNode = (FSMNode)edge.input.node;
 
-                    FSMConnectionSaveData choiceData = (FSMConnectionSaveData) edge.output.userData;
+                    FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
 
                     choiceData.NodeId = nextNode.Id;
                 }
@@ -298,9 +309,9 @@ public class FSMGraphView : GraphView
                         continue;
                     }
 
-                    Edge edge = (Edge) element;
+                    Edge edge = (Edge)element;
 
-                    FSMConnectionSaveData choiceData = (FSMConnectionSaveData) edge.output.userData;
+                    FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
 
                     choiceData.NodeId = "";
                 }
@@ -314,29 +325,31 @@ public class FSMGraphView : GraphView
     {
         string nodeName = node.StateName;
         node.Group = group;
-        if(!_groupedNodes.ContainsKey(group))
+        if (!_groupedNodes.ContainsKey(group))
         {
             _groupedNodes.Add(group, new SerializableDictionary<string, FSMNodeErrorData>());
         }
-        if(!_groupedNodes[group].ContainsKey(nodeName))
+
+        if (!_groupedNodes[group].ContainsKey(nodeName))
         {
             FSMNodeErrorData nodeErrorData = new FSMNodeErrorData();
             nodeErrorData.Nodes.Add(node);
             _groupedNodes[group].Add(nodeName, nodeErrorData);
             return;
         }
+
         List<FSMNode> groupedNodesList = _groupedNodes[group][nodeName].Nodes;
 
         groupedNodesList.Add(node);
         Color errorColor = _groupedNodes[group][nodeName].ErrorData.Color;
         node.SetErrorStyle(errorColor);
-        if(groupedNodesList.Count == 2)
+        if (groupedNodesList.Count == 2)
         {
             ++RepeatedNameCount;
             groupedNodesList[0].SetErrorStyle(errorColor);
         }
     }
-    
+
     public void RemoveGroupedNode(FSMNode node, Group group)
     {
         string nodeName = node.StateName;
@@ -345,8 +358,8 @@ public class FSMGraphView : GraphView
 
         groupedNodesList.Remove(node);
         node.ResetStyle();
-        
-        if(groupedNodesList.Count == 1)
+
+        if (groupedNodesList.Count == 1)
         {
             --RepeatedNameCount;
             groupedNodesList[0].ResetStyle();
@@ -356,7 +369,7 @@ public class FSMGraphView : GraphView
         if (groupedNodesList.Count == 0)
         {
             _groupedNodes[group].Remove(nodeName);
-            if(_groupedNodes[group].Count == 0)
+            if (_groupedNodes[group].Count == 0)
             {
                 _groupedNodes.Remove(group);
             }
@@ -373,6 +386,7 @@ public class FSMGraphView : GraphView
             _groups.Add(groupName, groupErrorData);
             return;
         }
+
         List<FSMGroup> groupsList = _groups[groupName].Groups;
         groupsList.Add(group);
         Color errorColor = _groups[groupName].ErrorData.Color;
@@ -390,18 +404,19 @@ public class FSMGraphView : GraphView
         List<FSMGroup> groupsList = _groups[groupName].Groups;
         groupsList.Remove(group);
         group.ResetStyle();
-        if(groupsList.Count == 1)
+        if (groupsList.Count == 1)
         {
             --RepeatedNameCount;
             groupsList[0].ResetStyle();
             return;
         }
+
         if (groupsList.Count == 0)
         {
             _groups.Remove(groupName);
         }
     }
-    
+
     private void AddMiniMap()
     {
         _miniMap = new MiniMap()
@@ -410,34 +425,34 @@ public class FSMGraphView : GraphView
         };
         _miniMap.SetPosition(new Rect(10, 45, 200, 140));
         Add(_miniMap);
-        
+
         _miniMap.visible = false;
     }
-    
+
     private void AddGridBackground()
     {
         GridBackground gridBackground = new GridBackground();
         gridBackground.StretchToParentSize();
         Insert(0, gridBackground);
     }
-    
+
     private void AddStyles()
     {
-        this.AddStyleSheets("FSMSystem/FSMGraphViewStyle.uss","FSMSystem/FSMNodeStyle.uss");
+        this.AddStyleSheets("FSMSystem/FSMGraphViewStyle.uss", "FSMSystem/FSMNodeStyle.uss");
     }
-    
+
     private void AddMiniMapStyles()
     {
         StyleColor backgroundColor = new StyleColor(new Color32(29, 29, 30, 255));
         StyleColor borderColor = new StyleColor(new Color32(51, 51, 51, 255));
-        
+
         _miniMap.style.backgroundColor = backgroundColor;
         _miniMap.style.borderBottomColor = borderColor;
         _miniMap.style.borderLeftColor = borderColor;
         _miniMap.style.borderRightColor = borderColor;
         _miniMap.style.borderTopColor = borderColor;
     }
-    
+
     private void AddManipulators()
     {
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
@@ -451,53 +466,58 @@ public class FSMGraphView : GraphView
         this.AddManipulator(CreateTransitionItemMenu("Distance"));
         this.AddManipulator(CreateGroupContextualMenu());
     }
-    
+
     private void AddSearchWindow()
     {
-        if(_searchWindow == null)
+        if (_searchWindow == null)
         {
             _searchWindow = ScriptableObject.CreateInstance<FSMSearchWindow>();
             _searchWindow.Initialize(this);
         }
+
         nodeCreationRequest = context =>
             SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
     }
-    
+
     private IManipulator CreateGroupContextualMenu()
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-            menuEvent => menuEvent.menu.AppendAction("Create Group", 
-                menuActionEvent => CreateGroup("State Group", GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition)))
-            );
-        
+            menuEvent => menuEvent.menu.AppendAction("Create Group",
+                menuActionEvent => CreateGroup("State Group",
+                    GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition)))
+        );
+
         return contextualMenuManipulator;
     }
-    
+
     private IManipulator CreateStateItemMenu(string nodeName)
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-            menuEvent => menuEvent.menu.AppendAction($"Create State/{nodeName}", menuActionEvent => 
-                AddElement(CreateNode(nodeName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.State))));
-        
+            menuEvent => menuEvent.menu.AppendAction($"Create State/{nodeName}", menuActionEvent =>
+                AddElement(CreateNode(nodeName, GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition),
+                    FSMNodeType.State))));
+
         return contextualMenuManipulator;
     }
-    
+
     private IManipulator CreateTransitionItemMenu(string transitionName)
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-            menuEvent => menuEvent.menu.AppendAction($"Create Transition/{transitionName}", menuActionEvent => 
-                AddElement(CreateNode(transitionName,GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.Transition))));
-        
+            menuEvent => menuEvent.menu.AppendAction($"Create Transition/{transitionName}", menuActionEvent =>
+                AddElement(CreateNode(transitionName,
+                    GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.Transition))));
+
         return contextualMenuManipulator;
     }
-    
+
     public Vector2 GetLocalMousePosition(Vector2 mousePosition, bool isSearchWindow = false)
     {
         Vector2 worldMousePosition = mousePosition;
-        if(isSearchWindow)
+        if (isSearchWindow)
         {
             worldMousePosition -= _window.position.position;
         }
+
         Vector2 localMousePosition = contentViewContainer.WorldToLocal(worldMousePosition);
         return localMousePosition;
     }
@@ -508,12 +528,17 @@ public class FSMGraphView : GraphView
         _groups.Clear();
         _groupedNodes.Clear();
         _ungroupedNodes.Clear();
-        
+
         repeatedNameCount = 0;
     }
 
     public void ToggleMiniMap()
     {
         _miniMap.visible = !_miniMap.visible;
+    }
+
+    public FSMEditorWindow GetWindow()
+    {
+        return _window;
     }
 }

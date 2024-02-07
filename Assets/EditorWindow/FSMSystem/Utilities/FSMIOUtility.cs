@@ -346,7 +346,6 @@ public static class FSMIOUtility
                 ((PatrolStateScript)node.StateScript).patrolSpeed = patrolData.patrolSpeed;
                 ((PatrolStateScript)node.StateScript).patrolPointPrefab = patrolData.patrolPointPrefab;
                 ((PatrolStateScript)node.StateScript).patrolPoints = patrolData.patrolPoints;
-                Debug.Log("Patrol Points: " + patrolData.patrolPoints.Count);
                 break;
             case "Attack":
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);

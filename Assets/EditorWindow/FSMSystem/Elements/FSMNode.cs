@@ -16,7 +16,7 @@ public class FSMNode : Node
     public FSMNodeType NodeType { get; set; }
     public FSMGroup Group { get; set; }
     
-    private FSMGraphView _graphView;
+    protected FSMGraphView _graphView;
     public StateScript StateScript { get; set; }
 
     public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)

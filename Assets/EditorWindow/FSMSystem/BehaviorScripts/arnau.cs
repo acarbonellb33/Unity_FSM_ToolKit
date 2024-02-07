@@ -64,8 +64,18 @@ public class arnau : BehaviorScript
 	{
 		currentState = FSMStates.Patrol;
 	}
-	public void AddObjectToList(GameObject obj)
+	public GameObject AddObjectToList()
 	{
-		patrol.patrolPoints.Add(obj);
+		GameObject newGameObject = new GameObject("Patrol Point " + patrol.patrolPoints.Count);
+		patrol.patrolPoints.Add(newGameObject);
+		return newGameObject;
+	}
+	public void RemoveObjectFromList(GameObject patrolPoint)
+	{
+		patrol.RemovePatrolPoint(patrolPoint);
+		if(GameObject.Find(patrolPoint.name) != null)
+		{
+			DestroyImmediate(patrolPoint);
+		}
 	}
 }

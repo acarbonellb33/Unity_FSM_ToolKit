@@ -5,6 +5,7 @@
 }
 .fsm-node_main-container {
     background-color: var(--fsm-colors-window-dark-grey-1);
+    display: flex; /* Use flexbox layout */
 }
 
 .fsm-node_custom-data-container {
@@ -84,6 +85,13 @@
 }
 /*ELEMENTS*/
 
+.fsm-node_label {
+    margin-left: 5px;
+    margin-top: 10px;
+    -unity-font-style: bold-and-italic;
+    font-size: 39;
+}
+
 .fsm-node_custom-data-container > Foldout{
     margin-left: -4px;
     margin-top: 4px;
@@ -94,8 +102,24 @@
 }
 
 .fsm-node_state-attribute-label{
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 8px;
+    margin-left: 2px;
+    -unity-font-style: bold;
+}
+.fsm-node_state-attribute-field{
+    
+}
+.fsm-node_state-attribute-field > .unity-object-field__input {
+    background-color: var(--fsm-colors-window-dark-grey-6);
+    border-radius: 0;
+}
+.fsm-node_state-attribute-field > .unity-float-field__input {
+    background-color: var(--fsm-colors-window-dark-grey-6);
+    border-radius: 0;
+}
+.fsm-node_state-attribute-field > .unity-int-field__input {
+    background-color: var(--fsm-colors-window-dark-grey-6);
+    border-radius: 0;
 }
 
 /*BUILD IN*/

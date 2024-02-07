@@ -42,7 +42,7 @@ public class FSMNode : Node
 
     public virtual void Draw()
     {
-        TextField stateNameField = FSMElementUtility.CreateTextField(StateName, null, callback =>
+        Label stateNameField = FSMElementUtility.CreateLabel(StateName, callback =>
         {
             if (Group == null)
             {
@@ -56,7 +56,7 @@ public class FSMNode : Node
             StateName = callback.newValue;
             _graphView.AddGroupedNode(this, currentGroup);
         });
-        stateNameField.AddClasses("fsm-node_textfield", "fsm-node_filename-textfield", "fsm-node_textfield_hidden");
+        stateNameField.AddClasses("fsm-node_label", "fsm-node_state-attribute-field input");
         titleContainer.Insert(0, stateNameField);
         
         Port inputPort = this.CreatePort("Connection", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);

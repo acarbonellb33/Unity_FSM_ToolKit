@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "FSMGraphSaveData", menuName = "FSM/FSMGraphSaveData", order = 1)]
 public class FSMGraphSaveData : ScriptableObject
 {
     [field: SerializeField] public string FileName { get; set; }

@@ -93,34 +93,38 @@ public class FSMStateNode : FSMNode
                 case "System.Collections.Generic.List`1[UnityEngine.GameObject]":
                     
                     string inputList = result[2];
-                    List<GameObject> outputGameObjectsList = new List<GameObject>();
-                    outputGameObjectsList = inputList.Split('/').Select(GameObject.Find).ToList();
-                    foreach (var value in outputGameObjectsList)
+                    if (inputList != "")
                     {
-                        string outputValue = Regex.Replace(value.ToString(), @"\s*\([^()]*\)", "");
-                    
-                        ObjectField objectListField = new ObjectField()
+                        List<GameObject> outputGameObjectsList = new List<GameObject>();
+                        outputGameObjectsList = inputList.Split('/').Select(GameObject.Find).ToList();
+                        foreach (var value in outputGameObjectsList)
                         {
-                            objectType = typeof(GameObject),
-                            value = GameObject.Find(outputValue)
-                        };
-                        objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
-                        {
-                            StateScript.SetVariableValue(result[0], objectListField.value);
-                        });
+                            string outputValue = Regex.Replace(value.ToString(), @"\s*\([^()]*\)", "");
+                            
+                            ObjectField objectListField = new ObjectField()
+                            {
+                                objectType = typeof(GameObject),
+                                value = GameObject.Find(outputValue)
+                            };
+                            objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
+                            {
+                                StateScript.SetVariableValue(result[0], objectListField.value);
+                            });
+                                                
+                            Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
+                            {
+                                RemovePatrolPoint(objectListField);
+                                stateAttributeContainer.Remove(objectListField);
+                            });
                         
-                        Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
-                        {
-                            RemovePatrolPoint(objectListField);
-                            stateAttributeContainer.Remove(objectListField);
-                        });
-
-                        deleteChoiceButton.AddToClassList("ds-node__button");
-                        objectListField.AddToClassList("fsm-node_state-attribute-field");
-                        
-                        objectListField.Add(deleteChoiceButton);
-                        stateAttributeContainer.Add(objectListField);
+                            deleteChoiceButton.AddToClassList("fsm-node_button");
+                            objectListField.AddToClassList("fsm-node_state-attribute-field");
+                                                
+                            objectListField.Add(deleteChoiceButton);
+                            stateAttributeContainer.Add(objectListField);
+                        }
                     }
+                    
                     Button addChoiceButton = null;
                     addChoiceButton = FSMElementUtility.CreateButton("Add Patrol Point", () =>
                     {
@@ -142,7 +146,7 @@ public class FSMStateNode : FSMNode
                                 stateAttributeContainer.Remove(objectListField);
                             });
 
-                            deleteChoiceButton.AddToClassList("ds-node__button");
+                            deleteChoiceButton.AddToClassList("fsm-node_button");
                             objectListField.AddToClassList("fsm-node_state-attribute-field");
                             
                             objectListField.Add(deleteChoiceButton);
@@ -152,7 +156,7 @@ public class FSMStateNode : FSMNode
                         }
                     });
                     
-                    addChoiceButton.AddToClassList("ds-node__button");
+                    addChoiceButton.AddToClassList("fsm-node_button");
                     stateAttributeContainer.Add(addChoiceButton);
                     break;
                 case "System.Single":

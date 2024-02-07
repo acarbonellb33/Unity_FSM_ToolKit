@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: testing
   m_EditorClassIdentifier: 
   <FileName>k__BackingField: testing
-  <InitialState>k__BackingField: Patrol
+  <InitialState>k__BackingField: Chase
   <Nodes>k__BackingField:
   - <Id>k__BackingField: 7a87c729-1d5e-489e-be76-a9add69d5110
     <Name>k__BackingField: Patrol
@@ -66,4 +66,4 @@ MonoBehaviour:
   - Hearing
   <OldGroupedNodeNames>k__BackingField:
     list: []
-  <GameObject>k__BackingField: {fileID: 0}
+  <GameObject>k__BackingField: Enemy

@@ -1,7 +1,7 @@
 /* CONTAINERS */
 .fsm-node_extension-container {
-    background-color: var(--fsm-colors-window-dark-grey-1);
-    padding: 8px;
+    background-color: var(--fsm-colors-window-grey);
+    padding: 4px;
 }
 .fsm-node_main-container {
     background-color: var(--fsm-colors-window-dark-grey-1);
@@ -67,10 +67,13 @@
 /* BUTTONS */
 
 .fsm-node_button {
-    background-color: var(--fsm-colors-window-dark-grey-5);
-    border-color: var(--fsm-colors-window-dark-grey-1);
-    margin: 4px;
-    max-height: 25px;
+    background-color: var(--fsm-colors-window-grey);
+    border-color: var(--fsm-colors-window-gray-border);
+    border-radius: 0;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-left: -1px;
+    margin-bottom: 0px;
 }
 .fsm-node_button:hover {
     background-color: var(--fsm-colors-window-dark-grey-2);
@@ -81,9 +84,6 @@
 }
 /*ELEMENTS*/
 
-TextField{
-    margin-left: 0px;
-}
 .fsm-node_custom-data-container > Foldout{
     margin-left: -4px;
     margin-top: 4px;

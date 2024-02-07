@@ -55,8 +55,10 @@ MonoBehaviour:
     <NodeType>k__BackingField: 0
     <Position>k__BackingField: {x: 264, y: 239}
     <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 134.0,\n    \"patrolRadius\":
-      6.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23110\n    },\n   
-      \"patrolPoints\": []\n}"
+      6.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 23112\n    },\n   
+      \"patrolPoints\": [\n        {\n            \"instanceID\": 23164\n       
+      },\n        {\n            \"instanceID\": 23160\n        },\n        {\n           
+      \"instanceID\": 23168\n        }\n    ]\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:

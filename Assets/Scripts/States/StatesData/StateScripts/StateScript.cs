@@ -98,18 +98,16 @@ public abstract class StateScript : MonoBehaviour
         {
             if (field.FieldType.ToString() == "System.Collections.Generic.List`1[UnityEngine.GameObject]")
             {
-                List<GameObject> list = (List<GameObject>)field.GetValue(this);
-                list.Clear();
-                string[] names = newValue.ToString().Split('/');
-                foreach (var name in names)
+                if(newValue.GetType().ToString() == "UnityEngine.GameObject")
                 {
-                    GameObject obj = GameObject.Find(name);
-                    if (obj != null)
-                    {
-                        list.Add(obj);
-                    }
+                    List<GameObject> list = (List<GameObject>)field.GetValue(this);
+                    list.Add((GameObject)newValue);
+                    field.SetValue(this, list);
                 }
-                field.SetValue(this, list);
+                else
+                {
+                    field.SetValue(this, (List<GameObject>)newValue);
+                }
             }
             else
             {

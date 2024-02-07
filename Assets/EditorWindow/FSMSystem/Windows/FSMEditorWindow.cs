@@ -8,23 +8,27 @@ using UnityEngine.UIElements;
 public class FSMEditorWindow : EditorWindow
 {
     private static FSMGraphView _graphView;
-    private readonly string _fileName = "New FSM";
-    private static TextField _fileNameTextField;
+    private static string _fileName = "";
+    private static Label _fileNameTextField;
     private Button _saveButton;
     private Button _miniMapButton;
     private Button _generateScriptButton;
     private static PopupField<string> _popupField;
     public static List<string> _stateNames = new List<string>();
-
-    [MenuItem("Window/FSM/FSM Graph")]
-    public static void Open()
-    {
-        GetWindow<FSMEditorWindow>("FSM Graph");
-    }
-    
+    private static FSMEditorWindow _window;
+    private static FSMGraphSaveData _saveData;
     public static void OpenWithSaveData(FSMGraphSaveData saveData)
     {
-        FSMEditorWindow window = GetWindow<FSMEditorWindow>("FSM Graph");
+        _saveData = saveData;
+        _fileName = saveData.FileName;
+        if(_window == null)
+        {
+            _window = CreateWindow<FSMEditorWindow>("FSM Graph");
+        }
+        else
+        {
+            GetWindow<FSMEditorWindow>("FSM Graph");
+        }
         string assetPath = $"Assets/EditorWindow/FSMSystem/Graphs/{saveData.FileName}.asset";
         if (string.IsNullOrEmpty(assetPath))return;
         _graphView.ClearGraph();
@@ -58,43 +62,37 @@ public class FSMEditorWindow : EditorWindow
     private void AddToolbar()
     {
         Toolbar toolbar = new Toolbar();
+        Box box = new Box();
         
-        _fileNameTextField = FSMElementUtility.CreateTextField(_fileName, "File Name: ");
+        _fileNameTextField = FSMElementUtility.CreateLabel("File Name: "+_fileName);
         
         _saveButton = FSMElementUtility.CreateButton("Save", () => Save());
         
-        Button loadButton = FSMElementUtility.CreateButton("Load", () => Load());
+        Button reloadButton = FSMElementUtility.CreateButton("Reload", () => Reload());
         Button clearButton = FSMElementUtility.CreateButton("Clear", () => Clear());
-        Button resetButton = FSMElementUtility.CreateButton("Reset", () => ResetGraph());
+        //Button resetButton = FSMElementUtility.CreateButton("Reset", () => ResetGraph());
         _miniMapButton = FSMElementUtility.CreateButton("MiniMap", () => ToggleMiniMap());
         _generateScriptButton = FSMElementUtility.CreateButton("Generate Script", () => GenerateScript());
         _popupField = new PopupField<string>("Select Initial State", _stateNames, 0);
-
+        
         toolbar.Add(_fileNameTextField);
         toolbar.Add(_saveButton);
-        toolbar.Add(loadButton);
+        toolbar.Add(reloadButton);
         toolbar.Add(clearButton);
-        toolbar.Add(resetButton);
+        //toolbar.Add(resetButton);
         toolbar.Add(_miniMapButton);
         toolbar.Add(_generateScriptButton);
         toolbar.Add(_popupField);
         
         toolbar.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
         rootVisualElement.Add(toolbar);
+        box.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
+        rootVisualElement.Add(box);
     }
 
     #region Toolbar Actions
     private bool Save()
     {
-        if (string.IsNullOrEmpty(_fileNameTextField.value))
-        {
-            EditorUtility.DisplayDialog(
-                "Invalid file name!",
-                "Please enter a valid file name.",
-                "OK"
-            );
-            return false;
-        }
         if(_popupField.value == null || _popupField.value == "")
         {
             EditorUtility.DisplayDialog(
@@ -104,7 +102,7 @@ public class FSMEditorWindow : EditorWindow
             );
             return false;
         }
-        FSMIOUtility.Initialize(_fileNameTextField.value, _graphView, _popupField.value);
+        FSMIOUtility.Initialize(_fileName, _graphView, _popupField.value);
         FSMIOUtility.Save();
         return true;
     }
@@ -113,18 +111,16 @@ public class FSMEditorWindow : EditorWindow
         _graphView.ClearGraph();
         ClearPopupField();
     }
-    private void ResetGraph()
+    /*private void ResetGraph()
     {
         _graphView.ClearGraph();
         UpdateFileName(_fileName);
         ClearPopupField();
-    }
-    private void Load()
+    }*/
+    private void Reload()
     {
-        string filePath = EditorUtility.OpenFilePanel("FSM Graphs", "Assets/EditorWindow/FSMSystem/Graphs", "asset");
-        if (string.IsNullOrEmpty(filePath))return;
         Clear();
-        FSMIOUtility.Initialize(Path.GetFileNameWithoutExtension(filePath), _graphView, _popupField.value);
+        FSMIOUtility.Initialize(_saveData.FileName, _graphView, _popupField.value);
         FSMIOUtility.Load();
     }
     
@@ -137,17 +133,17 @@ public class FSMEditorWindow : EditorWindow
     {
         if (Save())
         {
-            FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileNameTextField.value);
+            FSMGraphSaveData saveData = FSMIOUtility.LoadAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs",  _fileName);
             EnemyStateMachineEditor.GenerateScript(saveData);
         }
     }
     #endregion
 
     #region Utilities
-    public static void UpdateFileName(string fileName)
+    /*public static void UpdateFileName(string fileName)
     {
         _fileNameTextField.value = fileName;
-    }
+    }*/
     public static void UpdatePopupField(List<string> stateNames, string initialState)
     {
         _stateNames.Clear();
@@ -180,7 +176,7 @@ public class FSMEditorWindow : EditorWindow
     }
     public string GetFileName()
     {
-        return _fileNameTextField.value;
+        return _fileName;
     }
 
     #endregion

@@ -1,24 +1,49 @@
 Toolbar
 {
-    background-color: var(--fsm-colors-window-dark-grey-1);
-    height: 35px;
+    background-color: var(--fsm-colors-window-grey);
+    height: 21px;
+}
+Box{
+    background-color: var(--fsm-colors-window-black-gradient);
+    height: 1px;
 }
 TextField
 {
-    padding: 4px;
+    padding: 2px;
+}
+PopupField{
+    background-color: var(--fsm-colors-window-grey);
+    border-color: var(--fsm-colors-window-gray-border);
+    border-radius: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-left: 5px;
+    margin-bottom: 0px;
+}
+Label
+{
+    padding: 3px;
+    -unity-font-style: bold;
+    margin-right: 40px;
 }
 Button{
-    background-color: var(--fsm-colors-window-dark-grey-5);
-    border-color: var(--fsm-colors-window-dark-grey-1);
-    margin: 4px;
-    max-height: 25px;
+    background-color: var(--fsm-colors-window-grey);
+    border-color: var(--fsm-colors-window-gray-border);
+    border-radius: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-left: -1px;
+    margin-bottom: 0px; 
 }
 Button:hover {
-    background-color: var(--fsm-colors-window-dark-grey-2);
+    background-color: var(--fsm-colors-window-light-grey-1);
 }
 Button:active {
-    background-color: var(--fsm-colors-window-dark-grey-3);
-    color: var(--fsm-colors-window-yellow);
+    background-color: var(--fsm-colors-window-light-grey-1);
 }
 
 .unity-text-field__label
@@ -43,5 +68,5 @@ TextField:focus > .unity-text-field__label
 
 .fsm-toolbar__button__selected
 {
-    color: var(--fsm-colors-window-yellow);
+    background-color: var(--fsm-colors-window-light-grey-1);
 }

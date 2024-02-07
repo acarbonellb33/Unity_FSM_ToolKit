@@ -40,9 +40,6 @@ public abstract class BehaviorScript : MonoBehaviour
                     PatrolStateScript patrol = gameObject.AddComponent<PatrolStateScript>();
                     foreach (var variable in ((StateScript)newValue).GetVariables())
                     {
-                        Debug.Log("SetVariableValue : " + variable.Key + " : " + variable.Value);
-                        Debug.Log("SetVariableValue : " + variable.Key.GetType() + " : " + variable.Value.GetType());
-                        //if(variable.Key.GetType())
                         patrol.SetVariableValue(variable.Key, variable.Value);
                     }
                     field.SetValue(this, patrol);

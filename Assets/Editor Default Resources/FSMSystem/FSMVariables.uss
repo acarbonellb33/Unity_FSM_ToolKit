@@ -8,7 +8,12 @@
     --fsm-colors-window-dark-grey-4: #232527;
     --fsm-colors-window-dark-grey-5: #252729;
     --fsm-colors-window-dark-grey-6: #27292C;
+    --fsm-colors-window-grey: #383838;
+    --fsm-colors-window-light-grey-1: #505050;
     --fsm-colors-window-yellow: #FDD057;
+    --fsm-colors-window-dark-gradient: #FF5A5A;
+    --fsm-colors-window-gray-border: #232323;
+    --fsm-colors-window-black-gradient: rgba(1,1, 1, 0.15);
     
     --fsm-metrics-grid-25: 25;
 }

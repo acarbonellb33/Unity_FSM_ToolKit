@@ -242,7 +242,7 @@ public static class FSMIOUtility
                 $"Ok");
             return;
         }
-        FSMEditorWindow.UpdateFileName(graphSaveData.FileName);
+        //FSMEditorWindow.UpdateFileName(graphSaveData.FileName);
         List<string> stateNames = new List<string>();
         foreach(FSMNodeSaveData node in graphSaveData.Nodes)
         {

@@ -86,10 +86,11 @@
 /*ELEMENTS*/
 
 .fsm-node_label {
-    margin-left: 5px;
-    margin-top: 10px;
     -unity-font-style: bold-and-italic;
-    font-size: 39;
+    -unity-text-align: middle-center;
+    font-size: 15px;
+    width: 100%;
+    height: 100%;
 }
 
 .fsm-node_custom-data-container > Foldout{

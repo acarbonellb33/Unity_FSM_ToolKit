@@ -56,7 +56,7 @@ public class FSMNode : Node
             StateName = callback.newValue;
             _graphView.AddGroupedNode(this, currentGroup);
         });
-        stateNameField.AddClasses("fsm-node_label", "fsm-node_state-attribute-field input");
+        stateNameField.AddClasses("fsm-node_label");
         titleContainer.Insert(0, stateNameField);
         
         Port inputPort = this.CreatePort("Connection", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);

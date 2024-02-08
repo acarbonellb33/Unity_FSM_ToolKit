@@ -132,10 +132,8 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t\t\tDestroyImmediate(patrolPoint);\n";
             scriptContent += "\t\t}\n";
             scriptContent += "\t}\n";
-
-            scriptContent += "}\n";
         }
-
+        scriptContent += "}\n";
         return scriptContent;
     }
 
@@ -198,42 +196,56 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\t\t{\n";
         scriptContent += "\t\t\t\tif (iterator.name != \"m_Script\")\n";
         scriptContent += "\t\t\t\t{\n";
-        scriptContent += "\t\t\t\t\tif (iterator.isArray)\n";
-        scriptContent += "\t\t\t\t\t{\n";
-        scriptContent += "\t\t\t\t\t\tEditorGUILayout.Space();\n";
-        scriptContent += "\t\t\t\t\t\tEditorGUILayout.LabelField(\"Create a Patrol Waypoint\", EditorStyles.boldLabel);\n";
-        scriptContent += "\t\t\t\t\t\tEditorGUILayout.Space();\n";
-        scriptContent += "\t\t\t\t\t\tfor (int i = 0; i < iterator.arraySize; i++)\n";
-        scriptContent += "\t\t\t\t\t\t{\n";
-        scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.BeginHorizontal();\n";
-        scriptContent += "\t\t\t\t\t\t\tSerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);\n";
-        scriptContent += "\t\t\t\t\t\t\tif (gameObjectElementProperty.objectReferenceValue != null)\n";
-        scriptContent += "\t\t\t\t\t\t\t{\n";
-        scriptContent += "\t\t\t\t\t\t\t\tGameObject gameObject = (GameObject)gameObjectElementProperty.objectReferenceValue;\n";
-        scriptContent += "\t\t\t\t\t\t\t\tEditorGUILayout.PropertyField(gameObjectElementProperty, GUIContent.none);\n";
-        scriptContent += "\t\t\t\t\t\t\t\tif (GUILayout.Button(\"Remove\", GUILayout.Width(70)))\n";
-        scriptContent += "\t\t\t\t\t\t\t\t{\n";
-        scriptContent += "\t\t\t\t\t\t\t\t\tRemovePatrolPoint(gameObject);\n";
-        scriptContent += "\t\t\t\t\t\t\t\t}\n";
-        scriptContent += $"\t\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
-        scriptContent += "\t\t\t\t\t\t\t}\n";
-        scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.EndHorizontal();\n";
-        scriptContent += "\t\t\t\t\t\t}\n";
-        scriptContent += "\t\t\t\t\t\tif (GUILayout.Button(\"Create and Add a Patrol Point\"))\n";
-        scriptContent += "\t\t\t\t\t\t{\n";
-        scriptContent += $"\t\t\t\t\t\t\tCreateAndAddGameObject({nameLowerCapital});\n";
-        scriptContent += "\t\t\t\t\t\t}\n";
-        scriptContent += "\t\t\t\t\t}\n";
-        scriptContent += "\t\t\t\t\telse\n";
-        scriptContent += "\t\t\t\t\t{\n";
-        scriptContent += "\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
-        scriptContent += "\t\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n";
-        scriptContent += "\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
-        scriptContent += "\t\t\t\t\t\t{\n";
-        scriptContent += "\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
-        scriptContent += $"\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
-        scriptContent += "\t\t\t\t\t\t}\n";
-        scriptContent += "\t\t\t\t\t}\n";
+        if (hasPatrolState)
+        {
+            scriptContent += "\t\t\t\t\tif (iterator.isArray)\n";
+            scriptContent += "\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\tEditorGUILayout.Space();\n";
+            scriptContent += "\t\t\t\t\t\tEditorGUILayout.LabelField(\"Create a Patrol Waypoint\", EditorStyles.boldLabel);\n";
+            scriptContent += "\t\t\t\t\t\tEditorGUILayout.Space();\n";
+            scriptContent += "\t\t\t\t\t\tfor (int i = 0; i < iterator.arraySize; i++)\n";
+            scriptContent += "\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.BeginHorizontal();\n";
+            scriptContent += "\t\t\t\t\t\t\tSerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);\n";
+            scriptContent += "\t\t\t\t\t\t\tif (gameObjectElementProperty.objectReferenceValue != null)\n";
+            scriptContent += "\t\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\t\tGameObject gameObject = (GameObject)gameObjectElementProperty.objectReferenceValue;\n";
+            scriptContent += "\t\t\t\t\t\t\t\tEditorGUILayout.PropertyField(gameObjectElementProperty, GUIContent.none);\n"; 
+            scriptContent += "\t\t\t\t\t\t\t\tif (GUILayout.Button(\"Remove\", GUILayout.Width(70)))\n"; 
+            scriptContent += "\t\t\t\t\t\t\t\t{\n"; 
+            scriptContent += "\t\t\t\t\t\t\t\t\tRemovePatrolPoint(gameObject);\n"; 
+            scriptContent += "\t\t\t\t\t\t\t\t}\n"; 
+            scriptContent += $"\t\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
+            scriptContent += "\t\t\t\t\t\t\t}\n"; 
+            scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.EndHorizontal();\n"; 
+            scriptContent += "\t\t\t\t\t\t}\n"; 
+            scriptContent += "\t\t\t\t\t\tif (GUILayout.Button(\"Create and Add a Patrol Point\"))\n"; 
+            scriptContent += "\t\t\t\t\t\t{\n"; 
+            scriptContent += $"\t\t\t\t\t\t\tCreateAndAddGameObject({nameLowerCapital});\n"; 
+            scriptContent += "\t\t\t\t\t\t}\n"; 
+            scriptContent += "\t\t\t\t\t}\n"; 
+            scriptContent += "\t\t\t\t\telse\n"; 
+            scriptContent += "\t\t\t\t\t{\n"; 
+            scriptContent += "\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n"; 
+            scriptContent += "\t\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n"; 
+            scriptContent += "\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n"; 
+            scriptContent += "\t\t\t\t\t\t{\n"; 
+            scriptContent += "\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n"; 
+            scriptContent += $"\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
+            scriptContent += "\t\t\t\t\t\t}\n"; 
+            scriptContent += "\t\t\t\t\t}\n";
+        }
+        else
+        {
+            scriptContent += "\t\t\t\t\tEditorGUI.BeginChangeCheck();\n"; 
+            scriptContent += "\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n"; 
+            scriptContent += "\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n"; 
+            scriptContent += "\t\t\t\t\t{\n"; 
+            scriptContent += "\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n"; 
+            scriptContent += $"\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
+            scriptContent += "\t\t\t\t\t}\n"; 
+        }
+        
         scriptContent += "\t\t\t\t}\n";
         scriptContent += "\t\t\t\tnextVisible = iterator.NextVisible(false);\n";
         scriptContent += "\t\t\t}\n";
@@ -244,20 +256,24 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\t}\n";
         scriptContent += "\t\tserializedObject.ApplyModifiedProperties();\n";
         scriptContent += "\t}\n";
-        scriptContent += $"\tprivate void CreateAndAddGameObject({stringWithoutSpaces} {nameLowerCapital})\n";
-        scriptContent += "\t{\n";
-        scriptContent += $"\t\t{nameLowerCapital}.AddObjectToList();\n";
-        scriptContent += "\t}\n";
-        scriptContent += "\tprivate void RemovePatrolPoint(GameObject patrolPoint)\n";
-        scriptContent += "\t{\n";
-        scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
-        scriptContent += $"\t\t{nameLowerCapital}.patrol.RemovePatrolPoint(patrolPoint);\n";
-        scriptContent += "\t\tif(GameObject.Find(patrolPoint.name) != null)\n";
-        scriptContent += "\t\t{\n";
-        scriptContent += "\t\t\tDestroyImmediate(patrolPoint);\n";
-        scriptContent += "\t\t}\n";
-        scriptContent += "\t}\n";
-
+       
+        if (hasPatrolState)
+        {
+            scriptContent += $"\tprivate void CreateAndAddGameObject({stringWithoutSpaces} {nameLowerCapital})\n";
+            scriptContent += "\t{\n";
+            scriptContent += $"\t\t{nameLowerCapital}.AddObjectToList();\n";
+            scriptContent += "\t}\n";
+            scriptContent += "\tprivate void RemovePatrolPoint(GameObject patrolPoint)\n";
+            scriptContent += "\t{\n";
+            scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
+            scriptContent += $"\t\t{nameLowerCapital}.patrol.RemovePatrolPoint(patrolPoint);\n";
+            scriptContent += "\t\tif(GameObject.Find(patrolPoint.name) != null)\n";
+            scriptContent += "\t\t{\n";
+            scriptContent += "\t\t\tDestroyImmediate(patrolPoint);\n";
+            scriptContent += "\t\t}\n";
+            scriptContent += "\t}\n";
+        }
+        
         scriptContent += "}\n";
         return scriptContent;
     }

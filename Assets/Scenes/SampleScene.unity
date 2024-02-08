@@ -716,7 +716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphContainer: {fileID: 11400000, guid: 8f94c2e81cc11094e91ee98574558696, type: 2}
+  graphContainer: {fileID: 11400000, guid: 6f1b059f63311cc4cac9f1f9f905ee05, type: 2}
 --- !u!114 &869181771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -742,13 +742,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 13447
-  patrolRadius: 6
-  patrolPointPrefab: {fileID: 216584297}
-  patrolPoints: []
 --- !u!114 &869181773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,7 +757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 6
+  distance: 10
 --- !u!114 &869181774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,7 +770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hearingRange: 54
+  hearingRange: 6
 --- !u!114 &869181775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,7 +780,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9825cad6097130c4aa0ee79d94a33839, type: 3}
+  m_Script: {fileID: 11500000, guid: a611c00a424c5bb4390af28f1770b051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   options:
@@ -792,10 +788,10 @@ MonoBehaviour:
   - {fileID: 869181773}
   - {fileID: 869181772}
   - {fileID: 869181771}
-  selectedOptionIndex: 2
+  selectedOptionIndex: 0
   hearing: {fileID: 869181774}
   distance: {fileID: 869181773}
-  patrol: {fileID: 869181772}
+  chase: {fileID: 869181772}
   attack: {fileID: 869181771}
 --- !u!1 &963194225
 GameObject:

@@ -1,0 +1,46 @@
+Image
+{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    width:50;
+    height:50;
+    align-self: center;
+}
+.customLabelClass  > .unity-text-field__input {
+    padding: 3px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    font-size: 12px;
+    white-space: normal; /* Enable text wrapping */
+    color: #fdfdfd; /* Text color */
+    background-color: #494848; /* Background color */
+}
+
+.customLabelTitle{
+    padding: 3px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    font-size: 15px;
+}
+
+.customLabelFilename{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 3px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    font-size: 13px;
+}
+Button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 95%;
+    height: 30px;
+    background-color: #6e6d6d;
+    color: #fdfdfd;
+    font-size: 12px;
+    -unity-font-style: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+}

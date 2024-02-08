@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -140,7 +141,7 @@ public class FSMEditorWindow : EditorWindow
     #region Toolbar Actions
     private bool Save()
     {
-        if(_popupField.value == null || _popupField.value == "")
+        if(String.IsNullOrEmpty(_popupField.value))
         {
             EditorUtility.DisplayDialog(
                 "Invalid Initial State!",
@@ -153,7 +154,6 @@ public class FSMEditorWindow : EditorWindow
         FSMIOUtility.Initialize(_fileName, _graphView, _popupField.value);
         FSMIOUtility.Save();
         EnemyStateMachineEditor.GenerateScript(_saveData);
-        //_fsmInspector.UpdateComponentOfGameObject(_saveData);
         return true;
     }
     private void Clear()

@@ -41,6 +41,7 @@ public class FSMTransitionNode : FSMNode
             connectionPort.userData = connection;
 
             outputContainer.Add(connectionPort);
+            outputContainer.AddToClassList("fsm-node_input-output-container");
         }
 
         VisualElement customDataContainer = new VisualElement();
@@ -64,13 +65,21 @@ public class FSMTransitionNode : FSMNode
         foreach(string attribute in attributes)
         {
             string[] result = attribute.Split(',');
-                
-            Label stateAttributeLabel = new Label(UpdateNameStyle(result[0]));
-            stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
-            stateAttributeContainer.Add(stateAttributeLabel);
-    
+
             switch (result[1])
             {
+                case "FSMOperands":
+                    EnumField enumField = new EnumField();
+                    enumField.Init(new FSMOperands());
+                    enumField.value = (Enum)Enum.Parse(typeof(FSMOperands), result[2]);
+                    enumField.label = UpdateNameStyle(result[0]);
+                    enumField.RegisterCallback<ChangeEvent<Enum>>(evt =>
+                    {
+                        StateScript.SetVariableValue(result[0], enumField.value);
+                    });
+                    enumField.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(enumField);
+                    break;
                 case "UnityEngine.GameObject":
 
                     string input = result[2];
@@ -78,6 +87,7 @@ public class FSMTransitionNode : FSMNode
                     
                     ObjectField objectField = new ObjectField()
                     {
+                        label = UpdateNameStyle(result[0]),
                         objectType = typeof(GameObject),
                         value = GameObject.Find(output)
                     };      
@@ -91,6 +101,7 @@ public class FSMTransitionNode : FSMNode
                 case "System.Single":
                     FloatField floatField = new FloatField()
                     {
+                        label = UpdateNameStyle(result[0]),
                         value = float.Parse(result[2])
                     };
                     floatField.RegisterCallback<InputEvent>(evt =>
@@ -103,6 +114,7 @@ public class FSMTransitionNode : FSMNode
                 case "System.Int32":
                     IntegerField integerField = new IntegerField()
                     {
+                        label = UpdateNameStyle(result[0]),
                         value = int.Parse(result[2])
                     };
                     integerField.RegisterCallback<InputEvent>(evt =>
@@ -115,6 +127,7 @@ public class FSMTransitionNode : FSMNode
                 case "System.Boolean":
                     Toggle toggle = new Toggle()
                     { 
+                        label = UpdateNameStyle(result[0]),
                         value = bool.Parse(result[2])
                     };
                     toggle.RegisterCallback<ClickEvent>(evt =>
@@ -127,6 +140,7 @@ public class FSMTransitionNode : FSMNode
                 case "System.String":
                     TextField textField = new TextField()
                     {
+                        label = UpdateNameStyle(result[0]),
                         value = result[2]
                     };
                     textField.RegisterCallback<InputEvent>(evt =>

@@ -78,6 +78,7 @@ public static class FSMElementUtility
     {
         Port port = node.InstantiatePort(orientation, direction, capacity, typeof(bool));
         port.portName = portName;
+        port.AddToClassList("fsm-node_port");
         return port;
     }
     

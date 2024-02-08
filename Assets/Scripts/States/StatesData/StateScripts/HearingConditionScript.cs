@@ -6,6 +6,7 @@ public class HearingConditionScript : StateScript
 {
     private float distanceToPlayer = 20f;
     public float hearingRange = 10f;
+    public FSMOperands operand;
     
     public HearingConditionScript()
     {

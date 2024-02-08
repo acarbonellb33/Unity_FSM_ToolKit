@@ -59,8 +59,9 @@ public class FSMNode : Node
         stateNameField.AddClasses("fsm-node_label");
         titleContainer.Insert(0, stateNameField);
         
-        Port inputPort = this.CreatePort("Connection", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);
+        Port inputPort = this.CreatePort("Input", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);
         inputContainer.Add(inputPort);
+        inputContainer.AddToClassList("fsm-node_input-output-container");
     }
 
     #region Ports

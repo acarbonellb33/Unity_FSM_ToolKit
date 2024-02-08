@@ -325,6 +325,7 @@ public static class FSMIOUtility
                 HearingData hearingData = JsonUtility.FromJson<HearingData>(json);
                 node.StateScript = new HearingConditionScript();
                 ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
+                ((HearingConditionScript)node.StateScript).operand = hearingData.operand;
                 break;
             case "Distance":
                 DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);
@@ -363,6 +364,7 @@ public static class FSMIOUtility
                 HearingData hearingData = JsonUtility.FromJson<HearingData>(json);
                 node.StateScript = new HearingConditionScript();
                 ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
+                ((HearingConditionScript)node.StateScript).operand = hearingData.operand;
                 break;
             case "Distance":
                 DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);

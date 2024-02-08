@@ -29,7 +29,7 @@ public abstract class BehaviorScript : MonoBehaviour
     {
         System.Type type = GetType();
         System.Reflection.FieldInfo field = type.GetField(variableName);
-        
+
         if (field != null)
         {
             if(options == null)

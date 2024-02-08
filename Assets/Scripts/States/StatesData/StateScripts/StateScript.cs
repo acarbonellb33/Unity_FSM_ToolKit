@@ -60,8 +60,8 @@ public abstract class StateScript : MonoBehaviour
             }
             else
             {
-              object value = field.GetValue(this);
-              result.Add($"{field.Name},{field.FieldType},{value}");  
+                object value = field.GetValue(this);
+                result.Add($"{field.Name},{field.FieldType},{value}");
             }
         }
         return result;

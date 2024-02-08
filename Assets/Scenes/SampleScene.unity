@@ -726,13 +726,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 10
-  attackRange: 5
-  attackCooldown: 2
-  canAttack: 1
 --- !u!114 &869181772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -742,10 +738,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 869181751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
+  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hearingRange: 7
+  operand: 0
 --- !u!114 &869181773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869181751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 10
+  attackRange: 5
+  attackCooldown: 2
+  canAttack: 1
+--- !u!114 &869181774
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -758,19 +772,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 10
---- !u!114 &869181774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 869181751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hearingRange: 6
 --- !u!114 &869181775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -789,10 +790,10 @@ MonoBehaviour:
   - {fileID: 869181772}
   - {fileID: 869181771}
   selectedOptionIndex: 0
-  hearing: {fileID: 869181774}
-  distance: {fileID: 869181773}
-  chase: {fileID: 869181772}
-  attack: {fileID: 869181771}
+  distance: {fileID: 869181774}
+  attack: {fileID: 869181773}
+  hearing: {fileID: 869181772}
+  chase: {fileID: 869181771}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

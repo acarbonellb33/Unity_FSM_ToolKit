@@ -17,4 +17,4 @@ MonoBehaviour:
   - <Text>k__BackingField: New State
     <NextNode>k__BackingField: {fileID: 11400000, guid: ee70306d757f00b4db7dbf8eebcc8476, type: 2}
   <NodeType>k__BackingField: 1
-  <DataObject>k__BackingField: "{\n    \"hearingRange\": 15.0\n}"
+  <DataObject>k__BackingField: "{\n    \"hearingRange\": 7.0,\n    \"operand\": 0\n}"

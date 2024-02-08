@@ -5,13 +5,15 @@
 }
 .fsm-node_main-container {
     background-color: var(--fsm-colors-window-dark-grey-1);
-    display: flex; /* Use flexbox layout */
 }
 
 .fsm-node_custom-data-container {
     background-color: var(--fsm-colors-window-dark-grey-3);
     border-radius: 4px;
     padding: 8px;
+}
+.fsm-node_input-output-container {
+    width: 50%;
 }
 
 /* INPUTS */
@@ -85,6 +87,11 @@
 }
 /*ELEMENTS*/
 
+.fsm-node_port {
+    -unity-font-style: bold-and-italic;
+    -unity-text-align: middle-center;
+}
+
 .fsm-node_label {
     -unity-font-style: bold-and-italic;
     -unity-text-align: middle-center;
@@ -107,21 +114,35 @@
     margin-left: 2px;
     -unity-font-style: bold;
 }
-.fsm-node_state-attribute-field{
-    
-}
 .fsm-node_state-attribute-field > .unity-object-field__input {
-    background-color: var(--fsm-colors-window-dark-grey-6);
+    background-color: var(--fsm-colors-window-light-grey-1);
     border-radius: 0;
 }
 .fsm-node_state-attribute-field > .unity-float-field__input {
-    background-color: var(--fsm-colors-window-dark-grey-6);
+    background-color: var(--fsm-colors-window-light-grey-1);
     border-radius: 0;
+    margin-top: 10px;
+    width: 90px;
+    -unity-text-align: middle-right;
+}
+.fsm-node_state-attribute-field > .unity-label{
+    margin-top: 10px;
+}
+.fsm-node_state-attribute-field > .unity-enum-field__input {
+    background-color: var(--fsm-colors-window-light-grey-1);
+    border-radius: 0;
+    margin-top: 10px;
 }
 .fsm-node_state-attribute-field > .unity-int-field__input {
-    background-color: var(--fsm-colors-window-dark-grey-6);
+    background-color: var(--fsm-colors-window-light-grey-1);
     border-radius: 0;
 }
+.fsm-node_state-attribute-field > .unity-toggle__input {
+    margin-top: 10px;
+    border-radius: 0;
+    justify-content: flex-end;
+}
+.fsm-node_state-attribute-container{}
 
 /*BUILD IN*/
 .unity-toggle_text{

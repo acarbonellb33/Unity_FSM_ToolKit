@@ -5,4 +5,5 @@ using UnityEngine;
 public class HearingData
 {
     public float hearingRange = 10f;
+    public FSMOperands operand;
 }

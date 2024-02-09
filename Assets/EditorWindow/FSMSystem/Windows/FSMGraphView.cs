@@ -42,6 +42,7 @@ public class FSMGraphView : GraphView
         _ungroupedNodes = new SerializableDictionary<string, FSMNodeErrorData>();
         _groups = new SerializableDictionary<string, FSMGroupErrorData>();
         _groupedNodes = new SerializableDictionary<Group, SerializableDictionary<string, FSMNodeErrorData>>();
+
         AddManipulators();
         AddSearchWindow();
         AddMiniMap();
@@ -51,9 +52,10 @@ public class FSMGraphView : GraphView
         OnGroupElementsRemoved();
         OnGroupRenamed();
         OnGraphViewChanged();
-
         AddStyles();
         AddMiniMapStyles();
+        
+        //AddElement(CreateNode("Initial State", new Vector2(100, 45), FSMNodeType.Initial));
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -286,15 +288,19 @@ public class FSMGraphView : GraphView
     {
         graphViewChanged = (changes) =>
         {
+            Debug.Log("Graph View Changed");
             if (changes.edgesToCreate != null)
             {
                 foreach (Edge edge in changes.edgesToCreate)
                 {
                     FSMNode nextNode = (FSMNode)edge.input.node;
-
                     FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
-
                     choiceData.NodeId = nextNode.Id;
+
+                    if (choiceData.Text == "Initial Node")
+                    {
+                        _window.initialState = nextNode.StateName;
+                    }
                 }
             }
 
@@ -310,10 +316,14 @@ public class FSMGraphView : GraphView
                     }
 
                     Edge edge = (Edge)element;
-
                     FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
-
                     choiceData.NodeId = "";
+                    
+                    if (choiceData.Text == "Initial Node")
+                    {
+                        _window.initialState = "";
+                        Debug.Log("Initial State: " + _window.initialState);
+                    }
                 }
             }
 
@@ -464,6 +474,7 @@ public class FSMGraphView : GraphView
         this.AddManipulator(CreateStateItemMenu("Chase"));
         this.AddManipulator(CreateTransitionItemMenu("Hearing"));
         this.AddManipulator(CreateTransitionItemMenu("Distance"));
+        this.AddManipulator(CreateInitialStateItemMenu());
         this.AddManipulator(CreateGroupContextualMenu());
     }
 
@@ -506,6 +517,15 @@ public class FSMGraphView : GraphView
             menuEvent => menuEvent.menu.AppendAction($"Create Transition/{transitionName}", menuActionEvent =>
                 AddElement(CreateNode(transitionName,
                     GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.Transition))));
+
+        return contextualMenuManipulator;
+    }
+    private IManipulator CreateInitialStateItemMenu()
+    {
+        ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
+            menuEvent => menuEvent.menu.AppendAction("Create Initial State", menuActionEvent =>
+                AddElement(CreateNode("Initial State",
+                    GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.Initial))));
 
         return contextualMenuManipulator;
     }

@@ -51,7 +51,7 @@ public static class EnemyStateMachineEditor
             {
                 hasPatrolState = true;
             }
-            states.Add(state);
+            if(state.NodeType != FSMNodeType.Initial)states.Add(state);
         }
         
         foreach (var node in states.Distinct())

@@ -36,7 +36,10 @@ public class FSMGraph : MonoBehaviour
             {
                 foreach (var node in graphContainer.Nodes)
                 {
-                    MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                    if (node.NodeType != FSMNodeType.Initial)
+                    {
+                        MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                    }
                 }
                 MonoBehaviour newScriptInstance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType(graphContainer.FileName));
 
@@ -46,11 +49,14 @@ public class FSMGraph : MonoBehaviour
                 {
                     for (int i = 0; i < graphContainer.Nodes.Count; i++)
                     {
-                        dynamicMethod.Invoke(newScriptInstance,new object[]
+                        if (graphContainer.Nodes[i].NodeType != FSMNodeType.Initial)
                         {
-                            char.ToLowerInvariant(graphContainer.Nodes[i].Name[0]) + graphContainer.Nodes[i].Name.Substring(1), 
-                            FSMIOUtility.LoadNode(graphContainer.Nodes[i], graphContainer.FileName).StateScript
-                        });
+                            dynamicMethod.Invoke(newScriptInstance,new object[]
+                            {
+                                char.ToLowerInvariant(graphContainer.Nodes[i].Name[0]) + graphContainer.Nodes[i].Name.Substring(1), 
+                                FSMIOUtility.LoadNode(graphContainer.Nodes[i], graphContainer.FileName).StateScript
+                            });
+                        }
                     }
                 }
             } 

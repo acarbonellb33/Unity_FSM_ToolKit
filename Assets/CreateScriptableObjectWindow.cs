@@ -45,15 +45,26 @@ public class CreateScriptableObjectWindow : EditorWindow
             // Set its name using the provided name
             newScriptableObject.Initialize(name.value, "");
             
-            // Save it to the specified path
+            FSMInitialNode node = new FSMInitialNode();
+            node.Initialize( "Initial State", null, new Vector2(100, 100));
+            
+            FSMNodeSaveData nodeSaveData = new FSMNodeSaveData()
+            {
+                Id = node.Id,
+                Name = node.StateName,
+                Connections = node.Choices,
+                GroupId = node.Group?.Id,
+                NodeType = node.NodeType,
+                Position = new Vector2(100, 100),
+                DataObject = null,
+            };
+            newScriptableObject.Nodes.Add(nodeSaveData);
+
             string fullPath = $"{savePath}/{name.value}.asset";
             AssetDatabase.CreateAsset(newScriptableObject, fullPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             
-            Debug.Log($"Scriptable object created and saved at: {fullPath}");
-            
-            // Close the window
             Close();
         });
         label.AddToClassList("customLabelTitle");

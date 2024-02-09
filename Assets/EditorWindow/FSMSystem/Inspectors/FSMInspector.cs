@@ -31,7 +31,7 @@ public class FSMInspector : Editor
         if (GUILayout.Button("Open FSM Graph"))
         {
             ((FSMGraphSaveData)graphContainerProperty.objectReferenceValue).GameObject = ((FSMGraph)target).gameObject.name;
-            FSMEditorWindow.OpenWithSaveData(graphContainerProperty.objectReferenceValue as FSMGraphSaveData, this);
+            FSMEditorWindow.OpenWithSaveData(graphContainerProperty.objectReferenceValue as FSMGraphSaveData);
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -46,7 +46,10 @@ public class FSMInspector : Editor
         {
             foreach (var node in graphContainerData.Nodes)
             {
-                MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                if (node.NodeType != FSMNodeType.Initial)
+                {
+                    MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                }
             }
             MonoBehaviour newScriptInstance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType(graphContainerData.FileName));
 
@@ -56,11 +59,14 @@ public class FSMInspector : Editor
             {
                 for (int i = 0; i < graphContainerData.Nodes.Count; i++)
                 {
-                    dynamicMethod.Invoke(newScriptInstance,new object[]
+                    if (graphContainerData.Nodes[i].NodeType != FSMNodeType.Initial)
                     {
-                        char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) + graphContainerData.Nodes[i].Name.Substring(1), 
-                        FSMIOUtility.LoadNode(graphContainerData.Nodes[i], graphContainerData.FileName).StateScript
-                    });
+                       dynamicMethod.Invoke(newScriptInstance,new object[]
+                       { 
+                           char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) + graphContainerData.Nodes[i].Name.Substring(1), 
+                           FSMIOUtility.LoadNode(graphContainerData.Nodes[i], graphContainerData.FileName).StateScript
+                       }); 
+                    }
                 }
             }
         }

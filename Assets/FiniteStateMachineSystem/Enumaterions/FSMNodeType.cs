@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum FSMNodeType
 {
-    State, Transition
+    State, Transition, Initial
 }

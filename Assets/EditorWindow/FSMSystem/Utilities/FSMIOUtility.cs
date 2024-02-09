@@ -142,8 +142,6 @@ public static class FSMIOUtility
         List<FSMConnectionSaveData> connections = CloneNodeConnections(node.Choices);
         _stateDataObject = CreateJsonDataObject(node, nodesContainer);
 
-        UpdateComponents();
-        
         FSMNodeSaveData nodeSaveData = new FSMNodeSaveData()
         {
             Id = node.Id,
@@ -155,11 +153,6 @@ public static class FSMIOUtility
             DataObject = _stateDataObject,
         };
         graphSaveData.Nodes.Add(nodeSaveData);
-    }
-
-    private static void UpdateComponents()
-    {
-        
     }
     private static List<FSMNodeConnectionData> ConvertNodeConnection(List<FSMConnectionSaveData> connections)
     {
@@ -242,7 +235,7 @@ public static class FSMIOUtility
                 $"Ok");
             return;
         }
-        //FSMEditorWindow.UpdateFileName(graphSaveData.FileName);
+        
         List<string> stateNames = new List<string>();
         foreach(FSMNodeSaveData node in graphSaveData.Nodes)
         {
@@ -251,7 +244,7 @@ public static class FSMIOUtility
                 stateNames.Add(node.Name);
             }
         }
-        FSMEditorWindow.UpdatePopupField(stateNames, graphSaveData.InitialState);
+        
         LoadGroups(graphSaveData.Groups);
         LoadNodes(graphSaveData.Nodes);
         LoadConnections();
@@ -293,11 +286,16 @@ public static class FSMIOUtility
         FSMNode node = new FSMNode();
         node.Id = nodeData.Id; 
         node.Choices = connections;
+        node.NodeType = nodeData.NodeType;
         node.StateScript = LoadFromJson(node, nodeData.Name,$"Assets/FSMSystem/FSMs/{fileName}/Global/Nodes/{nodeData.Name}DataFile.json");
         return node;
     }
     private static StateScript LoadFromJson(FSMNode node, string nodeName, string path)
     {
+        if(node.NodeType == FSMNodeType.Initial)
+        {
+            return null;
+        }
         string json = File.ReadAllText(path);
         switch (nodeName)
         {
@@ -337,6 +335,7 @@ public static class FSMIOUtility
     }
     private static StateScript LoadFromJson(FSMNode node)
     {
+        if (node.NodeType == FSMNodeType.Initial) return null;
         string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName}DataFile.json");
         switch (node.StateName)
         {
@@ -414,8 +413,12 @@ public static class FSMIOUtility
     }
     private static string CreateJsonDataObject(FSMNode node, FSMNodesContainerSO nodesContainer)
     {
-        string json = JsonUtility.ToJson(node.StateScript, true);
-        File.WriteAllText($"{_containerFolderPath}/Global/Nodes/{node.StateScript.GetStateName()}DataFile.json", json);
+        string json = null;
+        if(node.NodeType != FSMNodeType.Initial)
+        {
+            json = JsonUtility.ToJson(node.StateScript, true);
+            File.WriteAllText($"{_containerFolderPath}/Global/Nodes/{node.StateScript.GetStateName()}DataFile.json", json);
+        }
         FSMNodeSO nodeSo;
         if (node.Group != null)
         {

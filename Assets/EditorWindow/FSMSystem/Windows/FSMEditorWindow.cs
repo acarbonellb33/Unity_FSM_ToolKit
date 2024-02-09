@@ -20,12 +20,12 @@ public class FSMEditorWindow : EditorWindow
     private static FSMGraphSaveData _saveData;
 
     public string initialState;
-    private static string _initialState;
-    
+
     private const string SaveDataKey = "FSMSaveData";
     private const string FSMInspectorKey = "FSMInspectorData";
     
     private bool _isCompiling = false;
+    private bool _shouldClose = false;
     public static void OpenWithSaveData(FSMGraphSaveData saveData)
     {
         _saveData = saveData;
@@ -45,7 +45,7 @@ public class FSMEditorWindow : EditorWindow
         if (string.IsNullOrEmpty(assetPath))return;
         _graphView.ClearGraph();
         _stateNames.Clear();
-        FSMIOUtility.Initialize(saveData.FileName, _graphView, "");
+        FSMIOUtility.Initialize(saveData.FileName, _graphView, saveData.InitialState);
         FSMIOUtility.Load();
     }
     public static GameObject FindGameObjectWithClass<T>() where T : MonoBehaviour
@@ -90,8 +90,9 @@ public class FSMEditorWindow : EditorWindow
 
         GameObject gameObject = GameObject.Find(result);
 
-        Close();
+        if(_shouldClose)Close();
         gameObject.GetComponent<FSMGraph>().UpdateComponentOfGameObject();
+        _shouldClose = false;
     }
     
     private void AddGraphView()
@@ -132,8 +133,12 @@ public class FSMEditorWindow : EditorWindow
     }
 
     #region Toolbar Actions
-    private bool Save()
+    private void Save()
     {
+        if(String.IsNullOrEmpty(initialState))
+        {
+            initialState = _saveData.InitialState;
+        }
         if(String.IsNullOrEmpty(initialState))
         {
             EditorUtility.DisplayDialog(
@@ -141,13 +146,15 @@ public class FSMEditorWindow : EditorWindow
                 "Please select a valid initial state.",
                 "OK"
             );
-            return false;
+            return;
         }
         _isCompiling = true;
         FSMIOUtility.Initialize(_fileName, _graphView, initialState);
-        FSMIOUtility.Save();
-        EnemyStateMachineEditor.GenerateScript(_saveData);
-        return true;
+        if (FSMIOUtility.Save())
+        {
+            _shouldClose = true;
+            EnemyStateMachineEditor.GenerateScript(_saveData);
+        }
     }
     private void Clear()
     {
@@ -164,14 +171,6 @@ public class FSMEditorWindow : EditorWindow
     {
         _graphView.ToggleMiniMap();
         _miniMapButton.ToggleInClassList("fsm-toolbar__button__selected");
-    }
-    private void GenerateScript()
-    {
-        if (Save())
-        {
-            EnemyStateMachineEditor.GenerateScript(_saveData);
-            //_fsmInspector.AddComponentToGameObject();
-        }
     }
     #endregion
 

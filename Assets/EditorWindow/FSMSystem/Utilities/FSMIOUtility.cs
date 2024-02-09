@@ -43,10 +43,28 @@ public static class FSMIOUtility
     }
 
     #region SaveMethods
-    public static void Save()
+    public static bool Save()
     {
-        CreateStaticFolders();
         GetElementsFromGraphView();
+        
+        foreach(FSMNode node in _nodes)
+        {
+            foreach (FSMConnectionSaveData choice in node.Choices)
+            {
+                if (String.IsNullOrEmpty(choice.NodeId))
+                {
+                    EditorUtility.DisplayDialog(
+                        $"Node {choice.Text} is not connected!",
+                        "Pleas connect all ports before saving.",
+                        "OK"
+                    );
+                    return false;
+                }
+            }
+        }
+        
+        CreateStaticFolders();
+        
         FSMGraphSaveData graphSaveData = CreateAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs", _graphName);
         graphSaveData.Initialize(_graphName, _initialState);
         FSMNodesContainerSO nodesContainer = CreateAsset<FSMNodesContainerSO>(_containerFolderPath, _graphName);
@@ -57,6 +75,8 @@ public static class FSMIOUtility
 
         SaveAsset(graphSaveData);
         SaveAsset(nodesContainer);
+        
+        return true;
     }
 
     #region Groups

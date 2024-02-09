@@ -288,7 +288,6 @@ public class FSMGraphView : GraphView
     {
         graphViewChanged = (changes) =>
         {
-            Debug.Log("Graph View Changed");
             if (changes.edgesToCreate != null)
             {
                 foreach (Edge edge in changes.edgesToCreate)
@@ -322,7 +321,6 @@ public class FSMGraphView : GraphView
                     if (choiceData.Text == "Initial Node")
                     {
                         _window.initialState = "";
-                        Debug.Log("Initial State: " + _window.initialState);
                     }
                 }
             }

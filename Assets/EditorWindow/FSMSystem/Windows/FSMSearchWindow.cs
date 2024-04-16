@@ -47,7 +47,7 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
                 userData = FSMNodeType.Transition,
                 level = 2
             },
-            new SearchTreeEntry(new GUIContent("Distance", _indentationIcon))
+            new SearchTreeEntry(new GUIContent("Seeing", _indentationIcon))
             {
                 userData = FSMNodeType.Transition,
                 level = 2

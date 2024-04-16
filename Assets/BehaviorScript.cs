@@ -72,14 +72,14 @@ public abstract class BehaviorScript : MonoBehaviour
                     field.SetValue(this, hearing);
                     options.Add(hearing);
                     break;
-                case "DistanceConditionScript":
-                    DistanceConditionScript distance = gameObject.AddComponent<DistanceConditionScript>();
+                case "SeeingConditionScript":
+                    SeeingConditionScript seeing = gameObject.AddComponent<SeeingConditionScript>();
                     foreach (var variable in ((StateScript)newValue).GetVariables())
                     {
-                        distance.SetVariableValue(variable.Key, variable.Value);
+                        seeing.SetVariableValue(variable.Key, variable.Value);
                     }
-                    field.SetValue(this, distance);
-                    options.Add(distance);
+                    field.SetValue(this, seeing);
+                    options.Add(seeing);
                     break;
             }
         }

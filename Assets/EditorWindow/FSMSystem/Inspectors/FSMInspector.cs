@@ -41,7 +41,9 @@ public class FSMInspector : Editor
     {
         FSMGraph fsmGraph = (FSMGraph)target;
         graphContainerData = (FSMGraphSaveData)graphContainerProperty.objectReferenceValue;
+        Debug.Log(graphContainerData.FileName);
         MonoScript script = GetScript(graphContainerData.FileName);
+        Debug.Log(script);
         if (script != null)
         {
             foreach (var node in graphContainerData.Nodes)
@@ -53,6 +55,7 @@ public class FSMInspector : Editor
             }
             MonoBehaviour newScriptInstance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType(graphContainerData.FileName));
 
+            Debug.Log(script.GetClass());
             MethodInfo dynamicMethod = script.GetClass().GetMethod("SetVariableValue");
                     
             if (dynamicMethod != null)

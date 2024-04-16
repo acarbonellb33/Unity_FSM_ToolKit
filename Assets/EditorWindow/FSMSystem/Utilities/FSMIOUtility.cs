@@ -345,10 +345,10 @@ public static class FSMIOUtility
                 ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
                 ((HearingConditionScript)node.StateScript).operand = hearingData.operand;
                 break;
-            case "Distance":
-                DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);
-                node.StateScript = new DistanceConditionScript();
-                ((DistanceConditionScript)node.StateScript).distance = distanceData.distance;
+            case "Seeing":
+                SeeingData seeingData = JsonUtility.FromJson<SeeingData>(json);
+                node.StateScript = new SeeingConditionScript();
+                ((SeeingConditionScript)node.StateScript).distance = seeingData.distance;
                 break;
         }
         return node.StateScript;
@@ -385,10 +385,10 @@ public static class FSMIOUtility
                 ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
                 ((HearingConditionScript)node.StateScript).operand = hearingData.operand;
                 break;
-            case "Distance":
-                DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);
-                node.StateScript = new DistanceConditionScript();
-                ((DistanceConditionScript)node.StateScript).distance = distanceData.distance;
+            case "Seeing":
+                SeeingData seeingData = JsonUtility.FromJson<SeeingData>(json);
+                node.StateScript = new SeeingConditionScript();
+                ((SeeingConditionScript)node.StateScript).distance = seeingData.distance;
                 break;
         }
         return node.StateScript;

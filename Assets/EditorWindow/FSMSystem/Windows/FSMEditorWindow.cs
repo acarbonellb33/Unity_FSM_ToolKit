@@ -48,6 +48,7 @@ public class FSMEditorWindow : EditorWindow
         FSMIOUtility.Initialize(saveData.FileName, _graphView, saveData.InitialState);
         FSMIOUtility.Load();
     }
+
     public static GameObject FindGameObjectWithClass<T>() where T : MonoBehaviour
     {
         T[] components = GameObject.FindObjectsOfType<T>();
@@ -57,7 +58,7 @@ public class FSMEditorWindow : EditorWindow
         }
         return components[0].gameObject;
     }
-    
+
     private void OnEnable()
     {
         AddGraphView();  

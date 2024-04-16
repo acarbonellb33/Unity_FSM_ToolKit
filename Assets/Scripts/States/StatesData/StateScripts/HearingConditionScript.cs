@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HearingConditionScript : StateScript
 {
-    private float distanceToPlayer = 20f;
-    public float hearingRange = 10f;
+    private float distanceToPlayer;
     public FSMOperands operand;
-    
+    public float hearingRange = 10f;
+
     public HearingConditionScript()
     {
         SetStateName("Hearing");
@@ -21,10 +21,19 @@ public class HearingConditionScript : StateScript
 
     public bool Condition()
     {
-        if (distanceToPlayer <= hearingRange)
+        distanceToPlayer = Vector3.Distance(player.transform.position, agent.transform.position);
+        switch (operand)
         {
-            return true;
+            case FSMOperands.LessThan:
+                return distanceToPlayer < hearingRange;
+            case FSMOperands.GreaterThan:
+                return distanceToPlayer > hearingRange;
+            case FSMOperands.EqualTo:
+                return distanceToPlayer.Equals(hearingRange) ;
+            case FSMOperands.NotEqualTo:
+                return !distanceToPlayer.Equals(hearingRange) ;
+            default:
+                return false;
         }
-        return false;
     }
 }

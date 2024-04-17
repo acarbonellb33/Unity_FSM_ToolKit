@@ -26,6 +26,7 @@ public class arnauCarbonell : BehaviorScript
 
 	private void Start()
 	{
+		GetComponent<Animator>().SetFloat("Speed", GetComponent<NavMeshAgent>().speed);
 		currentState = FSMStates.Patrol;
 	}
 	void Update()
@@ -77,5 +78,14 @@ public class arnauCarbonell : BehaviorScript
 		{
 			DestroyImmediate(patrolPoint);
 		}
+	}
+	private void OnFootstep(AnimationEvent animationEvent)
+	{
+		
+	}
+
+	private void OnLand(AnimationEvent animationEvent)
+	{
+		
 	}
 }

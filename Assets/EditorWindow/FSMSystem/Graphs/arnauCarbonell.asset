@@ -36,8 +36,8 @@ MonoBehaviour:
     <Position>k__BackingField: {x: 361, y: 69}
     <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 5.0,\n    \"patrolRadius\":
       10.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 0\n    },\n   
-      \"patrolPoints\": [\n        {\n            \"instanceID\": -18466\n       
-      },\n        {\n            \"instanceID\": -18834\n        }\n    ]\n}"
+      \"patrolPoints\": [\n        {\n            \"instanceID\": -47970\n       
+      },\n        {\n            \"instanceID\": -47990\n        }\n    ]\n}"
   - <Id>k__BackingField: d5f88588-abd0-4671-a9ea-502c8c14cdaa
     <Name>k__BackingField: Chase
     <Text>k__BackingField: 

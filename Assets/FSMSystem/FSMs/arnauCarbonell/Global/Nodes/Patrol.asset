@@ -19,5 +19,5 @@ MonoBehaviour:
   <NodeType>k__BackingField: 0
   <DataObject>k__BackingField: "{\n    \"patrolSpeed\": 5.0,\n    \"patrolRadius\":
     10.0,\n    \"patrolPointPrefab\": {\n        \"instanceID\": 0\n    },\n    \"patrolPoints\":
-    [\n        {\n            \"instanceID\": -18466\n        },\n        {\n           
-    \"instanceID\": -18834\n        }\n    ]\n}"
+    [\n        {\n            \"instanceID\": -47970\n        },\n        {\n           
+    \"instanceID\": -47990\n        }\n    ]\n}"

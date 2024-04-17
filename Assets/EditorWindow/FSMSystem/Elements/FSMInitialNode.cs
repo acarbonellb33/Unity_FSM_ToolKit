@@ -23,15 +23,15 @@ public class FSMInitialNode : FSMNode
         {
             if (Group == null)
             {
-                _graphView.RemoveUngroupedNode(this);
+                graphView.RemoveUngroupedNode(this);
                 StateName = callback.newValue;
-                _graphView.AddUngroupedNode(this);
+                graphView.AddUngroupedNode(this);
                 return;
             }
             FSMGroup currentGroup = Group;
-            _graphView.RemoveGroupedNode(this, Group);
+            graphView.RemoveGroupedNode(this, Group);
             StateName = callback.newValue;
-            _graphView.AddGroupedNode(this, currentGroup);
+            graphView.AddGroupedNode(this, currentGroup);
         });
         stateNameField.AddClasses("fsm-node_label");
         titleContainer.Insert(0, stateNameField);

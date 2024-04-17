@@ -31,8 +31,8 @@ public class FSMEditorWindow : EditorWindow
         _saveData = saveData;
         _fileName = saveData.FileName;
 
-        PlayerPrefs.SetString(FSMInspectorKey, FindGameObjectWithClass<FSMGraph>().ToString());
-        
+        EditorPrefs.SetString(FSMInspectorKey, FindGameObjectWithClass<FSMGraph>().ToString());
+
         if(_window == null)
         {
             _window = CreateWindow<FSMEditorWindow>("FSM Graph");
@@ -44,7 +44,6 @@ public class FSMEditorWindow : EditorWindow
         string assetPath = $"Assets/EditorWindow/FSMSystem/Graphs/{saveData.FileName}.asset";
         if (string.IsNullOrEmpty(assetPath))return;
         _graphView.ClearGraph();
-        _stateNames.Clear();
         FSMIOUtility.Initialize(saveData.FileName, _graphView, saveData.InitialState);
         FSMIOUtility.Load();
     }
@@ -73,7 +72,6 @@ public class FSMEditorWindow : EditorWindow
     {
         EditorApplication.update -= OnEditorUpdate;
     }
-    
     private void OnEditorUpdate()
     {
         if (_isCompiling && !EditorApplication.isCompiling)
@@ -85,7 +83,7 @@ public class FSMEditorWindow : EditorWindow
     }
     private void PerformActionAfterCompilation()
     {
-        string inspectorJson = PlayerPrefs.GetString(FSMInspectorKey);
+        string inspectorJson = EditorPrefs.GetString(FSMInspectorKey);
         string pattern = @"\s*\([^)]*\)";
         string result = Regex.Replace(inspectorJson, pattern, "");
 
@@ -95,19 +93,16 @@ public class FSMEditorWindow : EditorWindow
         gameObject.GetComponent<FSMGraph>().UpdateComponentOfGameObject();
         _shouldClose = false;
     }
-    
     private void AddGraphView()
     {
         _graphView = new FSMGraphView(this);
         _graphView.StretchToParentSize();
         rootVisualElement.Add(_graphView);
     }
-    
     private void AddStyles()
     {
         rootVisualElement.AddStyleSheets("FSMSystem/FSMVariables.uss");
     }
-    
     private void AddToolbar()
     {
         Toolbar toolbar = new Toolbar();
@@ -167,7 +162,6 @@ public class FSMEditorWindow : EditorWindow
         FSMIOUtility.Initialize(_saveData.FileName, _graphView, initialState);
         FSMIOUtility.Load();
     }
-    
     private void ToggleMiniMap()
     {
         _graphView.ToggleMiniMap();

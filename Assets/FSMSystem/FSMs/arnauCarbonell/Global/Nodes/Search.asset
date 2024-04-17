@@ -17,4 +17,4 @@ MonoBehaviour:
   - <Text>k__BackingField: New Condition
     <NextNode>k__BackingField: {fileID: 11400000, guid: 3d6e217355f585c479041481feb5a656, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"exploreRadius\": 15.0\n}"
+  <DataObject>k__BackingField: "{\n    \"exploreRadius\": 50.0\n}"

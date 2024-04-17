@@ -217,8 +217,8 @@ public class FSMStateNode : FSMNode
     }
     private void CreateAndAddGameObject(ObjectField objectListField)
     {
-        FSMGraphSaveData graphContainerData = GetGraphData(_graphView.GetWindow().GetFileName());
-        MonoScript script = GetScript(_graphView.GetWindow().GetFileName());
+        FSMGraphSaveData graphContainerData = GetGraphData(graphView.GetWindow().GetFileName());
+        MonoScript script = GetScript(graphView.GetWindow().GetFileName());
         if (script != null)
         {
             BehaviorScript newScriptInstance = (BehaviorScript)GameObject.Find(graphContainerData.GameObject).GetComponent(Type.GetType(graphContainerData.FileName));
@@ -236,8 +236,8 @@ public class FSMStateNode : FSMNode
     private void RemovePatrolPoint(ObjectField objectListField)
     { 
         Debug.Log("RemovePatrolPoint");
-        FSMGraphSaveData graphContainerData = GetGraphData(_graphView.GetWindow().GetFileName());
-        MonoScript script = GetScript(_graphView.GetWindow().GetFileName());
+        FSMGraphSaveData graphContainerData = GetGraphData(graphView.GetWindow().GetFileName());
+        MonoScript script = GetScript(graphView.GetWindow().GetFileName());
         if (script != null)
         {
             BehaviorScript newScriptInstance = (BehaviorScript)GameObject.Find(graphContainerData.GameObject).GetComponent(Type.GetType(graphContainerData.FileName));

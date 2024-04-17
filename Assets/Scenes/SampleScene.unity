@@ -2519,11 +2519,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ec575d7648df04f8e7da4772deb51f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exploreRadius: 50
+--- !u!114 &5866666021310896184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 10
---- !u!114 &5866666021310896184
+--- !u!114 &5866666021310896185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2537,7 +2550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   operand: 0
   hearingRange: 50
---- !u!114 &5866666021310896185
+--- !u!114 &5866666021310896186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2549,24 +2562,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5866666021310896186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148682365174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolSpeed: 5
-  patrolRadius: 10
-  patrolPointPrefab: {fileID: 0}
-  patrolPoints:
-  - {fileID: 1853300802}
-  - {fileID: 1839338505}
 --- !u!114 &5866666021310896187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2585,10 +2580,10 @@ MonoBehaviour:
   - {fileID: 5866666021310896184}
   - {fileID: 5866666021310896183}
   selectedOptionIndex: 0
-  patrol: {fileID: 5866666021310896186}
-  chase: {fileID: 5866666021310896185}
-  hearing: {fileID: 5866666021310896184}
-  seeing: {fileID: 5866666021310896183}
+  chase: {fileID: 5866666021310896186}
+  hearing: {fileID: 5866666021310896185}
+  seeing: {fileID: 5866666021310896184}
+  search: {fileID: 5866666021310896183}
 --- !u!4 &5896985191658304802
 Transform:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class FSMNode : Node
     public FSMNodeType NodeType { get; set; }
     public FSMGroup Group { get; set; }
     
-    protected FSMGraphView _graphView;
+    protected FSMGraphView graphView;
     public StateScript StateScript { get; set; }
 
     public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
@@ -20,7 +20,7 @@ public class FSMNode : Node
         Id = Guid.NewGuid().ToString();
         StateName = nodeName;
         Choices = new List<FSMConnectionSaveData>();
-        _graphView = graphView;
+        this.graphView = graphView;
         SetPosition(new Rect(postition, Vector2.zero));
         
         StateScript = null;
@@ -42,15 +42,15 @@ public class FSMNode : Node
         {
             if (Group == null)
             {
-                _graphView.RemoveUngroupedNode(this);
+                graphView.RemoveUngroupedNode(this);
                 StateName = callback.newValue;
-                _graphView.AddUngroupedNode(this);
+                graphView.AddUngroupedNode(this);
                 return;
             }
             FSMGroup currentGroup = Group;
-            _graphView.RemoveGroupedNode(this, Group);
+            graphView.RemoveGroupedNode(this, Group);
             StateName = callback.newValue;
-            _graphView.AddGroupedNode(this, currentGroup);
+            graphView.AddGroupedNode(this, currentGroup);
         });
         stateNameField.AddClasses("fsm-node_label");
         titleContainer.Insert(0, stateNameField);
@@ -74,7 +74,7 @@ public class FSMNode : Node
             {
                 continue;
             }
-            _graphView.DeleteElements(port.connections);
+            graphView.DeleteElements(port.connections);
         }
     }
     #endregion

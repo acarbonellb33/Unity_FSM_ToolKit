@@ -8,7 +8,6 @@ public class SearchStateScript : StateScript, IAction
     
     private bool isSearching = false; // Flag to indicate if the enemy is currently searching
     
-    // Constructor for SearchStateScript
     public SearchStateScript()
     {
         // Set the state name to "Search" using the SetStateName method inherited from StateScript

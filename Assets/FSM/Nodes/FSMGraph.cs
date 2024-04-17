@@ -4,7 +4,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -13,11 +12,6 @@ using UnityEngine.AI;
 public class FSMGraph : MonoBehaviour
 {
     [SerializeField] private FSMGraphSaveData graphContainer;
-
-    public FSMGraphSaveData GraphContainer()
-    {
-        return graphContainer;
-    }
 
     public void UpdateComponentOfGameObject()
     {
@@ -35,13 +29,13 @@ public class FSMGraph : MonoBehaviour
             MonoScript script = GetScript(graphContainer.FileName);
             if (script != null)
             {
-                foreach (var node in graphContainer.Nodes)
+                /*foreach (var node in graphContainer.Nodes)
                 {
                     if (node.NodeType != FSMNodeType.Initial)
                     {
-                        //MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                        MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
                     }
-                }
+                }*/
 
                 MonoBehaviour newScriptInstance =
                     (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType(graphContainer.FileName));

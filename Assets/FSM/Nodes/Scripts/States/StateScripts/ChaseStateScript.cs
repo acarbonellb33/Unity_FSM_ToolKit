@@ -1,6 +1,5 @@
 public class ChaseStateScript : StateScript, IAction
 {
-    // Constructor for ChaseStateScript
     public ChaseStateScript()
     {
         // Set the state name to "Chase" using the SetStateName method inherited from StateScript

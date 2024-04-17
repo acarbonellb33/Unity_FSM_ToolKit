@@ -4,12 +4,5 @@
     "patrolPointPrefab": {
         "instanceID": 0
     },
-    "patrolPoints": [
-        {
-            "instanceID": -47970
-        },
-        {
-            "instanceID": -47990
-        }
-    ]
+    "patrolPoints": []
 }

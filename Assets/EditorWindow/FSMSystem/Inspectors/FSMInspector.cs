@@ -38,21 +38,18 @@ public class FSMInspector : Editor
     {
         FSMGraph fsmGraph = (FSMGraph)target;
         graphContainerData = (FSMGraphSaveData)graphContainerProperty.objectReferenceValue;
-        Debug.Log(graphContainerData.FileName);
         MonoScript script = GetScript(graphContainerData.FileName);
-        Debug.Log(script);
         if (script != null)
         {
             foreach (var node in graphContainerData.Nodes)
             {
                 if (node.NodeType != FSMNodeType.Initial)
                 {
-                    MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                    //MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
                 }
             }
             MonoBehaviour newScriptInstance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType(graphContainerData.FileName));
-
-            Debug.Log(script.GetClass());
+            
             MethodInfo dynamicMethod = script.GetClass().GetMethod("SetVariableValue");
                     
             if (dynamicMethod != null)
@@ -61,11 +58,11 @@ public class FSMInspector : Editor
                 {
                     if (graphContainerData.Nodes[i].NodeType != FSMNodeType.Initial)
                     {
-                       dynamicMethod.Invoke(newScriptInstance,new object[]
-                       { 
-                           char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) + graphContainerData.Nodes[i].Name.Substring(1), 
-                           FSMIOUtility.LoadNode(graphContainerData.Nodes[i], graphContainerData.FileName).StateScript
-                       }); 
+                        dynamicMethod.Invoke(newScriptInstance,new object[]
+                        { 
+                            char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) + graphContainerData.Nodes[i].Name.Substring(1), 
+                            FSMIOUtility.LoadNode(graphContainerData.Nodes[i], graphContainerData.FileName).StateScript
+                        });
                     }
                 }
             }

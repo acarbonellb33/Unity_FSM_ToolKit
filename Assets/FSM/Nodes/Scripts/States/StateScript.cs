@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -11,16 +10,12 @@ public abstract class StateScript : MonoBehaviour
     private string stateName;
 
     protected GameObject player;
-    protected NavMeshAgent agent = null;
+    protected NavMeshAgent agent;
 
     private void OnEnable()
     {
-        GameObject enemyObject = GameObject.Find("Enemy");
-        if (enemyObject != null)
-        {
-            agent = enemyObject.GetComponent<NavMeshAgent>();
-            
-        }
+        agent = GetComponent<NavMeshAgent>();
+        
         GameObject playerObject = GameObject.Find("Player");
         if (playerObject != null)
         {

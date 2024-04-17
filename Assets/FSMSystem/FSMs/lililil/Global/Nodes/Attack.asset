@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Search
+  m_Name: Attack
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Search
+  <NodeName>k__BackingField: Attack
   <Connections>k__BackingField:
   - <Text>k__BackingField: New Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 3d6e217355f585c479041481feb5a656, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 558ae2024459f5f4aa97fbb93facb0a4, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"exploreRadius\": 15.0\n}"
+  <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackRange\":
+    5.0,\n    \"attackCooldown\": 2.0,\n    \"canAttack\": true\n}"

@@ -39,8 +39,7 @@ public class FSMGraph : MonoBehaviour
                 {
                     if (node.NodeType != FSMNodeType.Initial)
                     {
-                        MonoBehaviour instance =
-                            (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                        //MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
                     }
                 }
 

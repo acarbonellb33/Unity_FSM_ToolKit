@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Search
+  m_Name: Initial State
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Search
+  <NodeName>k__BackingField: Initial State
   <Connections>k__BackingField:
-  - <Text>k__BackingField: New Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 3d6e217355f585c479041481feb5a656, type: 2}
-  <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"exploreRadius\": 15.0\n}"
+  - <Text>k__BackingField: Initial Node
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 54dc2657a3c2dfe4a95e96a9096c2e41, type: 2}
+  <NodeType>k__BackingField: 2
+  <DataObject>k__BackingField: 

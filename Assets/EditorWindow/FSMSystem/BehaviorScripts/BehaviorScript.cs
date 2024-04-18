@@ -78,7 +78,6 @@ public abstract class BehaviorScript : MonoBehaviour
                     {
                         hearing.SetVariableValue(variable.Key, variable.Value);
                     }
-                    Debug.Log(field.Name);
                     field.SetValue(this, hearing);
                     options.Add(hearing);
                     break;

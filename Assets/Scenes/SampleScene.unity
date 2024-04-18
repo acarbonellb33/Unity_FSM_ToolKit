@@ -1975,6 +1975,9 @@ GameObject:
   - component: {fileID: 1127633677}
   - component: {fileID: 5866666021310896189}
   - component: {fileID: 1127633676}
+  - component: {fileID: 5866666021310896197}
+  - component: {fileID: 5866666021310896198}
+  - component: {fileID: 5866666021310896196}
   - component: {fileID: 5866666021310896195}
   - component: {fileID: 5866666021310896194}
   - component: {fileID: 5866666021310896193}
@@ -3331,21 +3334,20 @@ MonoBehaviour:
   maxHealth: 100
 --- !u!114 &5866666021310896190
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
+  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  operand: 1
-  hearingRange: 15
+  distance: 10
 --- !u!114 &5866666021310896191
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -3358,7 +3360,20 @@ MonoBehaviour:
   distance: 10
 --- !u!114 &5866666021310896192
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 2.06
+--- !u!114 &5866666021310896193
+MonoBehaviour:
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -3369,9 +3384,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exploreRadius: 10
---- !u!114 &5866666021310896193
+--- !u!114 &5866666021310896194
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operand: 1
+  hearingRange: 15
+--- !u!114 &5866666021310896195
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 12
+  attackFrequency: 1
+--- !u!114 &5866666021310896196
+MonoBehaviour:
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -3383,21 +3426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   operand: 3
   hearingRange: 25
---- !u!114 &5866666021310896194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148682365174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackDamage: 10
-  attackFrequency: 1
---- !u!114 &5866666021310896195
+--- !u!114 &5866666021310896197
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3410,17 +3439,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   options:
+  - {fileID: 5866666021310896196}
+  - {fileID: 5866666021310896195}
   - {fileID: 5866666021310896194}
   - {fileID: 5866666021310896193}
   - {fileID: 5866666021310896192}
   - {fileID: 5866666021310896191}
   - {fileID: 5866666021310896190}
-  selectedOptionIndex: 0
-  attack: {fileID: 5866666021310896194}
-  hearing0: {fileID: 0}
-  search: {fileID: 5866666021310896192}
+  selectedOptionIndex: 4
+  hearing0: {fileID: 5866666021310896196}
+  attack: {fileID: 5866666021310896195}
+  hearing: {fileID: 5866666021310896194}
+  search: {fileID: 5866666021310896193}
+  seeing0: {fileID: 5866666021310896192}
   seeing: {fileID: 5866666021310896191}
-  hearing: {fileID: 5866666021310896190}
+  seeing1: {fileID: 5866666021310896190}
+--- !u!114 &5866666021310896198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d358aaf00afa1ee4bb1ee89916fbd8b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groupName: 
+  visible: 0
+  edit: 0
+  comps:
+  - {fileID: 5866666021310896190}
+  - {fileID: 5866666021310896191}
+  - {fileID: 5866666021310896192}
+  - {fileID: 5866666021310896193}
+  - {fileID: 5866666021310896194}
+  - {fileID: 5866666021310896195}
+  - {fileID: 5866666021310896196}
 --- !u!4 &5896985191658304802
 Transform:
   m_ObjectHideFlags: 0

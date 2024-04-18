@@ -100,7 +100,11 @@ public static class EnemyStateMachineEditor
                 
                 string name = GetState(node.Connections[0].NodeId);
                 string connectionName = GetConnection(node.Connections[0].NodeId);
-                scriptContent += $"\t\tif({char.ToLowerInvariant(name[0]) + name.Substring(1)}.Condition() ";
+                
+                string conditionName = char.ToLowerInvariant(name[0]) + name.Substring(1);
+                conditionName = conditionName.Replace(" ", "");
+                
+                scriptContent += $"\t\tif({conditionName}.Condition() ";
                 
                 FSMNodeSaveData nodeSaveData = GetNodeData(GetConnection(node.Connections[0].NodeId));
                 while(nodeSaveData != null && nodeSaveData.NodeType != FSMNodeType.State)

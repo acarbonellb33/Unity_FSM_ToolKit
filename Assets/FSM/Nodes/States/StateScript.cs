@@ -125,7 +125,7 @@ public abstract class StateScript : MonoBehaviour
     }
 
     // SetStateName method sets the state name
-    protected void SetStateName(string name)
+    public void SetStateName(string name)
     {
         stateName = name;
     }

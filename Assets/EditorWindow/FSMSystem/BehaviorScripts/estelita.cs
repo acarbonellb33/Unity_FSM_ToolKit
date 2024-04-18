@@ -16,10 +16,6 @@ public class estelita : BehaviorScript
 	[SerializeField]
 	public HearingConditionScript hearing0;
 
-	[Header("Search")]
-	[SerializeField]
-	public SearchStateScript search;
-
 	[Header("Seeing")]
 	[SerializeField]
 	public SeeingConditionScript seeing;
@@ -27,6 +23,18 @@ public class estelita : BehaviorScript
 	[Header("Hearing")]
 	[SerializeField]
 	public HearingConditionScript hearing;
+
+	[Header("Search")]
+	[SerializeField]
+	public SearchStateScript search;
+
+	[Header("Seeing 0")]
+	[SerializeField]
+	public SeeingConditionScript seeing0;
+
+	[Header("Seeing 1")]
+	[SerializeField]
+	public SeeingConditionScript seeing1;
 
 	private void Start()
 	{
@@ -56,7 +64,7 @@ public class estelita : BehaviorScript
 	public void UpdateSearchState()
 	{
 		search.Execute();
-		if(seeing.Condition() )
+		if(seeing0.Condition() && seeing1.Condition() && seeing.Condition() )
 		{
 			ChangeAttackState();
 		}

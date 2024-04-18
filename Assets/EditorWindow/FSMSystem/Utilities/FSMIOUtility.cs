@@ -326,9 +326,7 @@ public static class FSMIOUtility
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);
                 node.StateScript = new AttackStateScript();
                 ((AttackStateScript)node.StateScript).attackDamage = attackData.attackDamage;
-                ((AttackStateScript)node.StateScript).attackRange = attackData.attackRange;
-                ((AttackStateScript)node.StateScript).attackCooldown = attackData.attackCooldown;
-                ((AttackStateScript)node.StateScript).canAttack = attackData.canAttack;
+                ((AttackStateScript)node.StateScript).attackFrequency = attackData.attackFrequency;
                 break;
             case "Chase":
                 ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);
@@ -368,9 +366,7 @@ public static class FSMIOUtility
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);
                 node.StateScript = new AttackStateScript();
                 ((AttackStateScript)node.StateScript).attackDamage = attackData.attackDamage;
-                ((AttackStateScript)node.StateScript).attackRange = attackData.attackRange;
-                ((AttackStateScript)node.StateScript).attackCooldown = attackData.attackCooldown;
-                ((AttackStateScript)node.StateScript).canAttack = attackData.canAttack;
+                ((AttackStateScript)node.StateScript).attackFrequency = attackData.attackFrequency;
                 break;
             case "Chase":
                 ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);

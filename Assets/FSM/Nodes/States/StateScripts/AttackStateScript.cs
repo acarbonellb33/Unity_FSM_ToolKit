@@ -5,9 +5,9 @@ using UnityEngine;
 public class AttackStateScript : StateScript, IAction
 {
     public float attackDamage = 10f;
-    public float attackRange = 5f;
-    public float attackCooldown = 2f;
-    public bool canAttack = true;
+    public float attackFrequency = 1f;
+
+    private float lastAttack = 0f;
 
     public AttackStateScript()
     {
@@ -15,6 +15,23 @@ public class AttackStateScript : StateScript, IAction
     }
     
     public void Execute(){
-        Debug.Log("Attacking!");
+        if (CanAttack())
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.GetChild(0).position, transform.GetChild(0).transform.forward, out hit, 50f))
+            {
+                HealthSystem target = hit.transform.GetComponent<HealthSystem>();
+                if (target != null)
+                {
+                    target.TakeDamage(attackDamage);
+                }
+            }
+            lastAttack = Time.time;
+        }
+    }
+
+    private bool CanAttack()
+    {
+        return Time.time >= lastAttack + attackFrequency;
     }
 }

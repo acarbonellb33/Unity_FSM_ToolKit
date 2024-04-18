@@ -16,17 +16,17 @@ public class arnauCarbonell : BehaviorScript
 	[SerializeField]
 	public HearingConditionScript hearing;
 
+	[Header("Attack")]
+	[SerializeField]
+	public AttackStateScript attack;
+
 	[Header("Seeing")]
 	[SerializeField]
 	public SeeingConditionScript seeing;
 
-	[Header("Search")]
-	[SerializeField]
-	public SearchStateScript search;
-
 	private void Start()
 	{
-		currentState = FSMStates.Search;
+		currentState = FSMStates.Chase;
 		GetComponent<Animator>().SetFloat("Speed", GetComponent<NavMeshAgent>().speed);
 	}
 	void Update()
@@ -36,8 +36,8 @@ public class arnauCarbonell : BehaviorScript
 			case FSMStates.Chase:
 				UpdateChaseState();
 				break;
-			case FSMStates.Search:
-				UpdateSearchState();
+			case FSMStates.Attack:
+				UpdateAttackState();
 				break;
 		}
 	}
@@ -46,12 +46,12 @@ public class arnauCarbonell : BehaviorScript
 		chase.Execute();
 		if(hearing.Condition())
 		{
-			ChangeSearchState();
+			ChangeAttackState();
 		}
 	}
-	public void UpdateSearchState()
+	public void UpdateAttackState()
 	{
-		search.Execute();
+		attack.Execute();
 		if(seeing.Condition())
 		{
 			ChangeChaseState();
@@ -61,9 +61,9 @@ public class arnauCarbonell : BehaviorScript
 	{
 		currentState = FSMStates.Chase;
 	}
-	private void ChangeSearchState()
+	private void ChangeAttackState()
 	{
-		currentState = FSMStates.Search;
+		currentState = FSMStates.Attack;
 	}
 	private void OnFootstep() {}
 }

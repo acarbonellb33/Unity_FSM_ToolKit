@@ -4,6 +4,7 @@ public enum FSMStates
     Patrol, 
     Chase, 
     Attack, 
-    Dead, 
-    Search
+    Die, 
+    Search,
+    Alert
 }

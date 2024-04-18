@@ -56,6 +56,17 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
                 userData = FSMNodeType.Transition,
                 level = 2
             },
+            new SearchTreeGroupEntry(new GUIContent("Dual Transition Node"), 1),
+            new SearchTreeEntry(new GUIContent("Hearing", _indentationIcon))
+            {
+                userData = FSMNodeType.DualTransition,
+                level = 2
+            },
+            new SearchTreeEntry(new GUIContent("Seeing", _indentationIcon))
+            {
+                userData = FSMNodeType.DualTransition,
+                level = 2
+            },
             new SearchTreeEntry(new GUIContent("Create Group", _indentationIcon))
             {
                 userData = new Group(),
@@ -77,6 +88,10 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
             case FSMNodeType.Transition:
                 FSMTransitionNode transitionNode = (FSMTransitionNode) _graphView.CreateNode(searchTreeEntry.name,localMousePosition, FSMNodeType.Transition);
                 _graphView.AddElement(transitionNode);
+                return true;
+            case FSMNodeType.DualTransition:
+                FSMDualTransitionNode dualTransitionNode = (FSMDualTransitionNode) _graphView.CreateNode(searchTreeEntry.name,localMousePosition, FSMNodeType.DualTransition);
+                _graphView.AddElement(dualTransitionNode);
                 return true;
             case Group _:
                 _graphView.CreateGroup("New Group", localMousePosition);

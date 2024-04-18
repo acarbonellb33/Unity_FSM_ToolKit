@@ -19,7 +19,7 @@ public class FSMTransitionNode : FSMNode
      
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
-            Text = "New State",
+            Text = "Next Action",
         };
         Choices.Add(connectionSaveData);
         mainContainer.AddToClassList("fsm-node_main-container");
@@ -55,7 +55,8 @@ public class FSMTransitionNode : FSMNode
     #region ScriptableObject Attributes
     private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
     {
-        if (StateName == "Hearing")
+        string name = StateName.Split(' ')[0];
+        if (name == "Hearing")
         {
             CreateHearingAttributes(attributes, customDataContainer);
             return;
@@ -270,7 +271,8 @@ public class FSMTransitionNode : FSMNode
         {
             foreach (StateScript enemyState in _dataObjects)
             {
-                if (enemyState.GetStateName() == StateName)
+                string name = StateName.Split(' ')[0];
+                if (enemyState.GetStateName() == name)
                 {
                     StateScript = enemyState;
                 }

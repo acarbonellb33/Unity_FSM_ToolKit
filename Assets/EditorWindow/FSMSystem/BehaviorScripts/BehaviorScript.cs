@@ -28,8 +28,10 @@ public abstract class BehaviorScript : MonoBehaviour
     public virtual void SetVariableValue(string variableName, object newValue)
     {
         System.Type type = GetType();
+        variableName = variableName.Split(' ')[0];
+        Debug.Log(variableName);
+        Debug.Log(((StateScript)newValue).GetStateName());
         System.Reflection.FieldInfo field = type.GetField(variableName);
-
         if (field != null)
         {
             if(options == null)
@@ -96,5 +98,6 @@ public abstract class BehaviorScript : MonoBehaviour
         {
             Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
         }
+        Debug.Log(options.Count);
     }
 }

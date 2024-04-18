@@ -305,7 +305,7 @@ public static class FSMIOUtility
         node.Id = nodeData.Id; 
         node.Choices = connections;
         node.NodeType = nodeData.NodeType;
-        node.StateScript = LoadFromJson(node, nodeData.Name,$"Assets/FSMSystem/FSMs/{fileName}/Global/Nodes/{nodeData.Name}DataFile.json");
+        node.StateScript = LoadFromJson(node, nodeData.Name,$"Assets/FSMSystem/FSMs/{fileName}/Global/Nodes/{nodeData.Name.Replace(" ","")}DataFile.json");
         return node;
     }
     private static StateScript LoadFromJson(FSMNode node, string nodeName, string path)
@@ -315,7 +315,9 @@ public static class FSMIOUtility
             return null;
         }
         string json = File.ReadAllText(path);
-        switch (nodeName)
+        string newName = nodeName.Split(' ')[0];
+        
+        switch (newName)
         {
             case "Patrol":
                 PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
@@ -354,8 +356,9 @@ public static class FSMIOUtility
     private static StateScript LoadFromJson(FSMNode node)
     {
         if (node.NodeType == FSMNodeType.Initial) return null;
-        string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName}DataFile.json");
-        switch (node.StateName)
+        string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName.Replace(" ","")}DataFile.json");
+        string newName = node.StateName.Split(' ')[0];
+        switch (newName)
         {
             case "Patrol":
                 PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
@@ -435,7 +438,7 @@ public static class FSMIOUtility
         if(node.NodeType != FSMNodeType.Initial)
         {
             json = JsonUtility.ToJson(node.StateScript, true);
-            File.WriteAllText($"{_containerFolderPath}/Global/Nodes/{node.StateScript.GetStateName()}DataFile.json", json);
+            File.WriteAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName.Replace(" ","")}DataFile.json", json);
         }
         FSMNodeSO nodeSo;
         if (node.Group != null)
@@ -463,7 +466,7 @@ public static class FSMIOUtility
     public static void CreateJson(StateScript stateScript, string className)
     {
         string json = JsonUtility.ToJson(stateScript, true);
-        File.WriteAllText(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes/{stateScript.GetStateName()}DataFile.json", json);
+        File.WriteAllText(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes/{stateScript.GetStateName().Replace(" ","")}DataFile.json", json);
         
         FSMNodeSO node = LoadAsset<FSMNodeSO>($"Assets/FSMSystem/FSMs/{className}/Global/Nodes", stateScript.GetStateName());
         node.DataObject = json;
@@ -480,7 +483,7 @@ public static class FSMIOUtility
     
     public static void UpdateJson(string className, string fileName, string variableName, object newValue)
     {
-        string jsonFilePath = Path.Combine(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes", $"{fileName}DataFile.json");
+        string jsonFilePath = Path.Combine(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes", $"{fileName.Replace(" ","")}DataFile.json");
         string jsonString = File.ReadAllText(jsonFilePath);
         
         int startIndex = jsonString.IndexOf($"\"{variableName}\"") + variableName.Length + 4;

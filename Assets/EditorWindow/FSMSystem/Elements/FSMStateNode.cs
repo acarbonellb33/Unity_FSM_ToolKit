@@ -21,7 +21,7 @@ public class FSMStateNode : FSMNode
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
-            Text = "New Condition",
+            Text = "Condition",
         };
         Choices.Add(connectionSaveData);
         

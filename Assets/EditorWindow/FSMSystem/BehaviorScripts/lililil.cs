@@ -46,16 +46,13 @@ public class lililil : BehaviorScript
 		chase.Execute();
 		if(seeing.Condition())
 		{
-			ChangeAttackState();
+
 		}
 	}
 	public void UpdateAttackState()
 	{
 		attack.Execute();
-		if(hearing.Condition())
-		{
-			ChangeChaseState();
-		}
+
 	}
 	private void ChangeChaseState()
 	{

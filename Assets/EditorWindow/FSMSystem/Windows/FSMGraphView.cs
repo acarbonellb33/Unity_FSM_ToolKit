@@ -75,6 +75,20 @@ public class FSMGraphView : GraphView
         Type nodeType = Type.GetType($"FSM{nodeT}Node");
         FSMNode node = (FSMNode)Activator.CreateInstance(nodeType);
 
+        int index = 0;
+        if(nodeT == FSMNodeType.Transition || nodeT == FSMNodeType.DualTransition)
+        {
+            foreach (string stateName in _ungroupedNodes.Keys)
+            {
+                if (stateName == nodeName)
+                {
+                    nodeName = nodeName.Split(' ')[0];
+                    nodeName += " " + index;
+                    index++;
+                }
+            }
+        }
+
         node.Initialize(nodeName, this, position);
 
         if (shouldDraw)
@@ -118,6 +132,7 @@ public class FSMGraphView : GraphView
     public void AddUngroupedNode(FSMNode node)
     {
         string nodeName = node.StateName;
+        
         if (!_ungroupedNodes.ContainsKey(nodeName))
         {
             FSMNodeErrorData nodeErrorData = new FSMNodeErrorData();
@@ -471,7 +486,8 @@ public class FSMGraphView : GraphView
         this.AddManipulator(CreateStateItemMenu("Search"));
         this.AddManipulator(CreateTransitionItemMenu("Hearing"));
         this.AddManipulator(CreateTransitionItemMenu("Seeing"));
-        this.AddManipulator(CreateInitialStateItemMenu());
+        this.AddManipulator(CreateDualTransitionStateItemMenu("Hearing"));
+        this.AddManipulator(CreateDualTransitionStateItemMenu("Seeing"));
         this.AddManipulator(CreateGroupContextualMenu());
     }
 
@@ -517,12 +533,12 @@ public class FSMGraphView : GraphView
 
         return contextualMenuManipulator;
     }
-    private IManipulator CreateInitialStateItemMenu()
+    private IManipulator CreateDualTransitionStateItemMenu(string transitionName)
     {
         ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-            menuEvent => menuEvent.menu.AppendAction("Create Initial State", menuActionEvent =>
-                AddElement(CreateNode("Initial State",
-                    GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.Initial))));
+            menuEvent => menuEvent.menu.AppendAction($"Create Dual Transition/{transitionName}", menuActionEvent =>
+                AddElement(CreateNode(transitionName,
+                    GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.DualTransition))));
 
         return contextualMenuManipulator;
     }

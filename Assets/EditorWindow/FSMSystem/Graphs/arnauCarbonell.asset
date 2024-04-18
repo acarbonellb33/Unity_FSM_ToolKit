@@ -20,60 +20,73 @@ MonoBehaviour:
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: Initial Node
-      <NodeId>k__BackingField: d5f88588-abd0-4671-a9ea-502c8c14cdaa
+      <NodeId>k__BackingField: 955585de-f989-4dbf-8028-2d2652c709b2
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 2
     <Position>k__BackingField: {x: 100, y: 100}
     <DataObject>k__BackingField: 
-  - <Id>k__BackingField: d5f88588-abd0-4671-a9ea-502c8c14cdaa
+  - <Id>k__BackingField: 955585de-f989-4dbf-8028-2d2652c709b2
     <Name>k__BackingField: Chase
     <Text>k__BackingField: 
     <Connections>k__BackingField:
-    - <Text>k__BackingField: New Condition
-      <NodeId>k__BackingField: b6ec1fe4-f138-4d66-bcda-a05e19b40aa2
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 6abc32f1-34fb-462d-b649-3b206bfeaa41
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
     <Position>k__BackingField: {x: 334, y: 100}
     <DataObject>k__BackingField: '{}'
-  - <Id>k__BackingField: b6ec1fe4-f138-4d66-bcda-a05e19b40aa2
+  - <Id>k__BackingField: 431a6530-925d-4395-889a-cd866c58a9ba
     <Name>k__BackingField: Hearing
     <Text>k__BackingField: 
     <Connections>k__BackingField:
-    - <Text>k__BackingField: New State
-      <NodeId>k__BackingField: 6e857e56-dfa4-43f0-b4f0-ba038e45a09d
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: 955585de-f989-4dbf-8028-2d2652c709b2
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 615, y: 100}
-    <DataObject>k__BackingField: "{\n    \"operand\": 1,\n    \"hearingRange\": 10.0\n}"
-  - <Id>k__BackingField: 6e857e56-dfa4-43f0-b4f0-ba038e45a09d
-    <Name>k__BackingField: Attack
+    <Position>k__BackingField: {x: 550, y: -24}
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
+  - <Id>k__BackingField: 6abc32f1-34fb-462d-b649-3b206bfeaa41
+    <Name>k__BackingField: Hearing
     <Text>k__BackingField: 
     <Connections>k__BackingField:
-    - <Text>k__BackingField: New Condition
-      <NodeId>k__BackingField: 635c5170-4329-4cff-891c-d5660272a2f5
+    - <Text>k__BackingField: True
+      <NodeId>k__BackingField: a81b9470-cd67-4989-9f77-c44f46898f9b
+    - <Text>k__BackingField: False
+      <NodeId>k__BackingField: 955585de-f989-4dbf-8028-2d2652c709b2
     <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 775, y: 283}
-    <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
-      1.0\n}"
-  - <Id>k__BackingField: 635c5170-4329-4cff-891c-d5660272a2f5
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 234, y: 266}
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 15.0\n}"
+  - <Id>k__BackingField: a81b9470-cd67-4989-9f77-c44f46898f9b
     <Name>k__BackingField: Seeing
     <Text>k__BackingField: 
     <Connections>k__BackingField:
-    - <Text>k__BackingField: New State
-      <NodeId>k__BackingField: d5f88588-abd0-4671-a9ea-502c8c14cdaa
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: ca526b4d-2a9f-4e04-b896-f5ef97e9a669
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 334, y: 312}
-    <DataObject>k__BackingField: "{\n    \"distance\": 1.000000013351432e-10\n}"
+    <Position>k__BackingField: {x: 584, y: 317}
+    <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
+  - <Id>k__BackingField: ca526b4d-2a9f-4e04-b896-f5ef97e9a669
+    <Name>k__BackingField: Attack
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 431a6530-925d-4395-889a-cd866c58a9ba
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 965, y: 151}
+    <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
+      1.0\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
   - Initial State
   - Chase
   - Hearing
-  - Attack
+  - Hearing
   - Seeing
+  - Attack
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy

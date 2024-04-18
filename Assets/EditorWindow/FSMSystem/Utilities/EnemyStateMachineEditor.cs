@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEngine;
 
 public static class EnemyStateMachineEditor
 {
@@ -57,7 +59,10 @@ public static class EnemyStateMachineEditor
             scriptContent += $"\t[Header(\"" + node.Name + "\")]\n";
             scriptContent += "\t[SerializeField]\n";
             string variableName = node.NodeType == FSMNodeType.State ? node.Name+"State" : node.Name+"Condition";
-            scriptContent += $"\tpublic {variableName}Script {char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)};\n";
+            string name = char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1);
+            name = name.Replace(" ", "");
+            variableName = Regex.Replace(variableName, @"[\s\d]", "");
+            scriptContent += $"\tpublic {variableName}Script {name};\n";
             scriptContent += "\n";
         }
         
@@ -95,8 +100,21 @@ public static class EnemyStateMachineEditor
                 
                 string name = GetState(node.Connections[0].NodeId);
                 string connectionName = GetConnection(node.Connections[0].NodeId);
-                scriptContent += $"\t\tif({char.ToLowerInvariant(name[0]) + name.Substring(1)}.Condition())\n";
+                scriptContent += $"\t\tif({char.ToLowerInvariant(name[0]) + name.Substring(1)}.Condition() ";
+                
+                FSMNodeSaveData nodeSaveData = GetNodeData(GetConnection(node.Connections[0].NodeId));
+                while(nodeSaveData != null && nodeSaveData.NodeType != FSMNodeType.State)
+                {
+                    string nameVariable = char.ToLowerInvariant(nodeSaveData.Name[0]) + nodeSaveData.Name.Substring(1);
+                    nameVariable = nameVariable.Replace(" ", "");
+                    scriptContent += $"&& {nameVariable}.Condition() ";
+
+                    connectionName = GetConnection(nodeSaveData.Id);
+                    nodeSaveData = GetNodeData(GetState(nodeSaveData.Connections[0].NodeId));
+                }
+                scriptContent += ")\n";
                 scriptContent += "\t\t{\n";  
+                connectionName = connectionName.Replace(" ", "");
                 scriptContent += $"\t\t\tChange{connectionName}State();\n";
                 scriptContent += "\t\t}\n";
                 scriptContent += "\t}\n";
@@ -107,7 +125,7 @@ public static class EnemyStateMachineEditor
         {
             if (node.NodeType == FSMNodeType.State)
             {
-                scriptContent += $"\tprivate void Change{node.Name}State()\n";
+                scriptContent += $"\tprivate void Change{node.Name.Replace(" ","")}State()\n";
                 scriptContent += "\t{\n";
                 scriptContent += $"\t\tcurrentState = FSMStates.{node.Name};\n";
                 scriptContent += "\t}\n";
@@ -141,10 +159,10 @@ public static class EnemyStateMachineEditor
 
     private static string GenerateEditorScriptContent(FSMGraphSaveData saveData)
     {
-        string scriptContent = "using System.Collections.Generic;\n";
+        string scriptContent = "using System;\n";
+        scriptContent += "using System.Collections.Generic;\n";
         scriptContent += "using UnityEditor;\n";
-        scriptContent += "using System.Collections;\n";
-        scriptContent += "using UnityEngine;\n";
+        scriptContent += "using System.Reflection;\n";
 
         string stringWithSpaces = saveData.FileName;
         string stringWithoutSpaces = stringWithSpaces.Replace(" ", "");
@@ -168,9 +186,14 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t{\n";
         scriptContent += "\t\tselectedOptionIndexProp = serializedObject.FindProperty(\"selectedOptionIndex\");\n";
         scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
-        scriptContent += $"\t\tfor (int i = 0; i < {nameLowerCapital}.options.Count; i++)\n";
+        scriptContent += $"\t\tType type = typeof({nameLowerCapital});\n";
+        scriptContent += "\t\tFieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);\n";
+        scriptContent += "\t\tint i = 0;\n";
+        scriptContent += "\t\tforeach (FieldInfo field in fields)\n";
         scriptContent += "\t\t{\n";
-        scriptContent += $"\t\t\toptionToObjectMap[{nameLowerCapital}.options[i].GetStateName()] = {nameLowerCapital}.options[i];\n";
+        scriptContent += "\t\t\tstring nameField = FixName(field.Name);\n";
+        scriptContent += $"\t\t\toptionToObjectMap[nameField] = {nameLowerCapital}.options[i];\n";
+        scriptContent += "\t\t\ti++;\n";
         scriptContent += "\t\t}\n";
         scriptContent += "\t}\n";
         
@@ -179,9 +202,14 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\tserializedObject.Update();\n";
         scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
         scriptContent += $"\t\tstring[] options = new string[{nameLowerCapital}.options.Count];\n";
-        scriptContent += "\t\tfor (int i = 0; i < options.Length; i++)\n";
+        scriptContent += $"\t\tType type = typeof({nameLowerCapital});\n";
+        scriptContent += "\t\tFieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);\n";
+        scriptContent += "\t\tint i = 0;\n";
+        scriptContent += "\t\tforeach (FieldInfo field in fields) \n";
         scriptContent += "\t\t{\n";
-        scriptContent += $"\t\t\toptions[i] = {nameLowerCapital}.options[i].GetStateName();\n";
+        scriptContent += "\t\t\tstring nameField = FixName(field.Name);\n";
+        scriptContent += "\t\t\toptions[i] = nameField;\n";
+        scriptContent += "\t\t\ti++;\n";
         scriptContent += "\t\t}\n";
         scriptContent += "\t\tselectedOptionIndexProp.intValue = EditorGUILayout.Popup(\"Selected Option\", selectedOptionIndexProp.intValue, options);\n";
         scriptContent += "\t\tstring selectedOptionName = options[selectedOptionIndexProp.intValue];\n";
@@ -276,6 +304,11 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t}\n";
         }
         
+        scriptContent += "\tprivate string FixName(string oldName)\n";
+        scriptContent += "\t{\n";
+        scriptContent += "\t\treturn char.ToUpperInvariant(oldName[0]) + oldName.Substring(1);\n";
+        scriptContent += "\t}\n";
+
         scriptContent += "}\n";
         return scriptContent;
     }
@@ -303,6 +336,19 @@ public static class EnemyStateMachineEditor
         }
         return null;
     }
+
+    private static FSMNodeSaveData GetNodeData(string name)
+    {
+        foreach (var state in states)
+        {
+            if (state.Name == name)
+            {
+                return state;
+            }
+        }
+        return null;
+    }
+    
     #endregion
 }
 

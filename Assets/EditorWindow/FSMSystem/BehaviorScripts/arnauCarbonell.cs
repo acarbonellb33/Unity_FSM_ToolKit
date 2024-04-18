@@ -15,14 +15,15 @@ public class arnauCarbonell : BehaviorScript
 	[Header("Hearing")]
 	[SerializeField]
 	public HearingConditionScript hearing;
-
-	[Header("Attack")]
-	[SerializeField]
-	public AttackStateScript attack;
+	
 
 	[Header("Seeing")]
 	[SerializeField]
 	public SeeingConditionScript seeing;
+
+	[Header("Attack")]
+	[SerializeField]
+	public AttackStateScript attack;
 
 	private void Start()
 	{
@@ -46,13 +47,12 @@ public class arnauCarbonell : BehaviorScript
 		chase.Execute();
 		if(hearing.Condition())
 		{
-			ChangeAttackState();
 		}
 	}
 	public void UpdateAttackState()
 	{
 		attack.Execute();
-		if(seeing.Condition())
+		if(hearing.Condition())
 		{
 			ChangeChaseState();
 		}

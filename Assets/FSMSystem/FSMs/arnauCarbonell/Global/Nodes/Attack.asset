@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Attack
   <Connections>k__BackingField:
-  - <Text>k__BackingField: New Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 3d6e217355f585c479041481feb5a656, type: 2}
+  - <Text>k__BackingField: Condition
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 57b85ffa4d8b0a84fb321d1b08e16de2, type: 2}
   <NodeType>k__BackingField: 0
   <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
     1.0\n}"

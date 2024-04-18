@@ -8,6 +8,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(EnemyHealthSystem))]
 [AddComponentMenu("FSM AI/FSM AI")]
 public class FSMGraph : MonoBehaviour
 {

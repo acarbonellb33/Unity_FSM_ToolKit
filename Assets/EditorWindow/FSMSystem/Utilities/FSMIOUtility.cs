@@ -147,7 +147,6 @@ public static class FSMIOUtility
                 groupedNodeNames.AddItem(node.Group.title, node.StateName);
                 continue;
             }
-            
             ungroupedNodeNames.Add(node.StateName);
         }
 
@@ -284,9 +283,11 @@ public static class FSMIOUtility
 
             FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false);
             node.Id = nodeData.Id;
+            node.StateName = nodeData.Name;
             node.Choices = connections;
             node.StateScript = LoadFromJson(node);
             node.Draw();
+
             _graphView.AddElement(node);
             _loadedNodes.Add(node.Id, node);
             if(string.IsNullOrEmpty(nodeData.GroupId))

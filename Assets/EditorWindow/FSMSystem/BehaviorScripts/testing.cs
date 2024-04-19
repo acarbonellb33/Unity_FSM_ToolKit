@@ -6,35 +6,23 @@ using UnityEngine.AI;
 using System.Reflection;
 
 [Serializable]
-public class estelita : BehaviorScript
+public class testing : BehaviorScript
 {
-	[Header("Attack")]
-	[SerializeField]
-	public AttackStateScript attack;
-
 	[Header("Hearing 0")]
 	[SerializeField]
 	public HearingConditionScript hearing0;
 
-	[Header("Search")]
+	[Header("Attack")]
 	[SerializeField]
-	public SearchStateScript search;
+	public AttackStateScript attack;
 
 	[Header("Seeing 0")]
 	[SerializeField]
 	public SeeingConditionScript seeing0;
 
-	[Header("Hearing 2")]
+	[Header("Search")]
 	[SerializeField]
-	public HearingConditionScript hearing2;
-
-	[Header("Seeing")]
-	[SerializeField]
-	public SeeingConditionScript seeing;
-
-	[Header("Seeing 2")]
-	[SerializeField]
-	public SeeingConditionScript seeing2;
+	public SearchStateScript search;
 
 	private void Start()
 	{
@@ -56,7 +44,7 @@ public class estelita : BehaviorScript
 	public void UpdateAttackState()
 	{
 		attack.Execute();
-		if(hearing2.Condition() && seeing0.Condition() )
+		if(hearing0.Condition() )
 		{
 			ChangeSearchState();
 		}
@@ -64,7 +52,7 @@ public class estelita : BehaviorScript
 	public void UpdateSearchState()
 	{
 		search.Execute();
-		if(seeing2.Condition() && seeing.Condition() && hearing0.Condition() )
+		if(seeing0.Condition() )
 		{
 			ChangeAttackState();
 		}

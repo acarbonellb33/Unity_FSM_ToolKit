@@ -14,6 +14,8 @@ public class FSMNode : Node
     
     protected FSMGraphView graphView;
     public StateScript StateScript { get; set; }
+    
+    public Label stateNameField;
 
     public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
@@ -38,13 +40,13 @@ public class FSMNode : Node
 
     public virtual void Draw()
     {
-        Label stateNameField = FSMElementUtility.CreateLabel(StateName, callback =>
+        stateNameField = FSMElementUtility.CreateLabel(StateName, callback =>
         {
             if (Group == null)
             {
-                graphView.RemoveUngroupedNode(this);
+                //graphView.RemoveUngroupedNode(this);
                 StateName = callback.newValue;
-                graphView.AddUngroupedNode(this);
+                //graphView.AddUngroupedNode(this);
                 return;
             }
             FSMGroup currentGroup = Group;
@@ -101,5 +103,11 @@ public class FSMNode : Node
             menuEvent => menuEvent.menu.AppendAction("Create Transition", menuActionEvent => Debug.Log("Create Transition")));
         
         return contextualMenuManipulator;
+    }
+
+    public void SetStateName(string stateName)
+    {
+        StateName = stateName;
+        stateNameField.text = stateName;
     }
 }

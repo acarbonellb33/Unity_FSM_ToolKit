@@ -109,6 +109,7 @@ public static class EnemyStateMachineEditor
                 FSMNodeSaveData nodeSaveData = GetNodeData(GetConnection(node.Connections[0].NodeId));
                 while(nodeSaveData != null && nodeSaveData.NodeType != FSMNodeType.State)
                 {
+                    Debug.Log(node.Connections.Count);
                     string nameVariable = char.ToLowerInvariant(nodeSaveData.Name[0]) + nodeSaveData.Name.Substring(1);
                     nameVariable = nameVariable.Replace(" ", "");
                     scriptContent += $"&& {nameVariable}.Condition() ";

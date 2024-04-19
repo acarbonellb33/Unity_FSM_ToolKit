@@ -74,26 +74,30 @@ public class FSMGraphView : GraphView
     {
         Type nodeType = Type.GetType($"FSM{nodeT}Node");
         FSMNode node = (FSMNode)Activator.CreateInstance(nodeType);
-
-        int index = 0;
+        
         if(nodeT == FSMNodeType.Transition || nodeT == FSMNodeType.DualTransition)
         {
+            int count = 0;
             foreach (string stateName in _ungroupedNodes.Keys)
             {
+                Debug.Log(stateName+" / "+nodeName);
                 if (stateName.Split(" ")[0] == nodeName.Split(" ")[0])
                 {
                     nodeName = nodeName.Split(" ")[0];
-                    nodeName += " " + index;
-
-                    index++;
+                    _ungroupedNodes.UpdateKey(stateName, nodeName+ " " + count);
+                    GetNodeFromGraph(stateName).SetStateName(nodeName+ " " + count);
+                    //GetNodeFromGraph(stateName).SetStateName(nodeName + " " + count);
+                    count++;
+                    nodeName = nodeName + " " + count;
                 }
             }
         }
-
+        Debug.Log(nodeName);
         node.Initialize(nodeName, this, position);
 
         if (shouldDraw)
         {
+            Debug.Log("Drawing");
             node.Draw();
         }
 
@@ -133,7 +137,6 @@ public class FSMGraphView : GraphView
     public void AddUngroupedNode(FSMNode node)
     {
         string nodeName = node.StateName;
-        
         if (!_ungroupedNodes.ContainsKey(nodeName))
         {
             FSMNodeErrorData nodeErrorData = new FSMNodeErrorData();
@@ -148,7 +151,7 @@ public class FSMGraphView : GraphView
 
         Color errorColor = _ungroupedNodes[nodeName].ErrorData.Color;
         node.SetErrorStyle(errorColor);
-
+        
         if (ungroupedNodesList.Count == 2)
         {
             ++RepeatedNameCount;
@@ -159,6 +162,7 @@ public class FSMGraphView : GraphView
     public void RemoveUngroupedNode(FSMNode node)
     {
         string nodeName = node.StateName;
+        Debug.Log(nodeName);
         List<FSMNode> ungroupedNodesList = _ungroupedNodes[nodeName].Nodes;
 
         ungroupedNodesList.Remove(node);
@@ -173,8 +177,44 @@ public class FSMGraphView : GraphView
 
         if (ungroupedNodesList.Count == 0)
         {
+            Debug.Log("Removing");
             _ungroupedNodes.Remove(nodeName);
+            if(node.NodeType == FSMNodeType.Transition || node.NodeType == FSMNodeType.DualTransition)
+            {
+                int count = 0;
+                foreach (string stateName in _ungroupedNodes.Keys)
+                {
+                    if (stateName.Split(" ")[0] == nodeName.Split(" ")[0])
+                    {
+                        nodeName = nodeName.Split(" ")[0];
+                        
+                        _ungroupedNodes.UpdateKey(stateName, nodeName + " " + count);
+                        GetNodeFromGraph(stateName).SetStateName(nodeName + " " + count);
+                        count++;
+                    }
+                }
+                foreach(string n in _ungroupedNodes.Keys)
+                {
+                   Debug.Log(n);
+                } 
+            }
+            
         }
+    }
+    
+    private FSMNode GetNodeFromGraph(string nodeName)
+    {
+        foreach (GraphElement element in graphElements)
+        {
+            if (element is FSMNode node)
+            {
+                if (node.StateName == nodeName)
+                {
+                    return node; 
+                }
+            }
+        }
+        return null;
     }
 
     private void OnElementsDeleted()
@@ -242,7 +282,7 @@ public class FSMGraphView : GraphView
                 {
                     node.Group.RemoveElement(node);
                 }
-
+                Debug.Log(nodesToDelete.Count);
                 RemoveUngroupedNode(node);
                 node.DisconnectAllPorts();
                 RemoveElement(node);

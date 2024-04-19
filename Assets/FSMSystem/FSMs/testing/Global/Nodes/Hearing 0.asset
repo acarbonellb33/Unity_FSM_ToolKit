@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Hearing 0
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Next Action
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 77898b2235569b54a952c77b53589303, type: 2}
+  - <Text>k__BackingField: True
+    <NextNode>k__BackingField: {fileID: 11400000, guid: dee9e7ab5b6ef9c45b0f9a2bad748fb5, type: 2}
+  - <Text>k__BackingField: False
+    <NextNode>k__BackingField: {fileID: 0}
   <NodeType>k__BackingField: 1
   <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"

@@ -25,55 +25,92 @@ MonoBehaviour:
     <NodeType>k__BackingField: 2
     <Position>k__BackingField: {x: 100, y: 100}
     <DataObject>k__BackingField: 
-  - <Id>k__BackingField: eb3c2b99-22f9-40ec-b0db-1306b6b59f64
-    <Name>k__BackingField: Hearing 0
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Next Action
-      <NodeId>k__BackingField: 607d299c-f1a1-466d-8a06-bda8f093abbe
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 582, y: 89}
-    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
   - <Id>k__BackingField: 0c6a6a89-7260-4af8-b56e-6e60e5dcf452
     <Name>k__BackingField: Attack
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: Condition
-      <NodeId>k__BackingField: eb3c2b99-22f9-40ec-b0db-1306b6b59f64
+      <NodeId>k__BackingField: 64eb956e-e13b-4246-a717-351009b5821f
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 280, y: 165}
+    <Position>k__BackingField: {x: 302, y: 62}
     <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
       1.0\n}"
-  - <Id>k__BackingField: 6997b624-91a4-4c89-aa95-b6dcaf29a01b
-    <Name>k__BackingField: Seeing 0
+  - <Id>k__BackingField: 64eb956e-e13b-4246-a717-351009b5821f
+    <Name>k__BackingField: Hearing 0
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: True
+      <NodeId>k__BackingField: 1248a033-1774-4082-b72c-8bbca701df27
+    - <Text>k__BackingField: False
+      <NodeId>k__BackingField: d48062e4-7211-40d2-99a4-78bcf3af0425
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 644, y: 26}
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
+  - <Id>k__BackingField: d38e3891-c884-4f49-bfb5-008064700da4
+    <Name>k__BackingField: Patrol
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 3a3788af-9189-4779-b8b4-f7651cd0e258
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 675, y: 532}
+    <DataObject>k__BackingField: "{\n    \"patrolPoints\": []\n}"
+  - <Id>k__BackingField: 3a3788af-9189-4779-b8b4-f7651cd0e258
+    <Name>k__BackingField: Hearing 2
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: Next Action
       <NodeId>k__BackingField: 0c6a6a89-7260-4af8-b56e-6e60e5dcf452
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 538, y: 399}
+    <Position>k__BackingField: {x: 352, y: 329}
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
+  - <Id>k__BackingField: 1248a033-1774-4082-b72c-8bbca701df27
+    <Name>k__BackingField: Seeing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: True
+      <NodeId>k__BackingField: d48062e4-7211-40d2-99a4-78bcf3af0425
+    - <Text>k__BackingField: False
+      <NodeId>k__BackingField: 899f0856-175b-4179-bf8e-e598d38ef96c
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 1209, y: 104}
     <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
-  - <Id>k__BackingField: 607d299c-f1a1-466d-8a06-bda8f093abbe
+  - <Id>k__BackingField: 899f0856-175b-4179-bf8e-e598d38ef96c
     <Name>k__BackingField: Search
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: Condition
-      <NodeId>k__BackingField: 6997b624-91a4-4c89-aa95-b6dcaf29a01b
+      <NodeId>k__BackingField: 3a3788af-9189-4779-b8b4-f7651cd0e258
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 895, y: 365}
+    <Position>k__BackingField: {x: 1323, y: 435}
     <DataObject>k__BackingField: "{\n    \"exploreRadius\": 10.0\n}"
+  - <Id>k__BackingField: d48062e4-7211-40d2-99a4-78bcf3af0425
+    <Name>k__BackingField: Hearing 1
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: d38e3891-c884-4f49-bfb5-008064700da4
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 828, y: 235}
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
   - Initial State
-  - Hearing 0
   - Attack
-  - Seeing 0
+  - Hearing 0
+  - Patrol
+  - Hearing 2
+  - Seeing
   - Search
+  - Hearing 1
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy

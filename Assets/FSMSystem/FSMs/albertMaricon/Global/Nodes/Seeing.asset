@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Seeing 0
+  m_Name: Seeing
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Seeing 0
+  <NodeName>k__BackingField: Seeing
   <Connections>k__BackingField:
   - <Text>k__BackingField: Next Action
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 9f0103e2e165578429701adb19a00af3, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 2898219c1de3d374796b87fe9d7289f4, type: 2}
   <NodeType>k__BackingField: 1
   <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"

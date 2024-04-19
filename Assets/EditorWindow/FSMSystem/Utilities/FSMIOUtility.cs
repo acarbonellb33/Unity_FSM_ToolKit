@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -482,7 +483,15 @@ public static class FSMIOUtility
         string json = JsonUtility.ToJson(stateScript, true);
         File.WriteAllText(Application.dataPath+$"/FSMSystem/FSMs/{className}/Global/Nodes/{stateScript.GetStateName().Replace(" ","")}DataFile.json", json);
         
-        FSMNodeSO node = LoadAsset<FSMNodeSO>($"Assets/FSMSystem/FSMs/{className}/Global/Nodes", stateScript.GetStateName());
+        string[] parts = Regex.Split(stateScript.GetStateName(), @"(\d)", RegexOptions.None);
+        string result = "";
+        for (int i=0; i< parts.Length; i++)
+        {
+            if(i+2 < parts.Length)result += parts[i] + " ";
+            else result += parts[i];
+        }
+        
+        FSMNodeSO node = LoadAsset<FSMNodeSO>($"Assets/FSMSystem/FSMs/{className}/Global/Nodes", result);
         node.DataObject = json;
 
         FSMGraphSaveData graphSaveData = LoadAsset<FSMGraphSaveData>($"Assets/EditorWindow/FSMSystem/Graphs", className);

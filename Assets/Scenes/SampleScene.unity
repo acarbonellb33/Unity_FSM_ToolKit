@@ -997,7 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphContainer: {fileID: 11400000, guid: 25da911b186f92c4997fbcaceddb0c7e, type: 2}
+  graphContainer: {fileID: 11400000, guid: 3180b74235e14a2499dc79471f8c0ed5, type: 2}
 --- !u!82 &1127633677
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1976,6 +1976,8 @@ GameObject:
   - component: {fileID: 5866666021310896189}
   - component: {fileID: 1127633676}
   - component: {fileID: 5866666021310896198}
+  - component: {fileID: 5866666021310896205}
+  - component: {fileID: 5866666021310896204}
   - component: {fileID: 5866666021310896203}
   - component: {fileID: 5866666021310896202}
   - component: {fileID: 5866666021310896201}
@@ -3354,10 +3356,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38ec575d7648df04f8e7da4772deb51f, type: 3}
+  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exploreRadius: 10
+  distance: 120
 --- !u!114 &5866666021310896200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3370,8 +3372,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 10
+  distance: 42
 --- !u!114 &5866666021310896201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5866666021310896202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ec575d7648df04f8e7da4772deb51f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exploreRadius: 55
+--- !u!114 &5866666021310896203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3383,9 +3410,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 10
+  attackDamage: 12
   attackFrequency: 1
---- !u!114 &5866666021310896202
+--- !u!114 &5866666021310896204
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3399,7 +3426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   operand: 0
   hearingRange: 10
---- !u!114 &5866666021310896203
+--- !u!114 &5866666021310896205
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3408,19 +3435,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c62b4596c6c77034db988bafc6b3497b, type: 3}
+  m_Script: {fileID: 11500000, guid: 0518a589d8c0e294db1348900e7b3ee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   options:
+  - {fileID: 5866666021310896204}
+  - {fileID: 5866666021310896203}
   - {fileID: 5866666021310896202}
   - {fileID: 5866666021310896201}
   - {fileID: 5866666021310896200}
   - {fileID: 5866666021310896199}
-  selectedOptionIndex: 0
-  hearing0: {fileID: 5866666021310896202}
-  attack: {fileID: 5866666021310896201}
+  selectedOptionIndex: 4
+  hearing: {fileID: 5866666021310896204}
+  attack: {fileID: 5866666021310896203}
+  search: {fileID: 5866666021310896202}
+  chase: {fileID: 5866666021310896201}
   seeing0: {fileID: 5866666021310896200}
-  search: {fileID: 5866666021310896199}
+  seeing1: {fileID: 5866666021310896199}
 --- !u!4 &5896985191658304802
 Transform:
   m_ObjectHideFlags: 0

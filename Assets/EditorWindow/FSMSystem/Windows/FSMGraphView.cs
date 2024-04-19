@@ -80,7 +80,6 @@ public class FSMGraphView : GraphView
             int count = 0;
             foreach (string stateName in _ungroupedNodes.Keys)
             {
-                Debug.Log(stateName+" / "+nodeName);
                 if (stateName.Split(" ")[0] == nodeName.Split(" ")[0])
                 {
                     nodeName = nodeName.Split(" ")[0];
@@ -92,12 +91,10 @@ public class FSMGraphView : GraphView
                 }
             }
         }
-        Debug.Log(nodeName);
         node.Initialize(nodeName, this, position);
 
         if (shouldDraw)
         {
-            Debug.Log("Drawing");
             node.Draw();
         }
 
@@ -162,7 +159,6 @@ public class FSMGraphView : GraphView
     public void RemoveUngroupedNode(FSMNode node)
     {
         string nodeName = node.StateName;
-        Debug.Log(nodeName);
         List<FSMNode> ungroupedNodesList = _ungroupedNodes[nodeName].Nodes;
 
         ungroupedNodesList.Remove(node);
@@ -177,7 +173,6 @@ public class FSMGraphView : GraphView
 
         if (ungroupedNodesList.Count == 0)
         {
-            Debug.Log("Removing");
             _ungroupedNodes.Remove(nodeName);
             if(node.NodeType == FSMNodeType.Transition || node.NodeType == FSMNodeType.DualTransition)
             {
@@ -193,12 +188,7 @@ public class FSMGraphView : GraphView
                         count++;
                     }
                 }
-                foreach(string n in _ungroupedNodes.Keys)
-                {
-                   Debug.Log(n);
-                } 
             }
-            
         }
     }
     
@@ -282,7 +272,6 @@ public class FSMGraphView : GraphView
                 {
                     node.Group.RemoveElement(node);
                 }
-                Debug.Log(nodesToDelete.Count);
                 RemoveUngroupedNode(node);
                 node.DisconnectAllPorts();
                 RemoveElement(node);

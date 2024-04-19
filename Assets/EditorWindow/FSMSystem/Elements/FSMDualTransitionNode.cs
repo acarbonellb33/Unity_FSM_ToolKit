@@ -275,7 +275,8 @@ public class FSMDualTransitionNode : FSMNode
         {
             foreach (StateScript enemyState in _dataObjects)
             {
-                if (enemyState.GetStateName() == StateName)
+                string name = StateName.Split(' ')[0];
+                if (enemyState.GetStateName() == name)
                 {
                     StateScript = enemyState;
                 }

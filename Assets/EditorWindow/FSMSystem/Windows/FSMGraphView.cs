@@ -80,10 +80,11 @@ public class FSMGraphView : GraphView
         {
             foreach (string stateName in _ungroupedNodes.Keys)
             {
-                if (stateName == nodeName)
+                if (stateName.Split(" ")[0] == nodeName.Split(" ")[0])
                 {
-                    nodeName = nodeName.Split(' ')[0];
+                    nodeName = nodeName.Split(" ")[0];
                     nodeName += " " + index;
+
                     index++;
                 }
             }

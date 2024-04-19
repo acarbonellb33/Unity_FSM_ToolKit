@@ -113,7 +113,31 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionary, IDic
             list.Add(new SerializableKeyValuePair(key, value));
         }
     }
+    public void UpdateKey(TKey oldKey, TKey newKey)
+    {
+        if (!KeyPositions.TryGetValue(oldKey, out uint index))
+        {
+            throw new KeyNotFoundException($"The key '{oldKey}' was not found in the dictionary.");
+        }
 
+        // Retrieve the value associated with the old key
+        TValue value = list[(int)index].Value;
+
+        // Remove the entry with the old key
+        Remove(oldKey);
+
+        // Add a new entry with the new key and the retrieved value
+        Add(newKey, value);
+    }
+    public TValue GetValue(TKey key)
+    {
+        if (TryGetValue(key, out TValue value))
+        {
+            return value;
+        }
+    
+        throw new KeyNotFoundException($"The key '{key}' was not found in the dictionary.");
+    }
     public bool ContainsKey(TKey key) => KeyPositions.ContainsKey(key);
 
     public bool Remove(TKey key)

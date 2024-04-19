@@ -8,10 +8,6 @@ using System.Reflection;
 [Serializable]
 public class estelita : BehaviorScript
 {
-	[Header("Hearing 0")]
-	[SerializeField]
-	public HearingConditionScript hearing0;
-
 	[Header("Attack")]
 	[SerializeField]
 	public AttackStateScript attack;
@@ -20,17 +16,21 @@ public class estelita : BehaviorScript
 	[SerializeField]
 	public HearingConditionScript hearing;
 
-	[Header("Search")]
+	[Header("Hearing 0")]
 	[SerializeField]
-	public SearchStateScript search;
+	public HearingConditionScript hearing0;
 
-	[Header("Seeing 0")]
+	[Header("Hearing 1")]
 	[SerializeField]
-	public SeeingConditionScript seeing0;
+	public HearingConditionScript hearing1;
 
 	[Header("Seeing")]
 	[SerializeField]
 	public SeeingConditionScript seeing;
+
+	[Header("Search")]
+	[SerializeField]
+	public SearchStateScript search;
 
 	[Header("Seeing 1")]
 	[SerializeField]
@@ -64,7 +64,7 @@ public class estelita : BehaviorScript
 	public void UpdateSearchState()
 	{
 		search.Execute();
-		if(seeing0.Condition() && hearing0.Condition() && seeing.Condition() )
+		if(seeing.Condition() && hearing1.Condition() && hearing0.Condition() )
 		{
 			ChangeAttackState();
 		}

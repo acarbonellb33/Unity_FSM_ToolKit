@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Seeing 1
+  m_Name: Attack
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Seeing 1
+  <NodeName>k__BackingField: Attack
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Next Action
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 94b95856cc86aaa49b464bfbd63a5b02, type: 2}
-  <NodeType>k__BackingField: 1
-  <DataObject>k__BackingField: "{\n    \"distance\": 120.0\n}"
+  - <Text>k__BackingField: Condition
+    <NextNode>k__BackingField: {fileID: 11400000, guid: d57e9b074468e604fbbc28e03c3d7550, type: 2}
+  <NodeType>k__BackingField: 0
+  <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
+    1.0\n}"

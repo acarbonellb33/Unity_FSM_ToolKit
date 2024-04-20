@@ -103,7 +103,7 @@ public static class EnemyStateMachineEditor
                 FSMNodeSaveData nodeSaveData = GetNodeData(GetState(node.Connections[0].NodeId));
                 bool check = nodeSaveData.Connections.Count == 2;
                 
-                scriptContent += GenerateConditionsRecursive(nodeSaveData, conditions, true, check);
+                scriptContent += GenerateConditionsRecursive(nodeSaveData, conditions, true, check, "");
                 scriptContent += "\t}\n";
             }
         }
@@ -144,7 +144,7 @@ public static class EnemyStateMachineEditor
         return scriptContent;
     }
 
-    private static string GenerateConditionsRecursive(FSMNodeSaveData node, string test, bool isFirst, bool isElse)
+    private static string GenerateConditionsRecursive(FSMNodeSaveData node, string test, bool isFirst, bool isElse, string pastFalse)
     {
         if(node.NodeType == FSMNodeType.Initial || node.NodeType == FSMNodeType.State)
         {
@@ -159,8 +159,8 @@ public static class EnemyStateMachineEditor
         string conditionName = char.ToLowerInvariant(name[0]) + name.Substring(1);
         conditionName = conditionName.Replace(" ", "");
         
-        if(isFirst)test += $"\t\tif({conditionName}.Condition() ";
-        else test += $"&& {conditionName}.Condition() ";
+        if(isFirst)test += $"\t\tif({conditionName}.Condition()";
+        else test += $" && {conditionName}.Condition()";
         
         if (isElse)
         {
@@ -168,16 +168,19 @@ public static class EnemyStateMachineEditor
             bool check1 = nodeSaveData.Connections.Count == 2;
 
             FSMNodeSaveData nodeSaveData2 = GetNodeData(GetState(node.Connections[0].NodeId));
-            bool check2 = nodeSaveData.Connections.Count == 2;
+            bool check2 = nodeSaveData2.Connections.Count == 2;
+            
+            if(pastFalse == "")pastFalse = $"\t\telse if(!{conditionName}.Condition()";
+            else pastFalse += $" && !{conditionName}.Condition()";
 
-            return GenerateConditionsRecursive(nodeSaveData2, test, false, check2) +
-                   GenerateConditionsRecursive(nodeSaveData, $"\t\telse if(!{conditionName}.Condition() ", false, check1);
+            return GenerateConditionsRecursive(nodeSaveData2, test, false, check2, null) +
+                   GenerateConditionsRecursive(nodeSaveData, pastFalse, false, check1, pastFalse);
         }
         else
         {
             FSMNodeSaveData nodeSaveData = GetNodeData(GetState(node.Connections[0].NodeId));
             bool check = nodeSaveData.Connections.Count == 2;
-            return GenerateConditionsRecursive(nodeSaveData, test, false, check);
+            return GenerateConditionsRecursive(nodeSaveData, test, false, check, null);
         }
     }
 

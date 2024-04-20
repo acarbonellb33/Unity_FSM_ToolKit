@@ -15,6 +15,8 @@ public class AttackStateScript : StateScript, IAction
     }
     
     public void Execute(){
+        agent.ResetPath();
+        RotateEnemyToPlayer();
         if (CanAttack())
         {
             RaycastHit hit;
@@ -28,6 +30,13 @@ public class AttackStateScript : StateScript, IAction
             }
             lastAttack = Time.time;
         }
+    }
+    
+    private void RotateEnemyToPlayer()
+    {
+        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 0.1f);
     }
 
     private bool CanAttack()

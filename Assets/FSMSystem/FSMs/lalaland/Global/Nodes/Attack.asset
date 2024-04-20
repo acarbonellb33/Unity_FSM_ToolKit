@@ -15,7 +15,7 @@ MonoBehaviour:
   <NodeName>k__BackingField: Attack
   <Connections>k__BackingField:
   - <Text>k__BackingField: Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 602d831998a37ef4996d5c1405d543e9, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 1f3f7b463773bcf4081f05a8f2f7fb1d, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"attackDamage\": 12.0,\n    \"attackFrequency\":
+  <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
     1.0\n}"

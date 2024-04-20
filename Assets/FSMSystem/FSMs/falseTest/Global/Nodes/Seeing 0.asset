@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Hearing
+  m_Name: Seeing 0
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Hearing
+  <NodeName>k__BackingField: Seeing 0
   <Connections>k__BackingField:
-  - <Text>k__BackingField: True
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 2ae42ba8121cae843ac23bdb31f74c65, type: 2}
-  - <Text>k__BackingField: False
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 975e4e6ab805d4c40a20b7e525c577c4, type: 2}
+  - <Text>k__BackingField: Next Action
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 8b515ffa1817d76468ddcbd7e7b56cb1, type: 2}
   <NodeType>k__BackingField: 1
-  <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
+  <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"

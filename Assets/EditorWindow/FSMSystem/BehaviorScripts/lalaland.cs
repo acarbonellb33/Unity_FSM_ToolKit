@@ -8,89 +8,63 @@ using System.Reflection;
 [Serializable]
 public class lalaland : BehaviorScript
 {
-	[Header("Hearing")]
+	[Header("Chase")]
 	[SerializeField]
-	public HearingConditionScript hearing;
+	public ChaseStateScript chase;
+
+	[Header("Hearing 0")]
+	[SerializeField]
+	public HearingConditionScript hearing0;
 
 	[Header("Attack")]
 	[SerializeField]
 	public AttackStateScript attack;
 
-	[Header("Search")]
+	[Header("Seeing")]
 	[SerializeField]
-	public SearchStateScript search;
+	public SeeingConditionScript seeing;
 
-	[Header("Chase")]
-	[SerializeField]
-	public ChaseStateScript chase;
-
-	[Header("Seeing 0")]
-	[SerializeField]
-	public SeeingConditionScript seeing0;
-
-	[Header("Seeing 1")]
-	[SerializeField]
-	public SeeingConditionScript seeing1;
 
 	private void Start()
 	{
-		currentState = FSMStates.Attack;
+		currentState = FSMStates.Chase;
 		GetComponent<Animator>().SetFloat("Speed", GetComponent<NavMeshAgent>().speed);
 	}
 	void Update()
 	{
 		switch (currentState)
 		{
-			case FSMStates.Attack:
-				UpdateAttackState();
-				break;
-			case FSMStates.Search:
-				UpdateSearchState();
-				break;
 			case FSMStates.Chase:
 				UpdateChaseState();
 				break;
-		}
-	}
-	public void UpdateAttackState()
-	{
-		attack.Execute();
-		if(hearing.Condition() )
-		{
-			ChangeSearchState();
-		}
-		else if(!hearing.Condition() && seeing0.Condition() )
-		{
-			ChangeChaseState();
-		}
-	}
-	public void UpdateSearchState()
-	{
-		search.Execute();
-		if(seeing0.Condition() )
-		{
-			ChangeChaseState();
+			case FSMStates.Attack:
+				UpdateAttackState();
+				break;
 		}
 	}
 	public void UpdateChaseState()
 	{
 		chase.Execute();
-		if(seeing1.Condition() )
+		if(seeing.Condition() && hearing0.Condition() )
 		{
-			ChangeAttackState();
+			ChangeChaseState();
 		}
 	}
-	private void ChangeAttackState()
+	public void UpdateAttackState()
 	{
-		currentState = FSMStates.Attack;
-	}
-	private void ChangeSearchState()
-	{
-		currentState = FSMStates.Search;
+		attack.Execute();
+		if(hearing0.Condition() )
+		{
+			ChangeChaseState();
+		}
 	}
 	private void ChangeChaseState()
 	{
 		currentState = FSMStates.Chase;
+	}
+	private void ChangeAttackState()
+	{
+		currentState = FSMStates.Attack;
 	}
 	private void OnFootstep() {}
 }

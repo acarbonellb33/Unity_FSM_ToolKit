@@ -15,6 +15,6 @@ MonoBehaviour:
   <NodeName>k__BackingField: Search
   <Connections>k__BackingField:
   - <Text>k__BackingField: Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 975e4e6ab805d4c40a20b7e525c577c4, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 4b097372760eb30448d6fd5ec28c34d4, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"exploreRadius\": 55.0\n}"
+  <DataObject>k__BackingField: "{\n    \"exploreRadius\": 10.0\n}"

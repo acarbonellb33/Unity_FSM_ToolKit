@@ -997,7 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphContainer: {fileID: 11400000, guid: 8266fd4185013fb438951e29c4e5716c, type: 2}
+  graphContainer: {fileID: 11400000, guid: f399826a2e2c41c4b97005d48dd24537, type: 2}
 --- !u!82 &1127633677
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1975,7 +1975,7 @@ GameObject:
   - component: {fileID: 1127633677}
   - component: {fileID: 5866666021310896189}
   - component: {fileID: 1127633676}
-  - component: {fileID: 5866666021310896198}
+  - component: {fileID: 5866666021310896196}
   - component: {fileID: 5866666021310896208}
   - component: {fileID: 5866666021310896207}
   - component: {fileID: 5866666021310896206}
@@ -1986,6 +1986,8 @@ GameObject:
   - component: {fileID: 5866666021310896201}
   - component: {fileID: 5866666021310896200}
   - component: {fileID: 5866666021310896199}
+  - component: {fileID: 5866666021310896198}
+  - component: {fileID: 5866666021310896197}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -3334,7 +3336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
---- !u!114 &5866666021310896198
+--- !u!114 &5866666021310896196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3347,9 +3349,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupName: 
-  visible: 0
+  visible: 1
   edit: 0
   comps: []
+--- !u!114 &5866666021310896197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints: []
+--- !u!114 &5866666021310896198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operand: 0
+  hearingRange: 10
 --- !u!114 &5866666021310896199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3372,10 +3401,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
+  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolPoints: []
+  operand: 0
+  hearingRange: 10
 --- !u!114 &5866666021310896201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3385,24 +3415,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
+  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 10
+  operand: 0
+  hearingRange: 10
 --- !u!114 &5866666021310896202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148682365174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distance: 10
---- !u!114 &5866666021310896203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3415,6 +3433,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exploreRadius: 10
+--- !u!114 &5866666021310896203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 10
 --- !u!114 &5866666021310896204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3424,11 +3455,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  operand: 0
-  hearingRange: 10
+  chaseSpeed: 5
+  chaseRange: 10
+  chaseCooldown: 2
+  canChase: 1
 --- !u!114 &5866666021310896205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3438,11 +3471,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f50722b1a9f821c41a2f23e87558a963, type: 3}
+  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  operand: 0
-  hearingRange: 10
+  distance: 10
 --- !u!114 &5866666021310896206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3466,9 +3498,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
+  m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackDamage: 10
+  attackFrequency: 1
 --- !u!114 &5866666021310896208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3478,7 +3512,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb92004b6d4def347884844c3778cc46, type: 3}
+  m_Script: {fileID: 11500000, guid: 51312f33a107dac44b00a6b4e959fed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   options:
@@ -3491,16 +3525,20 @@ MonoBehaviour:
   - {fileID: 5866666021310896201}
   - {fileID: 5866666021310896200}
   - {fileID: 5866666021310896199}
+  - {fileID: 5866666021310896198}
+  - {fileID: 5866666021310896197}
   selectedOptionIndex: 0
-  chase: {fileID: 5866666021310896207}
+  attack: {fileID: 5866666021310896207}
   hearing0: {fileID: 5866666021310896206}
-  hearing1: {fileID: 5866666021310896205}
-  hearing2: {fileID: 5866666021310896204}
-  search: {fileID: 5866666021310896203}
-  seeing0: {fileID: 5866666021310896202}
-  seeing1: {fileID: 5866666021310896201}
-  patrol: {fileID: 5866666021310896200}
+  seeing0: {fileID: 5866666021310896205}
+  chase: {fileID: 5866666021310896204}
+  seeing1: {fileID: 5866666021310896203}
+  search: {fileID: 5866666021310896202}
+  hearing1: {fileID: 5866666021310896201}
+  hearing2: {fileID: 5866666021310896200}
   seeing2: {fileID: 5866666021310896199}
+  hearing3: {fileID: 5866666021310896198}
+  patrol: {fileID: 5866666021310896197}
 --- !u!4 &5896985191658304802
 Transform:
   m_ObjectHideFlags: 0

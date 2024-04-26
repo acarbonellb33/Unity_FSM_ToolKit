@@ -8,10 +8,6 @@ using System.Reflection;
 [Serializable]
 public class attackTest : BehaviorScript
 {
-	[Header("Seeing 0")]
-	[SerializeField]
-	public SeeingConditionScript seeing0;
-
 	[Header("Attack")]
 	[SerializeField]
 	public AttackStateScript attack;
@@ -28,6 +24,12 @@ public class attackTest : BehaviorScript
 	[SerializeField]
 	public ChaseStateScript chase;
 
+	[Header("Seeing 0")]
+	[SerializeField]
+	public SeeingConditionScript seeing0;
+
+	float waitHitTime = 6f;
+	float hitLastTime = 0f;
 	private void Start()
 	{
 		currentState = FSMStates.Chase;
@@ -43,12 +45,28 @@ public class attackTest : BehaviorScript
 			case FSMStates.Chase:
 				UpdateChaseState();
 				break;
+			case FSMStates.Hit:
+				UpdateHitState();
+				break;
+			case FSMStates.Die:
+				UpdateDieState();
+				break;
+		}
+		EnemyHealthSystem healthSystem = GetComponent<EnemyHealthSystem>();
+		if(healthSystem.GetCurrentHealth() < healthSystem.GetPreviousHealth())
+		{
+			ChangeHitState();
+			healthSystem.SetPreviousHealth(healthSystem.GetCurrentHealth());
+		}
+		if(healthSystem.GetCurrentHealth() <= 0)
+		{
+			ChangeDieState();
 		}
 	}
 	public void UpdateAttackState()
 	{
 		attack.Execute();
-		if(hearing1.Condition() )
+		if(hearing1.Condition())
 		{
 			ChangeChaseState();
 		}
@@ -56,10 +74,24 @@ public class attackTest : BehaviorScript
 	public void UpdateChaseState()
 	{
 		chase.Execute();
-		if(seeing0.Condition() && hearing0.Condition() )
+		if(seeing0.Condition() && hearing0.Condition())
 		{
 			ChangeAttackState();
 		}
+	}
+	public void UpdateHitState()
+	{
+		NavMeshAgent agent = GetComponent<NavMeshAgent>();
+		agent.isStopped = true;
+		if(Time.time >= hitLastTime + waitHitTime)
+		{
+			currentState = FSMStates.Chase;
+			agent.isStopped = false;
+		}
+	}
+	public void UpdateDieState()
+	{
+		GetComponent<EnemyHealthSystem>().Die();
 	}
 	private void ChangeAttackState()
 	{
@@ -68,6 +100,14 @@ public class attackTest : BehaviorScript
 	private void ChangeChaseState()
 	{
 		currentState = FSMStates.Chase;
+	}
+	private void ChangeHitState()
+	{
+		currentState = FSMStates.Hit;
+	}
+	private void ChangeDieState()
+	{
+		currentState = FSMStates.Die;
 	}
 	private void OnFootstep() {}
 }

@@ -60,7 +60,6 @@ public class FSMInspector : Editor
                     {
                         string nodeName = char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) + graphContainerData.Nodes[i].Name.Substring(1);
                         nodeName = nodeName.Replace(" ", "");
-                        Debug.Log(nodeName);
                         dynamicMethod.Invoke(newScriptInstance,new object[]
                         { 
                             nodeName, 

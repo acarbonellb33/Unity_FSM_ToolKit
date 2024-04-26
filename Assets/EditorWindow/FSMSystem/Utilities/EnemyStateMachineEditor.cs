@@ -237,17 +237,24 @@ public static class EnemyStateMachineEditor
             FSMNodeSaveData nodeSaveData2 = GetNodeData(GetState(node.Connections[0].NodeId));
             bool check2 = nodeSaveData2.Connections.Count == 2;
             
-            if(pastFalse == "")pastFalse = $"\t\telse if(!{conditionName}.Condition()";
+            string pastTrue = pastFalse;
+            
+            if(pastFalse[2] != 'e')pastFalse = $"\t\telse if(!{conditionName}.Condition()";
             else pastFalse += $" && !{conditionName}.Condition()";
+            
+            if(pastTrue[2] != 'e')pastTrue = $"\t\telse if({conditionName}.Condition()";
+            else pastTrue += $" && {conditionName}.Condition()";
 
-            return GenerateConditionsRecursive(nodeSaveData2, test, false, check2, null) +
+            return GenerateConditionsRecursive(nodeSaveData2, test, false, check2, pastTrue) +
                    GenerateConditionsRecursive(nodeSaveData, pastFalse, false, check1, pastFalse);
         }
         else
         {
+            pastFalse += $"\t\telse if({conditionName}.Condition()";
+            
             FSMNodeSaveData nodeSaveData = GetNodeData(GetState(node.Connections[0].NodeId));
             bool check = nodeSaveData.Connections.Count == 2;
-            return GenerateConditionsRecursive(nodeSaveData, test, false, check, null);
+            return GenerateConditionsRecursive(nodeSaveData, test, false, check, pastFalse);
         }
     }
 

@@ -9,13 +9,13 @@ using Toggle = UnityEngine.UIElements.Toggle;
 
 public class FSMDualTransitionNode : FSMNode
 {
-    private List<StateScript> _dataObjects;
+    private List<StateScriptData> _dataObjects;
     public override void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.Transition;
         
-        _dataObjects = new List<StateScript>(){new SeeingConditionScript(), new HearingConditionScript()};
+        _dataObjects = new List<StateScriptData>(){new SeeingData(), new HearingData()};
      
         FSMConnectionSaveData connectionSaveData1 = new FSMConnectionSaveData()
         {
@@ -271,9 +271,9 @@ public class FSMDualTransitionNode : FSMNode
         {
             StateScript.GetStateName();
         }
-        catch (NullReferenceException e)
+        catch (NullReferenceException)
         {
-            foreach (StateScript enemyState in _dataObjects)
+            foreach (StateScriptData enemyState in _dataObjects)
             {
                 string name = StateName.Split(' ')[0];
                 if (enemyState.GetStateName() == name)

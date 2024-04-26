@@ -13,7 +13,7 @@ public class FSMNode : Node
     public FSMGroup Group { get; set; }
     
     protected FSMGraphView graphView;
-    public StateScript StateScript { get; set; }
+    public StateScriptData StateScript { get; set; }
     
     public Label stateNameField;
 

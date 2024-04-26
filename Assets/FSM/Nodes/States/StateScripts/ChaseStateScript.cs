@@ -1,5 +1,9 @@
 public class ChaseStateScript : StateScript, IAction
 {
+    public float chaseSpeed = 5f;
+    public float chaseRange = 10f;
+    public float chaseCooldown = 2f;
+    public bool canChase = true;
     public ChaseStateScript()
     {
         // Set the state name to "Chase" using the SetStateName method inherited from StateScript

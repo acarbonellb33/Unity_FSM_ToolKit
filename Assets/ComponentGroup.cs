@@ -6,6 +6,11 @@ public class ComponentGroup : MonoBehaviour
     public string groupName;
     public bool visible, edit;
     public List<Component> comps = new List<Component>();
+    
+    public void AddComponentToGroup(Component aComp)
+    {
+        comps.Add(aComp);
+    }
 }
  
 #if UNITY_EDITOR

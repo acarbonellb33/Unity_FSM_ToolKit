@@ -1,1 +1,6 @@
-{}
+{
+    "chaseSpeed": 5.0,
+    "chaseRange": 10.0,
+    "chaseCooldown": 2.0,
+    "canChase": true
+}

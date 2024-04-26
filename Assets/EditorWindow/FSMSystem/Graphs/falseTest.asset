@@ -34,19 +34,8 @@ MonoBehaviour:
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
     <Position>k__BackingField: {x: 313, y: 139}
-    <DataObject>k__BackingField: '{}'
-  - <Id>k__BackingField: 8018f169-524c-4e25-b27d-ebb9838bdfed
-    <Name>k__BackingField: Hearing 0
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: True
-      <NodeId>k__BackingField: 97a3f9d0-e7b2-4c91-831f-365ddc392b22
-    - <Text>k__BackingField: False
-      <NodeId>k__BackingField: cc5c64b9-3b91-4e6d-ae1b-98c468f9c8a8
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 523, y: 151}
-    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
+    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
+      10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"
   - <Id>k__BackingField: cc5c64b9-3b91-4e6d-ae1b-98c468f9c8a8
     <Name>k__BackingField: Hearing 1
     <Text>k__BackingField: 
@@ -121,12 +110,23 @@ MonoBehaviour:
     <NodeType>k__BackingField: 1
     <Position>k__BackingField: {x: 1771, y: 391}
     <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
+  - <Id>k__BackingField: 8018f169-524c-4e25-b27d-ebb9838bdfed
+    <Name>k__BackingField: Hearing 0
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: True
+      <NodeId>k__BackingField: 97a3f9d0-e7b2-4c91-831f-365ddc392b22
+    - <Text>k__BackingField: False
+      <NodeId>k__BackingField: cc5c64b9-3b91-4e6d-ae1b-98c468f9c8a8
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 671, y: 59}
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
   - Initial State
   - Chase
-  - Hearing 0
   - Hearing 1
   - Hearing 2
   - Search
@@ -134,6 +134,7 @@ MonoBehaviour:
   - Seeing 1
   - Patrol
   - Seeing 2
+  - Hearing 0
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy

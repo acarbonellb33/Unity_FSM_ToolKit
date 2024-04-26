@@ -25,16 +25,6 @@ MonoBehaviour:
     <NodeType>k__BackingField: 2
     <Position>k__BackingField: {x: 100, y: 100}
     <DataObject>k__BackingField: 
-  - <Id>k__BackingField: bd983c75-2701-40e6-8e74-371c7a64d377
-    <Name>k__BackingField: Seeing 0
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Next Action
-      <NodeId>k__BackingField: 973ec96c-59d8-46d5-9c22-df979ee804f4
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 526, y: 141}
-    <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
   - <Id>k__BackingField: 3399b008-14d5-4d40-af40-17009c690b73
     <Name>k__BackingField: Attack
     <Text>k__BackingField: 
@@ -55,7 +45,7 @@ MonoBehaviour:
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
     <Position>k__BackingField: {x: 833, y: 223}
-    <DataObject>k__BackingField: "{\n    \"operand\": 1,\n    \"hearingRange\": 10.0\n}"
+    <DataObject>k__BackingField: "{\n    \"operand\": 1,\n    \"hearingRange\": 5.0\n}"
   - <Id>k__BackingField: 4f04b775-db09-4645-81d4-357cf69478d4
     <Name>k__BackingField: Hearing 1
     <Text>k__BackingField: 
@@ -75,16 +65,31 @@ MonoBehaviour:
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 0
     <Position>k__BackingField: {x: 291, y: 177}
-    <DataObject>k__BackingField: '{}'
+    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
+      10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"
+  - <Id>k__BackingField: bd983c75-2701-40e6-8e74-371c7a64d377
+    <Name>k__BackingField: Seeing 0
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: 973ec96c-59d8-46d5-9c22-df979ee804f4
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 576, y: 100}
+    <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
   - Initial State
-  - Seeing 0
   - Attack
   - Hearing 0
   - Hearing 1
   - Chase
+  - Seeing 0
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy
+  <HitData>k__BackingField:
+    <HitEnable>k__BackingField: 1
+    <TimeToWait>k__BackingField: 6
+    <CanDie>k__BackingField: 1

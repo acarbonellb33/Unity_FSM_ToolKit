@@ -314,7 +314,7 @@ public static class FSMIOUtility
         node.StateScript = LoadFromJson(node, nodeData.Name,$"Assets/FSMSystem/FSMs/{fileName}/Global/Nodes/{nodeData.Name.Replace(" ","")}DataFile.json");
         return node;
     }
-    private static StateScript LoadFromJson(FSMNode node, string nodeName, string path)
+    private static StateScriptData LoadFromJson(FSMNode node, string nodeName, string path)
     {
         if(node.NodeType == FSMNodeType.Initial)
         {
@@ -327,45 +327,32 @@ public static class FSMIOUtility
         {
             case "Patrol":
                 PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
-                node.StateScript = new PatrolStateScript();
-                ((PatrolStateScript)node.StateScript).patrolPoints = patrolData.patrolPoints;
-                ((PatrolStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = patrolData;
                 break;
             case "Attack":
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);
-                node.StateScript = new AttackStateScript();
-                ((AttackStateScript)node.StateScript).attackDamage = attackData.attackDamage;
-                ((AttackStateScript)node.StateScript).attackFrequency = attackData.attackFrequency;
-                ((AttackStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = attackData;
                 break;
             case "Chase":
                 ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);
-                node.StateScript = new ChaseStateScript();
-                ((ChaseStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = chaseData;
                 break;
             case "Search":
                 SearchData searchData = JsonUtility.FromJson<SearchData>(json);
-                node.StateScript = new SearchStateScript();
-                ((SearchStateScript)node.StateScript).exploreRadius = searchData.exploreRadius;
-                ((SearchStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = searchData;
                 break;
             case "Hearing":
                 HearingData hearingData = JsonUtility.FromJson<HearingData>(json);
-                node.StateScript = new HearingConditionScript();
-                ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
-                ((HearingConditionScript)node.StateScript).operand = hearingData.operand;
-                ((HearingConditionScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = hearingData;
                 break;
             case "Seeing":
                 SeeingData seeingData = JsonUtility.FromJson<SeeingData>(json);
-                node.StateScript = new SeeingConditionScript();
-                ((SeeingConditionScript)node.StateScript).distance = seeingData.distance;
-                ((SeeingConditionScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = seeingData;
                 break;
         }
         return node.StateScript;
     }
-    private static StateScript LoadFromJson(FSMNode node)
+    private static StateScriptData LoadFromJson(FSMNode node)
     {
         if (node.NodeType == FSMNodeType.Initial) return null;
         string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName.Replace(" ","")}DataFile.json");
@@ -374,40 +361,27 @@ public static class FSMIOUtility
         {
             case "Patrol":
                 PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
-                node.StateScript = new PatrolStateScript();
-                ((PatrolStateScript)node.StateScript).patrolPoints = patrolData.patrolPoints;
-                ((PatrolStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = patrolData;
                 break;
             case "Attack":
                 AttackData attackData = JsonUtility.FromJson<AttackData>(json);
-                node.StateScript = new AttackStateScript();
-                ((AttackStateScript)node.StateScript).attackDamage = attackData.attackDamage;
-                ((AttackStateScript)node.StateScript).attackFrequency = attackData.attackFrequency;
-                ((AttackStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = attackData;
                 break;
             case "Chase":
                 ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);
-                node.StateScript = new ChaseStateScript();
-                ((ChaseStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = chaseData;
                 break;
             case "Search":
                 SearchData searchData = JsonUtility.FromJson<SearchData>(json);
-                node.StateScript = new SearchStateScript();
-                ((SearchStateScript)node.StateScript).exploreRadius = searchData.exploreRadius;
-                ((SearchStateScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = searchData;
                 break;
             case "Hearing":
                 HearingData hearingData = JsonUtility.FromJson<HearingData>(json);
-                node.StateScript = new HearingConditionScript();
-                ((HearingConditionScript)node.StateScript).hearingRange = hearingData.hearingRange;
-                ((HearingConditionScript)node.StateScript).operand = hearingData.operand;
-                ((HearingConditionScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = hearingData;
                 break;
             case "Seeing":
                 SeeingData seeingData = JsonUtility.FromJson<SeeingData>(json);
-                node.StateScript = new SeeingConditionScript();
-                ((SeeingConditionScript)node.StateScript).distance = seeingData.distance;
-                ((SeeingConditionScript)node.StateScript).SetStateName(node.StateName);
+                node.StateScript = seeingData;
                 break;
         }
         return node.StateScript;

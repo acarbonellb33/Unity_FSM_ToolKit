@@ -34,56 +34,56 @@ public abstract class BehaviorScript : MonoBehaviour
         {
             if(options == null)
                 options = new List<StateScript>();
-            switch (((StateScript)newValue).GetType().ToString())
+            switch (((StateScriptData)newValue).GetType().ToString())
             {
-                case "PatrolStateScript":
+                case "PatrolData":
                     PatrolStateScript patrol = gameObject.AddComponent<PatrolStateScript>();
-                    foreach (var variable in ((StateScript)newValue).GetVariables())
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
                     {
                         patrol.SetVariableValue(variable.Key, variable.Value);
                     }
                     field.SetValue(this, patrol);
                     options.Add(patrol);
                     break;
-                case "ChaseStateScript":
+                case "ChaseData":
                     ChaseStateScript chase = gameObject.AddComponent<ChaseStateScript>();
-                    foreach (var variable in ((StateScript)newValue).GetVariables())
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
                     {
                         chase.SetVariableValue(variable.Key, variable.Value);
                     }
                     field.SetValue(this, chase);
                     options.Add(chase);
                     break;
-                case "AttackStateScript":
+                case "AttackData":
                     AttackStateScript attack = gameObject.AddComponent<AttackStateScript>();
-                    foreach (var variable in ((StateScript)newValue).GetVariables())
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
                     {
                         attack.SetVariableValue(variable.Key, variable.Value);
                     }
                     field.SetValue(this, attack);
                     options.Add(attack);
                     break;
-                case "SearchStateScript":
+                case "SearchData":
                     SearchStateScript search = gameObject.AddComponent<SearchStateScript>();
-                    foreach (var variable in ((StateScript)newValue).GetVariables())
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
                     {
                         search.SetVariableValue(variable.Key, variable.Value);
                     }
                     field.SetValue(this, search);
                     options.Add(search);
                     break;
-                case "HearingConditionScript":
+                case "HearingData":
                     HearingConditionScript hearing = gameObject.AddComponent<HearingConditionScript>();
-                    foreach (var variable in ((StateScript)newValue).GetVariables())
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
                     {
                         hearing.SetVariableValue(variable.Key, variable.Value);
                     }
                     field.SetValue(this, hearing);
                     options.Add(hearing);
                     break;
-                case "SeeingConditionScript":
+                case "SeeingData":
                     SeeingConditionScript seeing = gameObject.AddComponent<SeeingConditionScript>();
-                    foreach (var variable in ((StateScript)newValue).GetVariables())
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
                     {
                         seeing.SetVariableValue(variable.Key, variable.Value);
                     }

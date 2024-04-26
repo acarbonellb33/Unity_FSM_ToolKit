@@ -12,10 +12,6 @@ public class falseTest : BehaviorScript
 	[SerializeField]
 	public ChaseStateScript chase;
 
-	[Header("Hearing 0")]
-	[SerializeField]
-	public HearingConditionScript hearing0;
-
 	[Header("Hearing 1")]
 	[SerializeField]
 	public HearingConditionScript hearing1;
@@ -43,6 +39,10 @@ public class falseTest : BehaviorScript
 	[Header("Seeing 2")]
 	[SerializeField]
 	public SeeingConditionScript seeing2;
+
+	[Header("Hearing 0")]
+	[SerializeField]
+	public HearingConditionScript hearing0;
 
 	float waitHitTime = 2f;
 	float hitLastTime = 0f;

@@ -11,13 +11,13 @@ using UnityEngine.UIElements;
 
 public class FSMStateNode : FSMNode
 {
-    private List<StateScript> _dataObjects;
+    private List<StateScriptData> _dataObjects;
     public override void Initialize(string nodeName, FSMGraphView graphView,Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.State;
         
-        _dataObjects = new List<StateScript>(){new PatrolStateScript(), new ChaseStateScript(), new AttackStateScript(), new SearchStateScript()};
+        _dataObjects = new List<StateScriptData>(){new PatrolData(), new ChaseData(), new AttackData(), new SearchData()};
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
@@ -277,9 +277,9 @@ public class FSMStateNode : FSMNode
         {
             StateScript.GetStateName();
         }
-        catch (NullReferenceException e)
+        catch (NullReferenceException)
         {
-            foreach (StateScript enemyState in _dataObjects)
+            foreach (StateScriptData enemyState in _dataObjects)
             {
                 if (enemyState.GetStateName() == StateName)
                 {

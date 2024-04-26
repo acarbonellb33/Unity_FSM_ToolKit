@@ -3,7 +3,8 @@ public enum FSMStates
     Idle, 
     Patrol, 
     Chase, 
-    Attack, 
+    Attack,
+    Hit,
     Die, 
     Search,
     Alert

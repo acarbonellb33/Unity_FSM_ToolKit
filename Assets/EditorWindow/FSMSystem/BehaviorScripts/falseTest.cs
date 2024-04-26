@@ -44,6 +44,8 @@ public class falseTest : BehaviorScript
 	[SerializeField]
 	public SeeingConditionScript seeing2;
 
+	float waitHitTime = 2f;
+	float hitLastTime = 0f;
 	private void Start()
 	{
 		currentState = FSMStates.Chase;
@@ -62,6 +64,22 @@ public class falseTest : BehaviorScript
 			case FSMStates.Patrol:
 				UpdatePatrolState();
 				break;
+			case FSMStates.Hit:
+				UpdateHitState();
+				break;
+			case FSMStates.Die:
+				UpdateDieState();
+				break;
+		}
+		EnemyHealthSystem healthSystem = GetComponent<EnemyHealthSystem>();
+		if(healthSystem.GetCurrentHealth() < healthSystem.GetPreviousHealth())
+		{
+			ChangeHitState();
+			healthSystem.SetPreviousHealth(healthSystem.GetCurrentHealth());
+		}
+		if(healthSystem.GetCurrentHealth() <= 0)
+		{
+			ChangeDieState();
 		}
 	}
 	public void UpdateChaseState()
@@ -100,6 +118,20 @@ public class falseTest : BehaviorScript
 			ChangeSearchState();
 		}
 	}
+	public void UpdateHitState()
+	{
+		NavMeshAgent agent = GetComponent<NavMeshAgent>();
+		agent.isStopped = true;
+		if(Time.time >= hitLastTime + waitHitTime)
+		{
+			currentState = FSMStates.Chase;
+			agent.isStopped = false;
+		}
+	}
+	public void UpdateDieState()
+	{
+		GetComponent<EnemyHealthSystem>().Die();
+	}
 	private void ChangeChaseState()
 	{
 		currentState = FSMStates.Chase;
@@ -111,6 +143,14 @@ public class falseTest : BehaviorScript
 	private void ChangePatrolState()
 	{
 		currentState = FSMStates.Patrol;
+	}
+	private void ChangeHitState()
+	{
+		currentState = FSMStates.Hit;
+	}
+	private void ChangeDieState()
+	{
+		currentState = FSMStates.Die;
 	}
 	public GameObject AddObjectToList()
 	{

@@ -13,6 +13,7 @@ public static class FSMIOUtility
     private static string _initialState;
     private static string _graphName;
     private static string _containerFolderPath;
+    private static FSMHitSaveData _hitData;
     
     private static List<FSMGroup> _groups;
     private static List<FSMNode> _nodes;
@@ -25,11 +26,12 @@ public static class FSMIOUtility
     
     private static string _stateDataObject;
 
-    public static void Initialize(string graphName, FSMGraphView fsmGraphView, string initialState)
+    public static void Initialize(string graphName, FSMGraphView fsmGraphView, string initialState, FSMHitSaveData hitData)
     {
         _graphView = fsmGraphView;
         _initialState = initialState;
         _graphName = graphName;
+        _hitData = hitData;
         _containerFolderPath = $"Assets/FSMSystem/FSMs/{graphName}";
         
         _groups = new List<FSMGroup>();
@@ -65,7 +67,7 @@ public static class FSMIOUtility
         CreateStaticFolders();
         
         FSMGraphSaveData graphSaveData = CreateAsset<FSMGraphSaveData>("Assets/EditorWindow/FSMSystem/Graphs", _graphName);
-        graphSaveData.Initialize(_graphName, _initialState);
+        graphSaveData.Initialize(_graphName, _initialState, _hitData);
         FSMNodesContainerSO nodesContainer = CreateAsset<FSMNodesContainerSO>(_containerFolderPath, _graphName);
         nodesContainer.Initialize(_graphName);
         
@@ -266,6 +268,7 @@ public static class FSMIOUtility
         LoadGroups(graphSaveData.Groups);
         LoadNodes(graphSaveData.Nodes);
         LoadConnections();
+        LoadHitData(graphSaveData.HitData);
     }
     private static void LoadGroups(List<FSMGroupSaveData> groups)
     {
@@ -433,7 +436,10 @@ public static class FSMIOUtility
             }
         }
     }
-
+    private static void LoadHitData(FSMHitSaveData hitData)
+    {
+        _graphView.GetWindow().GetHitStatePopup().Initialize(hitData);
+    }
     #endregion
 
     #region CreationMethods

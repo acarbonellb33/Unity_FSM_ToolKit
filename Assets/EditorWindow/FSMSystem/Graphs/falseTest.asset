@@ -137,3 +137,7 @@ MonoBehaviour:
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy
+  <HitData>k__BackingField:
+    <HitEnable>k__BackingField: 1
+    <TimeToWait>k__BackingField: 2
+    <CanDie>k__BackingField: 1

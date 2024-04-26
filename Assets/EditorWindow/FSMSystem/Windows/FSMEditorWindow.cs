@@ -7,6 +7,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
+using PopupWindow = UnityEditor.PopupWindow;
 
 public class FSMEditorWindow : EditorWindow
 {
@@ -18,6 +19,7 @@ public class FSMEditorWindow : EditorWindow
     public static List<string> _stateNames = new List<string>();
     private static FSMEditorWindow _window;
     private static FSMGraphSaveData _saveData;
+    private static FSMHitStatePopup _hitStatePopup;
 
     public string initialState;
 
@@ -30,6 +32,8 @@ public class FSMEditorWindow : EditorWindow
     {
         _saveData = saveData;
         _fileName = saveData.FileName;
+        _hitStatePopup = new FSMHitStatePopup();
+        _hitStatePopup.Initialize(saveData.HitData);
 
         EditorPrefs.SetString(FSMInspectorKey, FindGameObjectWithClass<FSMGraph>().ToString());
 
@@ -44,7 +48,7 @@ public class FSMEditorWindow : EditorWindow
         string assetPath = $"Assets/EditorWindow/FSMSystem/Graphs/{saveData.FileName}.asset";
         if (string.IsNullOrEmpty(assetPath))return;
         _graphView.ClearGraph();
-        FSMIOUtility.Initialize(saveData.FileName, _graphView, saveData.InitialState);
+        FSMIOUtility.Initialize(saveData.FileName, _graphView, saveData.InitialState, saveData.HitData);
         FSMIOUtility.Load();
     }
 
@@ -116,12 +120,18 @@ public class FSMEditorWindow : EditorWindow
         Button clearButton = FSMElementUtility.CreateButton("Clear", () => Clear());
         _miniMapButton = FSMElementUtility.CreateButton("MiniMap", () => ToggleMiniMap());
 
+        Button hitStateButton = null;
+        hitStateButton = FSMElementUtility.CreateButton("Hit State", () => OpenHitPopup(hitStateButton));
+        hitStateButton.AddToClassList("Button--hit-state");
+        
         toolbar.Add(_fileNameTextField);
         toolbar.Add(_saveButton);
         toolbar.Add(reloadButton);
         toolbar.Add(clearButton);
         toolbar.Add(_miniMapButton);
+        toolbar.Add(hitStateButton);
 
+        
         toolbar.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
         rootVisualElement.Add(toolbar);
         box.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
@@ -145,7 +155,11 @@ public class FSMEditorWindow : EditorWindow
             return;
         }
         _isCompiling = true;
-        FSMIOUtility.Initialize(_fileName, _graphView, initialState);
+        
+        FSMHitSaveData hitData = new FSMHitSaveData();
+        hitData.Initialize(_hitStatePopup.IsHitStateEnabled(), _hitStatePopup.GetTimeToWait(), _hitStatePopup.CanDie());
+        
+        FSMIOUtility.Initialize(_fileName, _graphView, initialState, hitData);
         if (FSMIOUtility.Save())
         {
             _shouldClose = true;
@@ -159,13 +173,19 @@ public class FSMEditorWindow : EditorWindow
     private void Reload()
     {
         Clear();
-        FSMIOUtility.Initialize(_saveData.FileName, _graphView, initialState);
+
+        FSMIOUtility.Initialize(_saveData.FileName, _graphView, initialState, _saveData.HitData);
         FSMIOUtility.Load();
     }
     private void ToggleMiniMap()
     {
         _graphView.ToggleMiniMap();
         _miniMapButton.ToggleInClassList("fsm-toolbar__button__selected");
+    }
+    private void OpenHitPopup(VisualElement buttonElement)
+    {
+        Rect buttonRect = buttonElement.worldBound;
+        PopupWindow.Show(new Rect(buttonRect.x-187.5f, buttonRect.y-77.5f, 250, 100), _hitStatePopup);
     }
     #endregion
 
@@ -184,7 +204,9 @@ public class FSMEditorWindow : EditorWindow
     {
         return _fileName;
     }
-
+    public FSMHitStatePopup GetHitStatePopup()
+    {
+        return _hitStatePopup;
+    }
     #endregion
-    
 }

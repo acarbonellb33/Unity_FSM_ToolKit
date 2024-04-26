@@ -66,6 +66,9 @@ public static class EnemyStateMachineEditor
             scriptContent += "\n";
         }
         
+        scriptContent += $"\tfloat waitHitTime = {saveData.HitData.TimeToWait}f;\n";
+        scriptContent += "\tfloat hitLastTime = 0f;\n";
+
         scriptContent += "\tprivate void Start()\n";
         scriptContent += "\t{\n";
         scriptContent += $"\t\tcurrentState = FSMStates.{saveData.InitialState};\n";
@@ -87,7 +90,34 @@ public static class EnemyStateMachineEditor
             }
         }
         
-        scriptContent += "\t\t}\n";
+        if(saveData.HitData.HitEnable)
+        {
+            scriptContent += "\t\t\tcase FSMStates.Hit:\n";
+            scriptContent += "\t\t\t\tUpdateHitState();\n";
+            scriptContent += "\t\t\t\tbreak;\n";
+            if (saveData.HitData.CanDie)
+            {
+                scriptContent += "\t\t\tcase FSMStates.Die:\n";
+                scriptContent += "\t\t\t\tUpdateDieState();\n";
+                scriptContent += "\t\t\t\tbreak;\n";
+            }
+            scriptContent += "\t\t}\n";
+            scriptContent += "\t\tEnemyHealthSystem healthSystem = GetComponent<EnemyHealthSystem>();\n";
+            scriptContent += "\t\tif(healthSystem.GetCurrentHealth() < healthSystem.GetPreviousHealth())\n";
+            scriptContent += "\t\t{\n";
+            scriptContent += "\t\t\tChangeHitState();\n";
+            scriptContent += "\t\t\thealthSystem.SetPreviousHealth(healthSystem.GetCurrentHealth());\n";
+            scriptContent += "\t\t}\n";
+            if (saveData.HitData.CanDie)
+            {
+                scriptContent += "\t\tif(healthSystem.GetCurrentHealth() <= 0)\n";
+                scriptContent += "\t\t{\n";
+                scriptContent += "\t\t\tChangeDieState();\n";
+                scriptContent += "\t\t}\n";
+            }
+        }
+        else scriptContent += "\t\t}\n";
+
         scriptContent += "\t}\n";
         
         foreach (var node in states.Distinct())
@@ -107,6 +137,28 @@ public static class EnemyStateMachineEditor
                 scriptContent += "\t}\n";
             }
         }
+
+        if (saveData.HitData.HitEnable)
+        {
+            scriptContent += $"\tpublic void UpdateHitState()\n";
+            scriptContent += "\t{\n";
+            scriptContent += "\t\tNavMeshAgent agent = GetComponent<NavMeshAgent>();\n";
+            scriptContent += "\t\tagent.isStopped = true;\n";
+            scriptContent += "\t\tif(Time.time >= hitLastTime + waitHitTime)\n";
+            scriptContent += "\t\t{\n";
+            scriptContent += $"\t\t\tcurrentState = FSMStates.{saveData.InitialState};\n";
+            scriptContent += "\t\t\tagent.isStopped = false;\n";
+            scriptContent += "\t\t}\n";
+            scriptContent += "\t}\n";
+            if (saveData.HitData.CanDie)
+            {
+                scriptContent += $"\tpublic void UpdateDieState()\n";
+                scriptContent += "\t{\n";
+                scriptContent += "\t\tGetComponent<EnemyHealthSystem>().Die();\n";
+                scriptContent += "\t}\n";
+            }
+        }
+        
         
         foreach (var node in states.Distinct())
         {
@@ -115,6 +167,21 @@ public static class EnemyStateMachineEditor
                 scriptContent += $"\tprivate void Change{node.Name.Replace(" ","")}State()\n";
                 scriptContent += "\t{\n";
                 scriptContent += $"\t\tcurrentState = FSMStates.{node.Name};\n";
+                scriptContent += "\t}\n";
+            }
+        }
+        
+        if (saveData.HitData.HitEnable)
+        {
+            scriptContent += $"\tprivate void ChangeHitState()\n";
+            scriptContent += "\t{\n";
+            scriptContent += $"\t\tcurrentState = FSMStates.Hit;\n";
+            scriptContent += "\t}\n";
+            if (saveData.HitData.CanDie)
+            {
+                scriptContent += $"\tprivate void ChangeDieState()\n";
+                scriptContent += "\t{\n";
+                scriptContent += $"\t\tcurrentState = FSMStates.Die;\n";
                 scriptContent += "\t}\n";
             }
         }

@@ -70,3 +70,10 @@ TextField:focus > .unity-text-field__label
 {
     background-color: var(--fsm-colors-window-light-grey-1);
 }
+
+/* Custom style for the "Hit State" button to align it to the right */
+.Button--hit-state
+{
+    margin-left: auto; /* Aligns the button to the right */
+    margin-right: 0px;
+}

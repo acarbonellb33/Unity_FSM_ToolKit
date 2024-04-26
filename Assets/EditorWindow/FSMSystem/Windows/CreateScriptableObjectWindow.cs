@@ -43,7 +43,7 @@ public class CreateScriptableObjectWindow : EditorWindow
             FSMGraphSaveData newScriptableObject = ScriptableObject.CreateInstance<FSMGraphSaveData>();
             
             // Set its name using the provided name
-            newScriptableObject.Initialize(name.value, "");
+            newScriptableObject.Initialize(name.value, "", new FSMHitSaveData());
             
             FSMInitialNode node = new FSMInitialNode();
             node.Initialize( "Initial State", null, new Vector2(100, 100));

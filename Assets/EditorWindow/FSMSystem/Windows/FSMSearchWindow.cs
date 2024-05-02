@@ -56,6 +56,16 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
                 userData = FSMNodeType.Transition,
                 level = 2
             },
+            new SearchTreeEntry(new GUIContent("Distance", _indentationIcon))
+            {
+                userData = FSMNodeType.Transition,
+                level = 2
+            },
+            new SearchTreeEntry(new GUIContent("Health", _indentationIcon))
+            {
+                userData = FSMNodeType.DualTransition,
+                level = 2
+            },
             new SearchTreeGroupEntry(new GUIContent("Dual Transition Node"), 1),
             new SearchTreeEntry(new GUIContent("Hearing", _indentationIcon))
             {
@@ -63,6 +73,16 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
                 level = 2
             },
             new SearchTreeEntry(new GUIContent("Seeing", _indentationIcon))
+            {
+                userData = FSMNodeType.DualTransition,
+                level = 2
+            },
+            new SearchTreeEntry(new GUIContent("Distance", _indentationIcon))
+            {
+                userData = FSMNodeType.DualTransition,
+                level = 2
+            },
+            new SearchTreeEntry(new GUIContent("Health", _indentationIcon))
             {
                 userData = FSMNodeType.DualTransition,
                 level = 2

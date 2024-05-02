@@ -15,7 +15,7 @@ MonoBehaviour:
   <NodeName>k__BackingField: Chase
   <Connections>k__BackingField:
   - <Text>k__BackingField: Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: e1a05e244810b1c4fb62e12a2da7e82c, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: eda004cbc855a69409c0fa752124c673, type: 2}
   <NodeType>k__BackingField: 0
   <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
     10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"

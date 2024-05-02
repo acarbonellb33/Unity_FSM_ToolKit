@@ -349,6 +349,14 @@ public static class FSMIOUtility
                 SeeingData seeingData = JsonUtility.FromJson<SeeingData>(json);
                 node.StateScript = seeingData;
                 break;
+            case "Distance":
+                DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);
+                node.StateScript = distanceData;
+                break;
+            case "Health":
+                HealthData healthData = JsonUtility.FromJson<HealthData>(json);
+                node.StateScript = healthData;
+                break;
         }
         return node.StateScript;
     }
@@ -382,6 +390,14 @@ public static class FSMIOUtility
             case "Seeing":
                 SeeingData seeingData = JsonUtility.FromJson<SeeingData>(json);
                 node.StateScript = seeingData;
+                break;
+            case "Distance":
+                DistanceData distanceData = JsonUtility.FromJson<DistanceData>(json);
+                node.StateScript = distanceData;
+                break;
+            case "Health":
+                HealthData healthData = JsonUtility.FromJson<HealthData>(json);
+                node.StateScript = healthData;
                 break;
         }
         return node.StateScript;

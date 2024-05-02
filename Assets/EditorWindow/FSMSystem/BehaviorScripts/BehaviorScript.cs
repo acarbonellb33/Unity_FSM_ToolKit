@@ -81,6 +81,15 @@ public abstract class BehaviorScript : MonoBehaviour
                     field.SetValue(this, hearing);
                     options.Add(hearing);
                     break;
+                case "DistanceData":
+                    DistanceConditionScript distance = gameObject.AddComponent<DistanceConditionScript>();
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                    {
+                        distance.SetVariableValue(variable.Key, variable.Value);
+                    }
+                    field.SetValue(this, distance);
+                    options.Add(distance);
+                    break;
                 case "SeeingData":
                     SeeingConditionScript seeing = gameObject.AddComponent<SeeingConditionScript>();
                     foreach (var variable in ((StateScriptData)newValue).GetVariables())
@@ -89,6 +98,15 @@ public abstract class BehaviorScript : MonoBehaviour
                     }
                     field.SetValue(this, seeing);
                     options.Add(seeing);
+                    break;
+                case "HealthData":
+                    HealthConditionScript health = gameObject.AddComponent<HealthConditionScript>();
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                    {
+                        health.SetVariableValue(variable.Key, variable.Value);
+                    }
+                    field.SetValue(this, health);
+                    options.Add(health);
                     break;
             }
         }

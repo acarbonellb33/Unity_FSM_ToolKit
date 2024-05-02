@@ -15,7 +15,7 @@ public class FSMTransitionNode : FSMNode
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.Transition;
         
-        _dataObjects = new List<StateScriptData>(){new SeeingData(), new HearingData()};
+        _dataObjects = new List<StateScriptData>(){new SeeingData(), new HearingData(), new DistanceData(), new HealthData()};
      
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
@@ -56,9 +56,9 @@ public class FSMTransitionNode : FSMNode
     private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
     {
         string name = StateName.Split(' ')[0];
-        if (name == "Hearing")
+        if (name == "Distance")
         {
-            CreateHearingAttributes(attributes, customDataContainer);
+            CreateDistanceAttributes(attributes, customDataContainer);
             return;
         }
         VisualElement stateAttributeContainer = new VisualElement();
@@ -159,12 +159,12 @@ public class FSMTransitionNode : FSMNode
         customDataContainer.Add(stateAttributeContainer);
     }
 
-    private void CreateHearingAttributes(List<string> attributes, VisualElement customDataContainer)
+    private void CreateDistanceAttributes(List<string> attributes, VisualElement customDataContainer)
     {
         VisualElement stateAttributeContainer = new VisualElement();
         stateAttributeContainer.AddToClassList("fsm-node_state-attribute-container-hearing");
         
-        Label label = FSMElementUtility.CreateLabel("Hearing Range");
+        Label label = FSMElementUtility.CreateLabel("Distance From Player");
         label.AddToClassList("fsm-node_state-attribute-container-hearing-label");
         stateAttributeContainer.Add(label);
     

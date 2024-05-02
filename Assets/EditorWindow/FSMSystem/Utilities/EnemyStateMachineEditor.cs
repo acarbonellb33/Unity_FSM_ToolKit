@@ -65,9 +65,12 @@ public static class EnemyStateMachineEditor
             scriptContent += $"\tpublic {variableName}Script {name};\n";
             scriptContent += "\n";
         }
-        
-        scriptContent += $"\tfloat waitHitTime = {saveData.HitData.TimeToWait}f;\n";
-        scriptContent += "\tfloat hitLastTime = 0f;\n";
+
+        if (saveData.HitData.HitEnable)
+        {
+            scriptContent += $"\tfloat waitHitTime = {saveData.HitData.TimeToWait}f;\n";
+            scriptContent += "\tfloat hitLastTime = 0f;\n";
+        }
 
         scriptContent += "\tprivate void Start()\n";
         scriptContent += "\t{\n";
@@ -239,10 +242,16 @@ public static class EnemyStateMachineEditor
             
             string pastTrue = pastFalse;
             
-            if(pastFalse[2] != 'e')pastFalse = $"\t\telse if(!{conditionName}.Condition()";
+            if (pastFalse == "")
+            {
+                pastFalse = $"\t\telse if(!{conditionName}.Condition()";
+            }
             else pastFalse += $" && !{conditionName}.Condition()";
-            
-            if(pastTrue[2] != 'e')pastTrue = $"\t\telse if({conditionName}.Condition()";
+
+            if (pastTrue == "")
+            {
+                pastTrue = $"\t\telse if({conditionName}.Condition()";
+            }
             else pastTrue += $" && {conditionName}.Condition()";
 
             return GenerateConditionsRecursive(nodeSaveData2, test, false, check2, pastTrue) +
@@ -303,9 +312,9 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t{\n";
         scriptContent += "\t\tserializedObject.Update();\n";
         scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
-        scriptContent += $"\t\tstring[] options = new string[{nameLowerCapital}.options.Count];\n";
         scriptContent += $"\t\tType type = typeof({nameLowerCapital});\n";
         scriptContent += "\t\tFieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);\n";
+        scriptContent += $"\t\tstring[] options = new string[fields.Length];\n";
         scriptContent += "\t\tint x = 0;\n";
         scriptContent += "\t\tforeach (FieldInfo field in fields) \n";
         scriptContent += "\t\t{\n";

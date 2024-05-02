@@ -15,7 +15,7 @@ public class FSMDualTransitionNode : FSMNode
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.Transition;
         
-        _dataObjects = new List<StateScriptData>(){new SeeingData(), new HearingData()};
+        _dataObjects = new List<StateScriptData>(){new SeeingData(), new HearingData(), new DistanceData(), new HealthData()};
      
         FSMConnectionSaveData connectionSaveData1 = new FSMConnectionSaveData()
         {

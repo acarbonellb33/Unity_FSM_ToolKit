@@ -27,9 +27,9 @@ public class attackTestEditor : Editor
 	{
 		serializedObject.Update();
 		attackTest attackTest = (attackTest)target;
-		string[] options = new string[attackTest.options.Count];
 		Type type = typeof(attackTest);
 		FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+		string[] options = new string[fields.Length];
 		int x = 0;
 		foreach (FieldInfo field in fields) 
 		{
@@ -52,13 +52,41 @@ public class attackTestEditor : Editor
 			{
 				if (iterator.name != "m_Script")
 				{
-					EditorGUI.BeginChangeCheck();
-					EditorGUILayout.PropertyField(iterator, true);
-					if (EditorGUI.EndChangeCheck())
+					if (iterator.isArray)
 					{
-						selectedObject.SetStateName(selectedOptionName);
-						selectedObjectSerialized.ApplyModifiedProperties();
-						FSMIOUtility.CreateJson(selectedObject, "attackTest");
+						EditorGUILayout.Space();
+						EditorGUILayout.LabelField("Create a Patrol Waypoint", EditorStyles.boldLabel);
+						EditorGUILayout.Space();
+						for (int i = 0; i < iterator.arraySize; i++)
+						{
+							EditorGUILayout.BeginHorizontal();
+							SerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);
+							if (gameObjectElementProperty.objectReferenceValue != null)
+							{
+								GameObject gameObject = (GameObject)gameObjectElementProperty.objectReferenceValue;
+								EditorGUILayout.PropertyField(gameObjectElementProperty, GUIContent.none);
+								if (GUILayout.Button("Remove", GUILayout.Width(70)))
+								{
+									RemovePatrolPoint(gameObject);
+								}
+								FSMIOUtility.CreateJson(selectedObject, "attackTest");
+							}
+							EditorGUILayout.EndHorizontal();
+						}
+						if (GUILayout.Button("Create and Add a Patrol Point"))
+						{
+							CreateAndAddGameObject(attackTest);
+						}
+					}
+					else
+					{
+						EditorGUI.BeginChangeCheck();
+						EditorGUILayout.PropertyField(iterator, true);
+						if (EditorGUI.EndChangeCheck())
+						{
+							selectedObjectSerialized.ApplyModifiedProperties();
+							FSMIOUtility.CreateJson(selectedObject, "attackTest");
+						}
 					}
 				}
 				nextVisible = iterator.NextVisible(false);
@@ -69,6 +97,19 @@ public class attackTestEditor : Editor
 			}
 		}
 		serializedObject.ApplyModifiedProperties();
+	}
+	private void CreateAndAddGameObject(attackTest attackTest)
+	{
+		attackTest.AddObjectToList();
+	}
+	private void RemovePatrolPoint(GameObject patrolPoint)
+	{
+		attackTest attackTest = (attackTest)target;
+		attackTest.patrol.RemovePatrolPoint(patrolPoint);
+		if(GameObject.Find(patrolPoint.name) != null)
+		{
+			DestroyImmediate(patrolPoint);
+		}
 	}
 	private string FixName(string oldName)
 	{

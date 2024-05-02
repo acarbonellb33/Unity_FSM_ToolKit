@@ -1,7 +1,7 @@
 public class HearingData : StateScriptData
 {
-    public FSMOperands operand;
     public float hearingRange = 10f;
+    public float minPlayerSpeed = 5f;
     
     public HearingData()
     {

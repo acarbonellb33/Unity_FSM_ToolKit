@@ -12,10 +12,6 @@ public class newUpdate : BehaviorScript
 	[SerializeField]
 	public AttackStateScript attack;
 
-	[Header("Hearing 0")]
-	[SerializeField]
-	public HearingConditionScript hearing0;
-
 	[Header("Seeing 0")]
 	[SerializeField]
 	public SeeingConditionScript seeing0;
@@ -24,33 +20,41 @@ public class newUpdate : BehaviorScript
 	[SerializeField]
 	public ChaseStateScript chase;
 
-	[Header("Seeing 1")]
+	[Header("Hearing 0")]
 	[SerializeField]
-	public SeeingConditionScript seeing1;
-
-	[Header("Search")]
-	[SerializeField]
-	public SearchStateScript search;
+	public HearingConditionScript hearing0;
 
 	[Header("Hearing 1")]
 	[SerializeField]
 	public HearingConditionScript hearing1;
 
+	[Header("Seeing 1")]
+	[SerializeField]
+	public SeeingConditionScript seeing1;
+
 	[Header("Hearing 2")]
 	[SerializeField]
 	public HearingConditionScript hearing2;
 
-	[Header("Seeing 2")]
+	[Header("Patrol")]
 	[SerializeField]
-	public SeeingConditionScript seeing2;
+	public PatrolStateScript patrol;
+
+	[Header("Distance 0")]
+	[SerializeField]
+	public DistanceConditionScript distance0;
+
+	[Header("Distance 1")]
+	[SerializeField]
+	public DistanceConditionScript distance1;
 
 	[Header("Hearing 3")]
 	[SerializeField]
 	public HearingConditionScript hearing3;
 
-	[Header("Patrol")]
+	[Header("Health")]
 	[SerializeField]
-	public PatrolStateScript patrol;
+	public HealthConditionScript health;
 
 	float waitHitTime = 2f;
 	float hitLastTime = 0f;
@@ -68,9 +72,6 @@ public class newUpdate : BehaviorScript
 				break;
 			case FSMStates.Chase:
 				UpdateChaseState();
-				break;
-			case FSMStates.Search:
-				UpdateSearchState();
 				break;
 			case FSMStates.Patrol:
 				UpdatePatrolState();
@@ -96,15 +97,19 @@ public class newUpdate : BehaviorScript
 	public void UpdateAttackState()
 	{
 		attack.Execute();
-		if(hearing0.Condition() && seeing0.Condition() && hearing2.Condition())
+		if(hearing3.Condition())
 		{
 			ChangePatrolState();
 		}
-		else if(hearing0.Condition() && seeing0.Condition() && !hearing2.Condition() && hearing3.Condition() && seeing2.Condition())
+		else if(!hearing3.Condition() && seeing0.Condition() && hearing1.Condition())
 		{
 			ChangePatrolState();
 		}
-		else if(hearing0.Condition() && !seeing0.Condition())
+		else if(!hearing3.Condition() && seeing0.Condition() && !hearing1.Condition() && hearing2.Condition() && seeing1.Condition())
+		{
+			ChangePatrolState();
+		}
+		else if(!hearing3.Condition() && !seeing0.Condition())
 		{
 			ChangeChaseState();
 		}
@@ -112,15 +117,7 @@ public class newUpdate : BehaviorScript
 	public void UpdateChaseState()
 	{
 		chase.Execute();
-		if(seeing1.Condition())
-		{
-			ChangeSearchState();
-		}
-	}
-	public void UpdateSearchState()
-	{
-		search.Execute();
-		if(hearing1.Condition())
+		if(health.Condition() && distance0.Condition() && distance1.Condition() && hearing0.Condition())
 		{
 			ChangeAttackState();
 		}
@@ -128,7 +125,7 @@ public class newUpdate : BehaviorScript
 	public void UpdatePatrolState()
 	{
 		patrol.Execute();
-		if(hearing1.Condition())
+		if(hearing0.Condition())
 		{
 			ChangeAttackState();
 		}
@@ -154,10 +151,6 @@ public class newUpdate : BehaviorScript
 	private void ChangeChaseState()
 	{
 		currentState = FSMStates.Chase;
-	}
-	private void ChangeSearchState()
-	{
-		currentState = FSMStates.Search;
 	}
 	private void ChangePatrolState()
 	{

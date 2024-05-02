@@ -8,6 +8,10 @@ using System.Reflection;
 [Serializable]
 public class attackTest : BehaviorScript
 {
+	[Header("Chase")]
+	[SerializeField]
+	public ChaseStateScript chase;
+
 	[Header("Attack")]
 	[SerializeField]
 	public AttackStateScript attack;
@@ -16,20 +20,34 @@ public class attackTest : BehaviorScript
 	[SerializeField]
 	public HearingConditionScript hearing0;
 
+	[Header("Seeing")]
+	[SerializeField]
+	public SeeingConditionScript seeing;
+
+	[Header("Search")]
+	[SerializeField]
+	public SearchStateScript search;
+
 	[Header("Hearing 1")]
 	[SerializeField]
 	public HearingConditionScript hearing1;
 
-	[Header("Chase")]
+	[Header("Distance 0")]
 	[SerializeField]
-	public ChaseStateScript chase;
+	public DistanceConditionScript distance0;
 
-	[Header("Seeing 0")]
+	[Header("Distance 1")]
 	[SerializeField]
-	public SeeingConditionScript seeing0;
+	public DistanceConditionScript distance1;
 
-	float waitHitTime = 6f;
-	float hitLastTime = 0f;
+	[Header("Patrol")]
+	[SerializeField]
+	public PatrolStateScript patrol;
+
+	[Header("Distance 2")]
+	[SerializeField]
+	public DistanceConditionScript distance2;
+
 	private void Start()
 	{
 		currentState = FSMStates.Chase;
@@ -39,75 +57,89 @@ public class attackTest : BehaviorScript
 	{
 		switch (currentState)
 		{
-			case FSMStates.Attack:
-				UpdateAttackState();
-				break;
 			case FSMStates.Chase:
 				UpdateChaseState();
 				break;
-			case FSMStates.Hit:
-				UpdateHitState();
+			case FSMStates.Attack:
+				UpdateAttackState();
 				break;
-			case FSMStates.Die:
-				UpdateDieState();
+			case FSMStates.Search:
+				UpdateSearchState();
 				break;
-		}
-		EnemyHealthSystem healthSystem = GetComponent<EnemyHealthSystem>();
-		if(healthSystem.GetCurrentHealth() < healthSystem.GetPreviousHealth())
-		{
-			ChangeHitState();
-			healthSystem.SetPreviousHealth(healthSystem.GetCurrentHealth());
-		}
-		if(healthSystem.GetCurrentHealth() <= 0)
-		{
-			ChangeDieState();
-		}
-	}
-	public void UpdateAttackState()
-	{
-		attack.Execute();
-		if(hearing1.Condition())
-		{
-			ChangeChaseState();
+			case FSMStates.Patrol:
+				UpdatePatrolState();
+				break;
 		}
 	}
 	public void UpdateChaseState()
 	{
 		chase.Execute();
-		if(seeing0.Condition() && hearing0.Condition())
+		if(distance2.Condition())
+		{
+			ChangeSearchState();
+		}
+	}
+	public void UpdateAttackState()
+	{
+		attack.Execute();
+		if(distance0.Condition() && distance1.Condition())
+		{
+			ChangeChaseState();
+		}
+		else if(distance0.Condition() && !distance1.Condition())
+		{
+			ChangeSearchState();
+		}
+	}
+	public void UpdateSearchState()
+	{
+		search.Execute();
+		if(hearing1.Condition())
 		{
 			ChangeAttackState();
 		}
 	}
-	public void UpdateHitState()
+	public void UpdatePatrolState()
 	{
-		NavMeshAgent agent = GetComponent<NavMeshAgent>();
-		agent.isStopped = true;
-		if(Time.time >= hitLastTime + waitHitTime)
+		patrol.Execute();
+		if(distance0.Condition() && distance1.Condition())
 		{
-			currentState = FSMStates.Chase;
-			agent.isStopped = false;
+			ChangeChaseState();
 		}
-	}
-	public void UpdateDieState()
-	{
-		GetComponent<EnemyHealthSystem>().Die();
-	}
-	private void ChangeAttackState()
-	{
-		currentState = FSMStates.Attack;
+		else if(distance0.Condition() && !distance1.Condition())
+		{
+			ChangeSearchState();
+		}
 	}
 	private void ChangeChaseState()
 	{
 		currentState = FSMStates.Chase;
 	}
-	private void ChangeHitState()
+	private void ChangeAttackState()
 	{
-		currentState = FSMStates.Hit;
+		currentState = FSMStates.Attack;
 	}
-	private void ChangeDieState()
+	private void ChangeSearchState()
 	{
-		currentState = FSMStates.Die;
+		currentState = FSMStates.Search;
+	}
+	private void ChangePatrolState()
+	{
+		currentState = FSMStates.Patrol;
+	}
+	public GameObject AddObjectToList()
+	{
+		GameObject newGameObject = new GameObject("Patrol Point " + patrol.patrolPoints.Count);
+		patrol.patrolPoints.Add(newGameObject);
+		return newGameObject;
+	}
+	public void RemoveObjectFromList(GameObject patrolPoint)
+	{
+		patrol.RemovePatrolPoint(patrolPoint);
+		if(GameObject.Find(patrolPoint.name) != null)
+		{
+			DestroyImmediate(patrolPoint);
+		}
 	}
 	private void OnFootstep() {}
 }

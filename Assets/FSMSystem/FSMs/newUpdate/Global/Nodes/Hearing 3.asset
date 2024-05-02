@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Hearing 3
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Next Action
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 782f1c486d4e7a543826fc0f64bdcd25, type: 2}
+  - <Text>k__BackingField: True
+    <NextNode>k__BackingField: {fileID: 11400000, guid: d9e2dea189c58304a9519a22ca79b5e0, type: 2}
+  - <Text>k__BackingField: False
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 798b4e919e779ec48ac8fbb3acfc5445, type: 2}
   <NodeType>k__BackingField: 1
-  <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"hearingRange\": 10.0\n}"
+  <DataObject>k__BackingField: "{\n    \"hearingRange\": 10.0,\n    \"minPlayerSpeed\":
+    5.0\n}"

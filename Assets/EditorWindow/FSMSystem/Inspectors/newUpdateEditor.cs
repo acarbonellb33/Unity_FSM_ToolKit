@@ -27,9 +27,9 @@ public class newUpdateEditor : Editor
 	{
 		serializedObject.Update();
 		newUpdate newUpdate = (newUpdate)target;
-		string[] options = new string[newUpdate.options.Count];
 		Type type = typeof(newUpdate);
 		FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+		string[] options = new string[fields.Length];
 		int x = 0;
 		foreach (FieldInfo field in fields) 
 		{

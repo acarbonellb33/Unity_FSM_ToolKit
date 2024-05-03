@@ -154,6 +154,10 @@
     -unity-font-style: bold;
 }
 
+.fsm-node_toggle{
+    margin-top: 8px;
+}
+
 /*BUILD IN*/
 .unity-toggle_text{
     margin-left: 2px;

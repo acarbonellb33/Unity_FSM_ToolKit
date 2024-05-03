@@ -12,6 +12,12 @@ using UnityEngine.UIElements;
 public class FSMStateNode : FSMNode
 {
     private List<StateScriptData> _dataObjects;
+    
+    //Animator Trigger
+    private bool _hasAnimatorTrigger = false;
+    private string _animatorParameter;
+    private string _parameterType;
+    private string _animatorValue;
     public override void Initialize(string nodeName, FSMGraphView graphView,Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
@@ -36,12 +42,29 @@ public class FSMStateNode : FSMNode
         foreach (FSMConnectionSaveData connection in Choices)
         {
             Port connectionPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output, Port.Capacity.Multi);
-
+            if (!connectionPort.connected)
+            {
+                // Apply orange color to the port
+                connectionPort.portColor = Color.red;
+            }
             connectionPort.userData = connection;
 
             outputContainer.Add(connectionPort);
             outputContainer.AddToClassList("fsm-node_input-output-container");
         }
+        
+        Toggle showPopupToggle = new Toggle()
+        {
+            label = "Enable Animator Trigger",
+            value = _hasAnimatorTrigger,
+        };
+        showPopupToggle.RegisterValueChangedCallback(evt =>
+        {
+            ShowAnimatorParameterDropdown(showPopupToggle);
+            
+        });
+        showPopupToggle.AddToClassList("fsm-node_toggle");
+        
         
         VisualElement customDataContainer = new VisualElement();
         //customDataContainer.AddToClassList("fsm-node_custom-data-container");
@@ -50,7 +73,11 @@ public class FSMStateNode : FSMNode
 
         CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
         
+        extensionContainer.Add(showPopupToggle);
+        if(showPopupToggle.value)AddDropdownFields();
         extensionContainer.Add(customDataContainer);
+        
+        mainContainer.style.backgroundColor = new Color(200f/255f, 250f/255f, 100f/255f);
 
         RefreshExpandedState();
     }
@@ -305,6 +332,305 @@ public class FSMStateNode : FSMNode
             }
         }
         return resultString;
+    }
+
+    #endregion
+
+    #region Animator Methods
+
+    private void ShowAnimatorParameterDropdown(Toggle toggle)
+    {
+        if (!toggle.value)
+        {
+            if (_hasAnimatorTrigger)
+            {
+                extensionContainer.RemoveAt(2);
+                _hasAnimatorTrigger = false;
+            }
+            extensionContainer.RemoveAt(1);
+            return;
+        }
+
+        // Get all animator parameters
+        List<string> animatorParameters = GetAllAnimatorParameters();
+
+        // Create a dropdown menu
+        DropdownField dropdown = new DropdownField("Select Parameter", animatorParameters, 0);
+        dropdown.RegisterValueChangedCallback(evt =>
+        {
+            // Show text field or float field based on the parameter type
+            string selectedParameter = evt.newValue;
+            string parameterType = GetParameterType(selectedParameter);
+
+            if (_hasAnimatorTrigger)
+            {
+                extensionContainer.RemoveAt(2);
+            }
+            
+            if (parameterType == "Float")
+            {
+                FloatField floatField = new FloatField()
+                {
+                    label = selectedParameter
+                };
+                floatField.AddToClassList("fsm-node_textfield");
+                floatField.RegisterCallback<ChangeEvent<float>>(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,floatField);
+            }
+            else if (parameterType == "Integer")
+            {
+                IntegerField integerField = new IntegerField()
+                {
+                    label = selectedParameter
+                };
+                integerField.AddToClassList("fsm-node_textfield");
+                integerField.RegisterCallback<ChangeEvent<int>>(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,integerField);
+            }
+            else if (parameterType == "Bool")
+            {
+                Toggle toggleField = new Toggle()
+                {
+                    label = selectedParameter
+                };
+                toggleField.AddToClassList("fsm-node_toggle");
+                toggleField.RegisterValueChangedCallback(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,toggleField);
+            }
+            _hasAnimatorTrigger = true;
+        });
+
+        // Add the dropdown menu below the toggle
+        extensionContainer.Insert(1, dropdown);
+        
+        RefreshExpandedState();
+    }
+
+    private void AddDropdownFields()
+    {
+        List<string> animatorParameters = GetAllAnimatorParameters();
+        
+        DropdownField dropdown = new DropdownField("Select Parameter", animatorParameters, _animatorParameter);
+ 
+        if (_parameterType == "Float")
+        {
+            FloatField floatField = new FloatField()
+            {
+                label = dropdown.value,
+                value = float.Parse(_animatorValue)
+            };
+            floatField.AddToClassList("fsm-node_textfield");
+            floatField.RegisterCallback<ChangeEvent<float>>(e =>
+            {
+                _animatorValue = e.newValue.ToString();
+            });
+            extensionContainer.Insert(1, floatField);
+        }
+        else if (_parameterType == "Integer")
+        {
+            IntegerField integerField = new IntegerField()
+            {
+                label = dropdown.value,
+                value = int.Parse(_animatorValue)
+            };
+            integerField.AddToClassList("fsm-node_textfield");
+            integerField.RegisterCallback<ChangeEvent<int>>(e =>
+            {
+                _animatorValue = e.newValue.ToString();
+            });
+            extensionContainer.Insert(1, integerField);
+        }
+        else if (_parameterType == "Bool")
+        {
+            Toggle toggleField = new Toggle()
+            {
+                label = dropdown.value,
+                value = bool.Parse(_animatorValue)
+            };
+            toggleField.AddToClassList("fsm-node_toggle");
+            toggleField.RegisterValueChangedCallback(e =>
+            {
+                _animatorValue = e.newValue.ToString();
+            });
+            extensionContainer.Insert(1, toggleField);
+        }
+
+        dropdown.RegisterValueChangedCallback(evt =>
+        {
+            // Show text field or float field based on the parameter type
+            string selectedParameter = evt.newValue;
+            string parameterType = GetParameterType(selectedParameter);
+
+            if (_hasAnimatorTrigger)
+            {
+                extensionContainer.RemoveAt(2);
+            }
+            
+            if (parameterType == "Float")
+            {
+                FloatField floatField = new FloatField()
+                {
+                    label = selectedParameter
+                };
+                floatField.AddToClassList("fsm-node_textfield");
+                floatField.RegisterCallback<ChangeEvent<float>>(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,floatField);
+            }
+            else if (parameterType == "Integer")
+            {
+                IntegerField integerField = new IntegerField()
+                {
+                    label = selectedParameter
+                };
+                integerField.AddToClassList("fsm-node_textfield");
+                integerField.RegisterCallback<ChangeEvent<int>>(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,integerField);
+            }
+            else if (parameterType == "Bool")
+            {
+                Toggle toggleField = new Toggle()
+                {
+                    label = selectedParameter
+                };
+                toggleField.AddToClassList("fsm-node_toggle");
+                toggleField.RegisterValueChangedCallback(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,toggleField);
+            }
+            _hasAnimatorTrigger = true;
+        });
+        
+        extensionContainer.Insert(1, dropdown);
+        
+        RefreshExpandedState();
+    }
+
+    private string GetParameterType(string parameterName)
+    {
+        // Get the animator component from your object
+        Animator animator = GetAnimatorComponent();
+
+        // Get the type of the parameter
+        if (animator != null)
+        {
+            AnimatorControllerParameter[] parameters = animator.parameters;
+            foreach (AnimatorControllerParameter parameter in parameters)
+            {
+                if (parameter.name == parameterName)
+                {
+                    return parameter.type.ToString();
+                }
+            }
+        }
+
+        return "Unknown";
+    }
+    private void SetAnimatorParameter(string parameterName, object value, string parameterType)
+    {
+        // Set animator parameter value based on its type
+        Animator animator = GetAnimatorComponent();
+        if (animator != null)
+        {
+            switch (parameterType)
+            {
+                
+                case "Float":
+                    animator.SetFloat(parameterName, (float)value);Debug.Log("Parameter name: " + parameterName + " Value: " + value + " Parameter Type: " + parameterType);
+                    break;
+                case "Integer":
+                    animator.SetInteger(parameterName, (int)value);Debug.Log("Parameter name: " + parameterName + " Value: " + value + " Parameter Type: " + parameterType);
+                    break;
+                case "Bool":
+                    animator.SetBool(parameterName, (bool)value);Debug.Log("Parameter name: " + parameterName + " Value: " + value + " Parameter Type: " + parameterType);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    private List<string> GetAllAnimatorParameters()
+    {
+        // Get the animator component from your object
+        Animator animator = GetAnimatorComponent();
+
+        // Get all animator parameters
+        List<string> parameters = new List<string>();
+        if (animator != null)
+        {
+            for (int i = 0; i < animator.parameterCount; i++)
+            {
+                AnimatorControllerParameter parameter = animator.parameters[i];
+                parameters.Add(parameter.name);
+            }
+        }
+
+        return parameters;
+    }
+
+    private Animator GetAnimatorComponent()
+    {
+        string inspectorJson = EditorPrefs.GetString("FSMInspectorData");
+        string pattern = @"\s*\([^)]*\)";
+        string result = Regex.Replace(inspectorJson, pattern, "");
+
+        GameObject gameObject = GameObject.Find(result);
+        return gameObject.GetComponent<Animator>();
+    }
+
+    public override FSMAnimatorSaveData GetAnimatorSaveData()
+    {
+        FSMAnimatorSaveData animatorSaveData = new FSMAnimatorSaveData();
+        animatorSaveData.Initialize(_hasAnimatorTrigger, _animatorParameter, _parameterType, _animatorValue);
+        return animatorSaveData;
+    }
+    
+    public override void SetAnimatorSaveData(FSMAnimatorSaveData animatorSaveData)
+    {
+        _hasAnimatorTrigger = animatorSaveData.TriggerEnable;
+        _animatorParameter = animatorSaveData.ParameterName;
+        _parameterType = animatorSaveData.ParameterType;
+        _animatorValue = animatorSaveData.Value;
     }
 
     #endregion

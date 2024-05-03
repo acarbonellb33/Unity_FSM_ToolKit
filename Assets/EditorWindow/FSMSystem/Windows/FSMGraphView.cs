@@ -233,6 +233,8 @@ public class FSMGraphView : GraphView
                 if (element.GetType() == edgeType)
                 {
                     edgesToDelete.Add((Edge)element);
+                    ((Edge)element).output.portColor = Color.red;
+                    MarkDirtyRepaint();
                     continue;
                 }
 
@@ -343,6 +345,8 @@ public class FSMGraphView : GraphView
                     {
                         _window.initialState = nextNode.StateName;
                     }
+                    
+                    //edge.output.portColor = Color.white;
                 }
             }
 
@@ -365,9 +369,11 @@ public class FSMGraphView : GraphView
                     {
                         _window.initialState = "";
                     }
+                    
+                    //edge.output.portColor = Color.red;
                 }
             }
-
+            
             return changes;
         };
     }
@@ -522,6 +528,7 @@ public class FSMGraphView : GraphView
         this.AddManipulator(CreateDualTransitionStateItemMenu("Seeing"));
         this.AddManipulator(CreateDualTransitionStateItemMenu("Distance"));
         this.AddManipulator(CreateDualTransitionStateItemMenu("Health"));
+        this.AddManipulator(CreateExtensionNodeMenu("Extension Node"));
         this.AddManipulator(CreateGroupContextualMenu());
     }
 
@@ -576,7 +583,15 @@ public class FSMGraphView : GraphView
 
         return contextualMenuManipulator;
     }
+    private IManipulator CreateExtensionNodeMenu(string transitionName)
+    {
+        ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
+            menuEvent => menuEvent.menu.AppendAction($"Create Extension Node", menuActionEvent =>
+                AddElement(CreateNode(transitionName,
+                    GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FSMNodeType.Extension))));
 
+        return contextualMenuManipulator;
+    }
     public Vector2 GetLocalMousePosition(Vector2 mousePosition, bool isSearchWindow = false)
     {
         Vector2 worldMousePosition = mousePosition;

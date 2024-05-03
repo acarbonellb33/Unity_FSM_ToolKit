@@ -291,13 +291,14 @@ public static class EnemyStateMachineEditor
         string nameLowerCapital = char.ToLowerInvariant(stringWithoutSpaces[0]) + stringWithoutSpaces.Substring(1);
         
         scriptContent += "\tprivate SerializedProperty selectedOptionIndexProp;\n";
+        scriptContent += "\tprivate float lastClickedIndex = -1;\n";
         scriptContent += "\tDictionary<string, StateScript> optionToObjectMap = new Dictionary<string, StateScript>();\n";
         
         scriptContent += "\tvoid OnEnable()\n";
         scriptContent += "\t{\n";
         scriptContent += "\t\tselectedOptionIndexProp = serializedObject.FindProperty(\"selectedOptionIndex\");\n";
         scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
-        scriptContent += $"\t\tType type = typeof({nameLowerCapital});\n";
+        scriptContent += $"\t\tType type = typeof({stringWithoutSpaces});\n";
         scriptContent += "\t\tFieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);\n";
         scriptContent += "\t\tint j = 0;\n";
         scriptContent += "\t\tforeach (FieldInfo field in fields)\n";
@@ -312,7 +313,7 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t{\n";
         scriptContent += "\t\tserializedObject.Update();\n";
         scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
-        scriptContent += $"\t\tType type = typeof({nameLowerCapital});\n";
+        scriptContent += $"\t\tType type = typeof({stringWithoutSpaces});\n";
         scriptContent += "\t\tFieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);\n";
         scriptContent += $"\t\tstring[] options = new string[fields.Length];\n";
         scriptContent += "\t\tint x = 0;\n";
@@ -322,11 +323,63 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\t\toptions[x] = nameField;\n";
         scriptContent += "\t\t\tx++;\n";
         scriptContent += "\t\t}\n";
-        scriptContent += "\t\tselectedOptionIndexProp.intValue = EditorGUILayout.Popup(\"Selected Option\", selectedOptionIndexProp.intValue, options);\n";
         scriptContent += "\t\tstring selectedOptionName = options[selectedOptionIndexProp.intValue];\n";
+        
+        scriptContent += "\t\tGUIStyle buttonStyle = new GUIStyle(GUI.skin.button);\n";
+        scriptContent += "\t\tbuttonStyle.normal.textColor = Color.white;\n";
+        scriptContent += "\t\tbuttonStyle.hover.textColor = Color.white;\n";
+        scriptContent += "\t\tbuttonStyle.fontSize = 14;\n";
+        scriptContent += "\t\tbuttonStyle.fixedHeight = 30;\n";
+        scriptContent += "\t\tbuttonStyle.fixedWidth = 150;\n";
+        scriptContent += "\t\tbuttonStyle.margin = new RectOffset(5, 5, 5, 5);\n";
+        scriptContent += "\t\tbuttonStyle.padding = new RectOffset(0, 0, 0, 0);\n";
+        scriptContent += "\t\tbuttonStyle.normal.background = MakeTex(2, 2, new Color(0.3f, 0.3f, 0.3f));\n";
+        scriptContent += "\t\tbuttonStyle.active.background = MakeTex(2, 2, new Color(0.1f, 0.6f, 0.1f));\n";
+        scriptContent += "\t\tGUILayout.Space(10);\n";
+        
+        scriptContent += "\t\tEditorGUILayout.LabelField(\"Select the state you want to modify\", new GUIStyle(EditorStyles.boldLabel)\n";
+        scriptContent += "\t\t{\n";
+        scriptContent += "\t\t\talignment = TextAnchor.MiddleCenter,\n";
+        scriptContent += "\t\t\tfontSize = 14\n";
+        scriptContent += "\t\t});\n";
+        scriptContent += "\t\tint buttonsPerRow = 3;\n";
+        scriptContent += "\t\tint buttonCount = 0;\n";
+        scriptContent += "\t\tGUILayout.BeginVertical();\n";
+        scriptContent += "\t\tGUILayout.Space(10);\n";
+        scriptContent += "\t\tGUILayout.BeginHorizontal();\n";
+        scriptContent += "\t\tfor (int i = 0; i < options.Length; i++)\n";
+        scriptContent += "\t\t{\n";
+        scriptContent += "\t\t\tif (buttonCount > 0 && buttonCount % buttonsPerRow == 0)\n";
+        scriptContent += "\t\t\t{\n";
+        scriptContent += "\t\t\t\tGUILayout.EndHorizontal();\n";
+        scriptContent += "\t\t\t\tGUILayout.BeginHorizontal();\n";
+        scriptContent += "\t\t\t}\n";
+        scriptContent += "\t\t\tbool isSelected = selectedOptionIndexProp.intValue == i;\n";
+        scriptContent += "\t\t\tif (isSelected || lastClickedIndex == i)\n";
+        scriptContent += "\t\t\t{\n";
+        scriptContent += "\t\t\t\tGUI.backgroundColor = isSelected ? Color.green : new Color(0.1f, 0.6f, 0.1f);\n";
+        scriptContent += "\t\t\t}\n";
+        scriptContent += "\t\t\telse\n";
+        scriptContent += "\t\t\t{\n";
+        scriptContent += "\t\t\t\tGUI.backgroundColor = new Color(0.3f, 0.3f, 0.3f);\n";
+        scriptContent += "\t\t\t}\n";
+        scriptContent += "\t\t\tGUILayout.FlexibleSpace();\n";
+        scriptContent += "\t\t\tif (GUILayout.Button(options[i], buttonStyle))\n";
+        scriptContent += "\t\t\t{\n";
+        scriptContent += "\t\t\t\tselectedOptionIndexProp.intValue = i;\n";
+        scriptContent += "\t\t\t\tlastClickedIndex = i;\n";
+        scriptContent += "\t\t\t}\n";
+        scriptContent += "\t\t\tGUILayout.FlexibleSpace();\n";
+        scriptContent += "\t\t\tbuttonCount++;\n";
+        scriptContent += "\t\t}\n";
+        scriptContent += "\t\tGUI.backgroundColor = Color.white;\n";
+        scriptContent += "\t\tGUILayout.EndHorizontal();\n";
+        scriptContent += "\t\tGUILayout.EndVertical();\n";
+        
+        
         scriptContent += "\t\tif (optionToObjectMap.ContainsKey(selectedOptionName))\n";
         scriptContent += "\t\t{\n";
-        scriptContent += "\t\t\tEditorGUILayout.LabelField($\"{selectedOptionName} Attributes:\");\n";
+        scriptContent += "\t\t\tEditorGUILayout.LabelField($\"{selectedOptionName} Attributes:\", EditorStyles.boldLabel);\n";
         scriptContent += "\t\t\tStateScript selectedObject = optionToObjectMap[selectedOptionName];\n";
         scriptContent += "\t\t\tSerializedObject selectedObjectSerialized = new SerializedObject(selectedObject);\n";
         scriptContent += "\t\t\tselectedObjectSerialized.Update();\n";
@@ -420,6 +473,20 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t{\n";
         scriptContent += "\t\treturn char.ToUpperInvariant(oldName[0]) + oldName.Substring(1);\n";
         scriptContent += "\t}\n";
+        
+        scriptContent += "\tprivate Texture2D MakeTex(int width, int height, Color col)\n";
+        scriptContent += "\t{\n";
+        scriptContent += "\t\tColor[] pix = new Color[width * height];\n";
+        scriptContent += "\t\tfor (int i = 0; i < pix.Length; ++i)\n";
+        scriptContent += "\t\t{\n";
+        scriptContent += "\t\t\tpix[i] = col;\n";
+        scriptContent += "\t\t}\n";
+        scriptContent += "\t\tTexture2D result = new Texture2D(width, height);\n";
+        scriptContent += "\t\tresult.SetPixels(pix);\n";
+        scriptContent += "\t\tresult.Apply();\n";
+        scriptContent += "\t\treturn result;\n";
+        scriptContent += "\t}\n";
+        
 
         scriptContent += "}\n";
         return scriptContent;

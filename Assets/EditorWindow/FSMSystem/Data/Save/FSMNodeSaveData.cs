@@ -12,5 +12,6 @@ public class FSMNodeSaveData
     [field: SerializeField] public string GroupId { get; set; }
     [field: SerializeField] public FSMNodeType NodeType { get; set; }
     [field: SerializeField] public Vector2 Position { get; set; }
+    [field: SerializeField] public FSMAnimatorSaveData AnimatorSaveData { get; set; }
     [field: SerializeField] public string DataObject { get; set; }
 }

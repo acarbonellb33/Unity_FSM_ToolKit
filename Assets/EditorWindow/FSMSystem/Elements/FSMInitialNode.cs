@@ -39,7 +39,11 @@ public class FSMInitialNode : FSMNode
         foreach (FSMConnectionSaveData connection in Choices)
         {
             Port connectionPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
-
+            if (!connectionPort.connected)
+            {
+                // Apply orange color to the port
+                connectionPort.portColor = Color.red;
+            }
             connectionPort.userData = connection;
 
             outputContainer.Add(connectionPort);

@@ -33,7 +33,11 @@ public class FSMTransitionNode : FSMNode
         foreach (FSMConnectionSaveData connection in Choices)
         {
             Port connectionPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
-
+            if (!connectionPort.connected)
+            {
+                // Apply orange color to the port
+                connectionPort.portColor = Color.red;
+            }
             connectionPort.userData = connection;
 
             outputContainer.Add(connectionPort);
@@ -48,6 +52,8 @@ public class FSMTransitionNode : FSMNode
         CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
         extensionContainer.Add(customDataContainer);
+        
+        mainContainer.style.backgroundColor = new Color(151f/255f, 90f/255f, 245f/255f);
         
         RefreshExpandedState();
     }

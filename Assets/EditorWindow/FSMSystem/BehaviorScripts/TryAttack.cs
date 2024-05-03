@@ -8,21 +8,21 @@ using System.Reflection;
 [Serializable]
 public class TryAttack : BehaviorScript
 {
-	[Header("Chase")]
+	[Header("Attack")]
 	[SerializeField]
-	public ChaseStateScript chase;
-
-	[Header("Seeing")]
-	[SerializeField]
-	public SeeingConditionScript seeing;
+	public AttackStateScript attack;
 
 	[Header("Distance 0")]
 	[SerializeField]
 	public DistanceConditionScript distance0;
 
-	[Header("Attack")]
+	[Header("Seeing")]
 	[SerializeField]
-	public AttackStateScript attack;
+	public SeeingConditionScript seeing;
+
+	[Header("Search")]
+	[SerializeField]
+	public SearchStateScript search;
 
 	[Header("Distance 1")]
 	[SerializeField]
@@ -30,27 +30,19 @@ public class TryAttack : BehaviorScript
 
 	private void Start()
 	{
-		currentState = FSMStates.Chase;
+		currentState = FSMStates.Search;
 		GetComponent<Animator>().SetFloat("Speed", GetComponent<NavMeshAgent>().speed);
 	}
 	void Update()
 	{
 		switch (currentState)
 		{
-			case FSMStates.Chase:
-				UpdateChaseState();
-				break;
 			case FSMStates.Attack:
 				UpdateAttackState();
 				break;
-		}
-	}
-	public void UpdateChaseState()
-	{
-		chase.Execute();
-		if(seeing.Condition() && distance0.Condition())
-		{
-			ChangeAttackState();
+			case FSMStates.Search:
+				UpdateSearchState();
+				break;
 		}
 	}
 	public void UpdateAttackState()
@@ -58,16 +50,24 @@ public class TryAttack : BehaviorScript
 		attack.Execute();
 		if(distance1.Condition())
 		{
-			ChangeChaseState();
+			ChangeSearchState();
 		}
 	}
-	private void ChangeChaseState()
+	public void UpdateSearchState()
 	{
-		currentState = FSMStates.Chase;
+		search.Execute();
+		if(seeing.Condition() && distance0.Condition())
+		{
+			ChangeAttackState();
+		}
 	}
 	private void ChangeAttackState()
 	{
 		currentState = FSMStates.Attack;
+	}
+	private void ChangeSearchState()
+	{
+		currentState = FSMStates.Search;
 	}
 	private void OnFootstep() {}
 }

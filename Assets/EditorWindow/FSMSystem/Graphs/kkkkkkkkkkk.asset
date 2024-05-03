@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b664ecc41c97a804395c2672b001d2d7, type: 3}
+  m_Name: kkkkkkkkkkk
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: kkkkkkkkkkk
+  <InitialState>k__BackingField: 
+  <Nodes>k__BackingField:
+  - <Id>k__BackingField: a6621bbf-bfcd-47ba-9224-b16b40fc5b1d
+    <Name>k__BackingField: Initial State
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Initial Node
+      <NodeId>k__BackingField: 
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 2
+    <Position>k__BackingField: {x: 100, y: 100}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+    <DataObject>k__BackingField: 
+  <Groups>k__BackingField: []
+  <OldGroupedNames>k__BackingField: []
+  <OldUngroupedNames>k__BackingField: []
+  <OldGroupedNodeNames>k__BackingField:
+    list: []
+  <GameObject>k__BackingField: 
+  <HitData>k__BackingField:
+    <HitEnable>k__BackingField: 0
+    <TimeToWait>k__BackingField: 0
+    <CanDie>k__BackingField: 0

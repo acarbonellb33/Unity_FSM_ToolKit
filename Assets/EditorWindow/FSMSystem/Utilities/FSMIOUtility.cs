@@ -14,7 +14,7 @@ public static class FSMIOUtility
     private static string _graphName;
     private static string _containerFolderPath;
     private static FSMHitSaveData _hitData;
-    
+
     private static List<FSMGroup> _groups;
     private static List<FSMNode> _nodes;
 
@@ -170,6 +170,7 @@ public static class FSMIOUtility
             GroupId = node.Group?.Id,
             NodeType = node.NodeType,
             Position = node.GetPosition().position,
+            AnimatorSaveData = node.GetAnimatorSaveData(),
             DataObject = _stateDataObject,
         };
         graphSaveData.Nodes.Add(nodeSaveData);
@@ -290,6 +291,10 @@ public static class FSMIOUtility
             node.StateName = nodeData.Name;
             node.Choices = connections;
             node.StateScript = LoadFromJson(node);
+            if (node.NodeType == FSMNodeType.State)
+            {
+                node.SetAnimatorSaveData(nodeData.AnimatorSaveData);
+            } 
             node.Draw();
 
             _graphView.AddElement(node);
@@ -311,6 +316,10 @@ public static class FSMIOUtility
         node.StateName = nodeData.Name;
         node.Choices = connections;
         node.NodeType = nodeData.NodeType;
+        if (node.NodeType == FSMNodeType.State)
+        {
+            node.SetAnimatorSaveData(nodeData.AnimatorSaveData);
+        } 
         node.StateScript = LoadFromJson(node, nodeData.Name,$"Assets/FSMSystem/FSMs/{fileName}/Global/Nodes/{nodeData.Name.Replace(" ","")}DataFile.json");
         return node;
     }
@@ -411,8 +420,12 @@ public static class FSMIOUtility
                 FSMConnectionSaveData choiceData = (FSMConnectionSaveData) choicePort.userData;
                 if (string.IsNullOrEmpty(choiceData.NodeId))
                 {
+                    
+                    choicePort.portColor = Color.red;
                     continue;
                 }
+                
+                choicePort.portColor = Color.white;
 
                 FSMNode nextNode = _loadedNodes[choiceData.NodeId];
 

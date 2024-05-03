@@ -40,6 +40,7 @@ public class FSMNode : Node
 
     public virtual void Draw()
     {
+        
         stateNameField = FSMElementUtility.CreateLabel(StateName, callback =>
         {
             if (Group == null)
@@ -110,4 +111,7 @@ public class FSMNode : Node
         StateName = stateName;
         stateNameField.text = stateName;
     }
+    
+    public virtual void SetAnimatorSaveData(FSMAnimatorSaveData animatorSaveData) {}
+    public virtual FSMAnimatorSaveData GetAnimatorSaveData() { return null; }
 }

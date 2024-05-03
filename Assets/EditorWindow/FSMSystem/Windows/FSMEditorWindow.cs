@@ -25,7 +25,7 @@ public class FSMEditorWindow : EditorWindow
 
     private const string SaveDataKey = "FSMSaveData";
     private const string FSMInspectorKey = "FSMInspectorData";
-    
+
     private bool _isCompiling = false;
     private bool _shouldClose = false;
     public static void OpenWithSaveData(FSMGraphSaveData saveData)
@@ -120,6 +120,16 @@ public class FSMEditorWindow : EditorWindow
         Button clearButton = FSMElementUtility.CreateButton("Clear", () => Clear());
         _miniMapButton = FSMElementUtility.CreateButton("MiniMap", () => ToggleMiniMap());
 
+        ObjectField animatorField = new ObjectField("Animator");
+        animatorField.objectType = typeof(Animator);
+        
+        animatorField.RegisterValueChangedCallback(evt =>
+        {
+            //_animator = evt.newValue as Animator;
+            // Handle changes to the animator here
+        });
+        animatorField.AddToClassList("fsm-toolbar__animator-field");
+
         Button hitStateButton = null;
         hitStateButton = FSMElementUtility.CreateButton("Hit State", () => OpenHitPopup(hitStateButton));
         hitStateButton.AddToClassList("Button--hit-state");
@@ -129,6 +139,7 @@ public class FSMEditorWindow : EditorWindow
         toolbar.Add(reloadButton);
         toolbar.Add(clearButton);
         toolbar.Add(_miniMapButton);
+        toolbar.Add(animatorField);
         toolbar.Add(hitStateButton);
 
         
@@ -188,6 +199,24 @@ public class FSMEditorWindow : EditorWindow
         PopupWindow.Show(new Rect(buttonRect.x-187.5f, buttonRect.y-77.5f, 250, 100), _hitStatePopup);
     }
     #endregion
+    private void OnDestroy()
+    {
+        // Show popup asking if user wants to save changes
+        int option = EditorUtility.DisplayDialogComplex("Save Changes",
+            "Do you want to save changes before closing?",
+            "Save", "Discard", "Cancel");
+
+        switch (option)
+        {
+            case 0: // Save
+                Save();
+                break;
+            default:
+                break;
+        }
+    }
+
+
 
     #region Utilities
     public void EnableSaving()

@@ -77,3 +77,8 @@ TextField:focus > .unity-text-field__label
     margin-left: auto; /* Aligns the button to the right */
     margin-right: 0px;
 }
+
+.fsm-toolbar__animator-field{
+    margin-left: auto; /* Aligns the button to the right */
+    margin-right: 0px;
+}

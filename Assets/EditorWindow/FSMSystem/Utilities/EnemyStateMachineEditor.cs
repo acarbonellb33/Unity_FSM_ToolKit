@@ -130,6 +130,28 @@ public static class EnemyStateMachineEditor
                 scriptContent += $"\tpublic void Update{node.Name}State()\n";
                 scriptContent += "\t{\n";
                 scriptContent += $"\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.Execute();\n";
+                if (node.AnimatorSaveData.TriggerEnable)
+                {
+                    switch (node.AnimatorSaveData.ParameterType)
+                    {
+                        case "Float":
+                            scriptContent +=
+                                $"\t\tGetComponent<Animator>().SetFloat(\"{node.AnimatorSaveData.ParameterName}\", {node.AnimatorSaveData.Value});\n";
+                            break;
+                        case "Int":
+                            scriptContent +=
+                                $"\t\tGetComponent<Animator>().SetInteger(\"{node.AnimatorSaveData.ParameterName}\", {node.AnimatorSaveData.Value});\n";
+                            break;
+                        case "Bool":
+                            scriptContent +=
+                                $"\t\tGetComponent<Animator>().SetBool(\"{node.AnimatorSaveData.ParameterName}\", {char.ToLowerInvariant(node.AnimatorSaveData.Value[0]) + node.AnimatorSaveData.Value.Substring(1)});\n";
+                            break;
+                        case "Trigger":
+                            scriptContent +=
+                                $"\t\tGetComponent<Animator>().SetTrigger(\"{node.AnimatorSaveData.ParameterName}\");\n";
+                            break;
+                    }
+                }
                 
                 string conditions = "";
                 

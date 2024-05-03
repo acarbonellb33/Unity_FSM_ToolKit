@@ -418,6 +418,23 @@ public class FSMStateNode : FSMNode
                 });
                 extensionContainer.Insert(2,toggleField);
             }
+            else if (parameterType == "Trigger")
+            {
+                Toggle toggleField = new Toggle()
+                {
+                    label = selectedParameter
+                };
+                toggleField.AddToClassList("fsm-node_toggle");
+                toggleField.RegisterValueChangedCallback(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,toggleField);
+            }
             _hasAnimatorTrigger = true;
         });
 
@@ -462,6 +479,20 @@ public class FSMStateNode : FSMNode
             extensionContainer.Insert(1, integerField);
         }
         else if (_parameterType == "Bool")
+        {
+            Toggle toggleField = new Toggle()
+            {
+                label = dropdown.value,
+                value = bool.Parse(_animatorValue)
+            };
+            toggleField.AddToClassList("fsm-node_toggle");
+            toggleField.RegisterValueChangedCallback(e =>
+            {
+                _animatorValue = e.newValue.ToString();
+            });
+            extensionContainer.Insert(1, toggleField);
+        }
+        else if (_parameterType == "Trigger")
         {
             Toggle toggleField = new Toggle()
             {
@@ -522,6 +553,23 @@ public class FSMStateNode : FSMNode
                 extensionContainer.Insert(2,integerField);
             }
             else if (parameterType == "Bool")
+            {
+                Toggle toggleField = new Toggle()
+                {
+                    label = selectedParameter
+                };
+                toggleField.AddToClassList("fsm-node_toggle");
+                toggleField.RegisterValueChangedCallback(e =>
+                {
+                    // Set animator parameter value
+                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
+                    _animatorParameter = selectedParameter;
+                    _parameterType = parameterType;
+                    _animatorValue = e.newValue.ToString();
+                });
+                extensionContainer.Insert(2,toggleField);
+            }
+            else if (parameterType == "Trigger")
             {
                 Toggle toggleField = new Toggle()
                 {

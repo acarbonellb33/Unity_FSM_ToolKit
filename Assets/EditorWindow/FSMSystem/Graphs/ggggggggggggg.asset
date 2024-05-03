@@ -72,7 +72,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 0
     <Position>k__BackingField: {x: 1025, y: 394}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 1
+      <TriggerEnable>k__BackingField: 0
       <ParameterName>k__BackingField: FreeFall
       <ParameterType>k__BackingField: Bool
       <Value>k__BackingField: True

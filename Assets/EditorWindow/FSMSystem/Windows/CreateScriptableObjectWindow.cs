@@ -9,7 +9,7 @@ public class CreateScriptableObjectWindow : EditorWindow
 {
     private string savePath;
     
-    [MenuItem("Window/FSM/FSM Graph")]
+    [MenuItem("Window/FSM/FSM Graph Creator")]
     public static void ShowWindow()
     {
         GetWindow<CreateScriptableObjectWindow>("Create Scriptable Object");

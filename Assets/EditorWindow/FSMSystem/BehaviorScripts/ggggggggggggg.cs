@@ -44,6 +44,7 @@ public class ggggggggggggg : BehaviorScript
 	public void UpdateChaseState()
 	{
 		chase.Execute();
+		GetComponent<Animator>().SetFloat("MotionSpeed", 10);
 		if(hearing.Condition())
 		{
 			ChangeSearchState();

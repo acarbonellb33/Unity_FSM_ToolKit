@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -233,8 +234,6 @@ public class FSMGraphView : GraphView
                 if (element.GetType() == edgeType)
                 {
                     edgesToDelete.Add((Edge)element);
-                    ((Edge)element).output.portColor = Color.red;
-                    MarkDirtyRepaint();
                     continue;
                 }
 
@@ -338,7 +337,16 @@ public class FSMGraphView : GraphView
                 foreach (Edge edge in changes.edgesToCreate)
                 {
                     FSMNode nextNode = (FSMNode)edge.input.node;
+                    nextNode.SetPortColor(Color.white, Direction.Input);
+                    AddToSelection(nextNode);
+                    RemoveFromSelection(nextNode);
                     FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
+                    
+                    FSMNode previousNode = (FSMNode)edge.output.node;
+                    previousNode.SetPortColor(Color.white, Direction.Output);
+                    AddToSelection(previousNode);
+                    RemoveFromSelection(previousNode);
+                    
                     choiceData.NodeId = nextNode.Id;
 
                     if (choiceData.Text == "Initial Node")
@@ -360,22 +368,38 @@ public class FSMGraphView : GraphView
                     {
                         continue;
                     }
-
+                    
                     Edge edge = (Edge)element;
+                    FSMNode nextNode = (FSMNode)edge.input.node;
+                    if (edge.input.connections.Count() == 1)
+                    {
+                        nextNode.SetPortColor(Color.red, Direction.Input);
+                        AddToSelection(nextNode);
+                        RemoveFromSelection(nextNode);
+                    }
+                    
+                    FSMNode previousNode = (FSMNode)edge.output.node;
+                    if (edge.output.connections.Count() == 1)
+                    {
+                       previousNode.SetPortColor(Color.red, Direction.Output); 
+                       AddToSelection(previousNode);
+                       RemoveFromSelection(previousNode);
+                    }
+
                     FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
                     choiceData.NodeId = "";
+                    
                     
                     if (choiceData.Text == "Initial Node")
                     {
                         _window.initialState = "";
                     }
                     
-                    //edge.output.portColor = Color.red;
                 }
             }
-            
+            MarkDirtyRepaint();
             return changes;
-        };
+        };MarkDirtyRepaint();
     }
 
     public void AddGroupedNode(FSMNode node, FSMGroup group)

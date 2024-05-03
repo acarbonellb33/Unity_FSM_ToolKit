@@ -15,7 +15,10 @@ public class FSMNode : Node
     protected FSMGraphView graphView;
     public StateScriptData StateScript { get; set; }
     
-    public Label stateNameField;
+    private Label stateNameField;
+
+    private Port inputPort;
+    protected Port outputPort;
 
     public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
@@ -58,7 +61,7 @@ public class FSMNode : Node
         stateNameField.AddClasses("fsm-node_label");
         titleContainer.Insert(0, stateNameField);
         
-        Port inputPort = this.CreatePort("Input", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);
+        inputPort = this.CreatePort("Input", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);
         inputContainer.Add(inputPort);
         inputContainer.AddToClassList("fsm-node_input-output-container");
     }
@@ -112,6 +115,18 @@ public class FSMNode : Node
         stateNameField.text = stateName;
     }
     
+    public void SetPortColor(Color color, Direction direction)
+    {
+        if (direction == Direction.Input)
+        {
+            inputPort.portColor = color;
+        }
+        else
+        {
+            outputPort.portColor = color;
+        }
+    }
+
     public virtual void SetAnimatorSaveData(FSMAnimatorSaveData animatorSaveData) {}
     public virtual FSMAnimatorSaveData GetAnimatorSaveData() { return null; }
 }

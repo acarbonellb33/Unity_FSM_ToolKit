@@ -64,14 +64,12 @@ public class FSMNodeCreationWindow : EditorWindow
     private void CreateNewState(string stateName)
     {
         // Add logic to create a new state with the given name
-        Debug.Log("Creating new state: " + stateName);
         FSMCreationNodesUtilities.CreateStateNode(stateName);
     }
 
     private void CreateNewCondition(string conditionName)
     {
         // Add logic to create a new condition
-        Debug.Log("Creating new condition" + conditionName);
         FSMCreationNodesUtilities.CreateConditionNode(conditionName);
     }
 }

@@ -27,11 +27,11 @@ public class FSMExtensionNode : FSMNode
         inputContainer.AddToClassList("fsm-node_input-output-container");
         foreach (FSMConnectionSaveData connection in Choices)
         {
-            Port connectionPort = this.CreatePort("", Orientation.Horizontal, Direction.Output);
+            outputPort = this.CreatePort("", Orientation.Horizontal, Direction.Output);
 
-            connectionPort.userData = connection;
+            outputPort.userData = connection;
 
-            outputContainer.Add(connectionPort);
+            outputContainer.Add(outputPort);
             outputContainer.AddToClassList("fsm-node_input-output-container");
         }
         Button swapPortsButton = new Button(() => SwapPorts()) { text = "Swap Ports" };

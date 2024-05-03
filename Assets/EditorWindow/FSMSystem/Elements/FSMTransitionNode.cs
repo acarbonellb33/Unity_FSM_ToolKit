@@ -32,15 +32,15 @@ public class FSMTransitionNode : FSMNode
         
         foreach (FSMConnectionSaveData connection in Choices)
         {
-            Port connectionPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
-            if (!connectionPort.connected)
+            outputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
+            if (!outputPort.connected)
             {
                 // Apply orange color to the port
-                connectionPort.portColor = Color.red;
+                outputPort.portColor = Color.red;
             }
-            connectionPort.userData = connection;
+            outputPort.userData = connection;
 
-            outputContainer.Add(connectionPort);
+            outputContainer.Add(outputPort);
             outputContainer.AddToClassList("fsm-node_input-output-container");
         }
 

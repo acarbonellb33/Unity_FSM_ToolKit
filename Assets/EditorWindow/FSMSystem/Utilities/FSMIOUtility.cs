@@ -366,7 +366,16 @@ public static class FSMIOUtility
                 HealthData healthData = JsonUtility.FromJson<HealthData>(json);
                 node.StateScript = healthData;
                 break;
-        }
+            case "NextState":
+                NextStateData nextStateData = JsonUtility.FromJson<NextStateData>(json);
+                node.StateScript = nextStateData;
+                break;
+        
+            case "Estelita":
+                EstelitaData estelitaData = JsonUtility.FromJson<EstelitaData>(json);
+                node.StateScript = estelitaData;
+                break;
+            }
         return node.StateScript;
     }
     private static StateScriptData LoadFromJson(FSMNode node)
@@ -408,7 +417,16 @@ public static class FSMIOUtility
                 HealthData healthData = JsonUtility.FromJson<HealthData>(json);
                 node.StateScript = healthData;
                 break;
-        }
+            case "NextState":
+                NextStateData nextStateData = JsonUtility.FromJson<NextStateData>(json);
+                node.StateScript = nextStateData;
+                break;
+        
+            case "Estelita":
+                EstelitaData estelitaData = JsonUtility.FromJson<EstelitaData>(json);
+                node.StateScript = estelitaData;
+                break;
+            }
         return node.StateScript;
     }
     private static void LoadConnections()
@@ -430,6 +448,8 @@ public static class FSMIOUtility
                 FSMNode nextNode = _loadedNodes[choiceData.NodeId];
 
                 Port nextNodeInputPort = (Port) nextNode.inputContainer.Children().First();
+                
+                nextNodeInputPort.portColor = Color.white;
 
                 Edge edge = choicePort.ConnectTo(nextNodeInputPort);
 

@@ -16,6 +16,25 @@
 .fsm-node_input-output-container {
     width: 50%;
 }
+.fsm-node_input-output-container-extension {
+    /* Set width and height to make the containers small */
+    width: 4px;
+    height: 4px;
+
+    /* Set background color to make them almost invisible */
+    background-color: transparent;
+
+    /* Remove padding to minimize space */
+    padding: 0;
+
+    /* Set margin to position them properly */
+    margin: 0;
+}
+
+/* Optionally, you can hide the ports completely if desired */
+.fsm-node_extension-container .fsm-node_input-output-container .port {
+    display: none;
+}
 
 /* INPUTS */
 

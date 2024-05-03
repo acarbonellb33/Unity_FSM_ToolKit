@@ -54,7 +54,50 @@ public class FSMGraphView : GraphView
         AddStyles();
         AddMiniMapStyles();
         
+        RegisterCallback<MouseDownEvent>(OnMouseDown, TrickleDown.TrickleDown);
+        
         //AddElement(CreateNode("Initial State", new Vector2(100, 45), FSMNodeType.Initial));
+    }
+    
+    private void OnMouseDown(MouseDownEvent evt)
+    {
+        if (evt.button == (int)MouseButton.LeftMouse && evt.target is Edge edge)
+        {
+            // Get the ports connected by the edge
+            Port inputPort = edge.input;
+            Port outputPort = edge.output;
+
+            // Calculate position for the new node between the ports
+            Vector2 newNodePosition = (inputPort.GetGlobalCenter() + outputPort.GetGlobalCenter()) / 2f;
+            // Convert the position to local coordinates of the graph view
+            Vector2 localNewNodePosition = this.contentViewContainer.WorldToLocal(newNodePosition);
+
+
+            // Create and add the new node
+            FSMNode newNode = CreateNode("", localNewNodePosition, FSMNodeType.Extension);
+            AddElement(newNode);
+
+            // Connect the new node to the ports
+            ConnectPorts(outputPort, newNode.inputContainer[0] as Port);
+            ConnectPorts(newNode.outputContainer[0] as Port, inputPort);
+            
+            // Remove the edge
+            RemoveElement(edge);
+        }
+    }
+
+    private void ConnectPorts(Port fromPort, Port toPort)
+    {
+        Edge edge = new Edge
+        {
+            output = fromPort,
+            input = toPort
+        };
+
+        edge.input.Connect(edge);
+        edge.output.Connect(edge);
+
+        AddElement(edge);
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -218,6 +261,8 @@ public class FSMGraphView : GraphView
             List<FSMGroup> groupsToDelete = new List<FSMGroup>();
             List<Edge> edgesToDelete = new List<Edge>();
             List<FSMNode> nodesToDelete = new List<FSMNode>();
+            List<FSMNode> nodesToReconnect = new List<FSMNode>(); // Store nodes to reconnect
+
             foreach (GraphElement element in selection)
             {
                 if (element is FSMNode node)
@@ -225,6 +270,19 @@ public class FSMGraphView : GraphView
                     if (element is FSMStateNode n)
                     {
                         FSMEditorWindow._stateNames.Remove(n.StateName);
+                    }
+
+                    if (node.NodeType == FSMNodeType.Extension)
+                    {
+                        // For extension nodes, collect connected nodes to reconnect them later
+                        foreach (Port port in node.outputContainer.Children())
+                        {
+                            foreach (Edge edge in port.connections)
+                            {
+                                FSMNode connectedNode = edge.input.node as FSMNode;
+                                nodesToReconnect.Add(connectedNode);
+                            }
+                        }
                     }
 
                     nodesToDelete.Add(node);
@@ -244,6 +302,34 @@ public class FSMGraphView : GraphView
 
                 FSMGroup group = (FSMGroup)element;
                 groupsToDelete.Add(group);
+            }
+
+            // Reconnect nodes that were connected to extension nodes
+            foreach (FSMNode node in nodesToReconnect)
+            {
+                if (node == null)
+                    continue;
+
+                foreach (Port port in node.outputContainer.Children())
+                {
+                    foreach (Edge edge in port.connections)
+                    {
+                        FSMNode connectedNode = edge.input.node as FSMNode;
+                        if (connectedNode != null && !nodesToDelete.Contains(connectedNode))
+                        {
+                            // Reconnect the nodes
+                            FSMNode nextNode = (FSMNode)edge.input.node;
+                            FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
+
+                            choiceData.NodeId = nextNode.Id;
+
+                            if (choiceData.Text == "Initial Node")
+                            {
+                                _window.initialState = nextNode.StateName;
+                            }
+                        }
+                    }
+                }
             }
 
             foreach (FSMGroup group in groupsToDelete)
@@ -273,6 +359,7 @@ public class FSMGraphView : GraphView
                 {
                     node.Group.RemoveElement(node);
                 }
+
                 RemoveUngroupedNode(node);
                 node.DisconnectAllPorts();
                 RemoveElement(node);
@@ -353,8 +440,6 @@ public class FSMGraphView : GraphView
                     {
                         _window.initialState = nextNode.StateName;
                     }
-                    
-                    //edge.output.portColor = Color.white;
                 }
             }
 
@@ -397,9 +482,8 @@ public class FSMGraphView : GraphView
                     
                 }
             }
-            MarkDirtyRepaint();
             return changes;
-        };MarkDirtyRepaint();
+        };
     }
 
     public void AddGroupedNode(FSMNode node, FSMGroup group)
@@ -554,7 +638,10 @@ public class FSMGraphView : GraphView
         this.AddManipulator(CreateDualTransitionStateItemMenu("Health"));
         this.AddManipulator(CreateExtensionNodeMenu("Extension Node"));
         this.AddManipulator(CreateGroupContextualMenu());
-    }
+  		this.AddManipulator(CreateTransitionItemMenu("NextState"));
+		this.AddManipulator(CreateDualTransitionStateItemMenu("NextState"));
+  		this.AddManipulator(CreateStateItemMenu("Estelita"));
+  }
 
     private void AddSearchWindow()
     {

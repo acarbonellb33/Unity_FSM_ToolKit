@@ -17,8 +17,7 @@ public class FSMNode : Node
     
     private Label stateNameField;
 
-    private Port inputPort;
-    protected Port outputPort;
+    protected Port inputPort, outputPort;
 
     public virtual void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
@@ -62,6 +61,7 @@ public class FSMNode : Node
         titleContainer.Insert(0, stateNameField);
         
         inputPort = this.CreatePort("Input", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);
+        inputPort.portColor = Color.red;
         inputContainer.Add(inputPort);
         inputContainer.AddToClassList("fsm-node_input-output-container");
     }

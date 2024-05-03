@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 
 public class FSMExtensionNode : FSMNode
 {
-    private bool isSwapped = false;
     public override void Initialize(string nodeName, FSMGraphView graphView, Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
@@ -22,69 +21,30 @@ public class FSMExtensionNode : FSMNode
 
     public override void Draw()
     {
-        Port inputPort = this.CreatePort("", Orientation.Horizontal, Direction.Input, Port.Capacity.Multi);
+        mainContainer.Remove(titleContainer);
+        // Add input port to the input container
+        inputPort = this.CreatePort();
         inputContainer.Add(inputPort);
-        inputContainer.AddToClassList("fsm-node_input-output-container");
+        inputContainer.AddToClassList("fsm-node_input-output-container-extension");
+
+        // Add output ports to the output container
         foreach (FSMConnectionSaveData connection in Choices)
         {
             outputPort = this.CreatePort("", Orientation.Horizontal, Direction.Output);
-
             outputPort.userData = connection;
-
             outputContainer.Add(outputPort);
-            outputContainer.AddToClassList("fsm-node_input-output-container");
+            outputContainer.AddToClassList("fsm-node_input-output-container-extension");
         }
-        Button swapPortsButton = new Button(() => SwapPorts()) { text = "Swap Ports" };
-        extensionContainer.Add(swapPortsButton);
+
+        // Add the input and output containers to the main container
+        mainContainer.Add(inputContainer);
+        mainContainer.Add(outputContainer);
+
+        // Add class to the main container for styling purposes
+        mainContainer.AddToClassList("fsm-node_main-container");
+
+        // Refresh the expanded state of the node
         RefreshExpandedState();
     }
-    
-    private void SwapPorts()
-    {
-        // Get the children of input and output containers
-        List<VisualElement> inputPorts = inputContainer.Children().ToList();
-        List<VisualElement> outputPorts = outputContainer.Children().ToList();
 
-        // Clear the containers
-        inputContainer.Clear();
-        outputContainer.Clear();
-
-        // Add output ports to input container and vice versa
-        if (isSwapped)
-        {
-            foreach (var port in outputPorts)
-            {
-                // Change port direction to input
-                Port newPort = this.CreatePort(port.name);
-                newPort.userData = port.userData;
-                inputContainer.Add(newPort);
-            }
-            foreach (var port in inputPorts)
-            {
-                // Change port direction to output
-                Port newPort = this.CreatePort(port.name, Orientation.Horizontal, Direction.Output);
-                newPort.userData = port.userData;
-                outputContainer.Add(newPort);
-            }
-        }
-        else
-        {
-            foreach (var port in outputPorts)
-            {
-                // Change port direction to input
-                Port newPort = this.CreatePort(port.name);
-                newPort.userData = port.userData;
-                outputContainer.Add(newPort);
-            }
-            foreach (var port in inputPorts)
-            {
-                // Change port direction to output
-                Port newPort = this.CreatePort(port.name, Orientation.Horizontal, Direction.Output);
-                newPort.userData = port.userData;
-                inputContainer.Add(newPort);
-            }
-        }
-        isSwapped = !isSwapped;
-    }
-    
 }

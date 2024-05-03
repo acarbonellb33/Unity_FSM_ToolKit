@@ -23,7 +23,7 @@ public class FSMStateNode : FSMNode
         base.Initialize(nodeName, graphView, postition);
         NodeType = FSMNodeType.State;
         
-        _dataObjects = new List<StateScriptData>(){new PatrolData(), new ChaseData(), new AttackData(), new SearchData()};
+        _dataObjects = new List<StateScriptData>(){new EstelitaData(), new PatrolData(), new ChaseData(), new AttackData(), new SearchData()};
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {

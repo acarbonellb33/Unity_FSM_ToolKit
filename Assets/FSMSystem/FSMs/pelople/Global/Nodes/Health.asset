@@ -15,6 +15,6 @@ MonoBehaviour:
   <NodeName>k__BackingField: Health
   <Connections>k__BackingField:
   - <Text>k__BackingField: Next Action
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 9fdf5fe463ac6a14ea3448816490ed50, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 81732559a8367d84eab15fd860288314, type: 2}
   <NodeType>k__BackingField: 1
   <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"health\": 10.0\n}"

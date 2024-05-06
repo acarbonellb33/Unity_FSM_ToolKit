@@ -46,5 +46,9 @@ public class FSMExtensionNode : FSMNode
         // Refresh the expanded state of the node
         RefreshExpandedState();
     }
-
+    
+    public override void SetStateName(string stateName)
+    {
+        StateName = stateName;
+    }
 }

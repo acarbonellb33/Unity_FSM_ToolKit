@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Seeing
+  m_Name: Search
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Seeing
+  <NodeName>k__BackingField: Search
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Next Action
-    <NextNode>k__BackingField: {fileID: 11400000, guid: f3798ffd38edb4e47a22c33db651ea73, type: 2}
-  <NodeType>k__BackingField: 1
-  <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
+  - <Text>k__BackingField: Condition
+    <NextNode>k__BackingField: {fileID: 11400000, guid: d22952579b4d06e4b8d70fe36b590c37, type: 2}
+  <NodeType>k__BackingField: 0
+  <DataObject>k__BackingField: "{\n    \"exploreRadius\": 10.0\n}"

@@ -56,14 +56,18 @@ public static class EnemyStateMachineEditor
         
         foreach (var node in states.Distinct())
         {
-            scriptContent += $"\t[Header(\"" + node.Name + "\")]\n";
-            scriptContent += "\t[SerializeField]\n";
-            string variableName = node.NodeType == FSMNodeType.State ? node.Name+"State" : node.Name+"Condition";
-            string name = char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1);
-            name = name.Replace(" ", "");
-            variableName = Regex.Replace(variableName, @"[\s\d]", "");
-            scriptContent += $"\tpublic {variableName}Script {name};\n";
-            scriptContent += "\n";
+            if (node.NodeType != FSMNodeType.Extension)
+            {
+                scriptContent += $"\t[Header(\"" + node.Name + "\")]\n";
+                scriptContent += "\t[SerializeField]\n";
+                string variableName =
+                    node.NodeType == FSMNodeType.State ? node.Name + "State" : node.Name + "Condition";
+                string name = char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1);
+                name = name.Replace(" ", "");
+                variableName = Regex.Replace(variableName, @"[\s\d]", "");
+                scriptContent += $"\tpublic {variableName}Script {name};\n";
+                scriptContent += "\n";
+            }
         }
 
         if (saveData.HitData.HitEnable)
@@ -245,6 +249,13 @@ public static class EnemyStateMachineEditor
             test += $"\t\t\tChange{node.Name.Replace(" ", "")}State();\n";
             test += "\t\t}\n";
             return test;
+        }
+        
+        if(node.NodeType == FSMNodeType.Extension)
+        {
+            FSMNodeSaveData nodeSaveData = GetNodeData(GetState(node.Connections[0].NodeId));
+            bool check = nodeSaveData.Connections.Count == 2;
+            return GenerateConditionsRecursive(nodeSaveData, test, isFirst, check, pastFalse);
         }
 
         string name = node.Name;

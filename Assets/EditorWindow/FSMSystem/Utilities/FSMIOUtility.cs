@@ -286,7 +286,7 @@ public static class FSMIOUtility
         {
             List<FSMConnectionSaveData> connections = CloneNodeConnections(nodeData.Connections);
 
-            FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false);
+            FSMNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false, false);
             node.Id = nodeData.Id;
             node.StateName = nodeData.Name;
             node.Choices = connections;

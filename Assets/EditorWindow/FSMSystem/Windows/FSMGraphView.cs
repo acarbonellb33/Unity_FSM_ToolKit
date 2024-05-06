@@ -74,7 +74,12 @@ public class FSMGraphView : GraphView
 
 
             // Create and add the new node
-            FSMNode newNode = CreateNode("", localNewNodePosition, FSMNodeType.Extension);
+            FSMNode newNode = CreateNode("Extension", localNewNodePosition, FSMNodeType.Extension);
+
+            FSMNode node = (FSMNode)outputPort.node;
+            node.Choices[0].NodeId = newNode.Id;
+            newNode.Choices[0].NodeId = ((FSMNode)inputPort.node).Id;
+
             AddElement(newNode);
 
             // Connect the new node to the ports
@@ -83,6 +88,7 @@ public class FSMGraphView : GraphView
             
             // Remove the edge
             RemoveElement(edge);
+            //CheckLoopConditions();
         }
     }
 
@@ -114,27 +120,32 @@ public class FSMGraphView : GraphView
         return compatiblePorts;
     }
 
-    public FSMNode CreateNode(string nodeName, Vector2 position, FSMNodeType nodeT, bool shouldDraw = true)
+    public FSMNode CreateNode(string nodeName, Vector2 position, FSMNodeType nodeT, bool fixName = true, bool shouldDraw = true)
     {
+        Debug.Log("Node Name: " + nodeName);
         Type nodeType = Type.GetType($"FSM{nodeT}Node");
         FSMNode node = (FSMNode)Activator.CreateInstance(nodeType);
-        
-        if(nodeT == FSMNodeType.Transition || nodeT == FSMNodeType.DualTransition)
+
+        if (fixName)
         {
-            int count = 0;
-            foreach (string stateName in _ungroupedNodes.Keys)
+            if(nodeT == FSMNodeType.Transition || nodeT == FSMNodeType.DualTransition || nodeT == FSMNodeType.Extension)
             {
-                if (stateName.Split(" ")[0] == nodeName.Split(" ")[0])
+                int count = 0;
+                foreach (string stateName in _ungroupedNodes.Keys)
                 {
-                    nodeName = nodeName.Split(" ")[0];
-                    _ungroupedNodes.UpdateKey(stateName, nodeName+ " " + count);
-                    GetNodeFromGraph(stateName).SetStateName(nodeName+ " " + count);
-                    //GetNodeFromGraph(stateName).SetStateName(nodeName + " " + count);
-                    count++;
-                    nodeName = nodeName + " " + count;
+                    if (stateName.Split(" ")[0] == nodeName.Split(" ")[0])
+                    {
+                        nodeName = nodeName.Split(" ")[0];
+                        _ungroupedNodes.UpdateKey(stateName, nodeName+ " " + count);
+                        GetNodeFromGraph(stateName).SetStateName(nodeName+ " " + count);
+                        //GetNodeFromGraph(stateName).SetStateName(nodeName + " " + count);
+                        count++;
+                        nodeName = nodeName + " " + count;
+                    }
                 }
             }
         }
+        
         node.Initialize(nodeName, this, position);
 
         if (shouldDraw)
@@ -248,6 +259,7 @@ public class FSMGraphView : GraphView
                 }
             }
         }
+        Debug.Log("Node Name: " + nodeName);
         return null;
     }
 
@@ -262,6 +274,7 @@ public class FSMGraphView : GraphView
             List<Edge> edgesToDelete = new List<Edge>();
             List<FSMNode> nodesToDelete = new List<FSMNode>();
             List<FSMNode> nodesToReconnect = new List<FSMNode>(); // Store nodes to reconnect
+            Dictionary<string, FSMNode[]> nodeToReconnectDictionary = new Dictionary<string, FSMNode[]>();
 
             foreach (GraphElement element in selection)
             {
@@ -274,11 +287,20 @@ public class FSMGraphView : GraphView
 
                     if (node.NodeType == FSMNodeType.Extension)
                     {
-                        // For extension nodes, collect connected nodes to reconnect them later
+                        foreach (Port port in node.inputContainer.Children())
+                        {
+                            foreach (Edge edge in port.connections)
+                            {
+                                FSMNode connectedNode = edge.output.node as FSMNode;
+                                nodesToReconnect.Add(connectedNode);
+                            }
+                        }
+                        
                         foreach (Port port in node.outputContainer.Children())
                         {
                             foreach (Edge edge in port.connections)
                             {
+                     
                                 FSMNode connectedNode = edge.input.node as FSMNode;
                                 nodesToReconnect.Add(connectedNode);
                             }
@@ -305,7 +327,7 @@ public class FSMGraphView : GraphView
             }
 
             // Reconnect nodes that were connected to extension nodes
-            foreach (FSMNode node in nodesToReconnect)
+            /*foreach (FSMNode node in nodesToReconnect)
             {
                 if (node == null)
                     continue;
@@ -320,7 +342,7 @@ public class FSMGraphView : GraphView
                             // Reconnect the nodes
                             FSMNode nextNode = (FSMNode)edge.input.node;
                             FSMConnectionSaveData choiceData = (FSMConnectionSaveData)edge.output.userData;
-
+    
                             choiceData.NodeId = nextNode.Id;
 
                             if (choiceData.Text == "Initial Node")
@@ -330,7 +352,7 @@ public class FSMGraphView : GraphView
                         }
                     }
                 }
-            }
+            }*/
 
             foreach (FSMGroup group in groupsToDelete)
             {
@@ -415,6 +437,105 @@ public class FSMGraphView : GraphView
         };
     }
 
+    private void CheckLoopConditions()
+    {
+        // Perform depth-first search (DFS) traversal starting from each node
+        Dictionary<int, HashSet<FSMNode>> nodeLoopConnections = new Dictionary<int, HashSet<FSMNode>>();
+        HashSet<FSMNode> visit = new HashSet<FSMNode>();
+        
+        int count = 0;
+        foreach (var element in graphElements)
+        {
+            if (element is FSMNode startNode && (startNode.NodeType == FSMNodeType.Transition || startNode.NodeType == FSMNodeType.DualTransition || startNode.NodeType == FSMNodeType.Extension))
+            {
+                startNode.inputContainer.Children().OfType<Port>().ToList().ForEach(port =>
+                {
+                    port.connections.ToList().ForEach(edge =>
+                    {
+                        edge.input.portColor = Color.white;
+                    });
+                });
+                
+                startNode.outputContainer.Children().OfType<Port>().ToList().ForEach(port =>
+                {
+                    port.connections.ToList().ForEach(edge =>
+                    {
+                        edge.output.portColor = Color.white;
+                    });
+                });
+                
+                HashSet<FSMNode> visited = new HashSet<FSMNode>(); // Track visited nodes
+                visited = DFS(startNode, visited);
+                if (visited.Count > 0)
+                {
+                    nodeLoopConnections.Add(count, visited);
+                    count++;
+                }
+            }
+        }
+
+        // Highlight the nodes that are part of a loop in the dictionary
+        foreach(var item in nodeLoopConnections)
+        {
+            foreach (var element in graphElements)
+            {
+                if (item.Value.Contains(element))
+                {
+                    ((FSMNode)element).inputContainer.Children().OfType<Port>().ToList().ForEach(port =>
+                    {
+                        port.connections.ToList().ForEach(edge =>
+                        {
+                            edge.input.portColor = Color.yellow;
+                        });
+                    });
+                
+                    ((FSMNode)element).outputContainer.Children().OfType<Port>().ToList().ForEach(port =>
+                    {
+                        port.connections.ToList().ForEach(edge =>
+                        {
+                            edge.output.portColor = Color.yellow;
+                        });
+                    });
+                }
+                
+                AddToSelection(element);
+                RemoveFromSelection(element);
+            }
+        }
+        
+    }
+
+    private HashSet<FSMNode> DFS(FSMNode currentNode, HashSet<FSMNode> visited)
+    {
+        if (visited.Contains(currentNode))
+        {
+            // Detected a loop
+            return visited;
+        }
+        
+        // Mark current node as visited and add to current path
+        visited.Add(currentNode);
+
+        // Recursively traverse each connected node
+        foreach (var port in currentNode.outputContainer.Children().OfType<Port>())
+        {
+            foreach (var edge in port.connections)
+            {
+                var nextNode = edge.input.node as FSMNode;
+                if(nextNode != null)
+                {
+                    if (nextNode.NodeType != FSMNodeType.Transition && nextNode.NodeType != FSMNodeType.DualTransition && nextNode.NodeType != FSMNodeType.Extension)
+                    {
+                        return new HashSet<FSMNode>();
+                    }
+                    return DFS(nextNode, visited);
+                }
+            }
+        }
+        return new HashSet<FSMNode>();
+    }
+
+
     private void OnGraphViewChanged()
     {
         graphViewChanged = (changes) =>
@@ -482,6 +603,7 @@ public class FSMGraphView : GraphView
                     
                 }
             }
+            CheckLoopConditions();
             return changes;
         };
     }

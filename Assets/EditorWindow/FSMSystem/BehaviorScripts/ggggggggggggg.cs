@@ -8,14 +8,6 @@ using System.Reflection;
 [Serializable]
 public class ggggggggggggg : BehaviorScript
 {
-	[Header("Search")]
-	[SerializeField]
-	public SearchStateScript search;
-
-	[Header("Hearing")]
-	[SerializeField]
-	public HearingConditionScript hearing;
-
 	[Header("Seeing")]
 	[SerializeField]
 	public SeeingConditionScript seeing;
@@ -23,6 +15,14 @@ public class ggggggggggggg : BehaviorScript
 	[Header("Chase")]
 	[SerializeField]
 	public ChaseStateScript chase;
+
+	[Header("Search")]
+	[SerializeField]
+	public SearchStateScript search;
+
+	[Header("Hearing")]
+	[SerializeField]
+	public HearingConditionScript hearing;
 
 	private void Start()
 	{
@@ -33,20 +33,12 @@ public class ggggggggggggg : BehaviorScript
 	{
 		switch (currentState)
 		{
-			case FSMStates.Search:
-				UpdateSearchState();
-				break;
 			case FSMStates.Chase:
 				UpdateChaseState();
 				break;
-		}
-	}
-	public void UpdateSearchState()
-	{
-		search.Execute();
-		if(seeing.Condition())
-		{
-			ChangeChaseState();
+			case FSMStates.Search:
+				UpdateSearchState();
+				break;
 		}
 	}
 	public void UpdateChaseState()
@@ -58,13 +50,21 @@ public class ggggggggggggg : BehaviorScript
 			ChangeSearchState();
 		}
 	}
-	private void ChangeSearchState()
+	public void UpdateSearchState()
 	{
-		currentState = FSMStates.Search;
+		search.Execute();
+		if(seeing.Condition())
+		{
+			ChangeChaseState();
+		}
 	}
 	private void ChangeChaseState()
 	{
 		currentState = FSMStates.Chase;
+	}
+	private void ChangeSearchState()
+	{
+		currentState = FSMStates.Search;
 	}
 	private void OnFootstep() {}
 }

@@ -8,53 +8,53 @@ using System.Reflection;
 [Serializable]
 public class newUpdate : BehaviorScript
 {
-	[Header("Attack")]
-	[SerializeField]
-	public AttackStateScript attack;
-
-	[Header("Seeing 0")]
-	[SerializeField]
-	public SeeingConditionScript seeing0;
-
 	[Header("Chase")]
 	[SerializeField]
 	public ChaseStateScript chase;
-
-	[Header("Hearing 0")]
-	[SerializeField]
-	public HearingConditionScript hearing0;
 
 	[Header("Hearing 1")]
 	[SerializeField]
 	public HearingConditionScript hearing1;
 
-	[Header("Seeing 1")]
-	[SerializeField]
-	public SeeingConditionScript seeing1;
-
 	[Header("Hearing 2")]
 	[SerializeField]
 	public HearingConditionScript hearing2;
 
-	[Header("Patrol")]
+	[Header("Seeing 1")]
 	[SerializeField]
-	public PatrolStateScript patrol;
-
-	[Header("Distance 0")]
-	[SerializeField]
-	public DistanceConditionScript distance0;
+	public SeeingConditionScript seeing1;
 
 	[Header("Distance 1")]
 	[SerializeField]
 	public DistanceConditionScript distance1;
 
-	[Header("Hearing 3")]
+	[Header("Hearing 0")]
 	[SerializeField]
-	public HearingConditionScript hearing3;
+	public HearingConditionScript hearing0;
+
+	[Header("Patrol")]
+	[SerializeField]
+	public PatrolStateScript patrol;
+
+	[Header("Seeing 0")]
+	[SerializeField]
+	public SeeingConditionScript seeing0;
 
 	[Header("Health")]
 	[SerializeField]
 	public HealthConditionScript health;
+
+	[Header("Distance 0")]
+	[SerializeField]
+	public DistanceConditionScript distance0;
+
+	[Header("Attack")]
+	[SerializeField]
+	public AttackStateScript attack;
+
+	[Header("Hearing 3")]
+	[SerializeField]
+	public HearingConditionScript hearing3;
 
 	float waitHitTime = 2f;
 	float hitLastTime = 0f;
@@ -67,14 +67,14 @@ public class newUpdate : BehaviorScript
 	{
 		switch (currentState)
 		{
-			case FSMStates.Attack:
-				UpdateAttackState();
-				break;
 			case FSMStates.Chase:
 				UpdateChaseState();
 				break;
 			case FSMStates.Patrol:
 				UpdatePatrolState();
+				break;
+			case FSMStates.Attack:
+				UpdateAttackState();
 				break;
 			case FSMStates.Hit:
 				UpdateHitState();
@@ -92,6 +92,22 @@ public class newUpdate : BehaviorScript
 		if(healthSystem.GetCurrentHealth() <= 0)
 		{
 			ChangeDieState();
+		}
+	}
+	public void UpdateChaseState()
+	{
+		chase.Execute();
+		if(health.Condition() && distance0.Condition() && distance1.Condition() && hearing0.Condition())
+		{
+			ChangeAttackState();
+		}
+	}
+	public void UpdatePatrolState()
+	{
+		patrol.Execute();
+		if(hearing0.Condition())
+		{
+			ChangeAttackState();
 		}
 	}
 	public void UpdateAttackState()
@@ -114,22 +130,6 @@ public class newUpdate : BehaviorScript
 			ChangeChaseState();
 		}
 	}
-	public void UpdateChaseState()
-	{
-		chase.Execute();
-		if(health.Condition() && distance0.Condition() && distance1.Condition() && hearing0.Condition())
-		{
-			ChangeAttackState();
-		}
-	}
-	public void UpdatePatrolState()
-	{
-		patrol.Execute();
-		if(hearing0.Condition())
-		{
-			ChangeAttackState();
-		}
-	}
 	public void UpdateHitState()
 	{
 		NavMeshAgent agent = GetComponent<NavMeshAgent>();
@@ -144,10 +144,6 @@ public class newUpdate : BehaviorScript
 	{
 		GetComponent<EnemyHealthSystem>().Die();
 	}
-	private void ChangeAttackState()
-	{
-		currentState = FSMStates.Attack;
-	}
 	private void ChangeChaseState()
 	{
 		currentState = FSMStates.Chase;
@@ -155,6 +151,10 @@ public class newUpdate : BehaviorScript
 	private void ChangePatrolState()
 	{
 		currentState = FSMStates.Patrol;
+	}
+	private void ChangeAttackState()
+	{
+		currentState = FSMStates.Attack;
 	}
 	private void ChangeHitState()
 	{

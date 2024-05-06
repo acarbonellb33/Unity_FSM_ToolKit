@@ -109,7 +109,7 @@ public class FSMNode : Node
         return contextualMenuManipulator;
     }
 
-    public void SetStateName(string stateName)
+    public virtual void SetStateName(string stateName)
     {
         StateName = stateName;
         stateNameField.text = stateName;

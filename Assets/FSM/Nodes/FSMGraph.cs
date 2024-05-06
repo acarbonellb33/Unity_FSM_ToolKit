@@ -47,7 +47,7 @@ public class FSMGraph : MonoBehaviour
                 {
                     for (int i = 0; i < graphContainer.Nodes.Count; i++)
                     {
-                        if (graphContainer.Nodes[i].NodeType != FSMNodeType.Initial)
+                        if (graphContainer.Nodes[i].NodeType != FSMNodeType.Initial && graphContainer.Nodes[i].NodeType != FSMNodeType.Extension)
                         {
                             dynamicMethod.Invoke(newScriptInstance, new object[]
                             {

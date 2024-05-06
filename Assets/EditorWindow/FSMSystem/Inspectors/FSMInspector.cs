@@ -56,7 +56,7 @@ public class FSMInspector : Editor
             {
                 for (int i = 0; i < graphContainerData.Nodes.Count; i++)
                 {
-                    if (graphContainerData.Nodes[i].NodeType != FSMNodeType.Initial)
+                    if (graphContainerData.Nodes[i].NodeType != FSMNodeType.Initial && graphContainerData.Nodes[i].NodeType != FSMNodeType.Extension)
                     {
                         string nodeName = char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) + graphContainerData.Nodes[i].Name.Substring(1);
                         nodeName = nodeName.Replace(" ", "");

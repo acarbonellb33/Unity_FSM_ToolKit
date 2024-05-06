@@ -29,12 +29,13 @@
 
     /* Set margin to position them properly */
     margin: 0;
+
 }
 
 /* Optionally, you can hide the ports completely if desired */
-.fsm-node_extension-container .fsm-node_input-output-container .port {
+/*.fsm-node_input-output-container-extension .port {
     display: none;
-}
+}*/
 
 /* INPUTS */
 

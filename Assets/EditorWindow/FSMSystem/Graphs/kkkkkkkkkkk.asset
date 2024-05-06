@@ -13,26 +13,193 @@ MonoBehaviour:
   m_Name: kkkkkkkkkkk
   m_EditorClassIdentifier: 
   <FileName>k__BackingField: kkkkkkkkkkk
-  <InitialState>k__BackingField: 
+  <InitialState>k__BackingField: Chase
   <Nodes>k__BackingField:
   - <Id>k__BackingField: a6621bbf-bfcd-47ba-9224-b16b40fc5b1d
     <Name>k__BackingField: Initial State
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: Initial Node
-      <NodeId>k__BackingField: 
+      <NodeId>k__BackingField: 86eeb3a3-971e-4215-a728-0672285dda53
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 2
     <Position>k__BackingField: {x: 100, y: 100}
     <AnimatorSaveData>k__BackingField:
       <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
     <DataObject>k__BackingField: 
+  - <Id>k__BackingField: e4c10e3e-852c-440d-8f77-56ae4b313aa4
+    <Name>k__BackingField: Distance
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: 86eeb3a3-971e-4215-a728-0672285dda53
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: -28, y: 433}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"distanceFromPlayer\":
+      10.0\n}"
+  - <Id>k__BackingField: 36b3caa6-eb9a-4da8-819b-057bc3fb4152
+    <Name>k__BackingField: Extension 1
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Extension Node
+      <NodeId>k__BackingField: 67c10daf-bb0c-4605-b534-208af4973521
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 4
+    <Position>k__BackingField: {x: 1037, y: 625}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: 
+  - <Id>k__BackingField: 67c10daf-bb0c-4605-b534-208af4973521
+    <Name>k__BackingField: Extension 0
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Extension Node
+      <NodeId>k__BackingField: e4c10e3e-852c-440d-8f77-56ae4b313aa4
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 4
+    <Position>k__BackingField: {x: -75, y: 625}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: 
+  - <Id>k__BackingField: 1f796779-a796-4b06-8472-2e2338000a6a
+    <Name>k__BackingField: Extension 2
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Extension Node
+      <NodeId>k__BackingField: 038864ca-8f6e-497f-a3d2-eca2a86b6d8f
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 4
+    <Position>k__BackingField: {x: 613, y: 57}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: 
+  - <Id>k__BackingField: c6349a41-09e8-46d3-9be2-e456c726e02f
+    <Name>k__BackingField: Seeing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: 1f796779-a796-4b06-8472-2e2338000a6a
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 666, y: 191}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
+  - <Id>k__BackingField: ca1981ff-3c0a-462b-a3e0-aeccf8be3e48
+    <Name>k__BackingField: Extension 3
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Extension Node
+      <NodeId>k__BackingField: c6349a41-09e8-46d3-9be2-e456c726e02f
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 4
+    <Position>k__BackingField: {x: 924, y: 111}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: 
+  - <Id>k__BackingField: 038864ca-8f6e-497f-a3d2-eca2a86b6d8f
+    <Name>k__BackingField: Hearing
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: ca1981ff-3c0a-462b-a3e0-aeccf8be3e48
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 666, y: -95}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: "{\n    \"hearingRange\": 10.0,\n    \"minPlayerSpeed\":
+      5.0\n}"
+  - <Id>k__BackingField: 86eeb3a3-971e-4215-a728-0672285dda53
+    <Name>k__BackingField: Chase
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 350a49c2-4e06-48fa-bcf5-42bef690c94a
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 327, y: 119}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
+      10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"
+  - <Id>k__BackingField: 9f8007bc-0448-46f3-9cad-20c71feac549
+    <Name>k__BackingField: Search
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 36b3caa6-eb9a-4da8-819b-057bc3fb4152
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 772, y: 409}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: "{\n    \"exploreRadius\": 10.0\n}"
+  - <Id>k__BackingField: 350a49c2-4e06-48fa-bcf5-42bef690c94a
+    <Name>k__BackingField: Health
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: 9f8007bc-0448-46f3-9cad-20c71feac549
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 485, y: 447}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"health\": 10.0\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
-  <OldUngroupedNames>k__BackingField: []
+  <OldUngroupedNames>k__BackingField:
+  - Initial State
+  - Distance
+  - Extension 1
+  - Extension 0
+  - Extension 2
+  - Seeing
+  - Extension 3
+  - Hearing
+  - Chase
+  - Search
+  - Health
   <OldGroupedNodeNames>k__BackingField:
     list: []
-  <GameObject>k__BackingField: 
+  <GameObject>k__BackingField: Enemy
   <HitData>k__BackingField:
     <HitEnable>k__BackingField: 0
     <TimeToWait>k__BackingField: 0

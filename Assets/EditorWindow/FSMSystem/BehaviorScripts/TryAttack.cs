@@ -16,9 +16,9 @@ public class TryAttack : BehaviorScript
 	[SerializeField]
 	public DistanceConditionScript distance0;
 
-	[Header("Seeing")]
+	[Header("Seeing 0")]
 	[SerializeField]
-	public SeeingConditionScript seeing;
+	public SeeingConditionScript seeing0;
 
 	[Header("Search")]
 	[SerializeField]
@@ -56,7 +56,7 @@ public class TryAttack : BehaviorScript
 	public void UpdateSearchState()
 	{
 		search.Execute();
-		if(seeing.Condition() && distance0.Condition())
+		if(seeing0.Condition() && distance0.Condition())
 		{
 			ChangeAttackState();
 		}

@@ -4,5 +4,6 @@ public enum FSMNodeType
     Transition,
     Initial,
     DualTransition,
-    Extension
+    Extension,
+    CustomState
 }

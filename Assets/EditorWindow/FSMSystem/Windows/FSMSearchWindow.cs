@@ -101,7 +101,12 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
             {
                 userData = new Group(),
                 level = 1
-            }
+            },
+            new SearchTreeEntry(new GUIContent("Create Custom State", _indentationIcon))
+            {
+                userData = FSMNodeType.CustomState,
+            level = 1
+        }
         };
         return tree;
     }
@@ -122,6 +127,10 @@ public class FSMSearchWindow : ScriptableObject, ISearchWindowProvider
             case FSMNodeType.DualTransition:
                 FSMDualTransitionNode dualTransitionNode = (FSMDualTransitionNode) _graphView.CreateNode(searchTreeEntry.name,localMousePosition, FSMNodeType.DualTransition);
                 _graphView.AddElement(dualTransitionNode);
+                return true;
+            case FSMNodeType.CustomState:
+                FSMCustomStateNode customStateNode = (FSMCustomStateNode) _graphView.CreateNode(searchTreeEntry.name,localMousePosition, FSMNodeType.CustomState);
+                _graphView.AddElement(customStateNode);
                 return true;
             case Group _:
                 _graphView.CreateGroup("New Group", localMousePosition);

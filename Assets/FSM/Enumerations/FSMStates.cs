@@ -7,5 +7,6 @@ public enum FSMStates
     Hit,
     Die, 
     Search,
+    Custom,
     Alert
 }

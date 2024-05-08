@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class FSMStateNode : FSMNode
+public class FSMCustomStateNode : FSMNode
 {
     private List<StateScriptData> _dataObjects;
     
@@ -18,12 +18,19 @@ public class FSMStateNode : FSMNode
     private string _animatorParameter;
     private string _parameterType;
     private string _animatorValue;
+    
+    //Custom State Attributes
+    private GameObject selectedGameObject = default;
+    private Component selectedComponent = default;
+    private string selectedFunction;
+    private DropdownField componentDropdown = new DropdownField();
+    private DropdownField functionDropdown = new DropdownField();
     public override void Initialize(string nodeName, FSMGraphView graphView,Vector2 postition)
     {
         base.Initialize(nodeName, graphView, postition);
-        NodeType = FSMNodeType.State;
+        NodeType = FSMNodeType.CustomState;
         
-        _dataObjects = new List<StateScriptData>(){new PatrolData(), new ChaseData(), new AttackData(), new SearchData()};
+        _dataObjects = new List<StateScriptData>(){new EstelitaData(), new PatrolData(), new ChaseData(), new AttackData(), new SearchData()};
 
         FSMConnectionSaveData connectionSaveData = new FSMConnectionSaveData()
         {
@@ -82,6 +89,54 @@ public class FSMStateNode : FSMNode
         RefreshExpandedState();
     }
 
+    #region Custom State Methods
+    
+
+    // Method to populate the dropdown menu with component options
+    private void PopulateComponentDropdown()
+    {
+        if (selectedGameObject != null)
+        {
+            // Get all the components attached to the selected GameObject
+            Component[] components = selectedGameObject.GetComponents<Component>();
+            List<string> componentNames = new List<string>();
+
+            // Add their names to the dropdown options
+            foreach (Component comp in components)
+            {
+                componentNames.Add(comp.GetType().Name);
+            }
+
+            // Populate the dropdown options
+            componentDropdown.choices = componentNames;
+        }
+    }
+
+    // Method to populate the dropdown menu with function options
+    private void PopulateFunctionDropdown(DropdownField dropdown)
+    {
+        if (selectedGameObject != null)
+        {
+            // Get all the methods (functions) of the selected component
+            MethodInfo[] methods = selectedComponent.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreReturn | BindingFlags.DeclaredOnly);
+            List<string> methodNames = new List<string>();
+
+            // Add their names to the dropdown options
+            foreach (MethodInfo method in methods)
+            {
+                methodNames.Add(method.Name);
+            }
+
+            // Populate the dropdown options
+            dropdown.choices = methodNames;
+
+            // Register a callback for when a function is selected
+            dropdown.RegisterValueChangedCallback(evt => { selectedFunction = evt.newValue; });
+        }
+    }
+
+    #endregion
+
     #region ScriptableObject Attributes
     private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
     {
@@ -109,194 +164,48 @@ public class FSMStateNode : FSMNode
                     objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                     {
                         StateScript.SetVariableValue(result[0], objectField.value);
+                        selectedGameObject = (GameObject) objectField.value;
+                        PopulateComponentDropdown();
                     });
                     objectField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(objectField);
                     break;
-                case "System.Collections.Generic.List`1[UnityEngine.GameObject]":
-                    
-                    string inputList = result[2];
-                    if (inputList != "")
-                    {
-                        List<GameObject> outputGameObjectsList = new List<GameObject>();
-                        outputGameObjectsList = inputList.Split('/').Select(GameObject.Find).ToList();
-                        foreach (var value in outputGameObjectsList)
-                        {
-                            string outputValue = Regex.Replace(value.ToString(), @"\s*\([^()]*\)", "");
-                            
-                            ObjectField objectListField = new ObjectField()
-                            {
-                                label = UpdateNameStyle(result[0]),
-                                objectType = typeof(GameObject),
-                                value = GameObject.Find(outputValue)
-                            };
-                            objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
-                            {
-                                StateScript.SetVariableValue(result[0], objectListField.value);
-                            });
-                                                
-                            Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
-                            {
-                                RemovePatrolPoint(objectListField);
-                                stateAttributeContainer.Remove(objectListField);
-                            });
-                        
-                            deleteChoiceButton.AddToClassList("fsm-node_button");
-                            objectListField.AddToClassList("fsm-node_state-attribute-field");
-                                                
-                            objectListField.Add(deleteChoiceButton);
-                            stateAttributeContainer.Add(objectListField);
-                        }
-                    }
-                    
-                    Button addChoiceButton = null;
-                    addChoiceButton = FSMElementUtility.CreateButton("Add Patrol Point", () =>
-                    {
-                        int indexToAdd = stateAttributeContainer.IndexOf(addChoiceButton);
-                        if (indexToAdd != -1)
-                        {
-                            ObjectField objectListField = new ObjectField()
-                            {
-                                label = UpdateNameStyle(result[0]),
-                                objectType = typeof(GameObject)
-                            };
-                            objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
-                            {
-                                StateScript.SetVariableValue(result[0], objectListField.value);
-                            });
-
-                            Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
-                            {
-                                RemovePatrolPoint(objectListField);
-                                stateAttributeContainer.Remove(objectListField);
-                            });
-
-                            deleteChoiceButton.AddToClassList("fsm-node_button");
-                            objectListField.AddToClassList("fsm-node_state-attribute-field");
-                            
-                            objectListField.Add(deleteChoiceButton);
-                            stateAttributeContainer.Insert(indexToAdd, objectListField);
-                            
-                            CreateAndAddGameObject(objectListField);
-                        }
-                    });
-                    
-                    addChoiceButton.AddToClassList("fsm-node_button");
-                    stateAttributeContainer.Add(addChoiceButton);
-                    break;
-                case "System.Single":
-                    FloatField floatField = new FloatField()
-                    {
-                        label = UpdateNameStyle(result[0]),
-                        value = float.Parse(result[2])
-                    };
-                    floatField.RegisterCallback<InputEvent>(evt =>
-                    {
-                        StateScript.SetVariableValue(result[0], floatField.value);
-                    });
-                    floatField.AddToClassList("fsm-node_state-attribute-field");
-                    stateAttributeContainer.Add(floatField);
-                    break;
-                case "System.Int32":
-                    IntegerField integerField = new IntegerField()
-                    {
-                        label = UpdateNameStyle(result[0]),
-                        value = int.Parse(result[2])
-                    };
-                    integerField.RegisterCallback<InputEvent>(evt =>
-                    {
-                        StateScript.SetVariableValue(result[0], integerField.value);
-                    });
-                    integerField.AddToClassList("fsm-node_state-attribute-field");
-                    stateAttributeContainer.Add(integerField);
-                    break;
-                case "System.Boolean":
-                    Toggle toggle = new Toggle()
-                    { 
-                        label = UpdateNameStyle(result[0]),
-                        value = bool.Parse(result[2])
-                    };
-                    toggle.RegisterCallback<ClickEvent>(evt =>
-                    {
-                        StateScript.SetVariableValue(result[0], toggle.value);
-                    });
-                    toggle.AddToClassList("fsm-node_state-attribute-field");
-                    stateAttributeContainer.Add(toggle);
-                    break;
-                case "System.String":
-                    TextField textField = new TextField()
+                
+                case "UnityEngine.Component":
+                    componentDropdown = new DropdownField("Select Component", new List<string>(), 0)
                     {
                         label = UpdateNameStyle(result[0]),
                         value = result[2]
                     };
-                    textField.RegisterCallback<InputEvent>(evt =>
+                    componentDropdown.RegisterValueChangedCallback(evt =>
                     {
-                        StateScript.SetVariableValue(result[0], textField.value);
+                        string selectedName = evt.newValue;
+                        selectedComponent = selectedGameObject.GetComponent(selectedName);
+                        StateScript.SetVariableValue(result[0], selectedComponent);
+                        PopulateFunctionDropdown(functionDropdown);
                     });
-                    textField.AddToClassList("fsm-node_state-attribute-field");
-                    stateAttributeContainer.Add(textField);
+                    componentDropdown.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(componentDropdown);
+                    break;
+                case "System.String":
+                    functionDropdown = new DropdownField("Select Function", new List<string>(), 0)
+                    {
+                        label = UpdateNameStyle(result[0]),
+                        value = result[2]
+                    };
+                    functionDropdown.RegisterValueChangedCallback(evt =>
+                    {
+                        StateScript.SetVariableValue(result[0], functionDropdown.value);
+                        selectedFunction = evt.newValue;
+                    });
+                    functionDropdown.AddToClassList("fsm-node_state-attribute-field");
+                    stateAttributeContainer.Add(functionDropdown);
                     break;
                 default:
                     break;
             }
         }
         customDataContainer.Add(stateAttributeContainer);
-    }
-    private void CreateAndAddGameObject(ObjectField objectListField)
-    {
-        FSMGraphSaveData graphContainerData = GetGraphData(graphView.GetWindow().GetFileName());
-        MonoScript script = GetScript(graphView.GetWindow().GetFileName());
-        if (script != null)
-        {
-            BehaviorScript newScriptInstance = (BehaviorScript)GameObject.Find(graphContainerData.GameObject).GetComponent(Type.GetType(graphContainerData.FileName));
-            MethodInfo dynamicMethod = script.GetClass().GetMethod("AddObjectToList");
-            if (dynamicMethod != null)
-            {
-                object o = dynamicMethod.Invoke(newScriptInstance,new object[] {});
-                if (o != null)
-                {
-                    objectListField.value = (GameObject)o;
-                }
-            }
-        }
-    }
-    private void RemovePatrolPoint(ObjectField objectListField)
-    { 
-        Debug.Log("RemovePatrolPoint");
-        FSMGraphSaveData graphContainerData = GetGraphData(graphView.GetWindow().GetFileName());
-        MonoScript script = GetScript(graphView.GetWindow().GetFileName());
-        if (script != null)
-        {
-            BehaviorScript newScriptInstance = (BehaviorScript)GameObject.Find(graphContainerData.GameObject).GetComponent(Type.GetType(graphContainerData.FileName));
-            MethodInfo dynamicMethod = script.GetClass().GetMethod("RemoveObjectFromList");
-            if (dynamicMethod != null)
-            {
-                dynamicMethod.Invoke(newScriptInstance,new object[]
-                {
-                    (GameObject)objectListField.value
-                });
-            }
-        }
-    }
-    private MonoScript GetScript(string className)
-    {
-        string[] guids = AssetDatabase.FindAssets("t:Script " + className);
-        if (guids.Length > 0)
-        {
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            return AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-        }
-        return null;
-    }
-    private FSMGraphSaveData GetGraphData(string className)
-    {
-        string[] guids = AssetDatabase.FindAssets("t:FSMGraphSaveData  " + className);
-        if (guids.Length > 0)
-        {
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            return AssetDatabase.LoadAssetAtPath<FSMGraphSaveData>(path);
-        }
-        return null;
     }
     private void GetScriptableObject()
     {
@@ -306,13 +215,7 @@ public class FSMStateNode : FSMNode
         }
         catch (NullReferenceException)
         {
-            foreach (StateScriptData enemyState in _dataObjects)
-            {
-                if (enemyState.GetStateName() == StateName)
-                {
-                    StateScript = enemyState;
-                }
-            }
+            StateScript = new CustomData();
         }
     }
     private string UpdateNameStyle(string name)

@@ -60,8 +60,7 @@ public static class EnemyStateMachineEditor
             {
                 scriptContent += $"\t[Header(\"" + node.Name + "\")]\n";
                 scriptContent += "\t[SerializeField]\n";
-                string variableName =
-                    node.NodeType == FSMNodeType.State ? node.Name + "State" : node.Name + "Condition";
+                string variableName = node.NodeType == FSMNodeType.State || node.NodeType == FSMNodeType.CustomState ? node.Name + "State" : node.Name + "Condition";
                 string name = char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1);
                 name = name.Replace(" ", "");
                 variableName = Regex.Replace(variableName, @"[\s\d]", "");
@@ -89,7 +88,7 @@ public static class EnemyStateMachineEditor
 
         foreach (var node in states.Distinct())
         {
-            if (node.NodeType == FSMNodeType.State)
+            if (node.NodeType == FSMNodeType.State || node.NodeType == FSMNodeType.CustomState)
             {
                 scriptContent += $"\t\t\tcase FSMStates.{node.Name}:\n";
                 scriptContent += $"\t\t\t\tUpdate{node.Name}State();\n";
@@ -129,7 +128,7 @@ public static class EnemyStateMachineEditor
         
         foreach (var node in states.Distinct())
         {
-            if (node.NodeType == FSMNodeType.State)
+            if (node.NodeType == FSMNodeType.State || node.NodeType == FSMNodeType.CustomState)
             {
                 scriptContent += $"\tpublic void Update{node.Name}State()\n";
                 scriptContent += "\t{\n";
@@ -191,7 +190,7 @@ public static class EnemyStateMachineEditor
         
         foreach (var node in states.Distinct())
         {
-            if (node.NodeType == FSMNodeType.State)
+            if (node.NodeType == FSMNodeType.State || node.NodeType == FSMNodeType.CustomState)
             {
                 scriptContent += $"\tprivate void Change{node.Name.Replace(" ","")}State()\n";
                 scriptContent += "\t{\n";
@@ -242,7 +241,7 @@ public static class EnemyStateMachineEditor
 
     private static string GenerateConditionsRecursive(FSMNodeSaveData node, string test, bool isFirst, bool isElse, string pastFalse)
     {
-        if(node.NodeType == FSMNodeType.Initial || node.NodeType == FSMNodeType.State)
+        if(node.NodeType == FSMNodeType.Initial || node.NodeType == FSMNodeType.State || node.NodeType == FSMNodeType.CustomState)
         {
             test += ")\n";
             test += "\t\t{\n";

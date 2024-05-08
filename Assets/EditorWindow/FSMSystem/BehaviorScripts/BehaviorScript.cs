@@ -108,6 +108,15 @@ public abstract class BehaviorScript : MonoBehaviour
                     field.SetValue(this, health);
                     options.Add(health);
                     break;
+                case "CustomData":
+                    CustomStateScript custom = gameObject.AddComponent<CustomStateScript>();
+                    foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                    {
+                        custom.SetVariableValue(variable.Key, variable.Value);
+                    }
+                    field.SetValue(this, custom);
+                    options.Add(custom);
+                    break;
             }
         }
         else

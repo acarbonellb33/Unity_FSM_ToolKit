@@ -777,7 +777,7 @@ public class FSMGraphView : GraphView
         this.AddManipulator(CreateGroupContextualMenu());
   		this.AddManipulator(CreateTransitionItemMenu("NextState"));
 		this.AddManipulator(CreateDualTransitionStateItemMenu("NextState"));
-  		this.AddManipulator(CreateStateItemMenu("Estelita"));
+        this.AddManipulator(CreateCustomStateItemMenu("Custom"));
   }
 
     private void AddSearchWindow()
@@ -809,6 +809,16 @@ public class FSMGraphView : GraphView
             menuEvent => menuEvent.menu.AppendAction($"Create State/{nodeName}", menuActionEvent =>
                 AddElement(CreateNode(nodeName, GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition),
                     FSMNodeType.State))));
+
+        return contextualMenuManipulator;
+    }
+    
+    private IManipulator CreateCustomStateItemMenu(string nodeName)
+    {
+        ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
+            menuEvent => menuEvent.menu.AppendAction($"Create Custom State", menuActionEvent =>
+                AddElement(CreateNode(nodeName, GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition),
+                    FSMNodeType.CustomState))));
 
         return contextualMenuManipulator;
     }

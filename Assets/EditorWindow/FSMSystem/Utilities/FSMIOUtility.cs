@@ -370,12 +370,11 @@ public static class FSMIOUtility
                 NextStateData nextStateData = JsonUtility.FromJson<NextStateData>(json);
                 node.StateScript = nextStateData;
                 break;
-        
-            case "Estelita":
-                EstelitaData estelitaData = JsonUtility.FromJson<EstelitaData>(json);
-                node.StateScript = estelitaData;
+            case "Custom":
+                CustomData customData = JsonUtility.FromJson<CustomData>(json);
+                node.StateScript = customData;
                 break;
-            }
+        }
         return node.StateScript;
     }
     private static StateScriptData LoadFromJson(FSMNode node)
@@ -421,12 +420,11 @@ public static class FSMIOUtility
                 NextStateData nextStateData = JsonUtility.FromJson<NextStateData>(json);
                 node.StateScript = nextStateData;
                 break;
-        
-            case "Estelita":
-                EstelitaData estelitaData = JsonUtility.FromJson<EstelitaData>(json);
-                node.StateScript = estelitaData;
+            case "Custom":
+                CustomData customData = JsonUtility.FromJson<CustomData>(json);
+                node.StateScript = customData;
                 break;
-            }
+        }
         return node.StateScript;
     }
     private static void LoadConnections()

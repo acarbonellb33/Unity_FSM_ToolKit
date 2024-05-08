@@ -19,4 +19,4 @@ MonoBehaviour:
   <NodeType>k__BackingField: 5
   <DataObject>k__BackingField: "{\n    \"selectedGameObject\": {\n        \"instanceID\":
     28736\n    },\n    \"selectedComponent\": {\n        \"instanceID\": 28890\n   
-    },\n    \"selectedFunction\": \"Test\"\n}"
+    },\n    \"selectedFunction\": \"GetCurrentHealth\"\n}"

@@ -76,22 +76,6 @@ MonoBehaviour:
       <Value>k__BackingField: 
     <DataObject>k__BackingField: "{\n    \"hearingRange\": 5.0,\n    \"minPlayerSpeed\":
       5.0\n}"
-  - <Id>k__BackingField: e715fd38-e8cb-4c4e-8502-b54b96b88742
-    <Name>k__BackingField: Chase
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Condition
-      <NodeId>k__BackingField: 1a88e6ed-336e-46b9-9e5c-5801b249aabd
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 853, y: 488}
-    <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
-      <ParameterName>k__BackingField: 
-      <ParameterType>k__BackingField: 
-      <Value>k__BackingField: 
-    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
-      10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"
   - <Id>k__BackingField: 2e251c07-097b-4e88-b326-48da723c00ed
     <Name>k__BackingField: Distance
     <Text>k__BackingField: 
@@ -118,13 +102,29 @@ MonoBehaviour:
     <NodeType>k__BackingField: 5
     <Position>k__BackingField: {x: 356, y: 164}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
-      <ParameterName>k__BackingField: 
-      <ParameterType>k__BackingField: 
-      <Value>k__BackingField: 
+      <TriggerEnable>k__BackingField: 1
+      <ParameterName>k__BackingField: Jump
+      <ParameterType>k__BackingField: Bool
+      <Value>k__BackingField: True
     <DataObject>k__BackingField: "{\n    \"selectedGameObject\": {\n        \"instanceID\":
       28736\n    },\n    \"selectedComponent\": {\n        \"instanceID\": 28890\n   
-      },\n    \"selectedFunction\": \"Test\"\n}"
+      },\n    \"selectedFunction\": \"GetCurrentHealth\"\n}"
+  - <Id>k__BackingField: e715fd38-e8cb-4c4e-8502-b54b96b88742
+    <Name>k__BackingField: Chase
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 1a88e6ed-336e-46b9-9e5c-5801b249aabd
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 853, y: 488}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 1
+      <ParameterName>k__BackingField: Grounded
+      <ParameterType>k__BackingField: Bool
+      <Value>k__BackingField: False
+    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
+      10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
@@ -132,9 +132,9 @@ MonoBehaviour:
   - Extension 1
   - Initial State
   - Hearing
-  - Chase
   - Distance
   - Custom
+  - Chase
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy

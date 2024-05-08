@@ -107,6 +107,10 @@ public class FSMCustomStateNode : FSMNode
                 componentNames.Add(comp.GetType().Name);
             }
 
+            if (componentDropdown == null)
+            {
+                componentDropdown = new DropdownField("Select Component", new List<string>(), 0);
+            }
             // Populate the dropdown options
             componentDropdown.choices = componentNames;
         }
@@ -117,6 +121,11 @@ public class FSMCustomStateNode : FSMNode
     {
         if (selectedGameObject != null)
         {
+            if (dropdown == null)
+            {
+                dropdown = new DropdownField("Select Function", new List<string>(), 0);
+            }
+
             // Get all the methods (functions) of the selected component
             MethodInfo[] methods = selectedComponent.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreReturn | BindingFlags.DeclaredOnly);
             List<string> methodNames = new List<string>();
@@ -161,6 +170,12 @@ public class FSMCustomStateNode : FSMNode
                         objectType = typeof(GameObject),
                         value = GameObject.Find(output)
                     };      
+                    if(objectField.value != null)
+                    {
+                        StateScript.SetVariableValue(result[0], objectField.value);
+                        selectedGameObject = (GameObject) objectField.value;
+                        PopulateComponentDropdown();
+                    }
                     objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                     {
                         StateScript.SetVariableValue(result[0], objectField.value);
@@ -172,11 +187,15 @@ public class FSMCustomStateNode : FSMNode
                     break;
                 
                 case "UnityEngine.Component":
-                    componentDropdown = new DropdownField("Select Component", new List<string>(), 0)
+                    componentDropdown.label = UpdateNameStyle(result[0]);
+                    componentDropdown.value = GetNamespaceAndClassName(result[2]);
+                    
+                    if (componentDropdown.value != null)
                     {
-                        label = UpdateNameStyle(result[0]),
-                        value = result[2]
-                    };
+                        selectedComponent = selectedGameObject.GetComponent(componentDropdown.value);
+                        StateScript.SetVariableValue(result[0], selectedComponent);
+                        PopulateFunctionDropdown(functionDropdown);
+                    }
                     componentDropdown.RegisterValueChangedCallback(evt =>
                     {
                         string selectedName = evt.newValue;
@@ -188,11 +207,9 @@ public class FSMCustomStateNode : FSMNode
                     stateAttributeContainer.Add(componentDropdown);
                     break;
                 case "System.String":
-                    functionDropdown = new DropdownField("Select Function", new List<string>(), 0)
-                    {
-                        label = UpdateNameStyle(result[0]),
-                        value = result[2]
-                    };
+                    functionDropdown.label = UpdateNameStyle(result[0]);
+                    functionDropdown.value = result[2];
+                    
                     functionDropdown.RegisterValueChangedCallback(evt =>
                     {
                         StateScript.SetVariableValue(result[0], functionDropdown.value);
@@ -235,6 +252,18 @@ public class FSMCustomStateNode : FSMNode
             }
         }
         return resultString;
+    }
+    
+    private string GetNamespaceAndClassName(string fullTypeName)
+    {
+        // Split the string by '(' and ')' to get the class name
+        string[] parts = fullTypeName.Split('(');
+        if (parts.Length > 1)
+        {
+            string namespaceAndClassName = parts[1].Trim(')').Trim(); // Trim to remove ')' and any leading/trailing spaces
+            return namespaceAndClassName;
+        }
+        return null;
     }
 
     #endregion
@@ -525,15 +554,14 @@ public class FSMCustomStateNode : FSMNode
         {
             switch (parameterType)
             {
-                
                 case "Float":
-                    animator.SetFloat(parameterName, (float)value);Debug.Log("Parameter name: " + parameterName + " Value: " + value + " Parameter Type: " + parameterType);
+                    animator.SetFloat(parameterName, (float)value);
                     break;
                 case "Integer":
-                    animator.SetInteger(parameterName, (int)value);Debug.Log("Parameter name: " + parameterName + " Value: " + value + " Parameter Type: " + parameterType);
+                    animator.SetInteger(parameterName, (int)value);
                     break;
                 case "Bool":
-                    animator.SetBool(parameterName, (bool)value);Debug.Log("Parameter name: " + parameterName + " Value: " + value + " Parameter Type: " + parameterType);
+                    animator.SetBool(parameterName, (bool)value);
                     break;
                 default:
                     break;

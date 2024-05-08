@@ -291,7 +291,7 @@ public static class FSMIOUtility
             node.StateName = nodeData.Name;
             node.Choices = connections;
             node.StateScript = LoadFromJson(node);
-            if (node.NodeType == FSMNodeType.State)
+            if (node.NodeType == FSMNodeType.State || node.NodeType == FSMNodeType.CustomState)
             {
                 node.SetAnimatorSaveData(nodeData.AnimatorSaveData);
             } 

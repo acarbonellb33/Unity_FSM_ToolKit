@@ -12,10 +12,6 @@ public class customtesting : BehaviorScript
 	[SerializeField]
 	public HearingConditionScript hearing;
 
-	[Header("Chase")]
-	[SerializeField]
-	public ChaseStateScript chase;
-
 	[Header("Distance")]
 	[SerializeField]
 	public DistanceConditionScript distance;
@@ -23,6 +19,10 @@ public class customtesting : BehaviorScript
 	[Header("Custom")]
 	[SerializeField]
 	public CustomStateScript custom;
+
+	[Header("Chase")]
+	[SerializeField]
+	public ChaseStateScript chase;
 
 	private void Start()
 	{
@@ -33,37 +33,39 @@ public class customtesting : BehaviorScript
 	{
 		switch (currentState)
 		{
-			case FSMStates.Chase:
-				UpdateChaseState();
-				break;
 			case FSMStates.Custom:
 				UpdateCustomState();
 				break;
-		}
-	}
-	public void UpdateChaseState()
-	{
-		chase.Execute();
-		if(distance.Condition())
-		{
-			ChangeCustomState();
+			case FSMStates.Chase:
+				UpdateChaseState();
+				break;
 		}
 	}
 	public void UpdateCustomState()
 	{
 		custom.Execute();
+		GetComponent<Animator>().SetBool("Jump", true);
 		if(hearing.Condition())
 		{
 			ChangeChaseState();
 		}
 	}
-	private void ChangeChaseState()
+	public void UpdateChaseState()
 	{
-		currentState = FSMStates.Chase;
+		chase.Execute();
+		GetComponent<Animator>().SetBool("Grounded", false);
+		if(distance.Condition())
+		{
+			ChangeCustomState();
+		}
 	}
 	private void ChangeCustomState()
 	{
 		currentState = FSMStates.Custom;
+	}
+	private void ChangeChaseState()
+	{
+		currentState = FSMStates.Chase;
 	}
 	private void OnFootstep() {}
 }

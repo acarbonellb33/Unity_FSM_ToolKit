@@ -103,9 +103,9 @@ MonoBehaviour:
     <Position>k__BackingField: {x: 356, y: 164}
     <AnimatorSaveData>k__BackingField:
       <TriggerEnable>k__BackingField: 1
-      <ParameterName>k__BackingField: Jump
+      <ParameterName>k__BackingField: Grounded
       <ParameterType>k__BackingField: Bool
-      <Value>k__BackingField: True
+      <Value>k__BackingField: False
     <DataObject>k__BackingField: "{\n    \"selectedGameObject\": {\n        \"instanceID\":
       28736\n    },\n    \"selectedComponent\": {\n        \"instanceID\": 28890\n   
       },\n    \"selectedFunction\": \"GetCurrentHealth\"\n}"
@@ -120,7 +120,7 @@ MonoBehaviour:
     <Position>k__BackingField: {x: 853, y: 488}
     <AnimatorSaveData>k__BackingField:
       <TriggerEnable>k__BackingField: 1
-      <ParameterName>k__BackingField: Grounded
+      <ParameterName>k__BackingField: FreeFall
       <ParameterType>k__BackingField: Bool
       <Value>k__BackingField: False
     <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":

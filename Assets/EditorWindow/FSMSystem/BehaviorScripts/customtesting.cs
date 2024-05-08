@@ -44,7 +44,7 @@ public class customtesting : BehaviorScript
 	public void UpdateCustomState()
 	{
 		custom.Execute();
-		GetComponent<Animator>().SetBool("Jump", true);
+		GetComponent<Animator>().SetBool("Grounded", false);
 		if(hearing.Condition())
 		{
 			ChangeChaseState();
@@ -53,7 +53,7 @@ public class customtesting : BehaviorScript
 	public void UpdateChaseState()
 	{
 		chase.Execute();
-		GetComponent<Animator>().SetBool("Grounded", false);
+		GetComponent<Animator>().SetBool("FreeFall", false);
 		if(distance.Condition())
 		{
 			ChangeCustomState();

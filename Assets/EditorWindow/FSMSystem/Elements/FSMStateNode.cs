@@ -373,13 +373,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = floatField.value.ToString();
                 floatField.AddToClassList("fsm-node_textfield");
                 floatField.RegisterCallback<ChangeEvent<float>>(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,floatField);
@@ -390,13 +389,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = integerField.value.ToString();
                 integerField.AddToClassList("fsm-node_textfield");
                 integerField.RegisterCallback<ChangeEvent<int>>(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,integerField);
@@ -407,13 +405,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = toggleField.value.ToString();
                 toggleField.AddToClassList("fsm-node_toggle");
                 toggleField.RegisterValueChangedCallback(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,toggleField);
@@ -424,13 +421,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = toggleField.value.ToString();
                 toggleField.AddToClassList("fsm-node_toggle");
                 toggleField.RegisterValueChangedCallback(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,toggleField);
@@ -524,13 +520,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = floatField.value.ToString();
                 floatField.AddToClassList("fsm-node_textfield");
                 floatField.RegisterCallback<ChangeEvent<float>>(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,floatField);
@@ -541,13 +536,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = integerField.value.ToString();
                 integerField.AddToClassList("fsm-node_textfield");
                 integerField.RegisterCallback<ChangeEvent<int>>(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,integerField);
@@ -558,13 +552,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = toggleField.value.ToString();
                 toggleField.AddToClassList("fsm-node_toggle");
                 toggleField.RegisterValueChangedCallback(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,toggleField);
@@ -575,13 +568,12 @@ public class FSMStateNode : FSMNode
                 {
                     label = selectedParameter
                 };
+                _animatorParameter = selectedParameter;
+                _parameterType = parameterType;
+                _animatorValue = toggleField.value.ToString();
                 toggleField.AddToClassList("fsm-node_toggle");
                 toggleField.RegisterValueChangedCallback(e =>
                 {
-                    // Set animator parameter value
-                    //SetAnimatorParameter(selectedParameter, e.newValue, parameterType);
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
                     _animatorValue = e.newValue.ToString();
                 });
                 extensionContainer.Insert(2,toggleField);

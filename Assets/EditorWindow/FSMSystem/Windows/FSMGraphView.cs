@@ -272,7 +272,7 @@ public class FSMGraphView : GraphView
 
             foreach (GraphElement element in selection)
             {
-                if (element is FSMNode node)
+                if (element is FSMNode node && node.NodeType != FSMNodeType.Initial)
                 {
                     if (element is FSMStateNode n)
                     {
@@ -383,7 +383,6 @@ public class FSMGraphView : GraphView
         };
     }
     
-
     private void CheckLoopConditions()
     {
         // Perform depth-first search (DFS) traversal starting from each node
@@ -778,7 +777,7 @@ public class FSMGraphView : GraphView
   		this.AddManipulator(CreateTransitionItemMenu("NextState"));
 		this.AddManipulator(CreateDualTransitionStateItemMenu("NextState"));
         this.AddManipulator(CreateCustomStateItemMenu("Custom"));
-  }
+    }
 
     private void AddSearchWindow()
     {

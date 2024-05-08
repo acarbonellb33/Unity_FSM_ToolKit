@@ -585,7 +585,6 @@ public class FSMStateNode : FSMNode
         
         RefreshExpandedState();
     }
-
     private string GetParameterType(string parameterName)
     {
         // Get the animator component from your object

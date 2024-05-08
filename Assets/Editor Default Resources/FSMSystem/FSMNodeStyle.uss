@@ -6,6 +6,12 @@
 }
 .fsm-node_main-container {
     background-color: var(--fsm-colors-window-dark-grey-1);
+    min-width: 200px;
+}
+
+.fsm-node_main-container-initial {
+    background-color: var(--fsm-colors-window-dark-grey-1);
+    min-width: 100px;
 }
 
 .fsm-node_custom-data-container {

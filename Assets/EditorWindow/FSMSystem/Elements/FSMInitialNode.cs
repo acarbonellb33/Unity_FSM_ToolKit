@@ -13,7 +13,7 @@ public class FSMInitialNode : FSMNode
             Text = "Initial Node",
         };
         Choices.Add(connectionSaveData);
-        mainContainer.AddToClassList("fsm-node_main-container");
+        mainContainer.AddToClassList("fsm-node_main-container-initial");
         extensionContainer.AddToClassList("fsm-node_extension-container");
     }
 

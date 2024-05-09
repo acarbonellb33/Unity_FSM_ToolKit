@@ -157,9 +157,8 @@ public class FSMCustomStateNode : FSMNode
         {
             string[] result = attribute.Split(',');
 
-            switch (result[1]){
-               
-                case "UnityEngine.GameObject":
+            switch (result[0]){
+                case "selectedGameObject":
 
                     string input = result[2];
                     string output = Regex.Replace(input, @"\s*\([^()]*\)", "");
@@ -168,17 +167,17 @@ public class FSMCustomStateNode : FSMNode
                     {
                         label = UpdateNameStyle(result[0]),
                         objectType = typeof(GameObject),
-                        value = GameObject.Find(output)
+                        value = FSMIOUtility.FindGameObjectWithId<IDGenerator>(output)
                     };      
                     if(objectField.value != null)
                     {
-                        StateScript.SetVariableValue(result[0], objectField.value);
+                        StateScript.SetVariableValue(result[0], ((GameObject)objectField.value).GetComponent<IDGenerator>().GetUniqueID());
                         selectedGameObject = (GameObject) objectField.value;
                         PopulateComponentDropdown();
                     }
                     objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                     {
-                        StateScript.SetVariableValue(result[0], objectField.value);
+                        StateScript.SetVariableValue(result[0], ((GameObject)objectField.value).GetComponent<IDGenerator>().GetUniqueID());
                         selectedGameObject = (GameObject) objectField.value;
                         PopulateComponentDropdown();
                     });
@@ -186,27 +185,27 @@ public class FSMCustomStateNode : FSMNode
                     stateAttributeContainer.Add(objectField);
                     break;
                 
-                case "UnityEngine.Component":
+                case "selectedComponent":
                     componentDropdown.label = UpdateNameStyle(result[0]);
-                    componentDropdown.value = GetNamespaceAndClassName(result[2]);
-                    
+                    componentDropdown.value = result[2];
+        
                     if (componentDropdown.value != null)
                     {
                         selectedComponent = selectedGameObject.GetComponent(componentDropdown.value);
-                        StateScript.SetVariableValue(result[0], selectedComponent);
+                        StateScript.SetVariableValue(result[0], componentDropdown.value);
                         PopulateFunctionDropdown(functionDropdown);
                     }
                     componentDropdown.RegisterValueChangedCallback(evt =>
                     {
                         string selectedName = evt.newValue;
                         selectedComponent = selectedGameObject.GetComponent(selectedName);
-                        StateScript.SetVariableValue(result[0], selectedComponent);
+                        StateScript.SetVariableValue(result[0], componentDropdown.value);
                         PopulateFunctionDropdown(functionDropdown);
                     });
                     componentDropdown.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(componentDropdown);
                     break;
-                case "System.String":
+                case "selectedFunction":
                     functionDropdown.label = UpdateNameStyle(result[0]);
                     functionDropdown.value = result[2];
                     

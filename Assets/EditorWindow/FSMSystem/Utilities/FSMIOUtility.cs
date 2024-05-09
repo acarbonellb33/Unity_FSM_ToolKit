@@ -379,7 +379,7 @@ public static class FSMIOUtility
     }
     private static StateScriptData LoadFromJson(FSMNode node)
     {
-        if (node.NodeType == FSMNodeType.Initial) return null;
+        if (node.NodeType == FSMNodeType.Initial || node.NodeType == FSMNodeType.Extension) return null;
         string json = File.ReadAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName.Replace(" ","")}DataFile.json");
         string newName = node.StateName.Split(' ')[0];
         switch (newName)
@@ -477,11 +477,12 @@ public static class FSMIOUtility
     private static string CreateJsonDataObject(FSMNode node, FSMNodesContainerSO nodesContainer)
     {
         string json = null;
-        if(node.NodeType != FSMNodeType.Initial)
+        if(node.NodeType != FSMNodeType.Initial && node.NodeType != FSMNodeType.Extension)
         {
             json = JsonUtility.ToJson(node.StateScript, true);
             File.WriteAllText($"{_containerFolderPath}/Global/Nodes/{node.StateName.Replace(" ","")}DataFile.json", json);
         }
+
         FSMNodeSO nodeSo;
         if (node.Group != null)
         {
@@ -611,6 +612,26 @@ public static class FSMIOUtility
         }
 
         return clonedConnections;
+    }
+    public static GameObject FindGameObjectWithId<T>(string id) where T : MonoBehaviour
+    {
+        // Find all GameObjects with the component of type T
+        T[] components = GameObject.FindObjectsOfType<T>();
+
+        // Iterate through each GameObject and check if it has the specified ID
+        foreach (T component in components)
+        {
+            // Check if the component has an IDGenerator attached
+            IDGenerator idGenerator = component.GetComponent<IDGenerator>();
+            if (idGenerator != null && idGenerator.GetUniqueID() == id)
+            {
+                // Return the GameObject if the ID matches
+                return component.gameObject;
+            }
+        }
+
+        // Return null if no matching GameObject is found
+        return null;
     }
     #endregion
     

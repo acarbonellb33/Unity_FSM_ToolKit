@@ -15,7 +15,7 @@ public class FSMExtensionNode : FSMNode
             Text = "Extension Node",
         };
         Choices.Add(connectionSaveData);
-        mainContainer.AddToClassList("fsm-node_main-container");
+        mainContainer.AddToClassList("fsm-node_main-container-extension");
         extensionContainer.AddToClassList("fsm-node_extension-container");
     }
 

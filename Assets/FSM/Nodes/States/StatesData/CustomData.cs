@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CustomData : StateScriptData
 {
-    public GameObject selectedGameObject;
-    public Component selectedComponent;
+    public string selectedGameObject;
+    public string selectedComponent;
     public string selectedFunction;
     public CustomData()
     {

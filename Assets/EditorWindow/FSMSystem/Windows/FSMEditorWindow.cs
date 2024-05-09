@@ -34,6 +34,8 @@ public class FSMEditorWindow : EditorWindow
         _fileName = saveData.FileName;
         _hitStatePopup = new FSMHitStatePopup();
         _hitStatePopup.Initialize(saveData.HitData);
+        
+        OnHierarchyChanged();
 
         EditorPrefs.SetString(FSMInspectorKey, FindGameObjectWithClass<FSMGraph>().ToString());
 
@@ -71,10 +73,14 @@ public class FSMEditorWindow : EditorWindow
         AddStyles();
 
         EditorApplication.update += OnEditorUpdate;
+        
+        EditorApplication.hierarchyChanged += OnHierarchyChanged;
     }
     private void OnDisable()
     {
         EditorApplication.update -= OnEditorUpdate;
+        
+        EditorApplication.hierarchyChanged -= OnHierarchyChanged;
     }
     private void OnEditorUpdate()
     {
@@ -96,6 +102,21 @@ public class FSMEditorWindow : EditorWindow
         if(_shouldClose)Close();
         gameObject.GetComponent<FSMGraph>().UpdateComponentOfGameObject();
         _shouldClose = false;
+    }
+    private static void OnHierarchyChanged()
+    {
+        // Get all root GameObjects in the scene
+        GameObject[] rootGameObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+
+        foreach (GameObject rootGameObject in rootGameObjects)
+        {
+            if (rootGameObject.GetComponent<IDGenerator>() == null)
+            {
+                Component generator = rootGameObject.AddComponent<IDGenerator>();
+                ((IDGenerator)generator).GetUniqueID();
+                generator.hideFlags = HideFlags.HideInInspector;
+            }
+        }
     }
     private void AddGraphView()
     {

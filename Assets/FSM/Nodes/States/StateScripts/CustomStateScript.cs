@@ -4,8 +4,8 @@ using UnityEngine;
 public class CustomStateScript : StateScript, IAction
 {
     //Add any properties specific to this state
-    public GameObject selectedGameObject;
-    public Component selectedComponent;
+    public string selectedGameObject;
+    public string selectedComponent;
     public string selectedFunction;
 
     public CustomStateScript()

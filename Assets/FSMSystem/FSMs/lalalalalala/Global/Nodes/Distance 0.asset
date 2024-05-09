@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Distance 0
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Next Action
+  - <Text>k__BackingField: Chase
     <NextNode>k__BackingField: {fileID: 11400000, guid: c382e2186f195e949ba580390c9fa963, type: 2}
   <NodeType>k__BackingField: 1
   <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"distanceFromPlayer\":

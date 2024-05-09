@@ -16,5 +16,5 @@ public class IDGenerator : MonoBehaviour
             uniqueID = Guid.NewGuid().ToString();
         }
         return uniqueID;
-    } 
+    }
 }

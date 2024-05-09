@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Custom
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: de620ea65f6052644a2835115b47239e, type: 2}
+  - <Text>k__BackingField: Extension Node
+    <NextNode>k__BackingField: {fileID: 0}
   <NodeType>k__BackingField: 5
   <DataObject>k__BackingField: "{\n    \"selectedGameObject\": \"0bc03333-fb28-4c02-9326-9c11a37dffcd\",\n   
     \"selectedComponent\": \"EnemyHealthSystem\",\n    \"selectedFunction\": \"GetCurrentHealth\"\n}"

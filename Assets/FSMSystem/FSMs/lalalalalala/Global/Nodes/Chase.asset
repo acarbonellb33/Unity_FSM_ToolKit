@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Chase
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Condition
+  - <Text>k__BackingField: Seeing
     <NextNode>k__BackingField: {fileID: 11400000, guid: c4feabfc6046d01469c77468fee26553, type: 2}
   <NodeType>k__BackingField: 0
   <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":

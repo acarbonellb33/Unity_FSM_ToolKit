@@ -12,13 +12,13 @@ public class lalalalalala : BehaviorScript
 	[SerializeField]
 	public ChaseStateScript chase;
 
-	[Header("Attack")]
-	[SerializeField]
-	public AttackStateScript attack;
-
 	[Header("Distance 0")]
 	[SerializeField]
 	public DistanceConditionScript distance0;
+
+	[Header("Attack")]
+	[SerializeField]
+	public AttackStateScript attack;
 
 	[Header("Seeing")]
 	[SerializeField]

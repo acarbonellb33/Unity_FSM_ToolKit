@@ -16,14 +16,12 @@ MonoBehaviour:
   <GroupedNodes>k__BackingField:
     list: []
   <UngroupedNodes>k__BackingField:
-  - {fileID: 11400000, guid: 73d692d5452754f4ab44426a3345b5d8, type: 2}
   - {fileID: 11400000, guid: 0fed7264f367ba643982ef8f3cf416cf, type: 2}
   - {fileID: 11400000, guid: ce9626e97e071a640865a05071802c85, type: 2}
-  - {fileID: 11400000, guid: de620ea65f6052644a2835115b47239e, type: 2}
   - {fileID: 11400000, guid: b87090662f95420478a516d6cb58d098, type: 2}
   - {fileID: 11400000, guid: b8ffa0743fd31e64dbc2dbd2887fd9fa, type: 2}
   - {fileID: 11400000, guid: 963bf06f027935f4bb9f8d74a2e9cc74, type: 2}
   - {fileID: 11400000, guid: d49f76242520125499d45247e5eaba7c, type: 2}
+  - {fileID: 11400000, guid: bd528458a1ff3874c9dfc2e9f9c9e686, type: 2}
   - {fileID: 11400000, guid: af0b4f34844ea9941b1745804e4da4fa, type: 2}
   - {fileID: 11400000, guid: 893949cfdf2f7c04c805076db736ce3d, type: 2}
-  - {fileID: 11400000, guid: bd528458a1ff3874c9dfc2e9f9c9e686, type: 2}

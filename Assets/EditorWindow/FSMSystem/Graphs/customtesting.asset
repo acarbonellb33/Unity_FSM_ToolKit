@@ -15,60 +15,30 @@ MonoBehaviour:
   <FileName>k__BackingField: customtesting
   <InitialState>k__BackingField: Custom
   <Nodes>k__BackingField:
-  - <Id>k__BackingField: 874f3906-42db-4fe5-8ac5-f4fc08c78768
-    <Name>k__BackingField: Extension 5
+  - <Id>k__BackingField: 265b7f62-418d-4b9d-a337-e0362c80f48a
+    <Name>k__BackingField: Extension 4
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: Extension Node
       <NodeId>k__BackingField: 5ec02ea9-e34a-45dc-b0eb-7e8c781e4a24
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 4
-    <Position>k__BackingField: {x: 806, y: 177}
+    <Position>k__BackingField: {x: 938, y: 156}
     <AnimatorSaveData>k__BackingField:
       <TriggerEnable>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
     <DataObject>k__BackingField: 
-  - <Id>k__BackingField: 88be13b4-023d-4bb9-af23-492613fd583c
-    <Name>k__BackingField: Extension 4
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Extension Node
-      <NodeId>k__BackingField: 874f3906-42db-4fe5-8ac5-f4fc08c78768
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 4
-    <Position>k__BackingField: {x: 750, y: 109}
-    <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
-      <ParameterName>k__BackingField: 
-      <ParameterType>k__BackingField: 
-      <Value>k__BackingField: 
-    <DataObject>k__BackingField: 
-  - <Id>k__BackingField: 7ec8fcfb-8d35-4480-a55c-2449ae286b0a
+  - <Id>k__BackingField: 47029be9-647e-4974-bdf1-984836a388c3
     <Name>k__BackingField: Extension 3
     <Text>k__BackingField: 
     <Connections>k__BackingField:
     - <Text>k__BackingField: Extension Node
-      <NodeId>k__BackingField: 88be13b4-023d-4bb9-af23-492613fd583c
+      <NodeId>k__BackingField: 265b7f62-418d-4b9d-a337-e0362c80f48a
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 4
-    <Position>k__BackingField: {x: 694, y: 92}
-    <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
-      <ParameterName>k__BackingField: 
-      <ParameterType>k__BackingField: 
-      <Value>k__BackingField: 
-    <DataObject>k__BackingField: 
-  - <Id>k__BackingField: 275e5390-66b1-4c6c-a86b-f565df309cce
-    <Name>k__BackingField: Extension 2
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Extension Node
-      <NodeId>k__BackingField: 7ec8fcfb-8d35-4480-a55c-2449ae286b0a
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 4
-    <Position>k__BackingField: {x: 589, y: 60}
+    <Position>k__BackingField: {x: 882, y: 57}
     <AnimatorSaveData>k__BackingField:
       <TriggerEnable>k__BackingField: 0
       <ParameterName>k__BackingField: 
@@ -136,6 +106,22 @@ MonoBehaviour:
       <Value>k__BackingField: 
     <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"distanceFromPlayer\":
       10.0\n}"
+  - <Id>k__BackingField: fc32c347-fe48-4ce4-8509-b45853d1570a
+    <Name>k__BackingField: Custom
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Extension Node
+      <NodeId>k__BackingField: 47029be9-647e-4974-bdf1-984836a388c3
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 5
+    <Position>k__BackingField: {x: 356, y: 164}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 1
+      <ParameterName>k__BackingField: Grounded
+      <ParameterType>k__BackingField: Bool
+      <Value>k__BackingField: False
+    <DataObject>k__BackingField: "{\n    \"selectedGameObject\": \"0bc03333-fb28-4c02-9326-9c11a37dffcd\",\n   
+      \"selectedComponent\": \"EnemyHealthSystem\",\n    \"selectedFunction\": \"GetCurrentHealth\"\n}"
   - <Id>k__BackingField: e715fd38-e8cb-4c4e-8502-b54b96b88742
     <Name>k__BackingField: Chase
     <Text>k__BackingField: 
@@ -158,6 +144,8 @@ MonoBehaviour:
     <Connections>k__BackingField:
     - <Text>k__BackingField: Next Action
       <NodeId>k__BackingField: e715fd38-e8cb-4c4e-8502-b54b96b88742
+    - <Text>k__BackingField: 
+      <NodeId>k__BackingField: e715fd38-e8cb-4c4e-8502-b54b96b88742
     <GroupId>k__BackingField: 
     <NodeType>k__BackingField: 1
     <Position>k__BackingField: {x: 764, y: 254}
@@ -168,36 +156,18 @@ MonoBehaviour:
       <Value>k__BackingField: 
     <DataObject>k__BackingField: "{\n    \"hearingRange\": 5.0,\n    \"minPlayerSpeed\":
       5.0\n}"
-  - <Id>k__BackingField: fc32c347-fe48-4ce4-8509-b45853d1570a
-    <Name>k__BackingField: Custom
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Condition
-      <NodeId>k__BackingField: 275e5390-66b1-4c6c-a86b-f565df309cce
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 5
-    <Position>k__BackingField: {x: 356, y: 164}
-    <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 1
-      <ParameterName>k__BackingField: Grounded
-      <ParameterType>k__BackingField: Bool
-      <Value>k__BackingField: False
-    <DataObject>k__BackingField: "{\n    \"selectedGameObject\": \"0bc03333-fb28-4c02-9326-9c11a37dffcd\",\n   
-      \"selectedComponent\": \"EnemyHealthSystem\",\n    \"selectedFunction\": \"GetCurrentHealth\"\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
-  - Extension 5
   - Extension 4
   - Extension 3
-  - Extension 2
   - Extension 0
   - Extension 1
   - Initial State
   - Distance
+  - Custom
   - Chase
   - Hearing
-  - Custom
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy

@@ -305,6 +305,7 @@ public class FSMGraphView : GraphView
 
                     if (node.NodeType == FSMNodeType.Extension)
                     { 
+                        if(nodesToDeleteDict.Keys.Contains(node)) continue;
                         FSMNode nodeToDelete = ReconnectNodes(node);
                         nodesToDeleteDict.Add(nodeToDelete, true);
                     }
@@ -318,24 +319,24 @@ public class FSMGraphView : GraphView
 
                 if (element.GetType() == edgeType)
                 {
-                    //List<FSMNode> nodeEdges = ReconnectEdges((Edge)element);
-                    //Debug.Log("Node Edges: " + nodeEdges.Count);
-                    //if(nodeEdges.Count > 0)
-                    //{
-                    //   foreach (FSMNode nodeE in nodeEdges)
-                    //    {
-                    //        if(nodesToDelete.Contains(nodeE)) continue;
-                    //        Debug.Log("Node to Reconnect: " + nodeE.StateName);
-                    //        nodesToDelete.Add(nodeE);
-                    //    }
-                    //}
-                    
+                    bool hasBeenHandled = false;
                     Edge edge = (Edge)element;
-                    
-                    edge.input.Disconnect(edge);
-                    edge.output.Disconnect(edge);
-                    
-                    edgesToDelete.Add(edge);
+                    if (((FSMNode)edge.input.node).NodeType == FSMNodeType.Extension)
+                    {
+                        if(nodesToDeleteDict.Keys.Contains((FSMNode)edge.input.node)) continue;
+                        FSMNode nodeToDelete = ReconnectNodes((FSMNode)edge.input.node);
+                        nodesToDeleteDict.Add(nodeToDelete, true);
+                        hasBeenHandled = true;
+                    }
+                    if (((FSMNode)edge.output.node).NodeType == FSMNodeType.Extension)
+                    {
+                        if(nodesToDeleteDict.Keys.Contains((FSMNode)edge.output.node)) continue;
+                        FSMNode nodeToDelete = ReconnectNodes((FSMNode)edge.output.node);
+                        nodesToDeleteDict.Add(nodeToDelete, true);
+                        hasBeenHandled = true;
+                    }
+                    if (hasBeenHandled)continue;
+                    edgesToDelete.Add((Edge)element);
                     continue;
                 }
 
@@ -347,6 +348,8 @@ public class FSMGraphView : GraphView
                 FSMGroup group = (FSMGroup)element;
                 groupsToDelete.Add(group);
             }
+            
+            Debug.Log("Nodes to Delete: " + nodesToDeleteDict.Count);
 
             foreach (FSMGroup group in groupsToDelete)
             {
@@ -398,8 +401,22 @@ public class FSMGraphView : GraphView
                     RemoveElement(node.Key);
                 }
             }
-            
-            DeleteElements(edgesToDelete);
+
+
+            foreach (Edge edge in edgesToDelete)
+            {
+                Debug.Log("Edge Deleted");
+                if (edge.input == null || edge.output == null)
+                {
+                    RemoveElement(edge);
+                }
+                else
+                {
+                    edge.input.Disconnect(edge);
+                    edge.output.Disconnect(edge);
+                    RemoveElement(edge);
+                }
+            }
         };
     }
     
@@ -421,8 +438,8 @@ public class FSMGraphView : GraphView
         nextPreviousNode.Choices.Add(choiceData);
 
         Port prePort = nextPreviousNode.outputContainer.Children().OfType<Port>().ToList()[0];
-        
         FSMNode nextNewNode = GetNodeFromGraphById(startNode.Choices[0].NodeId);
+        
         Port nextPort = nextNewNode.inputContainer.Children().OfType<Port>().ToList()[0];
         
         ConnectPorts(prePort, nextPort);

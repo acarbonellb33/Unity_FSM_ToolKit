@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Extension 2
+  m_Name: Extension 1
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Extension 2
+  <NodeName>k__BackingField: Extension 1
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Extension 3
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 05725aa18dc0e7a4a9c7a58a689f5867, type: 2}
+  - <Text>k__BackingField: Extension 2
+    <NextNode>k__BackingField: {fileID: 11400000, guid: e32c8b0f61a353e4fb013462117ccbd1, type: 2}
   <NodeType>k__BackingField: 4
   <DataObject>k__BackingField: 

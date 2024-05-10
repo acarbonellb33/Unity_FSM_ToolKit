@@ -364,12 +364,9 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\tbuttonStyle.fixedHeight = 30;\n";
         scriptContent += "\t\tbuttonStyle.fixedWidth = 150;\n";
         scriptContent += "\t\tbuttonStyle.margin = new RectOffset(5, 5, 5, 5);\n";
-        scriptContent += "\t\tbuttonStyle.padding = new RectOffset(0, 0, 0, 0);\n";
-        scriptContent += "\t\tbuttonStyle.normal.background = MakeTex(2, 2, new Color(0.3f, 0.3f, 0.3f));\n";
-        scriptContent += "\t\tbuttonStyle.active.background = MakeTex(2, 2, new Color(0.1f, 0.6f, 0.1f));\n";
         scriptContent += "\t\tGUILayout.Space(10);\n";
         
-        scriptContent += "\t\tEditorGUILayout.LabelField(\"Select the state you want to modify\", new GUIStyle(EditorStyles.boldLabel)\n";
+        scriptContent += "\t\tEditorGUILayout.LabelField(\"SELECT THE STATE YOU WANT TO MODIFY\", new GUIStyle(EditorStyles.boldLabel)\n";
         scriptContent += "\t\t{\n";
         scriptContent += "\t\t\talignment = TextAnchor.MiddleCenter,\n";
         scriptContent += "\t\t\tfontSize = 14\n";
@@ -389,11 +386,11 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\t\tbool isSelected = selectedOptionIndexProp.intValue == i;\n";
         scriptContent += "\t\t\tif (isSelected || lastClickedIndex == i)\n";
         scriptContent += "\t\t\t{\n";
-        scriptContent += "\t\t\t\tGUI.backgroundColor = isSelected ? Color.green : new Color(0.1f, 0.6f, 0.1f);\n";
+        scriptContent += "\t\t\t\tGUI.backgroundColor = new Color(0.89f, 0.716f, 0.969f);\n";
         scriptContent += "\t\t\t}\n";
         scriptContent += "\t\t\telse\n";
         scriptContent += "\t\t\t{\n";
-        scriptContent += "\t\t\t\tGUI.backgroundColor = new Color(0.3f, 0.3f, 0.3f);\n";
+        scriptContent += "\t\t\t\tGUI.backgroundColor = new Color(0.575f, 0f, 0.671f);\n";
         scriptContent += "\t\t\t}\n";
         scriptContent += "\t\t\tGUILayout.FlexibleSpace();\n";
         scriptContent += "\t\t\tif (GUILayout.Button(options[i], buttonStyle))\n";
@@ -506,20 +503,6 @@ public static class EnemyStateMachineEditor
         scriptContent += "\t\treturn char.ToUpperInvariant(oldName[0]) + oldName.Substring(1);\n";
         scriptContent += "\t}\n";
         
-        scriptContent += "\tprivate Texture2D MakeTex(int width, int height, Color col)\n";
-        scriptContent += "\t{\n";
-        scriptContent += "\t\tColor[] pix = new Color[width * height];\n";
-        scriptContent += "\t\tfor (int i = 0; i < pix.Length; ++i)\n";
-        scriptContent += "\t\t{\n";
-        scriptContent += "\t\t\tpix[i] = col;\n";
-        scriptContent += "\t\t}\n";
-        scriptContent += "\t\tTexture2D result = new Texture2D(width, height);\n";
-        scriptContent += "\t\tresult.SetPixels(pix);\n";
-        scriptContent += "\t\tresult.Apply();\n";
-        scriptContent += "\t\treturn result;\n";
-        scriptContent += "\t}\n";
-        
-
         scriptContent += "}\n";
         return scriptContent;
     }

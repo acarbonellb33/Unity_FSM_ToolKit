@@ -8,38 +8,38 @@ using System.Reflection;
 [Serializable]
 public class lalalalalala : BehaviorScript
 {
-	[Header("Chase")]
+	[Header("Attack")]
 	[SerializeField]
-	public ChaseStateScript chase;
-
-	[Header("Distance 0")]
-	[SerializeField]
-	public DistanceConditionScript distance0;
+	public AttackStateScript attack;
 
 	[Header("Seeing")]
 	[SerializeField]
 	public SeeingConditionScript seeing;
 
-	[Header("Attack")]
+	[Header("Patrol")]
 	[SerializeField]
-	public AttackStateScript attack;
+	public PatrolStateScript patrol;
+
+	[Header("Distance 0")]
+	[SerializeField]
+	public DistanceConditionScript distance0;
 
 	float waitHitTime = 2f;
 	float hitLastTime = 0f;
 	private void Start()
 	{
-		currentState = FSMStates.Chase;
+		currentState = FSMStates.Patrol;
 		GetComponent<Animator>().SetFloat("Speed", GetComponent<NavMeshAgent>().speed);
 	}
 	void Update()
 	{
 		switch (currentState)
 		{
-			case FSMStates.Chase:
-				UpdateChaseState();
-				break;
 			case FSMStates.Attack:
 				UpdateAttackState();
+				break;
+			case FSMStates.Patrol:
+				UpdatePatrolState();
 				break;
 			case FSMStates.Hit:
 				UpdateHitState();
@@ -59,20 +59,20 @@ public class lalalalalala : BehaviorScript
 			ChangeDieState();
 		}
 	}
-	public void UpdateChaseState()
-	{
-		chase.Execute();
-		if(seeing.Condition())
-		{
-			ChangeAttackState();
-		}
-	}
 	public void UpdateAttackState()
 	{
 		attack.Execute();
 		if(distance0.Condition())
 		{
-			ChangeChaseState();
+			ChangePatrolState();
+		}
+	}
+	public void UpdatePatrolState()
+	{
+		patrol.Execute();
+		if(seeing.Condition())
+		{
+			ChangeAttackState();
 		}
 	}
 	public void UpdateHitState()
@@ -81,7 +81,7 @@ public class lalalalalala : BehaviorScript
 		agent.isStopped = true;
 		if(Time.time >= hitLastTime + waitHitTime)
 		{
-			currentState = FSMStates.Chase;
+			currentState = FSMStates.Patrol;
 			agent.isStopped = false;
 		}
 	}
@@ -89,13 +89,13 @@ public class lalalalalala : BehaviorScript
 	{
 		GetComponent<EnemyHealthSystem>().Die();
 	}
-	private void ChangeChaseState()
-	{
-		currentState = FSMStates.Chase;
-	}
 	private void ChangeAttackState()
 	{
 		currentState = FSMStates.Attack;
+	}
+	private void ChangePatrolState()
+	{
+		currentState = FSMStates.Patrol;
 	}
 	private void ChangeHitState()
 	{
@@ -104,6 +104,20 @@ public class lalalalalala : BehaviorScript
 	private void ChangeDieState()
 	{
 		currentState = FSMStates.Die;
+	}
+	public GameObject AddObjectToList()
+	{
+		GameObject newGameObject = new GameObject("Patrol Point " + patrol.patrolPoints.Count);
+		patrol.patrolPoints.Add(newGameObject);
+		return newGameObject;
+	}
+	public void RemoveObjectFromList(GameObject patrolPoint)
+	{
+		patrol.RemovePatrolPoint(patrolPoint);
+		if(GameObject.Find(patrolPoint.name) != null)
+		{
+			DestroyImmediate(patrolPoint);
+		}
 	}
 	private void OnFootstep() {}
 }

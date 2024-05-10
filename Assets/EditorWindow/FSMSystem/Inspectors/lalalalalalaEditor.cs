@@ -98,13 +98,41 @@ public class lalalalalalaEditor : Editor
 			{
 				if (iterator.name != "m_Script")
 				{
-					EditorGUI.BeginChangeCheck();
-					EditorGUILayout.PropertyField(iterator, true);
-					if (EditorGUI.EndChangeCheck())
+					if (iterator.isArray)
 					{
-						selectedObject.SetStateName(selectedOptionName);
-						selectedObjectSerialized.ApplyModifiedProperties();
-						FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+						EditorGUILayout.Space();
+						EditorGUILayout.LabelField("Create a Patrol Waypoint", EditorStyles.boldLabel);
+						EditorGUILayout.Space();
+						for (int i = 0; i < iterator.arraySize; i++)
+						{
+							EditorGUILayout.BeginHorizontal();
+							SerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);
+							if (gameObjectElementProperty.objectReferenceValue != null)
+							{
+								GameObject gameObject = (GameObject)gameObjectElementProperty.objectReferenceValue;
+								EditorGUILayout.PropertyField(gameObjectElementProperty, GUIContent.none);
+								if (GUILayout.Button("Remove", GUILayout.Width(70)))
+								{
+									RemovePatrolPoint(gameObject);
+								}
+								FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+							}
+							EditorGUILayout.EndHorizontal();
+						}
+						if (GUILayout.Button("Create and Add a Patrol Point"))
+						{
+							CreateAndAddGameObject(lalalalalala);
+						}
+					}
+					else
+					{
+						EditorGUI.BeginChangeCheck();
+						EditorGUILayout.PropertyField(iterator, true);
+						if (EditorGUI.EndChangeCheck())
+						{
+							selectedObjectSerialized.ApplyModifiedProperties();
+							FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+						}
 					}
 				}
 				nextVisible = iterator.NextVisible(false);
@@ -115,6 +143,19 @@ public class lalalalalalaEditor : Editor
 			}
 		}
 		serializedObject.ApplyModifiedProperties();
+	}
+	private void CreateAndAddGameObject(lalalalalala lalalalalala)
+	{
+		lalalalalala.AddObjectToList();
+	}
+	private void RemovePatrolPoint(GameObject patrolPoint)
+	{
+		lalalalalala lalalalalala = (lalalalalala)target;
+		lalalalalala.patrol.RemovePatrolPoint(patrolPoint);
+		if(GameObject.Find(patrolPoint.name) != null)
+		{
+			DestroyImmediate(patrolPoint);
+		}
 	}
 	private string FixName(string oldName)
 	{

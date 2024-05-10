@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Extension 0
+  m_Name: Patrol
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Extension 0
+  <NodeName>k__BackingField: Patrol
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Seeing
+  - <Text>k__BackingField: Condition
     <NextNode>k__BackingField: {fileID: 11400000, guid: c4feabfc6046d01469c77468fee26553, type: 2}
-  <NodeType>k__BackingField: 4
-  <DataObject>k__BackingField: 
+  <NodeType>k__BackingField: 0
+  <DataObject>k__BackingField: "{\n    \"patrolPoints\": []\n}"

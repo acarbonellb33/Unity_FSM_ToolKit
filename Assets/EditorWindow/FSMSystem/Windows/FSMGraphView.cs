@@ -126,8 +126,8 @@ public class FSMGraphView : GraphView
         edge.input.Connect(edge);
         edge.output.Connect(edge);
         
-        edge.input.portColor = Color.white;
-        edge.output.portColor = Color.white;
+        //edge.input.portColor = Color.white;
+        //edge.output.portColor = Color.white;
         
         AddElement(edge);
     }
@@ -305,8 +305,36 @@ public class FSMGraphView : GraphView
             }
         }
     }
+    
+    private void SetPortColorToEmptyNodes()
+    {
+        // Iterate through all elements in the graph
+        foreach (VisualElement element in graphElements)
+        {
+            // Check if the element is a node
+            if (element is FSMNode node)
+            {
+                if (((FSMNode)element).NodeType == FSMNodeType.Initial)
+                {
+                    if(node.outputContainer.Children().OfType<Port>().ToList().Count == 0) continue;
+                    Port outputPortInitial = node.outputContainer.Children().OfType<Port>().ToList()[0];
+                    if(!outputPortInitial.connected)outputPortInitial.portColor = Color.red;
+                    MarkDirtyRepaint();
+                }
+                if(node.inputContainer.Children().OfType<Port>().ToList().Count == 0) continue;
+                if(node.outputContainer.Children().OfType<Port>().ToList().Count == 0) continue;
+                
+                Port inputPort = node.inputContainer.Children().OfType<Port>().ToList()[0];
+                Port outputPort = node.outputContainer.Children().OfType<Port>().ToList()[0];
+                
+                if(!inputPort.connected)inputPort.portColor = Color.red;
+                if(!outputPort.connected)outputPort.portColor = Color.red;
+                MarkDirtyRepaint();
+            }
+        }
+    }
 
-    private static bool HasUnconnectedPorts(FSMNode extensionNode)
+    private bool HasUnconnectedPorts(FSMNode extensionNode)
     {
         // Check all input ports
         foreach (Port inputPort in extensionNode.inputContainer.Children())
@@ -314,8 +342,17 @@ public class FSMGraphView : GraphView
             // Check if the input port is unconnected
             if (!inputPort.connected)
             {
+                foreach(Port port in extensionNode.outputContainer.Children().OfType<Port>().ToList())
+                {
+                    foreach(Edge port2 in port.connections.ToList())
+                    {
+                        port2.input.portColor = Color.red;
+                    }
+                    MarkDirtyRepaint();
+                }
                 return true; // Return true if an unconnected port is found
             }
+            //extensionNode.SetPortColor(Color.white, Direction.Input);
         }
 
         // Check all output ports
@@ -324,8 +361,17 @@ public class FSMGraphView : GraphView
             // Check if the output port is unconnected
             if (!outputPort.connected)
             {
+                foreach(Port port in extensionNode.inputContainer.Children().OfType<Port>().ToList())
+                {
+                    foreach(Edge port2 in port.connections.ToList())
+                    {
+                        port2.output.portColor = Color.red;
+                    }
+                    MarkDirtyRepaint();
+                }
                 return true; // Return true if an unconnected port is found
             }
+            //extensionNode.SetPortColor(Color.white, Direction.Output);
         }
 
         return false; // Return false if no unconnected ports are found
@@ -397,8 +443,6 @@ public class FSMGraphView : GraphView
                 FSMGroup group = (FSMGroup)element;
                 groupsToDelete.Add(group);
             }
-            
-            Debug.Log("Nodes to Delete: " + nodesToDeleteDict.Count);
 
             foreach (FSMGroup group in groupsToDelete)
             {
@@ -454,7 +498,6 @@ public class FSMGraphView : GraphView
 
             foreach (Edge edge in edgesToDelete)
             {
-                Debug.Log("Edge Deleted");
                 if (edge.input == null || edge.output == null)
                 {
                     RemoveElement(edge);
@@ -466,6 +509,7 @@ public class FSMGraphView : GraphView
                     RemoveElement(edge);
                 }
             }
+            SetPortColorToEmptyNodes();
         };
     }
     
@@ -527,7 +571,7 @@ public class FSMGraphView : GraphView
                 {
                     port.connections.ToList().ForEach(edge =>
                     {
-                        edge.input.portColor = Color.white;
+                        //edge.input.portColor = Color.white;
                         AddToSelection(edge);
                         RemoveFromSelection(edge);
                     });
@@ -537,7 +581,7 @@ public class FSMGraphView : GraphView
                 {
                     port.connections.ToList().ForEach(edge =>
                     {
-                        edge.output.portColor = Color.white;
+                        //edge.output.portColor = Color.white;
                         AddToSelection(edge);
                         RemoveFromSelection(edge);
                     });
@@ -695,7 +739,7 @@ public class FSMGraphView : GraphView
     
     private async void StartDelayedCheckLoopConditions()
     {
-        await Task.Delay(TimeSpan.FromSeconds(0.01f)); // Adjust the delay as needed
+        await Task.Delay(TimeSpan.FromSeconds(0.01f));
         DeleteUnconnectedExtensionNodes();
         CheckLoopConditions();
     }

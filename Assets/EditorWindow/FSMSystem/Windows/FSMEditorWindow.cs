@@ -234,7 +234,7 @@ public class FSMEditorWindow : EditorWindow
     #endregion
     private void OnDestroy()
     {
-        // Show popup asking if user wants to save changes
+        // Prompt the user to save changes before closing
         int option = EditorUtility.DisplayDialogComplex("Save Changes",
             "Do you want to save changes before closing?",
             "Save", "Discard", "Cancel");
@@ -244,13 +244,15 @@ public class FSMEditorWindow : EditorWindow
             case 0: // Save
                 Save();
                 break;
-            default:
+            case 1: // Discard
+                // Don't save changes, just close the window
                 break;
+            case 2: // Cancel
+                // User canceled, don't close the window
+                // To prevent closing, we simply don't call the base OnDestroy method
+                return;
         }
     }
-
-
-
     #region Utilities
     public void EnableSaving()
     {

@@ -281,6 +281,55 @@ public class FSMGraphView : GraphView
         Debug.Log("Node Name: " + nodeName);
         return null;
     }
+    
+    private void DeleteUnconnectedExtensionNodes()
+    {
+        // Iterate through all elements in the graph
+        foreach (VisualElement element in graphElements)
+        {
+            // Check if the element is a node
+            if (element is FSMNode node)
+            {
+                // Check if the node is an Extension node
+                if (node.NodeType is FSMNodeType.Extension)
+                {
+                    // Check if the Extension node has unconnected ports
+                    if (HasUnconnectedPorts(node))
+                    {
+                        // Delete the Extension node
+                        RemoveUngroupedNode(node);
+                        node.DisconnectAllPorts();
+                        RemoveElement(node);
+                    }
+                }
+            }
+        }
+    }
+
+    private static bool HasUnconnectedPorts(FSMNode extensionNode)
+    {
+        // Check all input ports
+        foreach (Port inputPort in extensionNode.inputContainer.Children())
+        {
+            // Check if the input port is unconnected
+            if (!inputPort.connected)
+            {
+                return true; // Return true if an unconnected port is found
+            }
+        }
+
+        // Check all output ports
+        foreach (Port outputPort in extensionNode.outputContainer.Children())
+        {
+            // Check if the output port is unconnected
+            if (!outputPort.connected)
+            {
+                return true; // Return true if an unconnected port is found
+            }
+        }
+
+        return false; // Return false if no unconnected ports are found
+    }
 
     private void OnElementsDeleted()
     {
@@ -447,6 +496,8 @@ public class FSMGraphView : GraphView
         return startNode;
     }
     
+    
+    
     private FSMNode GetNodeFromGraphById(string nodeId)
     {
         foreach (GraphElement element in graphElements)
@@ -461,59 +512,7 @@ public class FSMGraphView : GraphView
         }
         return null;
     }
-
-    private List<FSMNode> ReconnectEdges(Edge edge)
-    {
-        List<FSMNode> nodesToRemove = new List<FSMNode>();
-
-        Port nextNode = edge.input;
-        Port previousNode = edge.output;
-        
-        bool hasChanged = false;
-        
-        if(((FSMNode)previousNode.node).NodeType is FSMNodeType.Extension)
-        {
-            foreach (Port port in previousNode.node.inputContainer.Children().OfType<Port>())
-            {
-                Edge inputEdge = port.connections.ToList()[0];
-                FSMNode node = (FSMNode)previousNode.node;
-
-                FSMConnectionSaveData choiceData = new FSMConnectionSaveData();
-                
-                string nodeConnectionId = node.Choices[0].NodeId;
-                string nodeConnectionText = node.Choices[0].Text;
-                
-                choiceData.NodeId = nodeConnectionId;
-                choiceData.Text = nodeConnectionText;
-                    
-                nodesToRemove.Add(node);
-                previousNode = inputEdge.output;
-                
-                hasChanged = true;
-                ((FSMNode)previousNode.node).Choices.Add(choiceData);
-            }
-        }
-
-        if(((FSMNode)nextNode.node).NodeType is FSMNodeType.Extension)
-        {
-            foreach (Port port in nextNode.node.outputContainer.Children().OfType<Port>())
-            {
-                Edge outputEdge = port.connections.ToList()[0];
-                FSMNode node = (FSMNode)nextNode.node;
-                nodesToRemove.Add(node);
-                nextNode = outputEdge.input;
-                hasChanged = true;
-            }
-        }
-
-        if (hasChanged)
-        {
-            ConnectPorts(previousNode, nextNode);
-            MarkDirtyRepaint();
-        }
-        
-        return nodesToRemove;
-    }
+    
     private void CheckLoopConditions()
     {
         // Perform depth-first search (DFS) traversal starting from each node
@@ -697,6 +696,7 @@ public class FSMGraphView : GraphView
     private async void StartDelayedCheckLoopConditions()
     {
         await Task.Delay(TimeSpan.FromSeconds(0.01f)); // Adjust the delay as needed
+        DeleteUnconnectedExtensionNodes();
         CheckLoopConditions();
     }
 

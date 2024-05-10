@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b438fc51aca1df46aca0002e565ef8e, type: 3}
-  m_Name: Seeing
+  m_Name: Extension 2
   m_EditorClassIdentifier: 
-  <NodeName>k__BackingField: Seeing
+  <NodeName>k__BackingField: Extension 2
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Extension 3
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 6e3911ad972414e43a5f09180d222904, type: 2}
-  <NodeType>k__BackingField: 1
-  <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
+  - <Text>k__BackingField: Attack
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 465a329d7cb626b42b37880af2e12942, type: 2}
+  <NodeType>k__BackingField: 4
+  <DataObject>k__BackingField: 

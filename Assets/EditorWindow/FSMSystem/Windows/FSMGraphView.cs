@@ -80,15 +80,21 @@ public class FSMGraphView : GraphView
             FSMNode node = (FSMNode)outputPort.node;
             
             FSMConnectionSaveData choiceData = new FSMConnectionSaveData();
-            choiceData.NodeId = newNode.Id;
-            choiceData.Text = newNode.StateName;
+            string id = newNode.Id;
+            string text = newNode.StateName;
+            
+            choiceData.NodeId = id;
+            choiceData.Text = text;
+            
+            FSMConnectionSaveData choiceData2 = new FSMConnectionSaveData();
+            string id2 = ((FSMNode)inputPort.node).Id;
+            string text2 = ((FSMNode)inputPort.node).StateName;
+            
+            choiceData2.NodeId = id2;
+            choiceData2.Text = text2;
             
             node.Choices = new List<FSMConnectionSaveData>();
             node.Choices.Add(choiceData);
-            
-            FSMConnectionSaveData choiceData2 = new FSMConnectionSaveData();
-            choiceData2.NodeId = ((FSMNode)inputPort.node).Id;
-            choiceData2.Text = ((FSMNode)inputPort.node).StateName;
             
             newNode.Choices = new List<FSMConnectionSaveData>();
             newNode.Choices.Add(choiceData2);
@@ -114,10 +120,15 @@ public class FSMGraphView : GraphView
             output = fromPort,
             input = toPort
         };
-
+        
+        edge.input.DisconnectAll();
+        edge.output.DisconnectAll();
         edge.input.Connect(edge);
         edge.output.Connect(edge);
-
+        
+        edge.input.portColor = Color.white;
+        edge.output.portColor = Color.white;
+        
         AddElement(edge);
     }
 
@@ -318,7 +329,13 @@ public class FSMGraphView : GraphView
                     //        nodesToDelete.Add(nodeE);
                     //    }
                     //}
-                    edgesToDelete.Add((Edge)element);
+                    
+                    Edge edge = (Edge)element;
+                    
+                    edge.input.Disconnect(edge);
+                    edge.output.Disconnect(edge);
+                    
+                    edgesToDelete.Add(edge);
                     continue;
                 }
 
@@ -388,14 +405,11 @@ public class FSMGraphView : GraphView
     
     private FSMNode ReconnectNodes(FSMNode startNode)
     {
-        var outputConnections = startNode.outputContainer.Children().ToList();
         var inputConnections = startNode.inputContainer.Children().ToList();
         
-        Port nextNode = (outputConnections[0] as Port).connections.ToList()[0].input;
         Port previousNode = (inputConnections[0] as Port).connections.ToList()[0].output;
         
         FSMConnectionSaveData choiceData = new FSMConnectionSaveData();
-        
         string nextNodeId = startNode.Choices[0].NodeId;
         string nextNodeName = startNode.Choices[0].Text;
         
@@ -405,7 +419,7 @@ public class FSMGraphView : GraphView
         FSMNode nextPreviousNode = (FSMNode)previousNode.node;
         nextPreviousNode.Choices = new List<FSMConnectionSaveData>();
         nextPreviousNode.Choices.Add(choiceData);
-        
+
         Port prePort = nextPreviousNode.outputContainer.Children().OfType<Port>().ToList()[0];
         
         FSMNode nextNewNode = GetNodeFromGraphById(startNode.Choices[0].NodeId);
@@ -632,7 +646,7 @@ public class FSMGraphView : GraphView
                     
                     Edge edge = (Edge)element;
                     FSMNode nextNode = (FSMNode)edge.input.node;
-                    if (edge.input.connections.Count() == 1)
+                    if (edge.input.connections.Count() == 0)
                     {
                         nextNode.SetPortColor(Color.red, Direction.Input);
                         AddToSelection(nextNode);
@@ -640,7 +654,7 @@ public class FSMGraphView : GraphView
                     }
                     
                     FSMNode previousNode = (FSMNode)edge.output.node;
-                    if (edge.output.connections.Count() == 1)
+                    if (edge.output.connections.Count() == 0)
                     {
                        previousNode.SetPortColor(Color.red, Direction.Output); 
                        AddToSelection(previousNode);

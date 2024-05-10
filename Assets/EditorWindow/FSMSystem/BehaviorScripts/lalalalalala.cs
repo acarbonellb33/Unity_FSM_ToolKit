@@ -16,13 +16,13 @@ public class lalalalalala : BehaviorScript
 	[SerializeField]
 	public DistanceConditionScript distance0;
 
-	[Header("Attack")]
-	[SerializeField]
-	public AttackStateScript attack;
-
 	[Header("Seeing")]
 	[SerializeField]
 	public SeeingConditionScript seeing;
+
+	[Header("Attack")]
+	[SerializeField]
+	public AttackStateScript attack;
 
 	float waitHitTime = 2f;
 	float hitLastTime = 0f;

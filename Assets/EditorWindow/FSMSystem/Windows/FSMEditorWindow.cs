@@ -110,12 +110,24 @@ public class FSMEditorWindow : EditorWindow
 
         foreach (GameObject rootGameObject in rootGameObjects)
         {
-            if (rootGameObject.GetComponent<IDGenerator>() == null)
-            {
-                Component generator = rootGameObject.AddComponent<IDGenerator>();
-                ((IDGenerator)generator).GetUniqueID();
-                generator.hideFlags = HideFlags.HideInInspector;
-            }
+            EnsureIDGeneratorRecursive(rootGameObject);
+        }
+    }
+    
+    private static void EnsureIDGeneratorRecursive(GameObject gameObject)
+    {
+        if (gameObject.GetComponent<IDGenerator>() == null)
+        {
+            // Add IDGenerator component if not present
+            IDGenerator generator = gameObject.AddComponent<IDGenerator>();
+            generator.GetUniqueID();
+            generator.hideFlags = HideFlags.HideInInspector;
+        }
+
+        // Recursively check child GameObjects
+        foreach (Transform child in gameObject.transform)
+        {
+            EnsureIDGeneratorRecursive(child.gameObject);
         }
     }
     private void AddGraphView()

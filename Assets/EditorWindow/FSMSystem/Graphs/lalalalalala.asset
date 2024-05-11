@@ -136,22 +136,6 @@ MonoBehaviour:
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
     <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"
-  - <Id>k__BackingField: 1fa0c7c5-36e1-4882-a289-8c5f1e38f070
-    <Name>k__BackingField: Patrol
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Condition
-      <NodeId>k__BackingField: 5d13a515-bc43-4cca-a572-1b69b3f5a13c
-    <GroupId>k__BackingField: 
-    <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 349, y: 136}
-    <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
-      <ParameterName>k__BackingField: 
-      <ParameterType>k__BackingField: 
-      <Value>k__BackingField: 
-    <DataObject>k__BackingField: "{\n    \"patrolPoints\": [\n        \"\",\n       
-      \"f92cd5fb-c5b4-4e91-827c-c41fb50b5be7\"\n    ]\n}"
   - <Id>k__BackingField: ff3cc836-dc3b-4602-8c1d-bfc65ec2aa22
     <Name>k__BackingField: Distance 0
     <Text>k__BackingField: 
@@ -168,6 +152,22 @@ MonoBehaviour:
       <Value>k__BackingField: 
     <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"distanceFromPlayer\":
       10.0\n}"
+  - <Id>k__BackingField: 1fa0c7c5-36e1-4882-a289-8c5f1e38f070
+    <Name>k__BackingField: Patrol
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 5d13a515-bc43-4cca-a572-1b69b3f5a13c
+    <GroupId>k__BackingField: 
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 348, y: 136}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <DataObject>k__BackingField: "{\n    \"patrolPoints\": [\n        \"67d72ad3-2c5a-4201-9ac0-b73c39a6acb3\",\n       
+      \"\"\n    ]\n}"
   <Groups>k__BackingField: []
   <OldGroupedNames>k__BackingField: []
   <OldUngroupedNames>k__BackingField:
@@ -179,8 +179,8 @@ MonoBehaviour:
   - Extension 5
   - Initial State
   - Seeing
-  - Patrol
   - Distance 0
+  - Patrol
   <OldGroupedNodeNames>k__BackingField:
     list: []
   <GameObject>k__BackingField: Enemy

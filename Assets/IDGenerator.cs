@@ -14,7 +14,6 @@ public class IDGenerator : MonoBehaviour
         {
             // Generate a unique ID using a combination of GameObject name and a random number
             uniqueID = Guid.NewGuid().ToString();
-            Debug.Log("Generated Unique ID: " + uniqueID);
         }
         return uniqueID;
     }

@@ -107,7 +107,7 @@ public class lalalalalalaEditor : Editor
 						{
 							EditorGUILayout.BeginHorizontal();
 							SerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);
-							if (!String.IsNullOrEmpty(gameObjectElementProperty.stringValue))
+							if (gameObjectElementProperty.stringValue != null)
 							{
 								GameObject gameObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);
 								EditorGUI.BeginChangeCheck();
@@ -127,11 +127,13 @@ public class lalalalalalaEditor : Editor
 										gameObjectElementProperty.stringValue = string.Empty;
 									}
 									selectedObjectSerialized.ApplyModifiedProperties();
-								FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+									FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
 								}
 								if (GUILayout.Button("Remove", GUILayout.Width(70)))
 								{
 									RemovePatrolPoint(gameObjectElementProperty.stringValue);
+									selectedObjectSerialized.ApplyModifiedProperties();
+									FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
 								}
 							}
 							EditorGUILayout.EndHorizontal();
@@ -139,6 +141,8 @@ public class lalalalalalaEditor : Editor
 						if (GUILayout.Button("Create and Add a Patrol Point"))
 						{
 							CreateAndAddGameObject(lalalalalala);
+							selectedObjectSerialized.ApplyModifiedProperties();
+							FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
 						}
 					}
 					else

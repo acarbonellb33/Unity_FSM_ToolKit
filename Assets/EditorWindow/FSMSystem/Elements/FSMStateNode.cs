@@ -129,7 +129,23 @@ public class FSMStateNode : FSMNode
                             };
                             objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                             {
-                                StateScript.SetVariableValue(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                try
+                                {
+                                    if (evt.previousValue == null)
+                                    {
+                                        StateScript.RemoveVariable(result[0], "");
+                                    }
+                                    else
+                                    {
+                                        StateScript.RemoveVariable(result[0], ((GameObject)evt.previousValue).GetComponent<IDGenerator>().GetUniqueID());
+                                    }
+                                    objectListField.value.ToString();
+                                    StateScript.SetVariableValue(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                }
+                                catch (Exception)
+                                {
+                                    StateScript.SetVariableValue(result[0], "");
+                                }
                             });
                                                 
                             Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
@@ -137,6 +153,10 @@ public class FSMStateNode : FSMNode
                                 if (objectListField.value != null)
                                 {
                                     StateScript.RemoveVariable(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                }
+                                else
+                                {
+                                    StateScript.RemoveVariable(result[0], "");
                                 }
                                 stateAttributeContainer.Remove(objectListField);
                             });
@@ -160,9 +180,26 @@ public class FSMStateNode : FSMNode
                                 label = UpdateNameStyle(result[0]),
                                 objectType = typeof(GameObject)
                             };
+                            StateScript.SetVariableValue(result[0], "");
                             objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                             {
-                                StateScript.SetVariableValue(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                try
+                                {
+                                    if (evt.previousValue == null)
+                                    {
+                                        StateScript.RemoveVariable(result[0], "");
+                                    }
+                                    else
+                                    {
+                                        StateScript.RemoveVariable(result[0], ((GameObject)evt.previousValue).GetComponent<IDGenerator>().GetUniqueID());
+                                    }
+                                    objectListField.value.ToString();
+                                    StateScript.SetVariableValue(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                }
+                                catch (Exception)
+                                {
+                                    StateScript.SetVariableValue(result[0], "");
+                                }
                             });
 
                             Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
@@ -170,6 +207,10 @@ public class FSMStateNode : FSMNode
                                 if (objectListField.value != null)
                                 {
                                     StateScript.RemoveVariable(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                }
+                                else
+                                {
+                                    StateScript.RemoveVariable(result[0], "");
                                 }
                                 stateAttributeContainer.Remove(objectListField);
                             });

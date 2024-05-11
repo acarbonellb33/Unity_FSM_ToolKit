@@ -21,7 +21,7 @@ public class StateScriptData
             if (field.FieldType.ToString() == "System.Collections.Generic.List`1[System.String]")
             {
                 List<string> list = (List<string>)field.GetValue(this);
-                object newValue = "";
+                string newValue = "";
                 if (list != null && list.Count > 0)
                 {
                     // Concatenate GameObject names in the list
@@ -32,7 +32,10 @@ public class StateScriptData
                         else
                             newValue += list[i]+"/";
                     }
-                    result.Add($"{field.Name},{field.FieldType},{newValue}"); 
+                    if(String.IsNullOrEmpty(newValue))
+                        result.Add($"{field.Name},{field.FieldType},Null");
+                    else
+                        result.Add($"{field.Name},{field.FieldType},{newValue}");
                 }
                 else
                 {

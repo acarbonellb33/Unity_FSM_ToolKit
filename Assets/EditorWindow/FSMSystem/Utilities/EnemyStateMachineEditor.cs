@@ -218,13 +218,9 @@ public static class EnemyStateMachineEditor
 
         if (hasPatrolState)
         {
-            scriptContent += "\tpublic GameObject AddObjectToList()\n";
+            scriptContent += "\tpublic void AddObjectToList()\n";
             scriptContent += "\t{\n";
-            scriptContent += "\t\tGameObject newGameObject = new GameObject(\"Patrol Point \" + patrol.patrolPoints.Count);\n";
-            scriptContent += "\t\tnewGameObject.AddComponent<IDGenerator>().GetUniqueID();\n";
-            scriptContent += "\t\tDebug.Log(newGameObject.GetComponent<IDGenerator>());\n";
-            scriptContent += "\t\tpatrol.patrolPoints.Add(newGameObject.GetComponent<IDGenerator>().GetUniqueID());\n";
-            scriptContent += "\t\treturn newGameObject;\n";
+            scriptContent += "\t\tpatrol.patrolPoints.Add(\"\");\n";
             scriptContent += "\t}\n";
  
             scriptContent += "\tpublic void RemoveObjectFromList(string patrolPoint)\n";
@@ -435,7 +431,7 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t\t\t\t\t\t{\n";
             scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.BeginHorizontal();\n";
             scriptContent += "\t\t\t\t\t\t\tSerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);\n";
-            scriptContent += "\t\t\t\t\t\t\tif (!String.IsNullOrEmpty(gameObjectElementProperty.stringValue))\n";
+            scriptContent += "\t\t\t\t\t\t\tif (gameObjectElementProperty.stringValue != null)\n";
             scriptContent += "\t\t\t\t\t\t\t{\n";
             scriptContent += "\t\t\t\t\t\t\t\tGameObject gameObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);\n";
             scriptContent += "\t\t\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
@@ -455,11 +451,13 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t\t\t\t\t\t\t\t\t\tgameObjectElementProperty.stringValue = string.Empty;\n";
             scriptContent += "\t\t\t\t\t\t\t\t\t}\n";
             scriptContent += "\t\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n"; 
-            scriptContent += $"\t\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
+            scriptContent += $"\t\t\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
             scriptContent += "\t\t\t\t\t\t\t\t}\n";
             scriptContent += "\t\t\t\t\t\t\t\tif (GUILayout.Button(\"Remove\", GUILayout.Width(70)))\n";
             scriptContent += "\t\t\t\t\t\t\t\t{\n";
             scriptContent += "\t\t\t\t\t\t\t\t\tRemovePatrolPoint(gameObjectElementProperty.stringValue);\n";
+            scriptContent += "\t\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n"; 
+            scriptContent += $"\t\t\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
             scriptContent += "\t\t\t\t\t\t\t\t}\n";
             scriptContent += "\t\t\t\t\t\t\t}\n";
             scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.EndHorizontal();\n"; 
@@ -467,6 +465,8 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t\t\t\t\t\tif (GUILayout.Button(\"Create and Add a Patrol Point\"))\n"; 
             scriptContent += "\t\t\t\t\t\t{\n"; 
             scriptContent += $"\t\t\t\t\t\t\tCreateAndAddGameObject({nameLowerCapital});\n"; 
+            scriptContent += "\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n"; 
+            scriptContent += $"\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
             scriptContent += "\t\t\t\t\t\t}\n"; 
             scriptContent += "\t\t\t\t\t}\n"; 
             scriptContent += "\t\t\t\t\telse\n"; 
@@ -476,7 +476,7 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n"; 
             scriptContent += "\t\t\t\t\t\t{\n"; 
             scriptContent += "\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n"; 
-            scriptContent += $"\t\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
+            scriptContent += $"\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
             scriptContent += "\t\t\t\t\t\t}\n"; 
             scriptContent += "\t\t\t\t\t}\n";
         }

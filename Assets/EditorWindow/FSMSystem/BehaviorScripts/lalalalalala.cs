@@ -17,13 +17,13 @@ public class lalalalalala : BehaviorScript
 	[SerializeField]
 	public SeeingConditionScript seeing;
 
-	[Header("Patrol")]
-	[SerializeField]
-	public PatrolStateScript patrol;
-
 	[Header("Distance 0")]
 	[SerializeField]
 	public DistanceConditionScript distance0;
+
+	[Header("Patrol")]
+	[SerializeField]
+	public PatrolStateScript patrol;
 
 	float waitHitTime = 2f;
 	float hitLastTime = 0f;
@@ -106,13 +106,9 @@ public class lalalalalala : BehaviorScript
 	{
 		currentState = FSMStates.Die;
 	}
-	public GameObject AddObjectToList()
+	public void AddObjectToList()
 	{
-		GameObject newGameObject = new GameObject("Patrol Point " + patrol.patrolPoints.Count);
-		newGameObject.AddComponent<IDGenerator>().GetUniqueID();
-		Debug.Log(newGameObject.GetComponent<IDGenerator>());
-		patrol.patrolPoints.Add(newGameObject.GetComponent<IDGenerator>().GetUniqueID());
-		return newGameObject;
+		patrol.patrolPoints.Add("");
 	}
 	public void RemoveObjectFromList(string patrolPoint)
 	{

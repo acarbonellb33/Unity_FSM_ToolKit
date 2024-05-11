@@ -107,15 +107,32 @@ public class lalalalalalaEditor : Editor
 						{
 							EditorGUILayout.BeginHorizontal();
 							SerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);
-							if (gameObjectElementProperty.objectReferenceValue != null)
+							if (!String.IsNullOrEmpty(gameObjectElementProperty.stringValue))
 							{
-								GameObject gameObject = (GameObject)gameObjectElementProperty.objectReferenceValue;
-								EditorGUILayout.PropertyField(gameObjectElementProperty, GUIContent.none);
+								GameObject gameObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);
+								EditorGUI.BeginChangeCheck();
+								gameObject = EditorGUILayout.ObjectField("Patrol Point", gameObject, typeof(GameObject), true) as GameObject;
+								if (EditorGUI.EndChangeCheck())
+								{
+									if (gameObject != null)
+									{
+										IDGenerator idGenerator = gameObject.GetComponent<IDGenerator>();
+										if (idGenerator.GetUniqueID() != null)
+										{
+											gameObjectElementProperty.stringValue = idGenerator.GetUniqueID();
+										}
+									}
+									else
+									{
+										gameObjectElementProperty.stringValue = string.Empty;
+									}
+									selectedObjectSerialized.ApplyModifiedProperties();
+								FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+								}
 								if (GUILayout.Button("Remove", GUILayout.Width(70)))
 								{
-									RemovePatrolPoint(gameObject.GetComponent<IDGenerator>().GetUniqueID());
+									RemovePatrolPoint(gameObjectElementProperty.stringValue);
 								}
-								FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
 							}
 							EditorGUILayout.EndHorizontal();
 						}

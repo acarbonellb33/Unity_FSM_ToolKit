@@ -34,7 +34,8 @@ public static class EnemyStateMachineEditor
         scriptContent += "using System.Collections;\n";
         scriptContent += "using System.Collections.Generic;\n";
         scriptContent += "using UnityEngine.AI;\n";
-        scriptContent += "using System.Reflection;\n\n";
+        scriptContent += "using System.Reflection;\n";
+        scriptContent += "using System.Threading.Tasks;\n\n";
 
         scriptContent += "[Serializable]\n";
         
@@ -219,16 +220,19 @@ public static class EnemyStateMachineEditor
             scriptContent += "\tpublic GameObject AddObjectToList()\n";
             scriptContent += "\t{\n";
             scriptContent += "\t\tGameObject newGameObject = new GameObject(\"Patrol Point \" + patrol.patrolPoints.Count);\n";
-            scriptContent += "\t\tpatrol.patrolPoints.Add(newGameObject);\n";
+            scriptContent += "\t\tnewGameObject.AddComponent<IDGenerator>().GetUniqueID();\n";
+            scriptContent += "\t\tDebug.Log(newGameObject.GetComponent<IDGenerator>());\n";
+            scriptContent += "\t\tpatrol.patrolPoints.Add(newGameObject.GetComponent<IDGenerator>().GetUniqueID());\n";
             scriptContent += "\t\treturn newGameObject;\n";
             scriptContent += "\t}\n";
  
-            scriptContent += "\tpublic void RemoveObjectFromList(GameObject patrolPoint)\n";
+            scriptContent += "\tpublic void RemoveObjectFromList(string patrolPoint)\n";
             scriptContent += "\t{\n";
             scriptContent += "\t\tpatrol.RemovePatrolPoint(patrolPoint);\n";
-            scriptContent += "\t\tif(GameObject.Find(patrolPoint.name) != null)\n";
+            scriptContent += "\t\tGameObject patrolPointObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);\n";
+            scriptContent += "\t\tif(patrolPointObject != null)\n";
             scriptContent += "\t\t{\n";
-            scriptContent += "\t\t\tDestroyImmediate(patrolPoint);\n";
+            scriptContent += "\t\t\tDestroyImmediate(patrolPointObject);\n";
             scriptContent += "\t\t}\n";
             scriptContent += "\t}\n";
         }
@@ -436,7 +440,7 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t\t\t\t\t\t\t\tEditorGUILayout.PropertyField(gameObjectElementProperty, GUIContent.none);\n"; 
             scriptContent += "\t\t\t\t\t\t\t\tif (GUILayout.Button(\"Remove\", GUILayout.Width(70)))\n"; 
             scriptContent += "\t\t\t\t\t\t\t\t{\n"; 
-            scriptContent += "\t\t\t\t\t\t\t\t\tRemovePatrolPoint(gameObject);\n"; 
+            scriptContent += "\t\t\t\t\t\t\t\t\tRemovePatrolPoint(gameObject.GetComponent<IDGenerator>().GetUniqueID());\n"; 
             scriptContent += "\t\t\t\t\t\t\t\t}\n"; 
             scriptContent += $"\t\t\t\t\t\t\t\tFSMIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n"; 
             scriptContent += "\t\t\t\t\t\t\t}\n"; 
@@ -487,13 +491,14 @@ public static class EnemyStateMachineEditor
             scriptContent += "\t{\n";
             scriptContent += $"\t\t{nameLowerCapital}.AddObjectToList();\n";
             scriptContent += "\t}\n";
-            scriptContent += "\tprivate void RemovePatrolPoint(GameObject patrolPoint)\n";
+            scriptContent += "\tprivate void RemovePatrolPoint(string patrolPoint)\n";
             scriptContent += "\t{\n";
             scriptContent += $"\t\t{stringWithoutSpaces} {nameLowerCapital} = ({stringWithoutSpaces})target;\n";
             scriptContent += $"\t\t{nameLowerCapital}.patrol.RemovePatrolPoint(patrolPoint);\n";
-            scriptContent += "\t\tif(GameObject.Find(patrolPoint.name) != null)\n";
+            scriptContent += "\t\tGameObject patrolPointObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);\n";
+            scriptContent += "\t\tif(patrolPointObject != null)\n";
             scriptContent += "\t\t{\n";
-            scriptContent += "\t\t\tDestroyImmediate(patrolPoint);\n";
+            scriptContent += "\t\t\tDestroyImmediate(patrolPointObject);\n";
             scriptContent += "\t\t}\n";
             scriptContent += "\t}\n";
         }

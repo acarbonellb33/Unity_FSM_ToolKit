@@ -17,4 +17,5 @@ MonoBehaviour:
   - <Text>k__BackingField: Condition
     <NextNode>k__BackingField: {fileID: 11400000, guid: c4feabfc6046d01469c77468fee26553, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"patrolPoints\": []\n}"
+  <DataObject>k__BackingField: "{\n    \"patrolPoints\": [\n        \"20ff1b90-43b7-4c88-9ca8-96f372ceff1b\"\n   
+    ]\n}"

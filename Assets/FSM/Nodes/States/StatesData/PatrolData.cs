@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PatrolData : StateScriptData
 {
-    public List<GameObject> patrolPoints;
+    public List<string> patrolPoints;
     
     public PatrolData()
     {

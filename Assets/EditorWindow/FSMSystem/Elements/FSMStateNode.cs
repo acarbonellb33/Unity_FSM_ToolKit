@@ -92,7 +92,6 @@ public class FSMStateNode : FSMNode
         foreach(string attribute in attributes)
         {
             string[] result = attribute.Split(',');
-
             switch (result[1]){
                
                 case "UnityEngine.GameObject":
@@ -113,31 +112,32 @@ public class FSMStateNode : FSMNode
                     objectField.AddToClassList("fsm-node_state-attribute-field");
                     stateAttributeContainer.Add(objectField);
                     break;
-                case "System.Collections.Generic.List`1[UnityEngine.GameObject]":
+                case "System.Collections.Generic.List`1[System.String]":
                     
                     string inputList = result[2];
                     if (inputList != "")
                     {
-                        List<GameObject> outputGameObjectsList = new List<GameObject>();
-                        outputGameObjectsList = inputList.Split('/').Select(GameObject.Find).ToList();
+                        List<GameObject> outputGameObjectsList = inputList.Split('/').Select(FSMIOUtility.FindGameObjectWithId<IDGenerator>).ToList();
+                        
                         foreach (var value in outputGameObjectsList)
                         {
-                            string outputValue = Regex.Replace(value.ToString(), @"\s*\([^()]*\)", "");
-                            
                             ObjectField objectListField = new ObjectField()
                             {
                                 label = UpdateNameStyle(result[0]),
                                 objectType = typeof(GameObject),
-                                value = GameObject.Find(outputValue)
+                                value = value
                             };
                             objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                             {
-                                StateScript.SetVariableValue(result[0], objectListField.value);
+                                StateScript.SetVariableValue(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
                             });
                                                 
                             Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
                             {
-                                RemovePatrolPoint(objectListField);
+                                if (objectListField.value != null)
+                                {
+                                    StateScript.RemoveVariable(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                }
                                 stateAttributeContainer.Remove(objectListField);
                             });
                         
@@ -162,12 +162,15 @@ public class FSMStateNode : FSMNode
                             };
                             objectListField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                             {
-                                StateScript.SetVariableValue(result[0], objectListField.value);
+                                StateScript.SetVariableValue(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
                             });
 
                             Button deleteChoiceButton = FSMElementUtility.CreateButton("X", () =>
                             {
-                                RemovePatrolPoint(objectListField);
+                                if (objectListField.value != null)
+                                {
+                                    StateScript.RemoveVariable(result[0], ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID());
+                                }
                                 stateAttributeContainer.Remove(objectListField);
                             });
 
@@ -177,7 +180,7 @@ public class FSMStateNode : FSMNode
                             objectListField.Add(deleteChoiceButton);
                             stateAttributeContainer.Insert(indexToAdd, objectListField);
                             
-                            CreateAndAddGameObject(objectListField);
+                            //CreateAndAddGameObject(objectListField);
                         }
                     });
                     
@@ -273,7 +276,7 @@ public class FSMStateNode : FSMNode
             {
                 dynamicMethod.Invoke(newScriptInstance,new object[]
                 {
-                    (GameObject)objectListField.value
+                    ((GameObject)objectListField.value).GetComponent<IDGenerator>().GetUniqueID()
                 });
             }
         }

@@ -507,6 +507,14 @@ public class FSMGraphView : GraphView
                     edge.input.Disconnect(edge);
                     edge.output.Disconnect(edge);
                     RemoveElement(edge);
+                    
+                    FSMNode nextNode = (FSMNode)edge.input.node;
+                    FSMNode previousNode = (FSMNode)edge.output.node;
+                    
+                    AddToSelection(nextNode);
+                    AddToSelection(previousNode);
+                    RemoveFromSelection(nextNode);
+                    RemoveFromSelection(previousNode);
                 }
             }
             SetPortColorToEmptyNodes();

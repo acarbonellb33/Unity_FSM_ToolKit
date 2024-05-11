@@ -18,9 +18,9 @@ public class StateScriptData
         foreach (FieldInfo field in fields)
         {
             // Check if the field is a List<GameObject>
-            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[UnityEngine.GameObject]")
+            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[System.String]")
             {
-                List<GameObject> list = (List<GameObject>)field.GetValue(this);
+                List<string> list = (List<string>)field.GetValue(this);
                 object newValue = "";
                 if (list != null && list.Count > 0)
                 {
@@ -28,9 +28,9 @@ public class StateScriptData
                     for (int i = 0; i < list.Count; i++)
                     {
                         if(i+1 == list.Count)
-                            newValue += list[i].name;
+                            newValue += list[i];
                         else
-                            newValue += list[i].name+"/";
+                            newValue += list[i]+"/";
                     }
                     result.Add($"{field.Name},{field.FieldType},{newValue}"); 
                 }
@@ -74,25 +74,52 @@ public class StateScriptData
         if (field != null)
         {
             // Check if the field is a List<GameObject>
-            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[UnityEngine.GameObject]")
+            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[System.String]")
             {
-                if(newValue.GetType().ToString() == "UnityEngine.GameObject")
+                if(newValue.GetType().ToString() == "System.String")
                 {
                     // Cast newValue to List<GameObject> and add a new GameObject
-                    List<GameObject> list = (List<GameObject>)field.GetValue(this);
-                    list.Add((GameObject)newValue);
+                    List<string> list = (List<string>)field.GetValue(this);
+                    list.Add((string)newValue);
                     field.SetValue(this, list);
                 }
                 else
                 {
                     // Set the value of the field to the new List<GameObject>
-                    field.SetValue(this, (List<GameObject>)newValue);
+                    field.SetValue(this, (List<string>)newValue);
                 }
             }
             else
             {
                 // Set the value of the field to the new value
                 field.SetValue(this, newValue);
+            }
+        }
+        else
+        {
+            // Log an error if the variable does not exist
+            Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
+        }
+    }
+    
+    public void RemoveVariable(string variableName, object pastValue)
+    {
+        Type type = GetType();
+        FieldInfo field = type.GetField(variableName);
+
+        if (field != null)
+        {
+            // Check if the field is a List<string>
+            if (field.FieldType == typeof(List<string>))
+            {
+                List<string> list = (List<string>)field.GetValue(this);
+                list.Remove((string)pastValue);
+                field.SetValue(this, list);
+            }
+            else
+            {
+                // Set the value of the field to default
+                field.SetValue(this, null);
             }
         }
         else

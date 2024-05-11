@@ -113,7 +113,7 @@ public class lalalalalalaEditor : Editor
 								EditorGUILayout.PropertyField(gameObjectElementProperty, GUIContent.none);
 								if (GUILayout.Button("Remove", GUILayout.Width(70)))
 								{
-									RemovePatrolPoint(gameObject);
+									RemovePatrolPoint(gameObject.GetComponent<IDGenerator>().GetUniqueID());
 								}
 								FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
 							}
@@ -148,13 +148,14 @@ public class lalalalalalaEditor : Editor
 	{
 		lalalalalala.AddObjectToList();
 	}
-	private void RemovePatrolPoint(GameObject patrolPoint)
+	private void RemovePatrolPoint(string patrolPoint)
 	{
 		lalalalalala lalalalalala = (lalalalalala)target;
 		lalalalalala.patrol.RemovePatrolPoint(patrolPoint);
-		if(GameObject.Find(patrolPoint.name) != null)
+		GameObject patrolPointObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);
+		if(patrolPointObject != null)
 		{
-			DestroyImmediate(patrolPoint);
+			DestroyImmediate(patrolPointObject);
 		}
 	}
 	private string FixName(string oldName)

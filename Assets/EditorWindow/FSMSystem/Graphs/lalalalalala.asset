@@ -150,7 +150,8 @@ MonoBehaviour:
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
-    <DataObject>k__BackingField: "{\n    \"patrolPoints\": []\n}"
+    <DataObject>k__BackingField: "{\n    \"patrolPoints\": [\n        \"20ff1b90-43b7-4c88-9ca8-96f372ceff1b\"\n   
+      ]\n}"
   - <Id>k__BackingField: ff3cc836-dc3b-4602-8c1d-bfc65ec2aa22
     <Name>k__BackingField: Distance 0
     <Text>k__BackingField: 

@@ -5,13 +5,14 @@ using UnityEngine;
 public class PatrolStateScript : StateScript, IAction
 {
     // List to store patrol points as GameObjects
-    public List<GameObject> patrolPoints;
+    public List<string> patrolPoints;
     private int counter;
     
     public PatrolStateScript()
     {
         // Set the state name to "Patrol" using the SetStateName method inherited from StateScript
         SetStateName("Patrol");
+        patrolPoints = new List<string>();
         counter = 0;
     }
 
@@ -41,7 +42,8 @@ public class PatrolStateScript : StateScript, IAction
             }
 
             // Set the agent's destination to the position of the current patrol point
-            agent.SetDestination(patrolPoints[counter].transform.position);
+            GameObject patrolPoint = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoints[counter]);
+            agent.SetDestination(patrolPoint.transform.position);
 
             // Increment the counter for the next patrol point
             counter++;
@@ -49,15 +51,10 @@ public class PatrolStateScript : StateScript, IAction
     }
 
     // Method to remove a patrol point from the list
-    public void RemovePatrolPoint(GameObject patrolPoint)
+    public void RemovePatrolPoint(string patrolPoint)
     {
         // Remove the specified patrol point from the list
         patrolPoints.Remove(patrolPoint);
-
-        // Update the names of the remaining patrol points
-        for(int i = 0; i < patrolPoints.Count; i++)
-        {
-            patrolPoints[i].name = "Patrol Point " + i;
-        }
+        Debug.Log("Count: " + patrolPoints.Count);
     }
 }

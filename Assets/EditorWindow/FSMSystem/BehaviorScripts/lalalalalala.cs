@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using System.Reflection;
+using System.Threading.Tasks;
 
 [Serializable]
 public class lalalalalala : BehaviorScript
@@ -108,15 +109,18 @@ public class lalalalalala : BehaviorScript
 	public GameObject AddObjectToList()
 	{
 		GameObject newGameObject = new GameObject("Patrol Point " + patrol.patrolPoints.Count);
-		patrol.patrolPoints.Add(newGameObject);
+		newGameObject.AddComponent<IDGenerator>().GetUniqueID();
+		Debug.Log(newGameObject.GetComponent<IDGenerator>());
+		patrol.patrolPoints.Add(newGameObject.GetComponent<IDGenerator>().GetUniqueID());
 		return newGameObject;
 	}
-	public void RemoveObjectFromList(GameObject patrolPoint)
+	public void RemoveObjectFromList(string patrolPoint)
 	{
 		patrol.RemovePatrolPoint(patrolPoint);
-		if(GameObject.Find(patrolPoint.name) != null)
+		GameObject patrolPointObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);
+		if(patrolPointObject != null)
 		{
-			DestroyImmediate(patrolPoint);
+			DestroyImmediate(patrolPointObject);
 		}
 	}
 	private void OnFootstep() {}

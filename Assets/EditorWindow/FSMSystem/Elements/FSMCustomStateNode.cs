@@ -188,8 +188,7 @@ public class FSMCustomStateNode : FSMNode
                 case "selectedComponent":
                     componentDropdown.label = UpdateNameStyle(result[0]);
                     componentDropdown.value = result[2];
-        
-                    if (componentDropdown.value != null)
+                    if (!String.IsNullOrEmpty(componentDropdown.value))
                     {
                         selectedComponent = selectedGameObject.GetComponent(componentDropdown.value);
                         StateScript.SetVariableValue(result[0], componentDropdown.value);

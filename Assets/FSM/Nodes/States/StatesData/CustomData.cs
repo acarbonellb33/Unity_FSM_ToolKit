@@ -1,13 +1,14 @@
-using OpenCover.Framework.Model;
-using UnityEngine;
-
-public class CustomData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public string selectedGameObject;
-    public string selectedComponent;
-    public string selectedFunction;
-    public CustomData()
+    public class CustomData : StateScriptData
     {
-        SetStateName("Custom");
+        public string selectedGameObject;
+        public string selectedComponent;
+        public string selectedFunction;
+
+        public CustomData()
+        {
+            SetStateName("Custom");
+        }
     }
 }

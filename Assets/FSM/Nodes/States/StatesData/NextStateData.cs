@@ -1,7 +1,10 @@
-public class NextStateData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public NextStateData()
+    public class NextStateData : StateScriptData
     {
-        SetStateName("NextState");
+        public NextStateData()
+        {
+            SetStateName("NextState");
+        }
     }
 }

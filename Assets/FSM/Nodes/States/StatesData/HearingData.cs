@@ -1,10 +1,13 @@
-public class HearingData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public float hearingRange = 10f;
-    public float minPlayerSpeed = 5f;
-    
-    public HearingData()
+    public class HearingData : StateScriptData
     {
-        SetStateName("Hearing");
+        public float hearingRange = 10f;
+        public float minPlayerSpeed = 5f;
+
+        public HearingData()
+        {
+            SetStateName("Hearing");
+        }
     }
 }

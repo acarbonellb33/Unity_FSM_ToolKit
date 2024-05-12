@@ -1,17 +1,19 @@
-using System.Collections.Generic;
-
-public static class CollectionUtility
+namespace FSM.Utilities
 {
-    public static void AddItem<K, V>(this SerializableDictionary<K, List<V>> serializableDictionary, K key, V value)
+    using System.Collections.Generic;
+
+    public static class CollectionUtility
     {
-        if (serializableDictionary.ContainsKey(key))
-        { 
-            serializableDictionary[key].Add(value);
-        }
-        else
-        { 
-            serializableDictionary.Add(key, new List<V> { value });
+        public static void AddItem<K, V>(this SerializableDictionary<K, List<V>> serializableDictionary, K key, V value)
+        {
+            if (serializableDictionary.ContainsKey(key))
+            {
+                serializableDictionary[key].Add(value);
+            }
+            else
+            {
+                serializableDictionary.Add(key, new List<V> { value });
+            }
         }
     }
 }
-

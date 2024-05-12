@@ -1,45 +1,52 @@
-using UnityEngine;
-
-// EnemyHealthCondition class inherits from MonoBehaviour
-public class HealthConditionScript : StateScript, ICondition
+#if UNITY_EDITOR
+namespace FSM.Nodes.States.StateScripts
 {
-    // Public reference to the enemy's health component
-    private EnemyHealthSystem enemyHealth;
-
-    // Public variable to define the minimum health threshold for the condition to be true
-    public FSMOperands operand;
-    public float health = 10f;
-
-    public HealthConditionScript()
+    using UnityEngine;
+    using Enemy;
+    using Enumerations;
+    // EnemyHealthCondition class inherits from MonoBehaviour
+    public class HealthConditionScript : StateScript, ICondition
     {
-        // Set the state name to "Health" using the SetStateName method inherited from StateScript
-        SetStateName("Health");
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Check if the enemy health component is assigned
-        if (TryGetComponent(out enemyHealth))
+        // Public reference to the enemy's health component
+        private EnemyHealthSystem enemyHealth;
+
+        // Public variable to define the minimum health threshold for the condition to be true
+        public FSMOperands operand;
+        public float health = 10f;
+
+        public HealthConditionScript()
         {
-            Debug.LogError("EnemyHealthSystem component is not added in the Enemy GameObject");
+            // Set the state name to "Health" using the SetStateName method inherited from StateScript
+            SetStateName("Health");
         }
-    }
 
-    // Implementation of the Condition method from the ICondition interface
-    public bool Condition()
-    {
-        switch(operand)
+        // Start is called before the first frame update
+        void Start()
         {
-            case FSMOperands.LessThan:
-                return enemyHealth.GetCurrentHealth() < health;
-            case FSMOperands.GreaterThan:
-                return enemyHealth.GetCurrentHealth() > health;
-            case FSMOperands.EqualTo:
-                return enemyHealth.GetCurrentHealth().Equals(health);
-            case FSMOperands.NotEqualTo:
-                return !enemyHealth.GetCurrentHealth().Equals(health);
-            default:
-                return false;
+            // Check if the enemy health component is assigned
+            if (TryGetComponent(out enemyHealth))
+            {
+                Debug.LogError("EnemyHealthSystem component is not added in the Enemy GameObject");
+            }
+        }
+
+        // Implementation of the Condition method from the ICondition interface
+        public bool Condition()
+        {
+            switch (operand)
+            {
+                case FSMOperands.LessThan:
+                    return enemyHealth.GetCurrentHealth() < health;
+                case FSMOperands.GreaterThan:
+                    return enemyHealth.GetCurrentHealth() > health;
+                case FSMOperands.EqualTo:
+                    return enemyHealth.GetCurrentHealth().Equals(health);
+                case FSMOperands.NotEqualTo:
+                    return !enemyHealth.GetCurrentHealth().Equals(health);
+                default:
+                    return false;
+            }
         }
     }
 }
+#endif

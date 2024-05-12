@@ -15,7 +15,7 @@ MonoBehaviour:
   <NodeName>k__BackingField: Patrol
   <Connections>k__BackingField:
   - <Text>k__BackingField: Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: c4feabfc6046d01469c77468fee26553, type: 2}
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 8605795ef6df58a4e9fa3f5b0a23f132, type: 2}
   <NodeType>k__BackingField: 0
-  <DataObject>k__BackingField: "{\n    \"patrolPoints\": [\n        \"67d72ad3-2c5a-4201-9ac0-b73c39a6acb3\",\n       
-    \"\"\n    ]\n}"
+  <DataObject>k__BackingField: "{\n    \"patrolPoints\": [\n        \"2193141f-2e5e-435e-85db-141607d1ad17\",\n       
+    \"1b47a30a-6fe0-4ca1-866c-63f8a146af63\"\n    ]\n}"

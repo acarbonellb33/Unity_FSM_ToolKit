@@ -1,9 +1,12 @@
-public class SeeingData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public float distance = 10f;
-    
-    public SeeingData()
+    public class SeeingData : StateScriptData
     {
-        SetStateName("Seeing");
+        public float distance = 10f;
+
+        public SeeingData()
+        {
+            SetStateName("Seeing");
+        }
     }
 }

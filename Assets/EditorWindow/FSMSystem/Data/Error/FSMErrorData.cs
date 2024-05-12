@@ -1,23 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class FSMErrorData
+#if UNITY_EDITOR
+namespace EditorWindow.FSMSystem.Data.Error
 {
-    public Color Color { get; set; }
-
-    public FSMErrorData()
+    using UnityEngine;
+    public class FSMErrorData
     {
-        GenerateRandomColor();
-    }
+        public Color Color { get; set; }
 
-    private void GenerateRandomColor()
-    {
-        Color = new Color32(
-            (byte) Random.Range(65, 256),
-            (byte) Random.Range(50, 176),
-            (byte) Random.Range(50, 176),
-            255
-        );
+        public FSMErrorData()
+        {
+            GenerateRandomColor();
+        }
+
+        private void GenerateRandomColor()
+        {
+            Color = new Color32(
+                (byte)Random.Range(65, 256),
+                (byte)Random.Range(50, 176),
+                (byte)Random.Range(50, 176),
+                255
+            );
+        }
     }
 }
+#endif

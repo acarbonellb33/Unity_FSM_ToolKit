@@ -1,16 +1,20 @@
-using UnityEngine;
-using UnityEngine.UI;
-
-public class HealthBar : MonoBehaviour
+namespace FSM.Player
 {
-    private Slider slider;
-    void Awake()
+    using UnityEngine;
+    using UnityEngine.UI;
+
+    public class HealthBar : MonoBehaviour
     {
-        slider = GetComponent<Slider>();
-    }
-    
-    public void UpdateHealthBar(float maxHealth, float currentHealth)
-    {
-        slider.value = currentHealth / maxHealth;
+        private Slider slider;
+
+        void Awake()
+        {
+            slider = GetComponent<Slider>();
+        }
+
+        public void UpdateHealthBar(float maxHealth, float currentHealth)
+        {
+            slider.value = currentHealth / maxHealth;
+        }
     }
 }

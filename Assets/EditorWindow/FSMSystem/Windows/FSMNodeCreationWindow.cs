@@ -1,75 +1,86 @@
-using UnityEditor;
-using UnityEngine;
-
-public class FSMNodeCreationWindow : EditorWindow
+#if UNITY_EDITOR
+namespace EditorWindow.FSMSystem.Windows
 {
-    private enum CreationType { None, State, Condition }
-    private CreationType creationType = CreationType.None;
-    private string newStateName = "";
-
-    [MenuItem("Window/FSM/Create State or Condition")]
-    public static void ShowWindow()
+    using UnityEditor;
+    using UnityEngine;
+    using Utilities;
+    public class FSMNodeCreationWindow : EditorWindow
     {
-        GetWindow<FSMNodeCreationWindow>("Create State or Condition");
-    }
-
-    private void OnGUI()
-    {
-        GUILayout.Label("Choose what to create:");
-
-        GUILayout.BeginHorizontal();
-
-        // Button to create a new state
-        if (GUILayout.Toggle(creationType == CreationType.State, "Create State", "Button"))
+        private enum CreationType
         {
-            creationType = CreationType.State;
+            None,
+            State,
+            Condition
         }
 
-        // Button to create a new condition
-        if (GUILayout.Toggle(creationType == CreationType.Condition, "Create Condition", "Button"))
+        private CreationType creationType = CreationType.None;
+        private string newStateName = "";
+
+        [MenuItem("Window/FSM/Create State or Condition")]
+        public static void ShowWindow()
         {
-            creationType = CreationType.Condition;
+            GetWindow<FSMNodeCreationWindow>("Create State or Condition");
         }
 
-        GUILayout.EndHorizontal();
-
-        // Show textfield for state name if "Create State" button is selected
-        if (creationType == CreationType.State)
+        private void OnGUI()
         {
-            GUILayout.Label("Enter the name for the new state:");
-            newStateName = EditorGUILayout.TextField("State Name:", newStateName);
-        }
+            GUILayout.Label("Choose what to create:");
 
-        // Show textfield for condition details if "Create Condition" button is selected
-        if (creationType == CreationType.Condition)
-        {
-            GUILayout.Label("Enter details for the new condition:");
-            newStateName = EditorGUILayout.TextField("Condition Details:", newStateName);
-        }
+            GUILayout.BeginHorizontal();
 
-        // Button to create the new state or condition
-        if (GUILayout.Button("Create"))
-        {
+            // Button to create a new state
+            if (GUILayout.Toggle(creationType == CreationType.State, "Create State", "Button"))
+            {
+                creationType = CreationType.State;
+            }
+
+            // Button to create a new condition
+            if (GUILayout.Toggle(creationType == CreationType.Condition, "Create Condition", "Button"))
+            {
+                creationType = CreationType.Condition;
+            }
+
+            GUILayout.EndHorizontal();
+
+            // Show textfield for state name if "Create State" button is selected
             if (creationType == CreationType.State)
             {
-                CreateNewState(newStateName);
+                GUILayout.Label("Enter the name for the new state:");
+                newStateName = EditorGUILayout.TextField("State Name:", newStateName);
             }
-            else if (creationType == CreationType.Condition)
+
+            // Show textfield for condition details if "Create Condition" button is selected
+            if (creationType == CreationType.Condition)
             {
-                CreateNewCondition(newStateName);
+                GUILayout.Label("Enter details for the new condition:");
+                newStateName = EditorGUILayout.TextField("Condition Details:", newStateName);
+            }
+
+            // Button to create the new state or condition
+            if (GUILayout.Button("Create"))
+            {
+                if (creationType == CreationType.State)
+                {
+                    CreateNewState(newStateName);
+                }
+                else if (creationType == CreationType.Condition)
+                {
+                    CreateNewCondition(newStateName);
+                }
             }
         }
-    }
 
-    private void CreateNewState(string stateName)
-    {
-        // Add logic to create a new state with the given name
-        FSMCreationNodesUtilities.CreateStateNode(stateName);
-    }
+        private void CreateNewState(string stateName)
+        {
+            // Add logic to create a new state with the given name
+            FSMCreationNodesUtilities.CreateStateNode(stateName);
+        }
 
-    private void CreateNewCondition(string conditionName)
-    {
-        // Add logic to create a new condition
-        FSMCreationNodesUtilities.CreateConditionNode(conditionName);
+        private void CreateNewCondition(string conditionName)
+        {
+            // Add logic to create a new condition
+            FSMCreationNodesUtilities.CreateConditionNode(conditionName);
+        }
     }
 }
+#endif

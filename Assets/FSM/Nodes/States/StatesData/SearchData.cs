@@ -1,9 +1,12 @@
-public class SearchData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public float exploreRadius = 10f;
-    
-    public SearchData()
+    public class SearchData : StateScriptData
     {
-        SetStateName("Search");
+        public float exploreRadius = 10f;
+
+        public SearchData()
+        {
+            SetStateName("Search");
+        }
     }
 }

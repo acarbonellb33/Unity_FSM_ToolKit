@@ -1,46 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class AttackStateScript : StateScript, IAction
+#if UNITY_EDITOR
+namespace FSM.Nodes.States.StateScripts
 {
-    public float attackDamage = 10f;
-    public float attackFrequency = 1f;
-
-    private float lastAttack = 0f;
-
-    public AttackStateScript()
+    using UnityEngine;
+    using Player;
+    public class AttackStateScript : StateScript, IAction
     {
-        SetStateName("Attack");
-    }
-    
-    public void Execute(){
-        agent.ResetPath();
-        RotateEnemyToPlayer();
-        if (CanAttack())
+        public float attackDamage = 10f;
+        public float attackFrequency = 1f;
+
+        private float _lastAttack = 0f;
+
+        public AttackStateScript()
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.GetChild(0).position, transform.GetChild(0).transform.forward, out hit, 50f))
+            SetStateName("Attack");
+        }
+
+        public void Execute()
+        {
+            agent.ResetPath();
+            RotateEnemyToPlayer();
+            if (CanAttack())
             {
-                HealthSystem target = hit.transform.GetComponent<HealthSystem>();
-                if (target != null)
+                RaycastHit hit;
+                if (Physics.Raycast(transform.GetChild(0).position, transform.GetChild(0).transform.forward, out hit,
+                        50f))
                 {
-                    target.TakeDamage(attackDamage);
+                    HealthSystem target = hit.transform.GetComponent<HealthSystem>();
+                    if (target != null)
+                    {
+                        target.TakeDamage(attackDamage);
+                    }
                 }
+
+                _lastAttack = Time.time;
             }
-            lastAttack = Time.time;
+        }
+
+        private void RotateEnemyToPlayer()
+        {
+            Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 0.1f);
+        }
+
+        private bool CanAttack()
+        {
+            return Time.time >= _lastAttack + attackFrequency;
         }
     }
-    
-    private void RotateEnemyToPlayer()
-    {
-        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 0.1f);
-    }
-
-    private bool CanAttack()
-    {
-        return Time.time >= lastAttack + attackFrequency;
-    }
 }
+#endif

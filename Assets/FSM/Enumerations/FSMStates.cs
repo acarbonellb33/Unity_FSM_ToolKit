@@ -1,12 +1,15 @@
-public enum FSMStates
+namespace FSM.Enumerations
 {
-    Idle, 
-    Patrol, 
-    Chase, 
-    Attack,
-    Hit,
-    Die, 
-    Search,
-    Custom,
-    Alert
+    public enum FSMStates
+    {
+        Idle,
+        Patrol,
+        Chase,
+        Attack,
+        Hit,
+        Die,
+        Search,
+        Custom,
+        Alert
+    }
 }

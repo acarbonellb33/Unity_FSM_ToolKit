@@ -1,12 +1,14 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PatrolData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public List<string> patrolPoints;
-    
-    public PatrolData()
+    using System.Collections.Generic;
+
+    public class PatrolData : StateScriptData
     {
-        SetStateName("Patrol");
+        public List<string> patrolPoints;
+
+        public PatrolData()
+        {
+            SetStateName("Patrol");
+        }
     }
 }

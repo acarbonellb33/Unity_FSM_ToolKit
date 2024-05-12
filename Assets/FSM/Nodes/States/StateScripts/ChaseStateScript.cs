@@ -1,21 +1,26 @@
-public class ChaseStateScript : StateScript, IAction
+#if UNITY_EDITOR
+namespace FSM.Nodes.States.StateScripts
 {
-    public float chaseSpeed = 5f;
-    public float chaseRange = 10f;
-    public float chaseCooldown = 2f;
-    public bool canChase = true;
-    public ChaseStateScript()
+    public class ChaseStateScript : StateScript, IAction
     {
-        // Set the state name to "Chase" using the SetStateName method inherited from StateScript
-        SetStateName("Chase");
-    }
+        public float chaseSpeed = 5f;
+        public float chaseRange = 10f;
+        public float chaseCooldown = 2f;
+        public bool canChase = true;
 
-    // Override the Execute method from the base StateScript class
-    public void Execute()
-    {
-        // Set the agent's destination to the player's current position
-        // 'agent' and 'player' are inherited from the parent class StateScript
-        agent.SetDestination(player.transform.position);
+        public ChaseStateScript()
+        {
+            // Set the state name to "Chase" using the SetStateName method inherited from StateScript
+            SetStateName("Chase");
+        }
+
+        // Override the Execute method from the base StateScript class
+        public void Execute()
+        {
+            // Set the agent's destination to the player's current position
+            // 'agent' and 'player' are inherited from the parent class StateScript
+            agent.SetDestination(player.transform.position);
+        }
     }
 }
-
+#endif

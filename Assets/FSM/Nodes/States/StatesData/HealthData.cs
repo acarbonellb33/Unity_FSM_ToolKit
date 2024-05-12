@@ -1,10 +1,15 @@
-public class HealthData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public FSMOperands operand;
-    public float health = 10f;
-    
-    public HealthData()
+    using Enumerations;
+
+    public class HealthData : StateScriptData
     {
-        SetStateName("Health");
+        public FSMOperands operand;
+        public float health = 10f;
+
+        public HealthData()
+        {
+            SetStateName("Health");
+        }
     }
 }

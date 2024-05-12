@@ -1,15 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class FSMNodeErrorData
+#if UNITY_EDITOR
+namespace EditorWindow.FSMSystem.Data.Error
 {
-    public FSMErrorData ErrorData { get; set; }
-    public List<FSMNode> Nodes { get; set; }
-
-    public FSMNodeErrorData()
+    using System.Collections.Generic;
+    using Elements;
+    public class FSMNodeErrorData
     {
-        ErrorData = new FSMErrorData();
-        Nodes = new List<FSMNode>();
+        public FSMErrorData ErrorData { get; set; }
+        public List<FSMNode> Nodes { get; set; }
+
+        public FSMNodeErrorData()
+        {
+            ErrorData = new FSMErrorData();
+            Nodes = new List<FSMNode>();
+        }
     }
 }
+#endif

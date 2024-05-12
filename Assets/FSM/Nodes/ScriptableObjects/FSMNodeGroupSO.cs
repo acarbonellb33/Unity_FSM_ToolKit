@@ -1,11 +1,14 @@
-using UnityEngine;
-
-public class FSMNodeGroupSO : ScriptableObject
+namespace FSM.Nodes.ScriptableObjects
 {
-    [field: SerializeField] public string GroupName { get; set; }
+    using UnityEngine;
 
-    public void Initialize(string groupName)
+    public class FSMNodeGroupSO : ScriptableObject
     {
-        GroupName = groupName;
+        [field: SerializeField] public string GroupName { get; set; }
+
+        public void Initialize(string groupName)
+        {
+            GroupName = groupName;
+        }
     }
 }

@@ -1,19 +1,22 @@
-using System;
-using UnityEngine;
-
-[Serializable]
-public class FSMAnimatorSaveData
+namespace EditorWindow.FSMSystem.Data.Save
 {
-    [field: SerializeField] public bool TriggerEnable { get; set; }
-    [field: SerializeField] public string ParameterName { get; set; }
-    [field: SerializeField] public string ParameterType { get; set; }
-    [field: SerializeField] public string Value { get; set; }
+    using System;
+    using UnityEngine;
 
-    public void Initialize(bool triggerEnable, string parameterName, string parameterType, string value)
+    [Serializable]
+    public class FSMAnimatorSaveData
     {
-        TriggerEnable = triggerEnable;
-        ParameterName = parameterName;
-        ParameterType = parameterType;
-        Value = value;
+        [field: SerializeField] public bool TriggerEnable { get; set; }
+        [field: SerializeField] public string ParameterName { get; set; }
+        [field: SerializeField] public string ParameterType { get; set; }
+        [field: SerializeField] public string Value { get; set; }
+
+        public void Initialize(bool triggerEnable, string parameterName, string parameterType, string value)
+        {
+            TriggerEnable = triggerEnable;
+            ParameterName = parameterName;
+            ParameterType = parameterType;
+            Value = value;
+        }
     }
 }

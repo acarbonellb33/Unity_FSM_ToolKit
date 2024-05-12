@@ -1,10 +1,15 @@
-public class DistanceData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public FSMOperands operand;
-    public float distanceFromPlayer = 10f;
-    
-    public DistanceData()
+    using Enumerations;
+
+    public class DistanceData : StateScriptData
     {
-        SetStateName("Distance");
+        public FSMOperands operand;
+        public float distanceFromPlayer = 10f;
+
+        public DistanceData()
+        {
+            SetStateName("Distance");
+        }
     }
 }

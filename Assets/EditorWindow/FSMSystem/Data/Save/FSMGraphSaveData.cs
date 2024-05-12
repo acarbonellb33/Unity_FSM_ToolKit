@@ -1,24 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class FSMGraphSaveData : ScriptableObject
+namespace EditorWindow.FSMSystem.Data.Save
 {
-    [field: SerializeField] public string FileName { get; set; }
-    [field: SerializeField] public string InitialState { get; set; }
-    [field: SerializeField] public List<FSMNodeSaveData> Nodes { get; set; }
-    [field: SerializeField] public List<FSMGroupSaveData> Groups { get; set; }
-    [field: SerializeField] public List<string> OldGroupedNames { get; set; }
-    [field: SerializeField] public List<string> OldUngroupedNames { get; set; }
-    [field: SerializeField] public SerializableDictionary<string, List<string>> OldGroupedNodeNames { get; set; }
-    [field: SerializeField] public string GameObject { get; set; }
-    [field: SerializeField] public FSMHitSaveData HitData { get; set; }
-    
-    public void Initialize(string fileName, string initialState, FSMHitSaveData hitSaveData)
+    using System.Collections.Generic;
+    using UnityEngine;
+    public class FSMGraphSaveData : ScriptableObject
     {
-        FileName = fileName;
-        InitialState = initialState;
-        HitData = hitSaveData;
-        Nodes = new List<FSMNodeSaveData>();
-        Groups = new List<FSMGroupSaveData>();
+        [field: SerializeField] public string FileName { get; set; }
+        [field: SerializeField] public string InitialState { get; set; }
+        [field: SerializeField] public List<FSMNodeSaveData> Nodes { get; set; }
+        [field: SerializeField] public List<string> OldUngroupedNames { get; set; }
+        [field: SerializeField] public string GameObject { get; set; }
+        [field: SerializeField] public FSMHitSaveData HitData { get; set; }
+
+        public void Initialize(string fileName, string initialState, FSMHitSaveData hitSaveData)
+        {
+            FileName = fileName;
+            InitialState = initialState;
+            HitData = hitSaveData;
+            Nodes = new List<FSMNodeSaveData>();
+        }
     }
 }

@@ -1,19 +1,22 @@
-using UnityEngine;
-
-public class NextStateStateScript : StateScript, ICondition
+#if UNITY_EDITOR
+namespace FSM.Nodes.States.StateScripts
 {
-    //Add any properties specific to this state
-
-     public NextStateStateScript()
+    public class NextStateStateScript : StateScript, ICondition
     {
-        // Set the state name to 'NextState' using the SetStateName method inherited from StateScript
-        SetStateName("NextState");
-    }
+        //Add any properties specific to this state
 
-    // Override the Execute method from the base StateScript class
-    public bool Condition()
-    {
-        // Add the logic for this state
-        return true; // Now returning true, replace with your logic
+        public NextStateStateScript()
+        {
+            // Set the state name to 'NextState' using the SetStateName method inherited from StateScript
+            SetStateName("NextState");
+        }
+
+        // Override the Execute method from the base StateScript class
+        public bool Condition()
+        {
+            // Add the logic for this state
+            return true; // Now returning true, replace with your logic
+        }
     }
 }
+#endif

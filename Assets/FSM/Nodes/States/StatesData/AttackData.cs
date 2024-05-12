@@ -1,10 +1,13 @@
-public class AttackData: StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public float attackDamage = 10f;
-    public float attackFrequency = 1f;
-    
-    public AttackData()
+    public class AttackData : StateScriptData
     {
-        SetStateName("Attack");
+        public float attackDamage = 10f;
+        public float attackFrequency = 1f;
+
+        public AttackData()
+        {
+            SetStateName("Attack");
+        }
     }
 }

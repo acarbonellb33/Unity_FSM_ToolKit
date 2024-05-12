@@ -1,9 +1,12 @@
-public enum FSMNodeType
+namespace FSM.Enumerations
 {
-    State,
-    Transition,
-    Initial,
-    DualTransition,
-    Extension,
-    CustomState
+    public enum FSMNodeType
+    {
+        State,
+        Transition,
+        Initial,
+        DualTransition,
+        Extension,
+        CustomState
+    }
 }

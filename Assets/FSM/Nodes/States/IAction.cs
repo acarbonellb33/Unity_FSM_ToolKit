@@ -1,4 +1,7 @@
-public interface IAction
+namespace FSM.Nodes.States
 {
-    public void Execute();
+    public interface IAction
+    {
+        public void Execute();
+    }
 }

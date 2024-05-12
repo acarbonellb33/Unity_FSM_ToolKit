@@ -1,28 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class MouseLook : MonoBehaviour
+namespace FSM.Player
 {
-    [SerializeField]
-    float mouseSensivity = 100f;
-    [SerializeField]
-    Transform playerBody;
-    float xRotation = 0f;
-    void Start()
+    using UnityEngine;
+
+    public class MouseLook : MonoBehaviour
     {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+        [SerializeField] float mouseSensivity = 100f;
+        [SerializeField] Transform playerBody;
+        float xRotation = 0f;
 
-    void Update()
-    {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensivity * Time.deltaTime;
+        void Start()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        void Update()
+        {
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensivity * Time.deltaTime;
 
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerBody.Rotate(Vector3.up * mouseX);
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            playerBody.Rotate(Vector3.up * mouseX);
+        }
     }
 }

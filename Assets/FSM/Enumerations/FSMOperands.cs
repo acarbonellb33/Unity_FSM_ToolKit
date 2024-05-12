@@ -1,7 +1,10 @@
-﻿public enum FSMOperands
+﻿namespace FSM.Enumerations
 {
-    GreaterThan,
-    LessThan,
-    EqualTo,
-    NotEqualTo
+    public enum FSMOperands
+    {
+        GreaterThan,
+        LessThan,
+        EqualTo,
+        NotEqualTo
+    }
 }

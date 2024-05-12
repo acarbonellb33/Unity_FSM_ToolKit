@@ -1,4 +1,7 @@
-public interface ICondition
+namespace FSM.Nodes.States
 {
-    public bool Condition();
+    public interface ICondition
+    {
+        public bool Condition();
+    }
 }

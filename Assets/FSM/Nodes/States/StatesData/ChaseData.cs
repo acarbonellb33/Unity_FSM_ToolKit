@@ -1,12 +1,15 @@
-public class ChaseData : StateScriptData
+namespace FSM.Nodes.States.StatesData
 {
-    public float chaseSpeed = 5f;
-    public float chaseRange = 10f;
-    public float chaseCooldown = 2f;
-    public bool canChase = true;
-    
-    public ChaseData()
+    public class ChaseData : StateScriptData
     {
-        SetStateName("Chase");
+        public float chaseSpeed = 5f;
+        public float chaseRange = 10f;
+        public float chaseCooldown = 2f;
+        public bool canChase = true;
+
+        public ChaseData()
+        {
+            SetStateName("Chase");
+        }
     }
 }

@@ -1,35 +1,39 @@
-using System.Reflection;
-using UnityEngine;
-
-public class CustomStateScript : StateScript, IAction
+#if UNITY_EDITOR
+namespace FSM.Nodes.States.StateScripts
 {
-    //Add any properties specific to this state
-    public string selectedGameObject;
-    public string selectedComponent;
-    public string selectedFunction;
+    using System.Reflection;
 
-    public CustomStateScript()
+    public class CustomStateScript : StateScript, IAction
     {
-        // Set the state name to 'Custom' using the SetStateName method inherited from StateScript
-        SetStateName("Custom");
-    }
+        //Add any properties specific to this state
+        public string selectedGameObject;
+        public string selectedComponent;
+        public string selectedFunction;
 
-    // Override the Execute method from the base StateScript class
-    public void Execute()
-    {
-        // Add the logic for this state
-        // Make sure selectedGameObject and selectedComponent are not null
-        if (selectedGameObject != null && selectedComponent != null)
+        public CustomStateScript()
         {
-            // Get the method info of the selected function
-            MethodInfo methodInfo = selectedComponent.GetType().GetMethod(selectedFunction);
+            // Set the state name to 'Custom' using the SetStateName method inherited from StateScript
+            SetStateName("Custom");
+        }
 
-            // Check if the method exists
-            if (methodInfo != null)
+        // Override the Execute method from the base StateScript class
+        public void Execute()
+        {
+            // Add the logic for this state
+            // Make sure selectedGameObject and selectedComponent are not null
+            if (selectedGameObject != null && selectedComponent != null)
             {
-                // Invoke the method on the selected component of the selected GameObject
-                methodInfo.Invoke(selectedComponent, null);
+                // Get the method info of the selected function
+                MethodInfo methodInfo = selectedComponent.GetType().GetMethod(selectedFunction);
+
+                // Check if the method exists
+                if (methodInfo != null)
+                {
+                    // Invoke the method on the selected component of the selected GameObject
+                    methodInfo.Invoke(selectedComponent, null);
+                }
             }
         }
     }
 }
+#endif

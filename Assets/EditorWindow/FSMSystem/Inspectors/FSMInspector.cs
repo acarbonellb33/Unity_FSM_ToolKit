@@ -1,115 +1,138 @@
-using System;
-using System.Reflection;
-using UnityEditor;
-using UnityEngine;
-
-[CustomEditor(typeof(FSMGraph))]
-public class FSMInspector : Editor
+#if UNITY_EDITOR
+namespace EditorWindow.FSMSystem.Inspectors
 {
-    private SerializedProperty graphContainerProperty;
-    private FSMGraphSaveData graphContainerData;
-    
-    private void OnEnable()
+    using System;
+    using System.Reflection;
+    using BehaviorScripts;
+    using Data.Save;
+    using UnityEditor;
+    using UnityEngine;
+    using Utilities;
+    using Windows;
+    using FSM.Enumerations;
+    using FSM.Nodes;
+    using FSM.Nodes.States;
+    [CustomEditor(typeof(FSMGraph))]
+    public class FSMInspector : Editor
     {
-        graphContainerProperty = serializedObject.FindProperty("graphContainer");
-    }
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+        private SerializedProperty graphContainerProperty;
+        private FSMGraphSaveData graphContainerData;
 
-        DrawGraphContainerArea();
-
-        if (graphContainerProperty == null)
+        private void OnEnable()
         {
-            StopDrawing("Select a FSM Graph Container to see the rest of the Inspector.");
-            return;
+            graphContainerProperty = serializedObject.FindProperty("graphContainer");
         }
 
-        if (GUILayout.Button("Open FSM Graph"))
+        public override void OnInspectorGUI()
         {
-            ((FSMGraphSaveData)graphContainerProperty.objectReferenceValue).GameObject = ((FSMGraph)target).gameObject.name;
-            FSMEditorWindow.OpenWithSaveData(graphContainerProperty.objectReferenceValue as FSMGraphSaveData);
-        }
+            serializedObject.Update();
 
-        serializedObject.ApplyModifiedProperties();
-    }
+            DrawGraphContainerArea();
 
-    private void AddComponentToGameObject()
-    {
-        FSMGraph fsmGraph = (FSMGraph)target;
-        graphContainerData = (FSMGraphSaveData)graphContainerProperty.objectReferenceValue;
-        MonoScript script = GetScript(graphContainerData.FileName);
-        if (script != null)
-        {
-            foreach (var node in graphContainerData.Nodes)
+            if (graphContainerProperty == null)
             {
-                if (node.NodeType != FSMNodeType.Initial)
-                {
-                    //MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
-                }
+                StopDrawing("Select a FSM Graph Container to see the rest of the Inspector.");
+                return;
             }
-            MonoBehaviour newScriptInstance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType(graphContainerData.FileName));
-            
-            MethodInfo dynamicMethod = script.GetClass().GetMethod("SetVariableValue");
-                    
-            if (dynamicMethod != null)
+
+            if (GUILayout.Button("Open FSM Graph"))
             {
-                for (int i = 0; i < graphContainerData.Nodes.Count; i++)
+                ((FSMGraphSaveData)graphContainerProperty.objectReferenceValue).GameObject =
+                    ((FSMGraph)target).gameObject.name;
+                FSMEditorWindow.OpenWithSaveData(graphContainerProperty.objectReferenceValue as FSMGraphSaveData);
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void AddComponentToGameObject()
+        {
+            FSMGraph fsmGraph = (FSMGraph)target;
+            graphContainerData = (FSMGraphSaveData)graphContainerProperty.objectReferenceValue;
+            MonoScript script = GetScript(graphContainerData.FileName);
+            if (script != null)
+            {
+                foreach (var node in graphContainerData.Nodes)
                 {
-                    if (graphContainerData.Nodes[i].NodeType != FSMNodeType.Initial && graphContainerData.Nodes[i].NodeType != FSMNodeType.Extension)
+                    if (node.NodeType != FSMNodeType.Initial)
                     {
-                        string nodeName = char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) + graphContainerData.Nodes[i].Name.Substring(1);
-                        nodeName = nodeName.Replace(" ", "");
-                        dynamicMethod.Invoke(newScriptInstance,new object[]
-                        { 
-                            nodeName, 
-                            FSMIOUtility.LoadNode(graphContainerData.Nodes[i], graphContainerData.FileName).StateScript
-                        });
+                        //MonoBehaviour instance = (MonoBehaviour)fsmGraph.gameObject.AddComponent(GetScript(node.Name).GetClass());
+                    }
+                }
+
+                MonoBehaviour newScriptInstance =
+                    (MonoBehaviour)fsmGraph.gameObject.AddComponent(Type.GetType("EditorWindow.FSMSystem.BehaviorScripts."+graphContainerData.FileName));
+
+                MethodInfo dynamicMethod = script.GetClass().GetMethod("SetVariableValue");
+
+                if (dynamicMethod != null)
+                {
+                    for (int i = 0; i < graphContainerData.Nodes.Count; i++)
+                    {
+                        if (graphContainerData.Nodes[i].NodeType != FSMNodeType.Initial &&
+                            graphContainerData.Nodes[i].NodeType != FSMNodeType.Extension)
+                        {
+                            string nodeName = char.ToLowerInvariant(graphContainerData.Nodes[i].Name[0]) +
+                                              graphContainerData.Nodes[i].Name.Substring(1);
+                            nodeName = nodeName.Replace(" ", "");
+                            dynamicMethod.Invoke(newScriptInstance, new object[]
+                            {
+                                nodeName,
+                                FSMIOUtility.LoadNode(graphContainerData.Nodes[i], graphContainerData.FileName)
+                                    .StateScript
+                            });
+                        }
                     }
                 }
             }
         }
-    }
-    private MonoScript GetScript(string className)
-    {
-        string[] guids = AssetDatabase.FindAssets("t:Script " + className);
-        if (guids.Length > 0)
+
+        private MonoScript GetScript(string className)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            return AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-        }
-        return null;
-    }
-
-    private void DrawGraphContainerArea()
-    {
-        FSMGraph fsmGraph = (FSMGraph)target;
-
-        EditorGUI.BeginChangeCheck();
-
-        FSMInspectorUtility.DrawHeader("FSM Graph Container");
-        graphContainerProperty.DrawPropertyField();
-
-        if (EditorGUI.EndChangeCheck())
-        {
-            graphContainerData = (FSMGraphSaveData)graphContainerProperty.objectReferenceValue;
-            foreach(Component c in fsmGraph.gameObject.GetComponents<Component>())
+            string[] guids = AssetDatabase.FindAssets("t:Script " + className);
+            if (guids.Length > 0)
             {
-                if (c is StateScript || c is BehaviorScript)
-                {
-                    DestroyImmediate(c);
-                }
+                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                return AssetDatabase.LoadAssetAtPath<MonoScript>(path);
             }
-            if(graphContainerProperty.objectReferenceValue != null)AddComponentToGameObject();
-        }
-        FSMInspectorUtility.DrawSpace();
-    }
 
-    private void StopDrawing(string reason, MessageType messageType = MessageType.Info)
-    {
-        FSMInspectorUtility.DrawHelpBox(reason, messageType);
-        FSMInspectorUtility.DrawSpace();
-        FSMInspectorUtility.DrawHelpBox("You need to select a Graph for this component to work properly at Runtime!", MessageType.Warning); 
-        serializedObject.ApplyModifiedProperties();
+            return null;
+        }
+
+        private void DrawGraphContainerArea()
+        {
+            FSMGraph fsmGraph = (FSMGraph)target;
+
+            EditorGUI.BeginChangeCheck();
+
+            FSMInspectorUtility.DrawHeader("FSM Graph Container");
+            graphContainerProperty.DrawPropertyField();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                graphContainerData = (FSMGraphSaveData)graphContainerProperty.objectReferenceValue;
+                foreach (Component c in fsmGraph.gameObject.GetComponents<Component>())
+                {
+                    if (c is StateScript || c is BehaviorScript)
+                    {
+                        DestroyImmediate(c);
+                    }
+                }
+
+                if (graphContainerProperty.objectReferenceValue != null) AddComponentToGameObject();
+            }
+
+            FSMInspectorUtility.DrawSpace();
+        }
+
+        private void StopDrawing(string reason, MessageType messageType = MessageType.Info)
+        {
+            FSMInspectorUtility.DrawHelpBox(reason, messageType);
+            FSMInspectorUtility.DrawSpace();
+            FSMInspectorUtility.DrawHelpBox(
+                "You need to select a Graph for this component to work properly at Runtime!", MessageType.Warning);
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }
+#endif

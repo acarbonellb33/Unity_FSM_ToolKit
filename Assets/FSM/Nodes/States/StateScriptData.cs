@@ -1,146 +1,152 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
-
-public class StateScriptData
+namespace FSM.Nodes.States
 {
-    // Private variable to store the state name
-    private string stateName;
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using UnityEngine;
 
-    // InspectVariables method inspects and returns a list of public variables and their values as strings
-    public List<string> InspectVariables()
+    public class StateScriptData
     {
-        List<string> result = new List<string>();
-        Type targetType = this.GetType();
-        FieldInfo[] fields = targetType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+        // Private variable to store the state name
+        private string stateName;
 
-        foreach (FieldInfo field in fields)
+        // InspectVariables method inspects and returns a list of public variables and their values as strings
+        public List<string> InspectVariables()
         {
-            // Check if the field is a List<GameObject>
-            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[System.String]")
+            List<string> result = new List<string>();
+            Type targetType = this.GetType();
+            FieldInfo[] fields = targetType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+
+            foreach (FieldInfo field in fields)
             {
-                List<string> list = (List<string>)field.GetValue(this);
-                string newValue = "";
-                if (list != null && list.Count > 0)
+                // Check if the field is a List<GameObject>
+                if (field.FieldType.ToString() == "System.Collections.Generic.List`1[System.String]")
                 {
-                    // Concatenate GameObject names in the list
-                    for (int i = 0; i < list.Count; i++)
+                    List<string> list = (List<string>)field.GetValue(this);
+                    string newValue = "";
+                    if (list != null && list.Count > 0)
                     {
-                        if(i+1 == list.Count)
-                            newValue += list[i];
+                        // Concatenate GameObject names in the list
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            if (i + 1 == list.Count)
+                                newValue += list[i];
+                            else
+                                newValue += list[i] + "/";
+                        }
+
+                        if (String.IsNullOrEmpty(newValue))
+                            result.Add($"{field.Name},{field.FieldType},Null");
                         else
-                            newValue += list[i]+"/";
+                            result.Add($"{field.Name},{field.FieldType},{newValue}");
                     }
-                    if(String.IsNullOrEmpty(newValue))
-                        result.Add($"{field.Name},{field.FieldType},Null");
                     else
-                        result.Add($"{field.Name},{field.FieldType},{newValue}");
+                    {
+                        result.Add($"{field.Name},{field.FieldType},");
+                    }
                 }
                 else
                 {
-                    result.Add($"{field.Name},{field.FieldType},");
+                    // Get the value of the field and add it to the result list
+                    object value = field.GetValue(this);
+                    result.Add($"{field.Name},{field.FieldType},{value}");
+                }
+            }
+
+            return result;
+        }
+
+        // GetVariables method returns a dictionary of all public variables and their values
+        public Dictionary<string, object> GetVariables()
+        {
+            Dictionary<string, object> variables = new Dictionary<string, object>();
+            Type type = GetType();
+            FieldInfo[] fields = type.GetFields();
+
+            foreach (FieldInfo field in fields)
+            {
+                // Get the value of the field and add it to the dictionary
+                object value = field.GetValue(this);
+                variables.Add(field.Name, value);
+            }
+
+            return variables;
+        }
+
+        // SetVariableValue method sets the value of a specified variable
+        public void SetVariableValue(string variableName, object newValue)
+        {
+            System.Type type = GetType();
+            System.Reflection.FieldInfo field = type.GetField(variableName);
+
+            if (field != null)
+            {
+                // Check if the field is a List<GameObject>
+                if (field.FieldType.ToString() == "System.Collections.Generic.List`1[System.String]")
+                {
+                    if (newValue.GetType().ToString() == "System.String")
+                    {
+                        // Cast newValue to List<GameObject> and add a new GameObject
+                        List<string> list = (List<string>)field.GetValue(this);
+                        list.Add((string)newValue);
+                        field.SetValue(this, list);
+                    }
+                    else
+                    {
+                        // Set the value of the field to the new List<GameObject>
+                        field.SetValue(this, (List<string>)newValue);
+                    }
+                }
+                else
+                {
+                    // Set the value of the field to the new value
+                    field.SetValue(this, newValue);
                 }
             }
             else
             {
-                // Get the value of the field and add it to the result list
-                object value = field.GetValue(this);
-                result.Add($"{field.Name},{field.FieldType},{value}");
+                // Log an error if the variable does not exist
+                Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
             }
         }
-        return result;
-    }
 
-    // GetVariables method returns a dictionary of all public variables and their values
-    public Dictionary<string, object> GetVariables()
-    {
-        Dictionary<string, object> variables = new Dictionary<string, object>();
-        Type type = GetType();
-        FieldInfo[] fields = type.GetFields();
-
-        foreach (FieldInfo field in fields)
+        public void RemoveVariable(string variableName, object pastValue)
         {
-            // Get the value of the field and add it to the dictionary
-            object value = field.GetValue(this);
-            variables.Add(field.Name, value);
-        }
-        return variables;
-    }
+            Type type = GetType();
+            FieldInfo field = type.GetField(variableName);
 
-    // SetVariableValue method sets the value of a specified variable
-    public void SetVariableValue(string variableName, object newValue)
-    {
-        System.Type type = GetType();
-        System.Reflection.FieldInfo field = type.GetField(variableName);
-
-        if (field != null)
-        {
-            // Check if the field is a List<GameObject>
-            if (field.FieldType.ToString() == "System.Collections.Generic.List`1[System.String]")
+            if (field != null)
             {
-                if(newValue.GetType().ToString() == "System.String")
+                // Check if the field is a List<string>
+                if (field.FieldType == typeof(List<string>))
                 {
-                    // Cast newValue to List<GameObject> and add a new GameObject
                     List<string> list = (List<string>)field.GetValue(this);
-                    list.Add((string)newValue);
+                    list.Remove((string)pastValue);
                     field.SetValue(this, list);
                 }
                 else
                 {
-                    // Set the value of the field to the new List<GameObject>
-                    field.SetValue(this, (List<string>)newValue);
+                    // Set the value of the field to default
+                    field.SetValue(this, null);
                 }
             }
             else
             {
-                // Set the value of the field to the new value
-                field.SetValue(this, newValue);
+                // Log an error if the variable does not exist
+                Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
             }
         }
-        else
-        {
-            // Log an error if the variable does not exist
-            Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
-        }
-    }
-    
-    public void RemoveVariable(string variableName, object pastValue)
-    {
-        Type type = GetType();
-        FieldInfo field = type.GetField(variableName);
 
-        if (field != null)
+        // SetStateName method sets the state name
+        public void SetStateName(string name)
         {
-            // Check if the field is a List<string>
-            if (field.FieldType == typeof(List<string>))
-            {
-                List<string> list = (List<string>)field.GetValue(this);
-                list.Remove((string)pastValue);
-                field.SetValue(this, list);
-            }
-            else
-            {
-                // Set the value of the field to default
-                field.SetValue(this, null);
-            }
+            stateName = name;
         }
-        else
-        {
-            // Log an error if the variable does not exist
-            Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
-        }
-    }
 
-    // SetStateName method sets the state name
-    public void SetStateName(string name)
-    {
-        stateName = name;
-    }
-    
-    // GetStateName method returns the state name
-    public string GetStateName()
-    {
-        return stateName;
+        // GetStateName method returns the state name
+        public string GetStateName()
+        {
+            return stateName;
+        }
     }
 }

@@ -1,26 +1,28 @@
-using UnityEngine;
-using UnityEngine.UI;
-
-public class EnemyHealthBar : MonoBehaviour
+namespace FSM.Enemy
 {
-    private Slider slider;
-    [SerializeField]
-    private Camera playerCamera;
-    [SerializeField]
-    private Transform target;
-    void Awake()
-    {
-        slider = GetComponent<Slider>();
-    }
-    
-    public void UpdateHealthBar(float maxHealth, float currentHealth)
-    {
-        slider.value = currentHealth / maxHealth;
-    }
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    private void Update()
+    public class EnemyHealthBar : MonoBehaviour
     {
-        transform.rotation = playerCamera.transform.rotation;
-        transform.position = target.position + new Vector3(0, 2, 0);
+        private Slider _slider;
+        [SerializeField] private Camera playerCamera;
+        [SerializeField] private Transform target;
+
+        void Awake()
+        {
+            _slider = GetComponent<Slider>();
+        }
+
+        public void UpdateHealthBar(float maxHealth, float currentHealth)
+        {
+            _slider.value = currentHealth / maxHealth;
+        }
+
+        private void Update()
+        {
+            transform.rotation = playerCamera.transform.rotation;
+            transform.position = target.position + new Vector3(0, 2, 0);
+        }
     }
 }

@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+
 namespace FSM.Nodes.States
 {
     using System;
@@ -20,13 +20,13 @@ namespace FSM.Nodes.States
         protected NavMeshAgent Agent;
 
         // Called when the script instance is being loaded
-        private void OnEnable()
+        private void Start()
         {
             // Get the NavMeshAgent component attached to the same GameObject as this script
             Agent = GetComponent<NavMeshAgent>();
 
             // Find the "Player" GameObject in the scene and assign it to the player variable
-            GameObject playerObject = GameObject.Find("Player");
+            GameObject playerObject = GameObject.FindWithTag("Player");
             if (playerObject != null)
             {
                 Player = playerObject;
@@ -141,6 +141,11 @@ namespace FSM.Nodes.States
         {
             return _stateName;
         }
+        
+        // HideFlagsInspector method hides the HideFlags property in the Inspector
+        public void HideFlagsInspector()
+        {
+            hideFlags = HideFlags.HideInInspector;
+        }
     }
 }
-#endif

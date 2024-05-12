@@ -1,7 +1,5 @@
-#if UNITY_EDITOR
 namespace FSM.Nodes.States.StateScripts
 {
-    using UnityEngine;
     using Enemy;
     using Enumerations;
     // EnemyHealthCondition class inherits from MonoBehaviour
@@ -24,10 +22,7 @@ namespace FSM.Nodes.States.StateScripts
         void Start()
         {
             // Check if the enemy health component is assigned
-            if (TryGetComponent(out _enemyHealthSystem))
-            {
-                Debug.LogError("EnemyHealthSystem component is not added in the Enemy GameObject");
-            }
+            _enemyHealthSystem = GetComponent<EnemyHealthSystem>();
         }
 
         // Implementation of the Condition method from the ICondition interface
@@ -49,4 +44,3 @@ namespace FSM.Nodes.States.StateScripts
         }
     }
 }
-#endif

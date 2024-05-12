@@ -1,9 +1,7 @@
-#if UNITY_EDITOR
 namespace FSM.Nodes.States.StateScripts
 {
     using System.Collections.Generic;
     using UnityEngine;
-    using EditorWindow.FSMSystem.Utilities;
     using Utilities;
     // PatrolStateScript class inherits from StateScript and implements IAction interface
     public class PatrolStateScript : StateScript, IAction
@@ -46,7 +44,7 @@ namespace FSM.Nodes.States.StateScripts
                 }
 
                 // Set the agent's destination to the position of the current patrol point
-                GameObject patrolPoint = FsmIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoints[_counter]);
+                GameObject patrolPoint = FindGameObjectWithId<IDGenerator>(patrolPoints[_counter]);
                 Agent.SetDestination(patrolPoint.transform.position);
 
                 // Increment the counter for the next patrol point
@@ -60,6 +58,25 @@ namespace FSM.Nodes.States.StateScripts
             // Remove the specified patrol point from the list
             patrolPoints.Remove(patrolPoint);
         }
+        public GameObject FindGameObjectWithId<T>(string id) where T : MonoBehaviour
+        {
+            // Find all GameObjects with the component of type T
+            T[] components = GameObject.FindObjectsOfType<T>();
+
+            // Iterate through each GameObject and check if it has the specified ID
+            foreach (T component in components)
+            {
+                // Check if the component has an IDGenerator attached
+                IDGenerator idGenerator = component.GetComponent<IDGenerator>();
+                if (idGenerator != null && idGenerator.GetUniqueID() == id)
+                {
+                    // Return the GameObject if the ID matches
+                    return component.gameObject;
+                }
+            }
+
+            // Return null if no matching GameObject is found
+            return null;
+        }
     }
 }
-#endif

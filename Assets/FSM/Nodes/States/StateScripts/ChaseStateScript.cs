@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 namespace FSM.Nodes.States.StateScripts
 {
     public class ChaseStateScript : StateScript, IAction
@@ -23,4 +22,3 @@ namespace FSM.Nodes.States.StateScripts
         }
     }
 }
-#endif

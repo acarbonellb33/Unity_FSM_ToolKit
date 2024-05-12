@@ -9,6 +9,7 @@ namespace FSM.Nodes.States.StatesData
         public PatrolData()
         {
             SetStateName("Patrol");
+            patrolPoints = new List<string>();
         }
     }
 }

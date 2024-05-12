@@ -249,7 +249,7 @@ namespace EditorWindow.FSMSystem.Elements
                         };
                         floatField.RegisterCallback<InputEvent>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newData);
+                            StateScript.SetVariableValue(result[0], float.Parse(evt.newData));
                         });
                         floatField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(floatField);
@@ -262,7 +262,7 @@ namespace EditorWindow.FSMSystem.Elements
                         };
                         integerField.RegisterCallback<InputEvent>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newData);
+                            StateScript.SetVariableValue(result[0], int.Parse(evt.newData));
                         });
                         integerField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(integerField);

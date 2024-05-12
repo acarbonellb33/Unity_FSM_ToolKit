@@ -27,7 +27,11 @@ namespace EditorWindow.FSMSystem.Inspectors
 			foreach (FieldInfo field in fields)
 			{
 				string nameField = FixName(field.Name);
-				optionToObjectMap[nameField] = lalalalalala.options[j];
+				try
+				{
+					optionToObjectMap[nameField] = lalalalalala.options[j];
+				}
+				catch (ArgumentOutOfRangeException) { }
 				j++;
 			}
 		}
@@ -105,62 +109,13 @@ namespace EditorWindow.FSMSystem.Inspectors
 				{
 					if (iterator.name != "m_Script")
 					{
-						if (iterator.isArray)
+						EditorGUI.BeginChangeCheck();
+						EditorGUILayout.PropertyField(iterator, true);
+						if (EditorGUI.EndChangeCheck())
 						{
-							EditorGUILayout.Space();
-							EditorGUILayout.LabelField("Create a Patrol Waypoint", EditorStyles.boldLabel);
-							EditorGUILayout.Space();
-							for (int i = 0; i < iterator.arraySize; i++)
-							{
-								EditorGUILayout.BeginHorizontal();
-								SerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);
-								if (gameObjectElementProperty.stringValue != null)
-								{
-									GameObject gameObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);
-									EditorGUI.BeginChangeCheck();
-									gameObject = EditorGUILayout.ObjectField("Patrol Point", gameObject, typeof(GameObject), true) as GameObject;
-									if (EditorGUI.EndChangeCheck())
-									{
-										if (gameObject != null)
-										{
-											IDGenerator idGenerator = gameObject.GetComponent<IDGenerator>();
-											if (idGenerator.GetUniqueID() != null)
-											{
-												gameObjectElementProperty.stringValue = idGenerator.GetUniqueID();
-											}
-										}
-										else
-										{
-											gameObjectElementProperty.stringValue = string.Empty;
-										}
-										selectedObjectSerialized.ApplyModifiedProperties();
-										FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
-									}
-									if (GUILayout.Button("Remove", GUILayout.Width(70)))
-									{
-										RemovePatrolPoint(gameObjectElementProperty.stringValue);
-										selectedObjectSerialized.ApplyModifiedProperties();
-										FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
-									}
-								}
-								EditorGUILayout.EndHorizontal();
-							}
-							if (GUILayout.Button("Create and Add a Patrol Point"))
-							{
-								CreateAndAddGameObject(lalalalalala);
-								selectedObjectSerialized.ApplyModifiedProperties();
-								FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
-							}
-						}
-						else
-						{
-							EditorGUI.BeginChangeCheck();
-							EditorGUILayout.PropertyField(iterator, true);
-							if (EditorGUI.EndChangeCheck())
-							{
-								selectedObjectSerialized.ApplyModifiedProperties();
-								FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
-							}
+							selectedObject.SetStateName(selectedOptionName);
+							selectedObjectSerialized.ApplyModifiedProperties();
+							FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
 						}
 					}
 					nextVisible = iterator.NextVisible(false);
@@ -171,20 +126,6 @@ namespace EditorWindow.FSMSystem.Inspectors
 				}
 			}
 			serializedObject.ApplyModifiedProperties();
-		}
-		private void CreateAndAddGameObject(lalalalalala lalalalalala)
-		{
-			lalalalalala.AddObjectToList();
-		}
-		private void RemovePatrolPoint(string patrolPoint)
-		{
-			lalalalalala lalalalalala = (lalalalalala)target;
-			lalalalalala.patrol.RemovePatrolPoint(patrolPoint);
-			GameObject patrolPointObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);
-			if(patrolPointObject != null)
-			{
-				DestroyImmediate(patrolPointObject);
-			}
 		}
 		private string FixName(string oldName)
 		{

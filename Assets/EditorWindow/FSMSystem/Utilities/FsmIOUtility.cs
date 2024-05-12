@@ -398,6 +398,7 @@ namespace EditorWindow.FSMSystem.Utilities
             CreateFolder("Assets/EditorWindow/FSMSystem", "Graphs");
             CreateFolder("Assets", "FSMSystem");
             CreateFolder("Assets/FSMSystem", "FSMs");
+            ClearFolder($"Assets/FSMSystem/FSMs/{_graphName}");
             CreateFolder("Assets/FSMSystem/FSMs", _graphName);
             CreateFolder(_containerFolderPath, "Global");
             CreateFolder(_containerFolderPath, "Groups");
@@ -497,6 +498,34 @@ namespace EditorWindow.FSMSystem.Utilities
             }
 
             AssetDatabase.CreateFolder(path, folderName);
+        }
+        private static void ClearFolder(string folderPath)
+        {
+            try
+            {
+                // Check if the directory exists
+                if (Directory.Exists(folderPath))
+                {
+                    // Delete all files in the directory
+                    string[] files = Directory.GetFiles(folderPath);
+                    foreach (string file in files)
+                    {
+                        File.Delete(file);
+                    }
+
+                    // Delete all subdirectories and their files recursively
+                    string[] subDirectories = Directory.GetDirectories(folderPath);
+                    foreach (string subDir in subDirectories)
+                    {
+                        Directory.Delete(subDir, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine("Error: " + ex.Message);
+            }
         }
 
         public static void RemoveFolder(string path)

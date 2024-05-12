@@ -857,7 +857,7 @@ Transform:
   m_GameObject: {fileID: 674416365}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.774488, y: 2.8381486, z: 4.431084}
+  m_LocalPosition: {x: -12.2, y: 0.56, z: -4.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -892,7 +892,7 @@ Transform:
   m_GameObject: {fileID: 710194559}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.8, y: 4.28, z: 13.47}
+  m_LocalPosition: {x: -10.81, y: 4.28, z: 13.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1659,6 +1659,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1815150321}
   - component: {fileID: 1815150320}
+  - component: {fileID: 1815150322}
   m_Layer: 0
   m_Name: Object
   m_TagString: Untagged
@@ -1688,12 +1689,24 @@ Transform:
   m_GameObject: {fileID: 1815150319}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.774488, y: 2.8381486, z: 4.431084}
+  m_LocalPosition: {x: 20.74, y: 2.8381486, z: -5.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1815150322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815150319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f214b79a6849de83330ad9b8d7a586, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1881599860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2353,8 +2366,6 @@ GameObject:
   - component: {fileID: 1127633676}
   - component: {fileID: 5866666021310896196}
   - component: {fileID: 5866666021310896210}
-  - component: {fileID: 5866666021310896215}
-  - component: {fileID: 5866666021310896214}
   - component: {fileID: 5866666021310896213}
   - component: {fileID: 5866666021310896212}
   - component: {fileID: 5866666021310896211}
@@ -4138,7 +4149,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints:
   - 2193141f-2e5e-435e-85db-141607d1ad17
-  - 
   - 1b47a30a-6fe0-4ca1-866c-63f8a146af63
 --- !u!114 &5866666021310896212
 MonoBehaviour:
@@ -4149,39 +4159,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb35867f5c746f4f9ba655e300804ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 579a077069d22f64995516b72ff70b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 10
 --- !u!114 &5866666021310896213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148682365174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3afd64ab986a7e84e8a6ae39ea36a36e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  operand: 0
-  distanceFromPlayer: 10
---- !u!114 &5866666021310896214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148682365174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5cf4d80d07ab004aaca10a366da6320, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackDamage: 10
-  attackFrequency: 1
---- !u!114 &5866666021310896215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4194,14 +4175,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   options:
-  - {fileID: 5866666021310896214}
-  - {fileID: 5866666021310896213}
   - {fileID: 5866666021310896212}
   - {fileID: 5866666021310896211}
-  selectedOptionIndex: 3
-  attack: {fileID: 5866666021310896214}
-  distance0: {fileID: 5866666021310896213}
-  seeing0: {fileID: 5866666021310896212}
+  selectedOptionIndex: 0
+  nextState: {fileID: 5866666021310896212}
   patrol: {fileID: 5866666021310896211}
 --- !u!4 &5896985191658304802
 Transform:

@@ -1,11 +1,11 @@
-#if UNITY_EDITOR
 namespace FSM.Nodes.States.StateScripts
 {
-    public class NextStateStateScript : StateScript, ICondition
+    using UnityEngine;
+    public class NextStateConditionScript : StateScript, ICondition
     {
         //Add any properties specific to this state
 
-        public NextStateStateScript()
+        public NextStateConditionScript()
         {
             // Set the state name to 'NextState' using the SetStateName method inherited from StateScript
             SetStateName("NextState");
@@ -19,4 +19,3 @@ namespace FSM.Nodes.States.StateScripts
         }
     }
 }
-#endif

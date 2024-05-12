@@ -1,3 +1,5 @@
+using UnityEngine;
+
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Utilities
 {
@@ -32,13 +34,11 @@ namespace EditorWindow.FSMSystem.Utilities
 
         private static string GenerateScriptContent(FsmGraphSaveData saveData)
         {
-            string scriptContent = "#if UNITY_EDITOR\n";
-            scriptContent += "namespace EditorWindow.FSMSystem.BehaviorScripts\n";
+            string scriptContent = "namespace EditorWindow.FSMSystem.BehaviorScripts\n";
             scriptContent += "{\n";
             scriptContent += "\tusing UnityEngine;\n";
             scriptContent += "\tusing System;\n";
             scriptContent += "\tusing UnityEngine.AI;\n";
-            scriptContent += "\tusing Utilities;\n";
             scriptContent += "\tusing FSM.Enemy;\n";
             scriptContent += "\tusing FSM.Enumerations;\n";
             scriptContent += "\tusing FSM.Nodes.States.StateScripts;\n";
@@ -57,6 +57,7 @@ namespace EditorWindow.FSMSystem.Utilities
             {
                 if (state.Name == "Patrol")
                 {
+                    Debug.Log("aaaaaaaaaaaaaas");
                     _hasPatrolState = true;
                 }
 
@@ -238,8 +239,7 @@ namespace EditorWindow.FSMSystem.Utilities
                 scriptContent += "\t\tpublic void RemoveObjectFromList(string patrolPoint)\n";
                 scriptContent += "\t\t{\n";
                 scriptContent += "\t\t\tpatrol.RemovePatrolPoint(patrolPoint);\n";
-                scriptContent +=
-                    "\t\t\tGameObject patrolPointObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);\n";
+                scriptContent += "\t\t\tGameObject patrolPointObject = patrol.FindGameObjectWithId<IDGenerator>(patrolPoint);\n";
                 scriptContent += "\t\t\tif(patrolPointObject != null)\n";
                 scriptContent += "\t\t\t{\n";
                 scriptContent += "\t\t\t\tDestroyImmediate(patrolPointObject);\n";
@@ -251,7 +251,6 @@ namespace EditorWindow.FSMSystem.Utilities
 
             scriptContent += "\t}\n";
             scriptContent += "}\n";
-            scriptContent += "#endif\n";
             return scriptContent;
         }
 
@@ -364,7 +363,11 @@ namespace EditorWindow.FSMSystem.Utilities
             scriptContent += "\t\t\tforeach (FieldInfo field in fields)\n";
             scriptContent += "\t\t\t{\n";
             scriptContent += "\t\t\t\tstring nameField = FixName(field.Name);\n";
-            scriptContent += $"\t\t\t\toptionToObjectMap[nameField] = {nameLowerCapital}.options[j];\n";
+            scriptContent += "\t\t\t\ttry\n";
+            scriptContent += "\t\t\t\t{\n";
+            scriptContent += $"\t\t\t\t\toptionToObjectMap[nameField] = {nameLowerCapital}.options[j];\n";
+            scriptContent += "\t\t\t\t}\n";
+            scriptContent += "\t\t\t\tcatch (ArgumentOutOfRangeException) { }\n";
             scriptContent += "\t\t\t\tj++;\n";
             scriptContent += "\t\t\t}\n";
             scriptContent += "\t\t}\n";

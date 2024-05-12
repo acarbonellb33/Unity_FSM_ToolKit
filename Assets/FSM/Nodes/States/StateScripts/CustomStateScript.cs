@@ -1,8 +1,6 @@
-#if UNITY_EDITOR
 namespace FSM.Nodes.States.StateScripts
 {
     using System.Reflection;
-
     public class CustomStateScript : StateScript, IAction
     {
         //Add any properties specific to this state
@@ -36,4 +34,3 @@ namespace FSM.Nodes.States.StateScripts
         }
     }
 }
-#endif

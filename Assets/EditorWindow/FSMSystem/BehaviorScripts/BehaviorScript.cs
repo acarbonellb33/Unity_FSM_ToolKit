@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.BehaviorScripts
 {
     using System;
@@ -43,6 +42,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                 {
                     case "PatrolData":
                         PatrolStateScript patrol = gameObject.AddComponent<PatrolStateScript>();
+                        patrol.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             patrol.SetVariableValue(variable.Key, variable.Value);
@@ -53,6 +53,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         break;
                     case "ChaseData":
                         ChaseStateScript chase = gameObject.AddComponent<ChaseStateScript>();
+                        chase.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             chase.SetVariableValue(variable.Key, variable.Value);
@@ -63,6 +64,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         break;
                     case "AttackData":
                         AttackStateScript attack = gameObject.AddComponent<AttackStateScript>();
+                        attack.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             attack.SetVariableValue(variable.Key, variable.Value);
@@ -73,6 +75,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         break;
                     case "SearchData":
                         SearchStateScript search = gameObject.AddComponent<SearchStateScript>();
+                        search.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             search.SetVariableValue(variable.Key, variable.Value);
@@ -83,6 +86,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         break;
                     case "HearingData":
                         HearingConditionScript hearing = gameObject.AddComponent<HearingConditionScript>();
+                        hearing.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             hearing.SetVariableValue(variable.Key, variable.Value);
@@ -93,6 +97,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         break;
                     case "DistanceData":
                         DistanceConditionScript distance = gameObject.AddComponent<DistanceConditionScript>();
+                        distance.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             distance.SetVariableValue(variable.Key, variable.Value);
@@ -103,6 +108,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         break;
                     case "SeeingData":
                         SeeingConditionScript seeing = gameObject.AddComponent<SeeingConditionScript>();
+                        seeing.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             seeing.SetVariableValue(variable.Key, variable.Value);
@@ -113,6 +119,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         break;
                     case "HealthData":
                         HealthConditionScript health = gameObject.AddComponent<HealthConditionScript>();
+                        health.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             health.SetVariableValue(variable.Key, variable.Value);
@@ -121,8 +128,20 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         field.SetValue(this, health);
                         options.Add(health);
                         break;
+                    case "NextStateData":
+                        NextStateConditionScript next = gameObject.AddComponent<NextStateConditionScript>();
+                        next.HideFlagsInspector();
+                        foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                        {
+                            next.SetVariableValue(variable.Key, variable.Value);
+                        }
+
+                        field.SetValue(this, next);
+                        options.Add(next);
+                        break;
                     case "CustomData":
                         CustomStateScript custom = gameObject.AddComponent<CustomStateScript>();
+                        custom.HideFlagsInspector();
                         foreach (var variable in ((StateScriptData)newValue).GetVariables())
                         {
                             custom.SetVariableValue(variable.Key, variable.Value);
@@ -140,4 +159,3 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
         }
     }
 }
-#endif

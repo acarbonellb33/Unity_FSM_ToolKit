@@ -87,14 +87,14 @@ namespace EditorWindow.FSMSystem.Elements
 
                 switch (result[1])
                 {
-                    case "FsmOperands":
+                    case "FSM.Enumerations.FsmOperands":
                         var enumField = new EnumField();
                         enumField.Init(new FsmOperands());
                         enumField.value = (Enum)Enum.Parse(typeof(FsmOperands), result[2]);
                         enumField.label = UpdateNameStyle(result[0]);
                         enumField.RegisterCallback<ChangeEvent<Enum>>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newValue);
+                            StateScript.SetVariableValue(result[0], (FsmOperands)evt.newValue);
                         });
                         enumField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(enumField);
@@ -125,7 +125,7 @@ namespace EditorWindow.FSMSystem.Elements
                         };
                         floatField.RegisterCallback<InputEvent>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newData);
+                            StateScript.SetVariableValue(result[0], float.Parse(evt.newData));
                         });
                         floatField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(floatField);
@@ -138,7 +138,7 @@ namespace EditorWindow.FSMSystem.Elements
                         };
                         integerField.RegisterCallback<InputEvent>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newData);
+                            StateScript.SetVariableValue(result[0], int.Parse(evt.newData));
                         });
                         integerField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(integerField);
@@ -187,16 +187,15 @@ namespace EditorWindow.FSMSystem.Elements
             foreach (var attribute in attributes)
             {
                 var result = attribute.Split(',');
-
                 switch (result[1])
                 {
-                    case "FsmOperands":
+                    case "FSM.Enumerations.FsmOperands":
                         var enumField = new EnumField();
                         enumField.Init(new FsmOperands());
                         enumField.value = (Enum)Enum.Parse(typeof(FsmOperands), result[2]);
                         enumField.RegisterCallback<ChangeEvent<Enum>>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newValue);
+                            StateScript.SetVariableValue(result[0], (FsmOperands)evt.newValue);
                         });
                         enumField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(enumField);
@@ -226,7 +225,7 @@ namespace EditorWindow.FSMSystem.Elements
                         };
                         floatField.RegisterCallback<InputEvent>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newData);
+                            StateScript.SetVariableValue(result[0], float.Parse(evt.newData));
                         });
                         floatField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(floatField);
@@ -239,7 +238,7 @@ namespace EditorWindow.FSMSystem.Elements
                         };
                         integerField.RegisterCallback<InputEvent>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newData);
+                            StateScript.SetVariableValue(result[0], int.Parse(evt.newData));
                         });
                         integerField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(integerField);

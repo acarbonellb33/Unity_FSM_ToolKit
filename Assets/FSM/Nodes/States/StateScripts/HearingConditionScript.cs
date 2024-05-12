@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 namespace FSM.Nodes.States.StateScripts
 {
     using UnityEngine;
@@ -41,4 +40,3 @@ namespace FSM.Nodes.States.StateScripts
         }
     }
 }
-#endif

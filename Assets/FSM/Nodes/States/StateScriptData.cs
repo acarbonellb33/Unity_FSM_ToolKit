@@ -8,7 +8,7 @@ namespace FSM.Nodes.States
     public class StateScriptData
     {
         // Private variable to store the state name
-        private string stateName;
+        private string _stateName;
 
         // InspectVariables method inspects and returns a list of public variables and their values as strings
         public List<string> InspectVariables()
@@ -76,8 +76,8 @@ namespace FSM.Nodes.States
         // SetVariableValue method sets the value of a specified variable
         public void SetVariableValue(string variableName, object newValue)
         {
-            System.Type type = GetType();
-            System.Reflection.FieldInfo field = type.GetField(variableName);
+            Type type = GetType();
+            FieldInfo field = type.GetField(variableName);
 
             if (field != null)
             {
@@ -138,15 +138,15 @@ namespace FSM.Nodes.States
         }
 
         // SetStateName method sets the state name
-        public void SetStateName(string name)
+        protected void SetStateName(string name)
         {
-            stateName = name;
+            _stateName = name;
         }
 
         // GetStateName method returns the state name
         public string GetStateName()
         {
-            return stateName;
+            return _stateName;
         }
     }
 }

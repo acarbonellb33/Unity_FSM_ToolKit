@@ -13,43 +13,62 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 	[Serializable]
 	public class lalalalalala : BehaviorScript
 	{
-		[Header("Attack")]
-		[SerializeField]
-		public AttackStateScript attack;
-
 		[Header("Distance 0")]
 		[SerializeField]
 		public DistanceConditionScript distance0;
-
-		[Header("Seeing 0")]
-		[SerializeField]
-		public SeeingConditionScript seeing0;
 
 		[Header("Patrol")]
 		[SerializeField]
 		public PatrolStateScript patrol;
 
+		[Header("Chase")]
+		[SerializeField]
+		public ChaseStateScript chase;
+
+		[Header("Hearing")]
+		[SerializeField]
+		public HearingConditionScript hearing;
+
+		[Header("Seeing 1")]
+		[SerializeField]
+		public SeeingConditionScript seeing1;
+
+		[Header("Seeing 0")]
+		[SerializeField]
+		public SeeingConditionScript seeing0;
+
+		[Header("Attack")]
+		[SerializeField]
+		public AttackStateScript attack;
+
+		[Header("Health")]
+		[SerializeField]
+		public HealthConditionScript health;
+
 		float waitHitTime = 2f;
 		float hitLastTime = 0f;
 		private void Start()
 		{
-			currentState = FSMStates.Patrol;
+			CurrentState = FsmStates.Patrol;
 			GetComponent<Animator>().SetFloat("Speed", GetComponent<NavMeshAgent>().speed);
 		}
 		void Update()
 		{
-			switch (currentState)
+			switch (CurrentState)
 			{
-				case FSMStates.Attack:
-					UpdateAttackState();
-					break;
-				case FSMStates.Patrol:
+				case FsmStates.Patrol:
 					UpdatePatrolState();
 					break;
-				case FSMStates.Hit:
+				case FsmStates.Chase:
+					UpdateChaseState();
+					break;
+				case FsmStates.Attack:
+					UpdateAttackState();
+					break;
+				case FsmStates.Hit:
 					UpdateHitState();
 					break;
-				case FSMStates.Die:
+				case FsmStates.Die:
 					UpdateDieState();
 					break;
 			}
@@ -64,21 +83,29 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 				ChangeDieState();
 			}
 		}
-		public void UpdateAttackState()
-		{
-			attack.Execute();
-		if(distance0.Condition())
-		{
-			ChangePatrolState();
-		}
-		}
 		public void UpdatePatrolState()
 		{
 			patrol.Execute();
-		if(seeing0.Condition())
-		{
-			ChangeAttackState();
+			if(seeing0.Condition() && seeing1.Condition())
+			{
+				ChangeChaseState();
+			}
 		}
+		public void UpdateChaseState()
+		{
+			chase.Execute();
+			if(hearing.Condition() && health.Condition())
+			{
+				ChangeAttackState();
+			}
+		}
+		public void UpdateAttackState()
+		{
+			attack.Execute();
+			if(distance0.Condition())
+			{
+				ChangePatrolState();
+			}
 		}
 		public void UpdateHitState()
 		{
@@ -86,7 +113,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 			agent.isStopped = true;
 			if(Time.time >= hitLastTime + waitHitTime)
 			{
-				currentState = FSMStates.Patrol;
+				CurrentState = FsmStates.Patrol;
 				agent.isStopped = false;
 			}
 		}
@@ -94,21 +121,25 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 		{
 			GetComponent<EnemyHealthSystem>().Die();
 		}
-		private void ChangeAttackState()
-		{
-			currentState = FSMStates.Attack;
-		}
 		private void ChangePatrolState()
 		{
-			currentState = FSMStates.Patrol;
+			CurrentState = FsmStates.Patrol;
+		}
+		private void ChangeChaseState()
+		{
+			CurrentState = FsmStates.Chase;
+		}
+		private void ChangeAttackState()
+		{
+			CurrentState = FsmStates.Attack;
 		}
 		private void ChangeHitState()
 		{
-			currentState = FSMStates.Hit;
+			CurrentState = FsmStates.Hit;
 		}
 		private void ChangeDieState()
 		{
-			currentState = FSMStates.Die;
+			CurrentState = FsmStates.Die;
 		}
 		public void AddObjectToList()
 		{
@@ -117,7 +148,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 		public void RemoveObjectFromList(string patrolPoint)
 		{
 			patrol.RemovePatrolPoint(patrolPoint);
-			GameObject patrolPointObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);
+			GameObject patrolPointObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);
 			if(patrolPointObject != null)
 			{
 				DestroyImmediate(patrolPointObject);

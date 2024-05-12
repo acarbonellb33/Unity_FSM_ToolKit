@@ -5,26 +5,26 @@ namespace FSM.Player
     public class HealthSystem : MonoBehaviour
     {
         public float maxHealth = 100f;
-        private float currentHealth;
+        private float _currentHealth;
 
         [SerializeField] private HealthBar healthBar;
 
         void Start()
         {
-            currentHealth = maxHealth;
-            healthBar.UpdateHealthBar(maxHealth, currentHealth);
+            _currentHealth = maxHealth;
+            healthBar.UpdateHealthBar(maxHealth, _currentHealth);
         }
 
         public void TakeDamage(float amount)
         {
-            currentHealth -= amount;
-            if (currentHealth <= 0) Die();
-            healthBar.UpdateHealthBar(maxHealth, currentHealth);
+            _currentHealth -= amount;
+            if (_currentHealth <= 0) Die();
+            healthBar.UpdateHealthBar(maxHealth, _currentHealth);
         }
 
         public void Heal()
         {
-            currentHealth = maxHealth;
+            _currentHealth = maxHealth;
         }
 
         private void Die()
@@ -41,7 +41,7 @@ namespace FSM.Player
 
         public float GetCurrentHealth()
         {
-            return currentHealth;
+            return _currentHealth;
         }
 
         #endregion

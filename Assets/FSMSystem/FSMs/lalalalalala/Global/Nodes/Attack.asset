@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Attack
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Distance 0
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 8ab29650244a26c48ba836ea605a1c95, type: 2}
+  - <Text>k__BackingField: Extension 2
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 6d04632ede48bf647958a1493e3e1aef, type: 2}
   <NodeType>k__BackingField: 0
   <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
     1.0\n}"

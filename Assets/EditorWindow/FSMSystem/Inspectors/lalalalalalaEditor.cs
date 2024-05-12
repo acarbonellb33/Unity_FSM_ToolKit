@@ -116,7 +116,7 @@ namespace EditorWindow.FSMSystem.Inspectors
 								SerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);
 								if (gameObjectElementProperty.stringValue != null)
 								{
-									GameObject gameObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);
+									GameObject gameObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);
 									EditorGUI.BeginChangeCheck();
 									gameObject = EditorGUILayout.ObjectField("Patrol Point", gameObject, typeof(GameObject), true) as GameObject;
 									if (EditorGUI.EndChangeCheck())
@@ -134,13 +134,13 @@ namespace EditorWindow.FSMSystem.Inspectors
 											gameObjectElementProperty.stringValue = string.Empty;
 										}
 										selectedObjectSerialized.ApplyModifiedProperties();
-										FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+										FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
 									}
 									if (GUILayout.Button("Remove", GUILayout.Width(70)))
 									{
 										RemovePatrolPoint(gameObjectElementProperty.stringValue);
 										selectedObjectSerialized.ApplyModifiedProperties();
-										FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+										FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
 									}
 								}
 								EditorGUILayout.EndHorizontal();
@@ -149,7 +149,7 @@ namespace EditorWindow.FSMSystem.Inspectors
 							{
 								CreateAndAddGameObject(lalalalalala);
 								selectedObjectSerialized.ApplyModifiedProperties();
-								FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+								FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
 							}
 						}
 						else
@@ -159,7 +159,7 @@ namespace EditorWindow.FSMSystem.Inspectors
 							if (EditorGUI.EndChangeCheck())
 							{
 								selectedObjectSerialized.ApplyModifiedProperties();
-								FSMIOUtility.CreateJson(selectedObject, "lalalalalala");
+								FsmIOUtility.CreateJson(selectedObject, "lalalalalala");
 							}
 						}
 					}
@@ -180,7 +180,7 @@ namespace EditorWindow.FSMSystem.Inspectors
 		{
 			lalalalalala lalalalalala = (lalalalalala)target;
 			lalalalalala.patrol.RemovePatrolPoint(patrolPoint);
-			GameObject patrolPointObject = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);
+			GameObject patrolPointObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoint);
 			if(patrolPointObject != null)
 			{
 				DestroyImmediate(patrolPointObject);

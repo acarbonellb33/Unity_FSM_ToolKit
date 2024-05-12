@@ -12,7 +12,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
     {
         public List<StateScript> options;
         public int selectedOptionIndex = 0;
-        protected FSMStates currentState = FSMStates.Idle;
+        protected FsmStates CurrentState = FsmStates.Idle;
 
         public virtual Dictionary<string, object> GetVariables()
         {
@@ -31,15 +31,14 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 
         public virtual void SetVariableValue(string variableName, object newValue)
         {
-            System.Type type = GetType();
+            var type = GetType();
             variableName = variableName.Replace(" ", "");
-            System.Reflection.FieldInfo field = type.GetField(variableName);
+            var field = type.GetField(variableName);
             if (field != null)
             {
-                int lastParenIndex = newValue.ToString().LastIndexOf('.');
-                string nameType = newValue.ToString().Substring(lastParenIndex + 1);
-                if (options == null)
-                    options = new List<StateScript>();
+                var lastParenIndex = newValue.ToString().LastIndexOf('.');
+                var nameType = newValue.ToString().Substring(lastParenIndex + 1);
+                if (options == null) options = new List<StateScript>();
                 switch (nameType)
                 {
                     case "PatrolData":

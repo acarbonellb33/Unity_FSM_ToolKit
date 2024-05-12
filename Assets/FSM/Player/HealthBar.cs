@@ -5,16 +5,16 @@ namespace FSM.Player
 
     public class HealthBar : MonoBehaviour
     {
-        private Slider slider;
+        private Slider _slider;
 
         void Awake()
         {
-            slider = GetComponent<Slider>();
+            _slider = GetComponent<Slider>();
         }
 
         public void UpdateHealthBar(float maxHealth, float currentHealth)
         {
-            slider.value = currentHealth / maxHealth;
+            _slider.value = currentHealth / maxHealth;
         }
     }
 }

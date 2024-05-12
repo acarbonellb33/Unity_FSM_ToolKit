@@ -22,8 +22,8 @@ namespace FSM.Nodes.States.StateScripts
         public bool Condition()
         {
             // Get the distance between the enemy and the player
-            float distanceToPlayer = Vector3.Distance(agent.transform.position, player.transform.position);
-            Rigidbody playerRigidbody = player.GetComponent<Rigidbody>();
+            float distanceToPlayer = Vector3.Distance(Agent.transform.position, Player.transform.position);
+            Rigidbody playerRigidbody = Player.GetComponent<Rigidbody>();
 
             // Check if the player is within the hearing range of the enemy
             if (distanceToPlayer <= hearingRange)

@@ -4,7 +4,7 @@ namespace FSM.Nodes.States.StatesData
 
     public class HealthData : StateScriptData
     {
-        public FSMOperands operand;
+        public FsmOperands operand;
         public float health = 10f;
 
         public HealthData()

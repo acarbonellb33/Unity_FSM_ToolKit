@@ -1,0 +1,30 @@
+#if UNITY_EDITOR
+namespace EditorWindow.FSMSystem.Utilities
+{
+    using UnityEditor;
+    using UnityEngine.UIElements;
+    public static class FsmStyleUtility
+    {
+        public static VisualElement AddClasses(this VisualElement element, params string[] classNames)
+        {
+            foreach (var className in classNames)
+            {
+                element.AddToClassList(className);
+            }
+
+            return element;
+        }
+
+        public static VisualElement AddStyleSheets(this VisualElement element, params string[] styleSheetNames)
+        {
+            foreach (var styleSheetName in styleSheetNames)
+            {
+                StyleSheet styleSheet = (StyleSheet)EditorGUIUtility.Load(styleSheetName);
+                element.styleSheets.Add(styleSheet);
+            }
+
+            return element;
+        }
+    }
+}
+#endif

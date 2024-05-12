@@ -14,16 +14,16 @@ namespace FSM.Player
 
         [SerializeField] float jumpHeight = 3f; //radi de la esfera
 
-        Vector3 velocity;
-        bool isGrounded;
+        Vector3 _velocity;
+        bool _isGrounded;
 
         void Update()
         {
-            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+            _isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-            if (isGrounded && velocity.y < 0)
+            if (_isGrounded && _velocity.y < 0)
             {
-                velocity.y = -2f;
+                _velocity.y = -2f;
             }
 
             float x = Input.GetAxis("Horizontal");
@@ -33,14 +33,14 @@ namespace FSM.Player
 
             controller.Move(move * speed * Time.deltaTime);
 
-            if (Input.GetButtonDown("Jump") && isGrounded)
+            if (Input.GetButtonDown("Jump") && _isGrounded)
             {
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
 
-            velocity.y += gravity * Time.deltaTime;
+            _velocity.y += gravity * Time.deltaTime;
 
-            controller.Move(velocity * Time.deltaTime);
+            controller.Move(_velocity * Time.deltaTime);
         }
     }
 }

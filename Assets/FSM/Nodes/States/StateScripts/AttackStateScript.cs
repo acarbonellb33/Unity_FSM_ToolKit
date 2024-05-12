@@ -8,7 +8,7 @@ namespace FSM.Nodes.States.StateScripts
         public float attackDamage = 10f;
         public float attackFrequency = 1f;
 
-        private float _lastAttack = 0f;
+        private float _lastAttack;
 
         public AttackStateScript()
         {
@@ -17,7 +17,7 @@ namespace FSM.Nodes.States.StateScripts
 
         public void Execute()
         {
-            agent.ResetPath();
+            Agent.ResetPath();
             RotateEnemyToPlayer();
             if (CanAttack())
             {
@@ -38,7 +38,7 @@ namespace FSM.Nodes.States.StateScripts
 
         private void RotateEnemyToPlayer()
         {
-            Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
+            Vector3 directionToPlayer = (Player.transform.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 0.1f);
         }

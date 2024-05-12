@@ -6,7 +6,7 @@ namespace FSM.Player
     {
         [SerializeField] float mouseSensivity = 100f;
         [SerializeField] Transform playerBody;
-        float xRotation = 0f;
+        float _xRotation;
 
         void Start()
         {
@@ -18,10 +18,10 @@ namespace FSM.Player
             float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensivity * Time.deltaTime;
 
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            _xRotation -= mouseY;
+            _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
 
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
             playerBody.Rotate(Vector3.up * mouseX);
         }
     }

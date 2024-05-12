@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Seeing 0
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Extension 1
-    <NextNode>k__BackingField: {fileID: 11400000, guid: f0d731b2478748b47a911559f1effa92, type: 2}
+  - <Text>k__BackingField: Attack
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 657633e1246a42d4facc5bd5a12efc94, type: 2}
   <NodeType>k__BackingField: 1
   <DataObject>k__BackingField: "{\n    \"distance\": 10.0\n}"

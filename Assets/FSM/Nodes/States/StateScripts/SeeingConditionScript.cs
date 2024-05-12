@@ -22,7 +22,7 @@ namespace FSM.Nodes.States.StateScripts
             RaycastHit hit;
 
             // Perform a raycast from the agent's first child's position in the forward direction
-            if (Physics.Raycast(agent.transform.GetChild(0).position, agent.transform.GetChild(0).transform.forward,
+            if (Physics.Raycast(Agent.transform.GetChild(0).position, Agent.transform.GetChild(0).transform.forward,
                     out hit, distance))
             {
                 // Check if the raycast hit a collider with the tag "Player"

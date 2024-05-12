@@ -13,23 +13,23 @@ namespace FSM.Nodes.States
     public abstract class StateScript : MonoBehaviour
     {
         // Private variable to store the state name
-        private string stateName;
+        private string _stateName;
 
         // Protected variables for player and agent references
-        protected GameObject player;
-        protected NavMeshAgent agent;
+        protected GameObject Player;
+        protected NavMeshAgent Agent;
 
         // Called when the script instance is being loaded
         private void OnEnable()
         {
             // Get the NavMeshAgent component attached to the same GameObject as this script
-            agent = GetComponent<NavMeshAgent>();
+            Agent = GetComponent<NavMeshAgent>();
 
             // Find the "Player" GameObject in the scene and assign it to the player variable
             GameObject playerObject = GameObject.Find("Player");
             if (playerObject != null)
             {
-                player = playerObject;
+                Player = playerObject;
             }
         }
 
@@ -96,8 +96,8 @@ namespace FSM.Nodes.States
         // SetVariableValue method sets the value of a specified variable
         public void SetVariableValue(string variableName, object newValue)
         {
-            System.Type type = GetType();
-            System.Reflection.FieldInfo field = type.GetField(variableName);
+            Type type = GetType();
+            FieldInfo field = type.GetField(variableName);
 
             if (field != null)
             {
@@ -131,15 +131,15 @@ namespace FSM.Nodes.States
         }
 
         // SetStateName method sets the state name
-        public void SetStateName(string name)
+        public void SetStateName(string newName)
         {
-            stateName = name;
+            _stateName = newName;
         }
 
         // GetStateName method returns the state name
         public string GetStateName()
         {
-            return stateName;
+            return _stateName;
         }
     }
 }

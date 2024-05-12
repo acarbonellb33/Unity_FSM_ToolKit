@@ -19,7 +19,7 @@ namespace FSM.Nodes.States.StateScripts
         {
             // Set the agent's destination to the player's current position
             // 'agent' and 'player' are inherited from the parent class StateScript
-            agent.SetDestination(player.transform.position);
+            Agent.SetDestination(Player.transform.position);
         }
     }
 }

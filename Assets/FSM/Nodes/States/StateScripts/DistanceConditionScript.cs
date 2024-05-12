@@ -6,8 +6,8 @@ namespace FSM.Nodes.States.StateScripts
     // DistanceConditionScript class inherits from StateScript and implements ICondition interface
     public class DistanceConditionScript : StateScript, ICondition
     {
-        private float distanceToPlayer;
-        public FSMOperands operand; // Public enum to define comparison operands
+        private float _distanceToPlayer;
+        public FsmOperands operand; // Public enum to define comparison operands
         public float distanceFromPlayer = 10f;
 
         public DistanceConditionScript()
@@ -20,19 +20,19 @@ namespace FSM.Nodes.States.StateScripts
         public bool Condition()
         {
             // Calculate the distance between the player and the agent
-            distanceToPlayer = Vector3.Distance(player.transform.position, agent.transform.position);
+            _distanceToPlayer = Vector3.Distance(Player.transform.position, Agent.transform.position);
 
             // Switch statement to check the condition based on the operand
             switch (operand)
             {
-                case FSMOperands.LessThan:
-                    return distanceToPlayer < distanceFromPlayer;
-                case FSMOperands.GreaterThan:
-                    return distanceToPlayer > distanceFromPlayer;
-                case FSMOperands.EqualTo:
-                    return distanceToPlayer.Equals(distanceFromPlayer);
-                case FSMOperands.NotEqualTo:
-                    return !distanceToPlayer.Equals(distanceFromPlayer);
+                case FsmOperands.LessThan:
+                    return _distanceToPlayer < distanceFromPlayer;
+                case FsmOperands.GreaterThan:
+                    return _distanceToPlayer > distanceFromPlayer;
+                case FsmOperands.EqualTo:
+                    return _distanceToPlayer.Equals(distanceFromPlayer);
+                case FsmOperands.NotEqualTo:
+                    return !_distanceToPlayer.Equals(distanceFromPlayer);
                 default:
                     return false;
             }

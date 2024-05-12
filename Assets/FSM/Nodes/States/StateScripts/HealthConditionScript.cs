@@ -8,10 +8,10 @@ namespace FSM.Nodes.States.StateScripts
     public class HealthConditionScript : StateScript, ICondition
     {
         // Public reference to the enemy's health component
-        private EnemyHealthSystem enemyHealth;
+        private EnemyHealthSystem _enemyHealthSystem;
 
         // Public variable to define the minimum health threshold for the condition to be true
-        public FSMOperands operand;
+        public FsmOperands operand;
         public float health = 10f;
 
         public HealthConditionScript()
@@ -24,7 +24,7 @@ namespace FSM.Nodes.States.StateScripts
         void Start()
         {
             // Check if the enemy health component is assigned
-            if (TryGetComponent(out enemyHealth))
+            if (TryGetComponent(out _enemyHealthSystem))
             {
                 Debug.LogError("EnemyHealthSystem component is not added in the Enemy GameObject");
             }
@@ -35,14 +35,14 @@ namespace FSM.Nodes.States.StateScripts
         {
             switch (operand)
             {
-                case FSMOperands.LessThan:
-                    return enemyHealth.GetCurrentHealth() < health;
-                case FSMOperands.GreaterThan:
-                    return enemyHealth.GetCurrentHealth() > health;
-                case FSMOperands.EqualTo:
-                    return enemyHealth.GetCurrentHealth().Equals(health);
-                case FSMOperands.NotEqualTo:
-                    return !enemyHealth.GetCurrentHealth().Equals(health);
+                case FsmOperands.LessThan:
+                    return _enemyHealthSystem.GetCurrentHealth() < health;
+                case FsmOperands.GreaterThan:
+                    return _enemyHealthSystem.GetCurrentHealth() > health;
+                case FsmOperands.EqualTo:
+                    return _enemyHealthSystem.GetCurrentHealth().Equals(health);
+                case FsmOperands.NotEqualTo:
+                    return !_enemyHealthSystem.GetCurrentHealth().Equals(health);
                 default:
                     return false;
             }

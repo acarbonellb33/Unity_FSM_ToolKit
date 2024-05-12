@@ -10,14 +10,14 @@ namespace FSM.Nodes.States.StateScripts
     {
         // List to store patrol points as GameObjects
         public List<string> patrolPoints;
-        private int counter;
+        private int _counter;
 
         public PatrolStateScript()
         {
             // Set the state name to "Patrol" using the SetStateName method inherited from StateScript
             SetStateName("Patrol");
             patrolPoints = new List<string>();
-            counter = 0;
+            _counter = 0;
         }
 
         // Implementation of the Execute method from the IAction interface
@@ -31,12 +31,12 @@ namespace FSM.Nodes.States.StateScripts
         private void MoveToNextPatrolPosition()
         {
             // Check if the agent's remaining distance is close to 0
-            if (agent.remainingDistance <= 0.1)
+            if (Agent.remainingDistance <= 0.1)
             {
                 // Reset the counter if it reaches the end of the patrol points list
-                if (counter == patrolPoints.Count)
+                if (_counter == patrolPoints.Count)
                 {
-                    counter = 0;
+                    _counter = 0;
                 }
 
                 // Check if the patrolPoints list is empty
@@ -46,11 +46,11 @@ namespace FSM.Nodes.States.StateScripts
                 }
 
                 // Set the agent's destination to the position of the current patrol point
-                GameObject patrolPoint = FSMIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoints[counter]);
-                agent.SetDestination(patrolPoint.transform.position);
+                GameObject patrolPoint = FsmIOUtility.FindGameObjectWithId<IDGenerator>(patrolPoints[_counter]);
+                Agent.SetDestination(patrolPoint.transform.position);
 
                 // Increment the counter for the next patrol point
-                counter++;
+                _counter++;
             }
         }
 

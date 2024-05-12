@@ -258,6 +258,7 @@ namespace EditorWindow.FSMSystem.Windows
 
         private void OnDestroy()
         {
+            if(_shouldClose) return;
             // Prompt the user to save changes before closing
             int option = EditorUtility.DisplayDialogComplex("Save Changes",
                 "Do you want to save changes before closing?",

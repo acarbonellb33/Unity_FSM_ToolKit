@@ -1196,7 +1196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17818e8d4c9c4b10b155a57d63908042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphContainer: {fileID: 11400000, guid: 112987a16b5f23e4faa1b90522e6ae0c, type: 2}
+  graphContainer: {fileID: 11400000, guid: 7749a1fc4065fd347859eaf75c3c9030, type: 2}
 --- !u!82 &1127633677
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1707,6 +1707,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f214b79a6849de83330ad9b8d7a586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  output: 
+  stack: 
 --- !u!1 &1881599860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2364,8 +2366,9 @@ GameObject:
   - component: {fileID: 1127633677}
   - component: {fileID: 5866666021310896189}
   - component: {fileID: 1127633676}
-  - component: {fileID: 5866666021310896196}
   - component: {fileID: 5866666021310896210}
+  - component: {fileID: 5866666021310896215}
+  - component: {fileID: 5866666021310896214}
   - component: {fileID: 5866666021310896213}
   - component: {fileID: 5866666021310896212}
   - component: {fileID: 5866666021310896211}
@@ -4106,22 +4109,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
---- !u!114 &5866666021310896196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148682365174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d358aaf00afa1ee4bb1ee89916fbd8b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groupName: 
-  visible: 0
-  edit: 0
-  comps: []
 --- !u!114 &5866666021310896210
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -4137,22 +4124,7 @@ MonoBehaviour:
   uniqueID: 0bc03333-fb28-4c02-9326-9c11a37dffcd
 --- !u!114 &5866666021310896211
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148682365174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97d4f32ed3d7f694f92d1f1b25884ee3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolPoints:
-  - 2193141f-2e5e-435e-85db-141607d1ad17
-  - 1b47a30a-6fe0-4ca1-866c-63f8a146af63
---- !u!114 &5866666021310896212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4162,7 +4134,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579a077069d22f64995516b72ff70b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5866666021310896212
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ec575d7648df04f8e7da4772deb51f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exploreRadius: 10
 --- !u!114 &5866666021310896213
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1b8c973fdfffe4aa80eab4120bcb4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseSpeed: 5
+  chaseRange: 10
+  chaseCooldown: 2
+  canChase: 1
+--- !u!114 &5866666021310896214
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148682365174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3afd64ab986a7e84e8a6ae39ea36a36e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operand: 0
+  distanceFromPlayer: 10
+--- !u!114 &5866666021310896215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4171,15 +4186,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148682365174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f7465af0ef36a458ed8dc62a7fe598, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e36034c94904b84cae599d3fdf65361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   options:
+  - {fileID: 5866666021310896214}
+  - {fileID: 5866666021310896213}
   - {fileID: 5866666021310896212}
   - {fileID: 5866666021310896211}
   selectedOptionIndex: 0
-  nextState: {fileID: 5866666021310896212}
-  patrol: {fileID: 5866666021310896211}
+  distance: {fileID: 5866666021310896214}
+  chase: {fileID: 5866666021310896213}
+  search: {fileID: 5866666021310896212}
+  nextState: {fileID: 5866666021310896211}
 --- !u!4 &5896985191658304802
 Transform:
   m_ObjectHideFlags: 0

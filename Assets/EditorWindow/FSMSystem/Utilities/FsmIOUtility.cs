@@ -398,10 +398,9 @@ namespace EditorWindow.FSMSystem.Utilities
             CreateFolder("Assets/EditorWindow/FSMSystem", "Graphs");
             CreateFolder("Assets", "FSMSystem");
             CreateFolder("Assets/FSMSystem", "FSMs");
-            ClearFolder($"Assets/FSMSystem/FSMs/{_graphName}");
             CreateFolder("Assets/FSMSystem/FSMs", _graphName);
             CreateFolder(_containerFolderPath, "Global");
-            CreateFolder(_containerFolderPath, "Groups");
+            CleanFolder($"{_containerFolderPath}/Global/Nodes");
             CreateFolder($"{_containerFolderPath}/Global", "Nodes");
         }
 
@@ -499,34 +498,39 @@ namespace EditorWindow.FSMSystem.Utilities
 
             AssetDatabase.CreateFolder(path, folderName);
         }
-        private static void ClearFolder(string folderPath)
+
+        private static void CleanFolder(string folderPath)
         {
             try
             {
                 // Check if the directory exists
                 if (Directory.Exists(folderPath))
                 {
-                    // Delete all files in the directory
-                    string[] files = Directory.GetFiles(folderPath);
-                    foreach (string file in files)
+                    // Delete all ScriptableObject files (files with .asset extension)
+                    string[] scriptableObjectFiles = Directory.GetFiles(folderPath, "*.asset");
+                    foreach (string file in scriptableObjectFiles)
                     {
                         File.Delete(file);
+                        File.Delete($"{file}.meta");
+                        AssetDatabase.Refresh();
                     }
 
-                    // Delete all subdirectories and their files recursively
-                    string[] subDirectories = Directory.GetDirectories(folderPath);
-                    foreach (string subDir in subDirectories)
+                    // Delete all JSON files
+                    string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
+                    foreach (string file in jsonFiles)
                     {
-                        Directory.Delete(subDir, true);
+                        File.Delete(file);
+                        File.Delete($"{file}.meta");
+                        AssetDatabase.Refresh();
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Handle any exceptions
-                Console.WriteLine("Error: " + ex.Message);
+                Debug.LogError("Error cleaning folder: " + ex.Message);
             }
         }
+
 
         public static void RemoveFolder(string path)
         {

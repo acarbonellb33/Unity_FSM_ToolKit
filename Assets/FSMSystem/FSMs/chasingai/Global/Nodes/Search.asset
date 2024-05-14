@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: Search
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Condition
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 2853fed068b9a2441bd10d2d1a83e12f, type: 2}
+  - <Text>k__BackingField: Extension 2
+    <NextNode>k__BackingField: {fileID: 11400000, guid: a349aa0c0acaddf4b98a991a9db38bb4, type: 2}
   <NodeType>k__BackingField: 0
   <DataObject>k__BackingField: "{\n    \"exploreRadius\": 10.0\n}"

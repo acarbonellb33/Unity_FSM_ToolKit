@@ -17,14 +17,12 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Nodes.States.StatesData;
     public class FsmTransitionNode : FsmNode
     {
-        private List<StateScriptData> _dataObjects;
-
         public override void Initialize(string nodeName, FsmGraphView graphView, Vector2 vectorPos)
         {
             base.Initialize(nodeName, graphView, vectorPos);
             NodeType = FsmNodeType.Transition;
 
-            _dataObjects = new List<StateScriptData>()
+            DataObjects = new List<StateScriptData>()
                 { new NextStateData(), new SeeingData(), new HearingData(), new DistanceData(), new HealthData() };
 
             var connectionSaveData = new FsmConnectionSaveData()
@@ -68,7 +66,6 @@ namespace EditorWindow.FSMSystem.Elements
         }
 
         #region ScriptableObject Attributes
-
         private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
         {
             var stateName = StateName.Split(' ')[0];
@@ -174,7 +171,6 @@ namespace EditorWindow.FSMSystem.Elements
 
             customDataContainer.Add(stateAttributeContainer);
         }
-
         private void CreateDistanceAttributes(List<string> attributes, VisualElement customDataContainer)
         {
             var stateAttributeContainer = new VisualElement();
@@ -274,46 +270,6 @@ namespace EditorWindow.FSMSystem.Elements
 
             customDataContainer.Add(stateAttributeContainer);
         }
-
-        private void GetScriptableObject()
-        {
-            try
-            {
-                StateScript.GetStateName();
-            }
-            catch (NullReferenceException)
-            {
-                foreach (var enemyState in _dataObjects)
-                {
-                    var stateName = StateName.Split(' ')[0];
-                    if (enemyState.GetStateName() == stateName)
-                    {
-                        StateScript = enemyState;
-                    }
-                }
-            }
-        }
-
-        private string UpdateNameStyle(string newName)
-        {
-            var fullName = Regex.Split(newName, @"(?=[A-Z])");
-            var resultString = "";
-
-            for (int i = 0; i < fullName.Length; i++)
-            {
-                if (i == 0)
-                {
-                    resultString = char.ToUpper(fullName[i][0]) + fullName[i].Substring(1);
-                }
-                else
-                {
-                    resultString += " " + fullName[i];
-                }
-            }
-
-            return resultString;
-        }
-
         #endregion
     }
 }

@@ -17,14 +17,12 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Nodes.States.StatesData;
     public class FsmDualTransitionNode : FsmNode
     {
-        private List<StateScriptData> _dataObjects;
-
         public override void Initialize(string nodeName, FsmGraphView fsmGraphView, Vector2 vectorPos)
         {
             base.Initialize(nodeName, fsmGraphView, vectorPos);
             NodeType = FsmNodeType.Transition;
 
-            _dataObjects = new List<StateScriptData>()
+            DataObjects = new List<StateScriptData>()
                 { new NextStateData(), new SeeingData(), new HearingData(), new DistanceData(), new HealthData() };
 
             var connectionSaveData1 = new FsmConnectionSaveData()
@@ -76,9 +74,10 @@ namespace EditorWindow.FSMSystem.Elements
 
         private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
         {
-            if (StateName == "Hearing")
+            var stateName = StateName.Split(' ')[0];
+            if (stateName == "Distance")
             {
-                CreateHearingAttributes(attributes, customDataContainer);
+                CreateDistanceAttributes(attributes, customDataContainer);
                 return;
             }
 
@@ -179,19 +178,18 @@ namespace EditorWindow.FSMSystem.Elements
             customDataContainer.Add(stateAttributeContainer);
         }
 
-        private void CreateHearingAttributes(List<string> attributes, VisualElement customDataContainer)
+        private void CreateDistanceAttributes(List<string> attributes, VisualElement customDataContainer)
         {
             var stateAttributeContainer = new VisualElement();
             stateAttributeContainer.AddToClassList("fsm-node_state-attribute-container-hearing");
 
-            var label = FsmElementUtility.CreateLabel("Hearing Range");
+            var label = FsmElementUtility.CreateLabel("Distance From Player");
             label.AddToClassList("fsm-node_state-attribute-container-hearing-label");
             stateAttributeContainer.Add(label);
 
             foreach (var attribute in attributes)
             {
                 var result = attribute.Split(',');
-
                 switch (result[1])
                 {
                     case "FSM.Enumerations.FsmOperands":
@@ -279,46 +277,7 @@ namespace EditorWindow.FSMSystem.Elements
 
             customDataContainer.Add(stateAttributeContainer);
         }
-
-        private void GetScriptableObject()
-        {
-            try
-            {
-                StateScript.GetStateName();
-            }
-            catch (NullReferenceException)
-            {
-                foreach (var enemyState in _dataObjects)
-                {
-                    var newName = StateName.Split(' ')[0];
-                    if (enemyState.GetStateName() == newName)
-                    {
-                        StateScript = enemyState;
-                    }
-                }
-            }
-        }
-
-        private string UpdateNameStyle(string newName)
-        {
-            var fullName = Regex.Split(newName, @"(?=[A-Z])");
-            var resultString = "";
-
-            for (int i = 0; i < fullName.Length; i++)
-            {
-                if (i == 0)
-                {
-                    resultString = char.ToUpper(fullName[i][0]) + fullName[i].Substring(1);
-                }
-                else
-                {
-                    resultString += " " + fullName[i];
-                }
-            }
-
-            return resultString;
-        }
-
+        
         #endregion
     }
 }

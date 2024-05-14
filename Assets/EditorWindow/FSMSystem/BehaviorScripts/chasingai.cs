@@ -79,7 +79,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 		public void UpdateChaseState()
 		{
 			chase.Execute();
-			GetComponent<Animator>().SetFloat("MotionSpeed", 5);
+			GetComponent<Animator>().SetBool("Grounded", true);
 			SetHitData(true, 10f, false);
 			if(nextState.Condition())
 			{

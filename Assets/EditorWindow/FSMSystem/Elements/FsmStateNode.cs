@@ -18,14 +18,12 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Utilities;
     public class FsmStateNode : FsmNode
     {
-        private List<StateScriptData> _dataObjects;
-
         public override void Initialize(string nodeName, FsmGraphView graphView, Vector2 postition)
         {
             base.Initialize(nodeName, graphView, postition);
             NodeType = FsmNodeType.State;
 
-            _dataObjects = new List<StateScriptData>()
+            DataObjects = new List<StateScriptData>()
                 { new PatrolData(), new ChaseData(), new AttackData(), new SearchData() };
 
             var connectionSaveData = new FsmConnectionSaveData()
@@ -37,7 +35,6 @@ namespace EditorWindow.FSMSystem.Elements
             mainContainer.AddToClassList("fsm-node_main-container");
             extensionContainer.AddToClassList("fsm-node_extension-container");
         }
-
         public override void Draw()
         {
             base.Draw();
@@ -89,7 +86,7 @@ namespace EditorWindow.FSMSystem.Elements
             extensionContainer.Add(horizontalLine);
             extensionContainer.Add(animatorPopupToggle);
             extensionContainer.Add(horizontalLine2);
-            if (animatorPopupToggle.value) AddDropdownFields();
+            if (animatorPopupToggle.value) ShowAnimatorParameterDropdown(animatorPopupToggle);
             extensionContainer.Add(hitPopupToggle);
             if (hitPopupToggle.value) ShowHitStateOverrideToggle(hitPopupToggle);
 
@@ -97,12 +94,8 @@ namespace EditorWindow.FSMSystem.Elements
 
             RefreshExpandedState();
         }
-
-        #region ScriptableObject Attributes
-
         private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
         {
-
             var stateAttributeContainer = new VisualElement();
             
             var stateAttributeLabel = FsmElementUtility.CreateLabel("State Attributes Fields");
@@ -319,46 +312,6 @@ namespace EditorWindow.FSMSystem.Elements
 
             customDataContainer.Add(stateAttributeContainer);
         }
-
-        private void GetScriptableObject()
-        {
-            try
-            {
-                StateScript.GetStateName();
-            }
-            catch (NullReferenceException)
-            {
-                foreach (StateScriptData enemyState in _dataObjects)
-                {
-                    if (enemyState.GetStateName() == StateName)
-                    {
-                        StateScript = enemyState;
-                    }
-                }
-            }
-        }
-
-        private string UpdateNameStyle(string newName)
-        {
-            var fullName = Regex.Split(newName, @"(?=[A-Z])");
-            var resultString = "";
-
-            for (int i = 0; i < fullName.Length; i++)
-            {
-                if (i == 0)
-                {
-                    resultString = char.ToUpper(fullName[i][0]) + fullName[i].Substring(1);
-                }
-                else
-                {
-                    resultString += " " + fullName[i];
-                }
-            }
-
-            return resultString;
-        }
-
-        #endregion
     }
 }
 #endif

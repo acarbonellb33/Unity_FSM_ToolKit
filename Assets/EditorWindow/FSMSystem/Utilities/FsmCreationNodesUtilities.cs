@@ -191,15 +191,15 @@ namespace EditorWindow.FSMSystem.Utilities
                 // Read the content of the script file
                 var scriptContent = File.ReadAllText(scriptPath);
 
-                // Find the line where _dataObjects list is initialized
-                var dataObjectsIndex = scriptContent.IndexOf("_dataObjects = new List<StateScriptData>()", StringComparison.Ordinal);
+                // Find the line where DataObjects list is initialized
+                var dataObjectsIndex = scriptContent.IndexOf("DataObjects = new List<StateScriptData>()", StringComparison.Ordinal);
 
                 if (dataObjectsIndex != -1)
                 {
                     // Construct the code for the new state
                     var newStateLine = "new " + stateName + "Data(), "; // Example: new YourNewStateData(),
 
-                    // Insert the new state code into the _dataObjects list initialization line
+                    // Insert the new state code into the DataObjects list initialization line
                     var insertionIndex = scriptContent.IndexOf("{", dataObjectsIndex, StringComparison.Ordinal) + 1;
                     scriptContent = scriptContent.Insert(insertionIndex, newStateLine);
 
@@ -223,15 +223,15 @@ namespace EditorWindow.FSMSystem.Utilities
                 // Read the content of the script file
                 var scriptContent = File.ReadAllText(scriptPath);
 
-                // Find the line where _dataObjects list is initialized
-                var dataObjectsIndex = scriptContent.IndexOf("_dataObjects = new List<StateScriptData>()", StringComparison.Ordinal);
+                // Find the line where DataObjects list is initialized
+                var dataObjectsIndex = scriptContent.IndexOf("DataObjects = new List<StateScriptData>()", StringComparison.Ordinal);
 
                 if (dataObjectsIndex != -1)
                 {
                     // Construct the code for the new state
                     var newStateLine = "new " + stateName + "Data(), "; // Example: new YourNewStateData(),
 
-                    // Insert the new state code into the _dataObjects list initialization line
+                    // Insert the new state code into the DataObjects list initialization line
                     var insertionIndex = scriptContent.IndexOf("{", dataObjectsIndex, StringComparison.Ordinal) + 1;
                     scriptContent = scriptContent.Insert(insertionIndex, newStateLine);
 
@@ -255,15 +255,15 @@ namespace EditorWindow.FSMSystem.Utilities
                 // Read the content of the script file
                 var scriptContent = File.ReadAllText(scriptPath);
 
-                // Find the line where _dataObjects list is initialized
-                var dataObjectsIndex = scriptContent.IndexOf("_dataObjects = new List<StateScriptData>()", StringComparison.Ordinal);
+                // Find the line where DataObjects list is initialized
+                var dataObjectsIndex = scriptContent.IndexOf("DataObjects = new List<StateScriptData>()", StringComparison.Ordinal);
 
                 if (dataObjectsIndex != -1)
                 {
                     // Construct the code for the new state
                     var newStateLine = "new " + stateName + "Data(), "; // Example: new YourNewStateData(),
 
-                    // Insert the new state code into the _dataObjects list initialization line
+                    // Insert the new state code into the DataObjects list initialization line
                     var insertionIndex = scriptContent.IndexOf("{", dataObjectsIndex, StringComparison.Ordinal) + 1;
                     scriptContent = scriptContent.Insert(insertionIndex, newStateLine);
 

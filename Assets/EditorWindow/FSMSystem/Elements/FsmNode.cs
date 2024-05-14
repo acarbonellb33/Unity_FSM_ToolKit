@@ -21,6 +21,7 @@ namespace EditorWindow.FSMSystem.Elements
         public List<FsmConnectionSaveData> Choices { get; set; }
         public FsmNodeType NodeType { get; set; }
         private FsmGraphView _graphView;
+        protected List<StateScriptData> DataObjects;
         public StateScriptData StateScript { get; set; }
         private Label _stateNameField;
         protected Port InputPort, OutputPort;
@@ -108,11 +109,11 @@ namespace EditorWindow.FSMSystem.Elements
 
         #endregion
 
+        #region Utilities
         private void AddManipulators()
         {
             this.AddManipulator(CreateNodeContectualMenu());
         }
-
         private IManipulator CreateNodeContectualMenu()
         {
             ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
@@ -122,13 +123,47 @@ namespace EditorWindow.FSMSystem.Elements
 
             return contextualMenuManipulator;
         }
-
         public virtual void SetStateName(string stateName)
         {
             StateName = stateName;
             _stateNameField.text = stateName;
         }
+        protected void GetScriptableObject()
+        {
+            try
+            {
+                StateScript.GetStateName();
+            }
+            catch (NullReferenceException)
+            {
+                foreach (StateScriptData enemyState in DataObjects)
+                {
+                    if (enemyState.GetStateName() == StateName)
+                    {
+                        StateScript = enemyState;
+                    }
+                }
+            }
+        }
+        protected string UpdateNameStyle(string newName)
+        {
+            var fullName = Regex.Split(newName, @"(?=[A-Z])");
+            var resultString = "";
 
+            for (int i = 0; i < fullName.Length; i++)
+            {
+                if (i == 0)
+                {
+                    resultString = char.ToUpper(fullName[i][0]) + fullName[i].Substring(1);
+                }
+                else
+                {
+                    resultString += " " + fullName[i];
+                }
+            }
+
+            return resultString;
+        }
         public void SetPortColor(Color color, Direction direction)
         {
             if (direction == Direction.Input)
@@ -140,6 +175,7 @@ namespace EditorWindow.FSMSystem.Elements
                 OutputPort.portColor = color;
             }
         }
+        #endregion
 
         #region Animator Methods
         protected void ShowAnimatorParameterDropdown(Toggle toggle)
@@ -158,86 +194,8 @@ namespace EditorWindow.FSMSystem.Elements
             
             var animatorParameters = GetAllAnimatorParameters();
             animatorParameters.Insert(0, "");
-            
-            var dropdown = new DropdownField("Select Parameter", animatorParameters, 0);
-            dropdown.RegisterValueChangedCallback(evt =>
-            {
-                var selectedParameter = evt.newValue;
-                var parameterType = GetParameterType(selectedParameter);
-
-                if (HasAnimatorTrigger)
-                {
-                    container.RemoveAt(1);
-                }
-
-                if (parameterType == "Float")
-                {
-                    var floatField = new FloatField()
-                    {
-                        label = selectedParameter
-                    };
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
-                    _animatorValue = floatField.value.ToString(CultureInfo.InvariantCulture);
-                    floatField.AddToClassList("fsm-node_state-attribute-field");
-                    floatField.RegisterCallback<ChangeEvent<float>>(e => { _animatorValue = e.newValue.ToString(CultureInfo.InvariantCulture);});
-                    container.Insert(1, floatField);
-                }
-                else if (parameterType == "Integer")
-                {
-                    var integerField = new IntegerField()
-                    {
-                        label = selectedParameter
-                    };
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
-                    _animatorValue = integerField.value.ToString();
-                    integerField.AddToClassList("fsm-node_textfield");
-                    integerField.RegisterCallback<ChangeEvent<int>>(e => { _animatorValue = e.newValue.ToString(); });
-                    container.Insert(1, integerField);
-                }
-                else if (parameterType == "Bool")
-                {
-                    var toggleField = new Toggle()
-                    {
-                        label = selectedParameter
-                    };
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
-                    _animatorValue = toggleField.value.ToString();
-                    toggleField.AddToClassList("fsm-node_toggle");
-                    toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                    container.Insert(1, toggleField);
-                }
-                else if (parameterType == "Trigger")
-                {
-                    var toggleField = new Toggle()
-                    {
-                        label = selectedParameter
-                    };
-                    _animatorParameter = selectedParameter;
-                    _parameterType = parameterType;
-                    _animatorValue = toggleField.value.ToString();
-                    toggleField.AddToClassList("fsm-node_toggle");
-                    toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                    container.Insert(1, toggleField);
-                }
-                HasAnimatorTrigger = true;
-            });
-            dropdown.AddToClassList("fsm-node_animator-dropdown");
-            
-            container.Add(dropdown);
-            extensionContainer.Insert(3, container);
-
-            RefreshExpandedState();
-        }
-        protected void AddDropdownFields()
-        {
-            var container = new VisualElement();
-            
-            var animatorParameters = GetAllAnimatorParameters();
-
-            var dropdown = new DropdownField("Select Parameter", animatorParameters, _animatorParameter);
+            var defaultIndex = _animatorParameter == null ? "" : _animatorParameter;
+            var dropdown = new DropdownField("Select Parameter", animatorParameters, defaultIndex);
             dropdown.AddToClassList("fsm-node_animator-dropdown");
             container.Add(dropdown);
             
@@ -291,10 +249,7 @@ namespace EditorWindow.FSMSystem.Elements
                 var selectedParameter = evt.newValue;
                 var parameterType = GetParameterType(selectedParameter);
 
-                if (HasAnimatorTrigger)
-                {
-                    container.RemoveAt(1);
-                }
+                if(container.childCount > 1) container.RemoveAt(1);
 
                 if (parameterType == "Float")
                 {
@@ -412,7 +367,6 @@ namespace EditorWindow.FSMSystem.Elements
             _parameterType = animatorSaveData.ParameterType;
             _animatorValue = animatorSaveData.Value;
         }
-
         #endregion
         
         #region Hit State Override Methods
@@ -494,11 +448,6 @@ namespace EditorWindow.FSMSystem.Elements
             HasHitStateOverride = true;
 
             RefreshExpandedState();
-        }
-
-        protected void AddHitStateOverrideFields()
-        {
-            
         }
         public FsmHitNodeSaveData GetHitNodeSaveData()
         {

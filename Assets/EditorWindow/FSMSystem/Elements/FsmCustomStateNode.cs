@@ -15,6 +15,7 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Enumerations;
     using FSM.Nodes.States.StatesData;
     using FSM.Utilities;
+    using FSM.Nodes.States;
     public class FsmCustomStateNode : FsmNode
     {
         //Custom State Attributes
@@ -28,6 +29,8 @@ namespace EditorWindow.FSMSystem.Elements
         {
             base.Initialize(nodeName, fsmGraphView, vectorPos);
             NodeType = FsmNodeType.CustomState;
+            
+            DataObjects = new List<StateScriptData> {new CustomData()};
 
             var connectionSaveData = new FsmConnectionSaveData()
             {
@@ -74,7 +77,7 @@ namespace EditorWindow.FSMSystem.Elements
             CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
             extensionContainer.Add(showPopupToggle);
-            if (showPopupToggle.value) AddDropdownFields();
+            if (showPopupToggle.value) ShowAnimatorParameterDropdown(showPopupToggle);
             extensionContainer.Add(customDataContainer);
 
             mainContainer.style.backgroundColor = new Color(200f / 255f, 250f / 255f, 100f / 255f);
@@ -132,7 +135,6 @@ namespace EditorWindow.FSMSystem.Elements
         #endregion
 
         #region ScriptableObject Attributes
-
         private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
         {
 
@@ -214,39 +216,6 @@ namespace EditorWindow.FSMSystem.Elements
 
             customDataContainer.Add(stateAttributeContainer);
         }
-
-        private void GetScriptableObject()
-        {
-            try
-            {
-                StateScript.GetStateName();
-            }
-            catch (NullReferenceException)
-            {
-                StateScript = new CustomData();
-            }
-        }
-
-        private string UpdateNameStyle(string newName)
-        {
-            var fullName = Regex.Split(newName, @"(?=[A-Z])");
-            var resultString = "";
-
-            for (var i = 0; i < fullName.Length; i++)
-            {
-                if (i == 0)
-                {
-                    resultString = char.ToUpper(fullName[i][0]) + fullName[i].Substring(1);
-                }
-                else
-                {
-                    resultString += " " + fullName[i];
-                }
-            }
-
-            return resultString;
-        }
-
         #endregion
     }
 }

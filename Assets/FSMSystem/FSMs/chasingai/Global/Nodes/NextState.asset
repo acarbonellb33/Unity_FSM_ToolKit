@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <NodeName>k__BackingField: NextState
   <Connections>k__BackingField:
-  - <Text>k__BackingField: Next Action
-    <NextNode>k__BackingField: {fileID: 11400000, guid: 857113bc5957d47438f3e8bbd364c295, type: 2}
+  - <Text>k__BackingField: Extension 1
+    <NextNode>k__BackingField: {fileID: 11400000, guid: 9ad2df6acc978534c82265e6aa86a2b7, type: 2}
   <NodeType>k__BackingField: 1
   <DataObject>k__BackingField: '{}'

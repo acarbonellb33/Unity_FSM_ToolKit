@@ -22,12 +22,17 @@ MonoBehaviour:
     - <Text>k__BackingField: Next Action
       <NodeId>k__BackingField: d2f9f19f-4346-40e0-a097-7d45d39f4e85
     <NodeType>k__BackingField: 1
-    <Position>k__BackingField: {x: 212, y: 427}
+    <Position>k__BackingField: {x: 214, y: 528}
     <AnimatorSaveData>k__BackingField:
       <TriggerEnable>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
     <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"distanceFromPlayer\":
       10.0\n}"
   - <Id>k__BackingField: 557bae7a-fcb6-483f-aa09-75f5a91af399
@@ -43,22 +48,12 @@ MonoBehaviour:
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
     <DataObject>k__BackingField: 
-  - <Id>k__BackingField: d2f9f19f-4346-40e0-a097-7d45d39f4e85
-    <Name>k__BackingField: Chase
-    <Text>k__BackingField: 
-    <Connections>k__BackingField:
-    - <Text>k__BackingField: Condition
-      <NodeId>k__BackingField: 2d74da6d-8566-4cc2-a53c-c1e52eb11e3a
-    <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 268, y: 142}
-    <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
-      <ParameterName>k__BackingField: 
-      <ParameterType>k__BackingField: 
-      <Value>k__BackingField: 
-    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
-      10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"
   - <Id>k__BackingField: f01143e2-bb71-42e7-b213-9b7e846ba34e
     <Name>k__BackingField: Search
     <Text>k__BackingField: 
@@ -69,9 +64,14 @@ MonoBehaviour:
     <Position>k__BackingField: {x: 732, y: 395}
     <AnimatorSaveData>k__BackingField:
       <TriggerEnable>k__BackingField: 0
-      <ParameterName>k__BackingField: 
-      <ParameterType>k__BackingField: 
-      <Value>k__BackingField: 
+      <ParameterName>k__BackingField: FreeFall
+      <ParameterType>k__BackingField: Bool
+      <Value>k__BackingField: False
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 1
+      <CanGetHit>k__BackingField: 1
+      <TimeToWait>k__BackingField: 4
+      <CanDie>k__BackingField: 1
     <DataObject>k__BackingField: "{\n    \"exploreRadius\": 10.0\n}"
   - <Id>k__BackingField: 2d74da6d-8566-4cc2-a53c-c1e52eb11e3a
     <Name>k__BackingField: NextState
@@ -86,15 +86,40 @@ MonoBehaviour:
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
     <DataObject>k__BackingField: '{}'
+  - <Id>k__BackingField: d2f9f19f-4346-40e0-a097-7d45d39f4e85
+    <Name>k__BackingField: Chase
+    <Text>k__BackingField: 
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 2d74da6d-8566-4cc2-a53c-c1e52eb11e3a
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 288, y: 65}
+    <AnimatorSaveData>k__BackingField:
+      <TriggerEnable>k__BackingField: 1
+      <ParameterName>k__BackingField: MotionSpeed
+      <ParameterType>k__BackingField: Float
+      <Value>k__BackingField: 5
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 1
+      <CanGetHit>k__BackingField: 1
+      <TimeToWait>k__BackingField: 10
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
+      10.0,\n    \"chaseCooldown\": 2.0,\n    \"canChase\": true\n}"
   <OldUngroupedNames>k__BackingField:
   - Distance
   - Initial State
-  - Chase
   - Search
   - NextState
+  - Chase
   <GameObject>k__BackingField: Enemy
   <HitData>k__BackingField:
-    <HitEnable>k__BackingField: 0
-    <TimeToWait>k__BackingField: 0
+    <HitEnable>k__BackingField: 1
+    <TimeToWait>k__BackingField: 8
     <CanDie>k__BackingField: 0

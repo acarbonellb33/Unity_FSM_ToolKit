@@ -57,25 +57,41 @@ namespace EditorWindow.FSMSystem.Elements
                 outputContainer.AddToClassList("fsm-node_input-output-container");
             }
 
-            var showPopupToggle = new Toggle()
+            var animatorPopupToggle = new Toggle()
             {
-                label = "Enable Animator Trigger",
+                label = "Animator Trigger",
                 value = HasAnimatorTrigger,
             };
-            showPopupToggle.RegisterValueChangedCallback(_ => { ShowAnimatorParameterDropdown(showPopupToggle); });
-            showPopupToggle.AddToClassList("fsm-node_toggle");
+            animatorPopupToggle.RegisterValueChangedCallback(_ => { ShowAnimatorParameterDropdown(animatorPopupToggle); });
+            animatorPopupToggle.AddToClassList("fsm-node_toggle-bold");
 
+            var hitPopupToggle = new Toggle()
+            {
+                label = "Override Hit State",
+                value = HasHitStateOverride,
+            };
+            hitPopupToggle.RegisterValueChangedCallback(_ => { ShowHitStateOverrideToggle(hitPopupToggle); });
+            hitPopupToggle.AddToClassList("fsm-node_toggle-bold");
+            
+            var horizontalLine = new VisualElement();
+            horizontalLine.AddToClassList("horizontal-line");
+            
+            var horizontalLine2 = new VisualElement();
+            horizontalLine2.AddToClassList("horizontal-line");
 
             var customDataContainer = new VisualElement();
-            //customDataContainer.AddToClassList("fsm-node_custom-data-container");
 
             GetScriptableObject();
 
             CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
-            extensionContainer.Add(showPopupToggle);
-            if (showPopupToggle.value) AddDropdownFields();
             extensionContainer.Add(customDataContainer);
+            extensionContainer.Add(horizontalLine);
+            extensionContainer.Add(animatorPopupToggle);
+            extensionContainer.Add(horizontalLine2);
+            if (animatorPopupToggle.value) AddDropdownFields();
+            extensionContainer.Add(hitPopupToggle);
+            if (hitPopupToggle.value) ShowHitStateOverrideToggle(hitPopupToggle);
 
             mainContainer.style.backgroundColor = new Color(200f / 255f, 250f / 255f, 100f / 255f);
 
@@ -88,6 +104,11 @@ namespace EditorWindow.FSMSystem.Elements
         {
 
             var stateAttributeContainer = new VisualElement();
+            
+            var stateAttributeLabel = FsmElementUtility.CreateLabel("State Attributes Fields");
+            stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
+            stateAttributeContainer.Add(stateAttributeLabel);
+            
             stateAttributeContainer.AddToClassList("fsm-node_state-attribute-container");
 
             foreach (var attribute in attributes)

@@ -30,6 +30,12 @@ namespace EditorWindow.FSMSystem.Elements
         private string _animatorParameter;
         private string _parameterType;
         private string _animatorValue;
+        
+        //Hit State Override
+        protected bool HasHitStateOverride;
+        private bool _canGetHit;
+        private float _timeToWait;
+        private bool _canDie;
 
         public virtual void Initialize(string nodeName, FsmGraphView graphView, Vector2 vectorPos)
         {
@@ -142,15 +148,16 @@ namespace EditorWindow.FSMSystem.Elements
             {
                 if (HasAnimatorTrigger)
                 {
-                    extensionContainer.RemoveAt(2);
                     HasAnimatorTrigger = false;
                 }
-
-                extensionContainer.RemoveAt(1);
+                extensionContainer.RemoveAt(3);
                 return;
             }
             
+            var container = new VisualElement();
+            
             var animatorParameters = GetAllAnimatorParameters();
+            animatorParameters.Insert(0, "");
             
             var dropdown = new DropdownField("Select Parameter", animatorParameters, 0);
             dropdown.RegisterValueChangedCallback(evt =>
@@ -160,7 +167,7 @@ namespace EditorWindow.FSMSystem.Elements
 
                 if (HasAnimatorTrigger)
                 {
-                    extensionContainer.RemoveAt(2);
+                    container.RemoveAt(1);
                 }
 
                 if (parameterType == "Float")
@@ -172,9 +179,9 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorParameter = selectedParameter;
                     _parameterType = parameterType;
                     _animatorValue = floatField.value.ToString(CultureInfo.InvariantCulture);
-                    floatField.AddToClassList("fsm-node_textfield");
+                    floatField.AddToClassList("fsm-node_state-attribute-field");
                     floatField.RegisterCallback<ChangeEvent<float>>(e => { _animatorValue = e.newValue.ToString(CultureInfo.InvariantCulture);});
-                    extensionContainer.Insert(2, floatField);
+                    container.Insert(1, floatField);
                 }
                 else if (parameterType == "Integer")
                 {
@@ -187,7 +194,7 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorValue = integerField.value.ToString();
                     integerField.AddToClassList("fsm-node_textfield");
                     integerField.RegisterCallback<ChangeEvent<int>>(e => { _animatorValue = e.newValue.ToString(); });
-                    extensionContainer.Insert(2, integerField);
+                    container.Insert(1, integerField);
                 }
                 else if (parameterType == "Bool")
                 {
@@ -200,7 +207,7 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorValue = toggleField.value.ToString();
                     toggleField.AddToClassList("fsm-node_toggle");
                     toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                    extensionContainer.Insert(2, toggleField);
+                    container.Insert(1, toggleField);
                 }
                 else if (parameterType == "Trigger")
                 {
@@ -213,21 +220,27 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorValue = toggleField.value.ToString();
                     toggleField.AddToClassList("fsm-node_toggle");
                     toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                    extensionContainer.Insert(2, toggleField);
+                    container.Insert(1, toggleField);
                 }
-
                 HasAnimatorTrigger = true;
             });
-            extensionContainer.Insert(1, dropdown);
+            dropdown.AddToClassList("fsm-node_animator-dropdown");
+            
+            container.Add(dropdown);
+            extensionContainer.Insert(3, container);
 
             RefreshExpandedState();
         }
         protected void AddDropdownFields()
         {
+            var container = new VisualElement();
+            
             var animatorParameters = GetAllAnimatorParameters();
 
             var dropdown = new DropdownField("Select Parameter", animatorParameters, _animatorParameter);
-
+            dropdown.AddToClassList("fsm-node_animator-dropdown");
+            container.Add(dropdown);
+            
             if (_parameterType == "Float")
             {
                 var floatField = new FloatField()
@@ -235,9 +248,9 @@ namespace EditorWindow.FSMSystem.Elements
                     label = dropdown.value,
                     value = float.Parse(_animatorValue)
                 };
-                floatField.AddToClassList("fsm-node_textfield");
+                floatField.AddToClassList("fsm-node_state-attribute-field");
                 floatField.RegisterCallback<ChangeEvent<float>>(e => { _animatorValue = e.newValue.ToString(CultureInfo.InvariantCulture); });
-                extensionContainer.Insert(1, floatField);
+                container.Add(floatField);
             }
             else if (_parameterType == "Integer")
             {
@@ -246,9 +259,9 @@ namespace EditorWindow.FSMSystem.Elements
                     label = dropdown.value,
                     value = int.Parse(_animatorValue)
                 };
-                integerField.AddToClassList("fsm-node_textfield");
+                integerField.AddToClassList("fsm-node_state-attribute-field");
                 integerField.RegisterCallback<ChangeEvent<int>>(e => { _animatorValue = e.newValue.ToString(); });
-                extensionContainer.Insert(1, integerField);
+                container.Add(integerField);
             }
             else if (_parameterType == "Bool")
             {
@@ -257,9 +270,9 @@ namespace EditorWindow.FSMSystem.Elements
                     label = dropdown.value,
                     value = bool.Parse(_animatorValue)
                 };
-                toggleField.AddToClassList("fsm-node_toggle");
+                toggleField.AddToClassList("fsm-node_state-attribute-field");
                 toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                extensionContainer.Insert(1, toggleField);
+                container.Add(toggleField);
             }
             else if (_parameterType == "Trigger")
             {
@@ -268,9 +281,9 @@ namespace EditorWindow.FSMSystem.Elements
                     label = dropdown.value,
                     value = bool.Parse(_animatorValue)
                 };
-                toggleField.AddToClassList("fsm-node_toggle");
+                toggleField.AddToClassList("fsm-node_state-attribute-field");
                 toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                extensionContainer.Insert(1, toggleField);
+                container.Add(toggleField);
             }
 
             dropdown.RegisterValueChangedCallback(evt =>
@@ -280,7 +293,7 @@ namespace EditorWindow.FSMSystem.Elements
 
                 if (HasAnimatorTrigger)
                 {
-                    extensionContainer.RemoveAt(2);
+                    container.RemoveAt(1);
                 }
 
                 if (parameterType == "Float")
@@ -292,9 +305,9 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorParameter = selectedParameter;
                     _parameterType = parameterType;
                     _animatorValue = floatField.value.ToString(CultureInfo.InvariantCulture);
-                    floatField.AddToClassList("fsm-node_textfield");
+                    floatField.AddToClassList("fsm-node_state-attribute-field");
                     floatField.RegisterCallback<ChangeEvent<float>>(e => { _animatorValue = e.newValue.ToString(CultureInfo.InvariantCulture);});
-                    extensionContainer.Insert(2, floatField);
+                    container.Insert(1, floatField);
                 }
                 else if (parameterType == "Integer")
                 {
@@ -305,9 +318,9 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorParameter = selectedParameter;
                     _parameterType = parameterType;
                     _animatorValue = integerField.value.ToString();
-                    integerField.AddToClassList("fsm-node_textfield");
+                    integerField.AddToClassList("fsm-node_state-attribute-field");
                     integerField.RegisterCallback<ChangeEvent<int>>(e => { _animatorValue = e.newValue.ToString(); });
-                    extensionContainer.Insert(2, integerField);
+                    container.Insert(1, integerField);
                 }
                 else if (parameterType == "Bool")
                 {
@@ -318,9 +331,9 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorParameter = selectedParameter;
                     _parameterType = parameterType;
                     _animatorValue = toggleField.value.ToString();
-                    toggleField.AddToClassList("fsm-node_toggle");
+                    toggleField.AddToClassList("fsm-node_state-attribute-field");
                     toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                    extensionContainer.Insert(2, toggleField);
+                    container.Insert(1, toggleField);
                 }
                 else if (parameterType == "Trigger")
                 {
@@ -331,15 +344,15 @@ namespace EditorWindow.FSMSystem.Elements
                     _animatorParameter = selectedParameter;
                     _parameterType = parameterType;
                     _animatorValue = toggleField.value.ToString();
-                    toggleField.AddToClassList("fsm-node_toggle");
-                    toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                    extensionContainer.Insert(2, toggleField);
+                    toggleField.AddToClassList("fsm-node_state-attribute-field");
+                    toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString();});
+                    container.Insert(1, toggleField);
                 }
-
                 HasAnimatorTrigger = true;
             });
 
-            extensionContainer.Insert(1, dropdown);
+            container.Insert(0, dropdown);
+            extensionContainer.Insert(3, container);
 
             RefreshExpandedState();
         }
@@ -400,6 +413,106 @@ namespace EditorWindow.FSMSystem.Elements
             _animatorValue = animatorSaveData.Value;
         }
 
+        #endregion
+        
+        #region Hit State Override Methods
+        private bool _secondIteration;
+        protected void ShowHitStateOverrideToggle(Toggle toggle)
+        {
+            if (!_secondIteration)
+            {
+                if(!EditorPrefs.GetBool("EnableHitState"))
+                {
+                    EditorUtility.DisplayDialog(
+                        $"Can Get Hit is not Enabled!",
+                        "To be able to override the hit state, you have to enable it.",
+                        "Continue"
+                    );
+                    toggle.value = false;
+                    _secondIteration = true;
+                    return;
+                }
+            }
+            if(_secondIteration && !toggle.value)
+            {
+                _secondIteration = false;
+                return;
+            }
+            
+            if (!toggle.value)
+            {
+                if (HasHitStateOverride)
+                {
+                    HasHitStateOverride = false;
+                }
+
+                extensionContainer.RemoveAt(extensionContainer.childCount - 1);
+                return;
+            }
+            
+            var visualElement = new VisualElement();
+            
+            var canGetHitToggle = new Toggle
+            {
+                label = "Can Get Hit",
+                value = _canGetHit
+            };
+            canGetHitToggle.AddToClassList("fsm-node_state-attribute-field");
+            canGetHitToggle.RegisterValueChangedCallback(e =>
+            {
+                _canGetHit = e.newValue;
+            });
+            
+            var timeToWaitField = new FloatField
+            {
+                label = "Time to Wait:",
+                value = _timeToWait
+            };
+            timeToWaitField.AddToClassList("fsm-node_state-attribute-field");
+            timeToWaitField.RegisterCallback<ChangeEvent<float>>(e =>
+            {
+                _timeToWait = e.newValue;
+            });
+            
+            var canDieToggle = new Toggle
+            {
+                label ="Can Die",
+                value = _canDie
+            };
+            canDieToggle.AddToClassList("fsm-node_state-attribute-field");
+            canDieToggle.RegisterValueChangedCallback(e =>
+            {
+                _canDie = e.newValue;
+            });
+            
+            visualElement.Add(canGetHitToggle);
+            visualElement.Add(timeToWaitField);
+            visualElement.Add(canDieToggle);
+
+            extensionContainer.Add(visualElement);
+            
+            HasHitStateOverride = true;
+
+            RefreshExpandedState();
+        }
+
+        protected void AddHitStateOverrideFields()
+        {
+            
+        }
+        public FsmHitNodeSaveData GetHitNodeSaveData()
+        {
+            var hitNodeSaveData = new FsmHitNodeSaveData();
+            hitNodeSaveData.Initialize(HasHitStateOverride, _canGetHit, _timeToWait, _canDie);
+            return hitNodeSaveData;
+        }
+        public void SetHitNodeSaveData(FsmHitNodeSaveData animatorSaveData)
+        {
+            HasHitStateOverride = animatorSaveData.HasHitOverride;
+            _canGetHit = animatorSaveData.CanGetHit;
+            _timeToWait = animatorSaveData.TimeToWait;
+            _canDie = animatorSaveData.CanDie;
+        }
         #endregion
     }
 }

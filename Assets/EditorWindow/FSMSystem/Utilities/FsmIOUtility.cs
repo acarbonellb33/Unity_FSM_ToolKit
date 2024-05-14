@@ -115,6 +115,7 @@ namespace EditorWindow.FSMSystem.Utilities
                 NodeType = node.NodeType,
                 Position = node.GetPosition().position,
                 AnimatorSaveData = node.GetAnimatorSaveData(),
+                HitNodeSaveData = node.GetHitNodeSaveData(),
                 DataObject = _stateDataObject,
             };
             graphSaveData.Nodes.Add(nodeSaveData);
@@ -209,6 +210,7 @@ namespace EditorWindow.FSMSystem.Utilities
                 if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
                 {
                     node.SetAnimatorSaveData(nodeData.AnimatorSaveData);
+                    node.SetHitNodeSaveData(nodeData.HitNodeSaveData);
                 }
 
                 node.Draw();
@@ -228,9 +230,10 @@ namespace EditorWindow.FSMSystem.Utilities
                 Choices = connections,
                 NodeType = nodeData.NodeType
             };
-            if (node.NodeType == FsmNodeType.State)
+            if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
             {
                 node.SetAnimatorSaveData(nodeData.AnimatorSaveData);
+                node.SetHitNodeSaveData(nodeData.HitNodeSaveData);
             }
 
             node.StateScript = LoadFromJson(node, nodeData.Name,

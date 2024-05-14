@@ -38,7 +38,7 @@ namespace EditorWindow.FSMSystem.Windows
 
             // Toggle for "Enable Hit State"
             _enableHitState =
-                EditorGUI.Toggle(new Rect(10, 40, rect.width - 20, 20), "Enable Hit State", _enableHitState);
+                EditorGUI.Toggle(new Rect(10, 40, rect.width - 20, 20), "Can get Hit", _enableHitState);
 
             // FloatField for "Time to Wait"
             _timeToWait = EditorGUI.FloatField(new Rect(10, 70, rect.width - 20, 20), "Time to Wait:", _timeToWait);

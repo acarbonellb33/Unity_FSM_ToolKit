@@ -83,9 +83,13 @@ namespace EditorWindow.FSMSystem.Utilities
 
             if (saveData.HitData.HitEnable)
             {
-                scriptContent += $"\t\tfloat waitHitTime = {saveData.HitData.TimeToWait}f;\n";
-                scriptContent += "\t\tfloat hitLastTime = 0f;\n";
+                scriptContent += $"\t\tprivate float _waitHitTime = {saveData.HitData.TimeToWait}f;\n";
+                scriptContent += "\t\tprivate float _hitLastTime = 0f;\n";
+                scriptContent += $"\t\tprivate bool _canGetHit = true;\n";
+                scriptContent += $"\t\tprivate bool _canDie = {saveData.HitData.CanDie.ToString().ToLower()};\n\n";
             }
+            
+            scriptContent += "\t\tprivate FsmStates _previousState;\n";
 
             scriptContent += "\t\tprivate void Start()\n";
             scriptContent += "\t\t{\n";
@@ -114,27 +118,21 @@ namespace EditorWindow.FSMSystem.Utilities
                 scriptContent += "\t\t\t\tcase FsmStates.Hit:\n";
                 scriptContent += "\t\t\t\t\tUpdateHitState();\n";
                 scriptContent += "\t\t\t\t\tbreak;\n";
-                if (saveData.HitData.CanDie)
-                {
-                    scriptContent += "\t\t\t\tcase FsmStates.Die:\n";
-                    scriptContent += "\t\t\t\t\tUpdateDieState();\n";
-                    scriptContent += "\t\t\t\t\tbreak;\n";
-                }
-
+                scriptContent += "\t\t\t\tcase FsmStates.Die:\n";
+                scriptContent += "\t\t\t\t\tUpdateDieState();\n";
+                scriptContent += "\t\t\t\t\tbreak;\n";
                 scriptContent += "\t\t\t}\n";
                 scriptContent += "\t\t\tEnemyHealthSystem healthSystem = GetComponent<EnemyHealthSystem>();\n";
-                scriptContent += "\t\t\tif(healthSystem.GetCurrentHealth() < healthSystem.GetPreviousHealth())\n";
+                scriptContent += "\t\t\tif(_canGetHit && healthSystem.GetCurrentHealth() < healthSystem.GetPreviousHealth())\n";
                 scriptContent += "\t\t\t{\n";
                 scriptContent += "\t\t\t\tChangeHitState();\n";
+                scriptContent += "\t\t\t\t_hitLastTime = Time.time;\n";
                 scriptContent += "\t\t\t\thealthSystem.SetPreviousHealth(healthSystem.GetCurrentHealth());\n";
                 scriptContent += "\t\t\t}\n";
-                if (saveData.HitData.CanDie)
-                {
-                    scriptContent += "\t\t\tif(healthSystem.GetCurrentHealth() <= 0)\n";
-                    scriptContent += "\t\t\t{\n";
-                    scriptContent += "\t\t\t\tChangeDieState();\n";
-                    scriptContent += "\t\t\t}\n";
-                }
+                scriptContent += "\t\t\tif(_canDie && healthSystem.GetCurrentHealth() <= 0)\n";
+                scriptContent += "\t\t\t{\n";
+                scriptContent += "\t\t\t\tChangeDieState();\n";
+                scriptContent += "\t\t\t}\n";
             }
             else scriptContent += "\t\t\t}\n";
 
@@ -170,7 +168,18 @@ namespace EditorWindow.FSMSystem.Utilities
                                 break;
                         }
                     }
-
+                    if (saveData.HitData.HitEnable)
+                    {
+                        if (node.HitNodeSaveData.HasHitOverride)
+                        {
+                            scriptContent += $"\t\t\tSetHitData({node.HitNodeSaveData.CanGetHit.ToString().ToLower()}, {node.HitNodeSaveData.TimeToWait}f, {node.HitNodeSaveData.CanDie.ToString().ToLower()});\n";
+                        }
+                        else
+                        {
+                            scriptContent += $"\t\t\tSetHitData(true, {saveData.HitData.TimeToWait}f, {saveData.HitData.CanDie.ToString().ToLower()});\n";
+                        }
+                    }
+                    
                     string conditions = "";
 
                     FsmNodeSaveData nodeSaveData = GetNodeData(GetState(node.Connections[0].NodeId));
@@ -187,19 +196,16 @@ namespace EditorWindow.FSMSystem.Utilities
                 scriptContent += "\t\t{\n";
                 scriptContent += "\t\t\tNavMeshAgent agent = GetComponent<NavMeshAgent>();\n";
                 scriptContent += "\t\t\tagent.isStopped = true;\n";
-                scriptContent += "\t\t\tif(Time.time >= hitLastTime + waitHitTime)\n";
+                scriptContent += "\t\t\tif(Time.time >= _hitLastTime + _waitHitTime)\n";
                 scriptContent += "\t\t\t{\n";
-                scriptContent += $"\t\t\t\tCurrentState = FsmStates.{saveData.InitialState};\n";
+                scriptContent += $"\t\t\t\tCurrentState = _previousState;\n";
                 scriptContent += "\t\t\t\tagent.isStopped = false;\n";
                 scriptContent += "\t\t\t}\n";
                 scriptContent += "\t\t}\n";
-                if (saveData.HitData.CanDie)
-                {
-                    scriptContent += $"\t\tpublic void UpdateDieState()\n";
-                    scriptContent += "\t\t{\n";
-                    scriptContent += "\t\t\tGetComponent<EnemyHealthSystem>().Die();\n";
-                    scriptContent += "\t\t}\n";
-                }
+                scriptContent += $"\t\tpublic void UpdateDieState()\n";
+                scriptContent += "\t\t{\n";
+                scriptContent += "\t\t\tGetComponent<EnemyHealthSystem>().Die();\n";
+                scriptContent += "\t\t}\n";
             }
 
 
@@ -210,6 +216,7 @@ namespace EditorWindow.FSMSystem.Utilities
                     scriptContent += $"\t\tprivate void Change{node.Name.Replace(" ", "")}State()\n";
                     scriptContent += "\t\t{\n";
                     scriptContent += $"\t\t\tCurrentState = FsmStates.{node.Name};\n";
+                    scriptContent += $"\t\t\t_previousState = CurrentState;\n";
                     scriptContent += "\t\t}\n";
                 }
             }
@@ -220,13 +227,10 @@ namespace EditorWindow.FSMSystem.Utilities
                 scriptContent += "\t\t{\n";
                 scriptContent += $"\t\t\tCurrentState = FsmStates.Hit;\n";
                 scriptContent += "\t\t}\n";
-                if (saveData.HitData.CanDie)
-                {
-                    scriptContent += $"\t\tprivate void ChangeDieState()\n";
-                    scriptContent += "\t\t{\n";
-                    scriptContent += $"\t\t\tCurrentState = FsmStates.Die;\n";
-                    scriptContent += "\t\t}\n";
-                }
+                scriptContent += $"\t\tprivate void ChangeDieState()\n";
+                scriptContent += "\t\t{\n";
+                scriptContent += $"\t\t\tCurrentState = FsmStates.Die;\n";
+                scriptContent += "\t\t}\n";
             }
 
             if (_hasPatrolState)
@@ -246,6 +250,13 @@ namespace EditorWindow.FSMSystem.Utilities
                 scriptContent += "\t\t\t}\n";
                 scriptContent += "\t\t}\n";
             }
+            
+            scriptContent += "\t\tprivate void SetHitData(bool canGetHit, float timeToWait, bool canDie)\n";
+            scriptContent += "\t\t{\n";
+            scriptContent += "\t\t\t_canGetHit = canGetHit;\n";
+            scriptContent += "\t\t\t_waitHitTime = timeToWait;\n";
+            scriptContent += "\t\t\t_canDie = canDie;\n";
+            scriptContent += "\t\t}\n";
 
             scriptContent += "\t\tprivate void OnFootstep() {}\n";
 

@@ -4194,7 +4194,7 @@ MonoBehaviour:
   - {fileID: 5866666021310896213}
   - {fileID: 5866666021310896212}
   - {fileID: 5866666021310896211}
-  selectedOptionIndex: 0
+  selectedOptionIndex: 1
   distance: {fileID: 5866666021310896214}
   chase: {fileID: 5866666021310896213}
   search: {fileID: 5866666021310896212}

@@ -260,23 +260,11 @@ namespace EditorWindow.FSMSystem.Windows
         {
             if(_shouldClose) return;
             // Prompt the user to save changes before closing
-            int option = EditorUtility.DisplayDialogComplex("Save Changes",
+            var option = EditorUtility.DisplayDialog("Save Changes",
                 "Do you want to save changes before closing?",
-                "Save", "Discard", "Cancel");
+                "Save", "Discard");
 
-            switch (option)
-            {
-                case 0: // Save
-                    Save();
-                    break;
-                case 1: // Discard
-                    // Don't save changes, just close the window
-                    break;
-                case 2: // Cancel
-                    // User canceled, don't close the window
-                    // To prevent closing, we simply don't call the base OnDestroy method
-                    return;
-            }
+            if (option) Save();
         }
 
         #region Utilities

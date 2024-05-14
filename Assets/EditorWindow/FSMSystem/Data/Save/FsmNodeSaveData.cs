@@ -14,6 +14,7 @@ namespace EditorWindow.FSMSystem.Data.Save
         [field: SerializeField] public FsmNodeType NodeType { get; set; }
         [field: SerializeField] public Vector2 Position { get; set; }
         [field: SerializeField] public FsmAnimatorSaveData AnimatorSaveData { get; set; }
+        [field: SerializeField] public FsmHitNodeSaveData HitNodeSaveData { get; set; }
         [field: SerializeField] public string DataObject { get; set; }
     }
 }

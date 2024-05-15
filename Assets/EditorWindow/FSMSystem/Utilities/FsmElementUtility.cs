@@ -1,6 +1,3 @@
-using DefaultNamespace;
-using UnityEditor.UIElements;
-
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Utilities
 {
@@ -9,6 +6,7 @@ namespace EditorWindow.FSMSystem.Utilities
     using Elements;
     using UnityEditor.Experimental.GraphView;
     using UnityEngine.UIElements;
+    using FSM.Utilities;
     public static class FsmElementUtility
     {
         public static TextField CreateTextField(string value = null, string label = null,

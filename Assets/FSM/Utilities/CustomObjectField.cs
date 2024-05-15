@@ -1,4 +1,4 @@
-﻿namespace DefaultNamespace
+﻿namespace FSM.Utilities
 {
     using UnityEngine;
     using UnityEditor.UIElements;

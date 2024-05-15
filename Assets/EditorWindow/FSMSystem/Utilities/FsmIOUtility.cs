@@ -158,9 +158,9 @@ namespace EditorWindow.FSMSystem.Utilities
         private static void UpdateOldUngroupedNodes(List<string> currentUngroupedNodeNames,
             FsmGraphSaveData graphSaveData)
         {
-            if (graphSaveData.OldUngroupedNames != null && graphSaveData.OldUngroupedNames.Count != 0)
+            if (graphSaveData.OldNodeNames != null && graphSaveData.OldNodeNames.Count != 0)
             {
-                List<string> nodesToRemove = graphSaveData.OldUngroupedNames.Except(currentUngroupedNodeNames).ToList();
+                List<string> nodesToRemove = graphSaveData.OldNodeNames.Except(currentUngroupedNodeNames).ToList();
 
                 foreach (string nodeToRemove in nodesToRemove)
                 {
@@ -168,7 +168,7 @@ namespace EditorWindow.FSMSystem.Utilities
                 }
             }
 
-            graphSaveData.OldUngroupedNames = new List<string>(currentUngroupedNodeNames);
+            graphSaveData.OldNodeNames = new List<string>(currentUngroupedNodeNames);
         }
 
         #endregion
@@ -492,7 +492,7 @@ namespace EditorWindow.FSMSystem.Utilities
 
         #region UtilityMethods
 
-        private static void CreateFolder(string path, string folderName)
+        public static void CreateFolder(string path, string folderName)
         {
             if (AssetDatabase.IsValidFolder($"{path}/{folderName}"))
             {

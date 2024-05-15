@@ -15,6 +15,7 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Enumerations;
     using FSM.Nodes.States;
     using FSM.Nodes.States.StatesData;
+    using FSM.Utilities;
     public class FsmTransitionNode : FsmNode
     {
         public override void Initialize(string nodeName, FsmGraphView graphView, Vector2 vectorPos)
@@ -55,7 +56,7 @@ namespace EditorWindow.FSMSystem.Elements
             var customDataContainer = new VisualElement();
 
             GetScriptableObject();
-
+            
             CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
             extensionContainer.Add(customDataContainer);
@@ -105,11 +106,12 @@ namespace EditorWindow.FSMSystem.Elements
                         {
                             label = UpdateNameStyle(result[0]),
                             objectType = typeof(GameObject),
-                            value = GameObject.Find(output)
+                            value = FsmIOUtility.FindGameObjectWithId<IDGenerator>(output)
                         };
                         objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newValue);
+                            StateScript.SetVariableValue(result[0], ((GameObject)evt.previousValue).GetComponent<IDGenerator>()
+                                .GetUniqueID());
                         });
                         objectField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(objectField);
@@ -205,11 +207,12 @@ namespace EditorWindow.FSMSystem.Elements
                         {
                             label = UpdateNameStyle(result[0]),
                             objectType = typeof(GameObject),
-                            value = GameObject.Find(output)
+                            value = FsmIOUtility.FindGameObjectWithId<IDGenerator>(output)
                         };
                         objectField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt =>
                         {
-                            StateScript.SetVariableValue(result[0], evt.newValue);
+                            StateScript.SetVariableValue(result[0], ((GameObject)evt.previousValue).GetComponent<IDGenerator>()
+                                .GetUniqueID());
                         });
                         objectField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(objectField);

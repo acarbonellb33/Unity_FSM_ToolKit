@@ -61,12 +61,10 @@ namespace EditorWindow.FSMSystem.Windows
             {
                 Port inputPort = edge.input;
                 Port outputPort = edge.output;
-
-                Vector2 newNodePosition = (inputPort.GetGlobalCenter() + outputPort.GetGlobalCenter()) / 2f;
-                Vector2 localNewNodePosition = this.contentViewContainer.WorldToLocal(newNodePosition);
-
-
-                FsmNode newNode = CreateNode("Extension", localNewNodePosition, FsmNodeType.Extension);
+                
+                Vector2 mousePosition = contentViewContainer.WorldToLocal(evt.mousePosition);
+                
+                FsmNode newNode = CreateNode("Extension", mousePosition, FsmNodeType.Extension);
                 FsmNode node = (FsmNode)outputPort.node;
 
                 FsmConnectionSaveData choiceData = new FsmConnectionSaveData();

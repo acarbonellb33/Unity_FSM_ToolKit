@@ -6,11 +6,14 @@ namespace FSM.Enemy
     public class EnemyHealthBar : MonoBehaviour
     {
         private Slider _slider;
-        [SerializeField] private Camera playerCamera;
-        [SerializeField] private Transform target;
+        private Camera _playerCamera;
+        private Transform _target;
 
         void Awake()
         {
+            var player = GameObject.FindWithTag("Player");
+            _playerCamera = player.GetComponentInChildren<Camera>();
+            _target = transform.parent;
             _slider = GetComponent<Slider>();
         }
 
@@ -21,8 +24,8 @@ namespace FSM.Enemy
 
         private void Update()
         {
-            transform.rotation = playerCamera.transform.rotation;
-            transform.position = target.position + new Vector3(0, 2, 0);
+            transform.rotation = _playerCamera.transform.rotation;
+            transform.position = _target.position + new Vector3(0, 2, 0);
         }
     }
 }

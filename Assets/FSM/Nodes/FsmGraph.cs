@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using FSM.Utilities;
+
+#if UNITY_EDITOR
 namespace FSM.Nodes
 {
     using System;

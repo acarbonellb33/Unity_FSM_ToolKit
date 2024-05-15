@@ -1,3 +1,6 @@
+using DefaultNamespace;
+using UnityEditor.UIElements;
+
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Utilities
 {
@@ -61,6 +64,24 @@ namespace EditorWindow.FSMSystem.Utilities
             textArea.multiline = true;
             return textArea;
         }
+        
+        public static CustomObjectField CreateObjectField<T>(string label = null, T value = null,
+            EventCallback<ChangeEvent<UnityEngine.Object>> onValueChanged = null) where T : UnityEngine.Object
+        {
+            CustomObjectField customObjectField = new CustomObjectField(label);
+            customObjectField.objectType = typeof(T);
+            customObjectField.value = value;
+            customObjectField.label = label;
+            customObjectField.allowSceneObjects = false;
+
+            if (onValueChanged != null)
+            {
+                customObjectField.RegisterValueChangedCallback(onValueChanged);
+            }
+
+            return customObjectField;
+        }
+
 
         public static Foldout CreateFoldout(string title, bool collapsed = false)
         {
@@ -80,6 +101,23 @@ namespace EditorWindow.FSMSystem.Utilities
             };
             return button;
         }
+        
+        public static Toggle CreateToggle(string label = null, bool value = false, 
+            EventCallback<ChangeEvent<bool>> onValueChanged = null)
+        {
+            Toggle toggle = new Toggle(label)
+            {
+                value = value
+            };
+
+            if (onValueChanged != null)
+            {
+                toggle.RegisterValueChangedCallback(onValueChanged);
+            }
+
+            return toggle;
+        }
+
 
         public static Port CreatePort(this FsmNode node, string portName = "",
             Orientation orientation = Orientation.Horizontal, Direction direction = Direction.Input,

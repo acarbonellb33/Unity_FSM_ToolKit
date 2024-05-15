@@ -16,6 +16,7 @@ namespace FSM.Utilities
             {
                 // Generate a unique ID using a combination of GameObject name and a random number
                 uniqueID = Guid.NewGuid().ToString();
+                hideFlags = HideFlags.HideInInspector;
             }
 
             return uniqueID;

@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Windows
 {
@@ -24,8 +26,6 @@ namespace EditorWindow.FSMSystem.Windows
         private static FsmHitStatePopup _hitStatePopup;
 
         public string initialState;
-        
-        private const string FsmInspectorKey = "FSMInspectorData";
 
         private bool _isCompiling;
         private bool _shouldClose;
@@ -38,8 +38,6 @@ namespace EditorWindow.FSMSystem.Windows
             _hitStatePopup.Initialize(saveData.HitData);
 
             OnHierarchyChanged();
-
-            EditorPrefs.SetString(FsmInspectorKey, FindGameObjectWithClass<FsmGraph>().ToString());
 
             if (_window == null)
             {
@@ -100,11 +98,7 @@ namespace EditorWindow.FSMSystem.Windows
 
         private void PerformActionAfterCompilation()
         {
-            string inspectorJson = EditorPrefs.GetString(FsmInspectorKey);
-            string pattern = @"\s*\([^)]*\)";
-            string result = Regex.Replace(inspectorJson, pattern, "");
-
-            GameObject gameObject = GameObject.Find(result);
+            var gameObject = Selection.activeGameObject;
 
             if (_shouldClose) Close();
             gameObject.GetComponent<FsmGraph>().UpdateComponentOfGameObject();
@@ -130,7 +124,6 @@ namespace EditorWindow.FSMSystem.Windows
                 // Add IDGenerator component if not present
                 IDGenerator generator = gameObject.AddComponent<IDGenerator>();
                 generator.GetUniqueID();
-                generator.hideFlags = HideFlags.HideInInspector;
             }
 
             // Recursively check child GameObjects
@@ -165,18 +158,6 @@ namespace EditorWindow.FSMSystem.Windows
             var clearButton = FsmElementUtility.CreateButton("Clear", Clear);
             _miniMapButton = FsmElementUtility.CreateButton("MiniMap", ToggleMiniMap);
 
-            var animatorField = new ObjectField
-            {
-                label = "Animator",
-                objectType = typeof(Animator)
-            };
-            animatorField.RegisterValueChangedCallback(_ =>
-            {
-                //_animator = evt.newValue as Animator;
-                // Handle changes to the animator here
-            });
-            animatorField.AddToClassList("fsm-toolbar__animator-field");
-
             Button hitStateButton = null;
             hitStateButton = FsmElementUtility.CreateButton("Hit State", () => OpenHitPopup(hitStateButton));
             hitStateButton.AddToClassList("Button--hit-state");
@@ -186,7 +167,6 @@ namespace EditorWindow.FSMSystem.Windows
             toolbar.Add(reloadButton);
             toolbar.Add(clearButton);
             toolbar.Add(_miniMapButton);
-            toolbar.Add(animatorField);
             toolbar.Add(hitStateButton);
 
 

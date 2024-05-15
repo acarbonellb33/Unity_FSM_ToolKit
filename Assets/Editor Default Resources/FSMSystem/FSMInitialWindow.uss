@@ -44,3 +44,16 @@ Button{
     cursor: pointer;
     align-self: center;
 }
+Button.selected {
+    background-color: #2a92bf;
+    color: #ffffff;
+}
+
+.customObjectField > .unity-label {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 3px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    font-size: 13px;
+}

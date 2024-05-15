@@ -7,7 +7,7 @@ namespace EditorWindow.FSMSystem.Data.Save
         [field: SerializeField] public string FileName { get; set; }
         [field: SerializeField] public string InitialState { get; set; }
         [field: SerializeField] public List<FsmNodeSaveData> Nodes { get; set; }
-        [field: SerializeField] public List<string> OldUngroupedNames { get; set; }
+        [field: SerializeField] public List<string> OldNodeNames { get; set; }
         [field: SerializeField] public string GameObject { get; set; }
         [field: SerializeField] public FsmHitSaveData HitData { get; set; }
 

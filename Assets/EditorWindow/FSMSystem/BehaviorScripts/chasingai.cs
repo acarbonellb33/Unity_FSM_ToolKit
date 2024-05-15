@@ -11,21 +11,25 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 	[Serializable]
 	public class chasingai : BehaviorScript
 	{
-		[Header("Distance")]
+		[Header("Distance 0")]
 		[SerializeField]
-		public DistanceConditionScript distance;
+		public DistanceConditionScript distance0;
 
 		[Header("Search")]
 		[SerializeField]
 		public SearchStateScript search;
 
-		[Header("NextState")]
-		[SerializeField]
-		public NextStateConditionScript nextState;
-
 		[Header("Chase")]
 		[SerializeField]
 		public ChaseStateScript chase;
+
+		[Header("Distance 1")]
+		[SerializeField]
+		public DistanceConditionScript distance1;
+
+		[Header("NextState")]
+		[SerializeField]
+		public NextStateConditionScript nextState;
 
 		private float _waitHitTime = 8f;
 		private float _hitLastTime = 0f;
@@ -71,7 +75,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 		{
 			search.Execute();
 			SetHitData(true, 4f, true);
-			if(distance.Condition())
+			if(distance0.Condition())
 			{
 				ChangeChaseState();
 			}
@@ -81,7 +85,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 			chase.Execute();
 			GetComponent<Animator>().SetBool("Grounded", true);
 			SetHitData(true, 10f, false);
-			if(nextState.Condition())
+			if(nextState.Condition() && distance1.Condition())
 			{
 				ChangeSearchState();
 			}

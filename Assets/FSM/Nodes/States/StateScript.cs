@@ -20,7 +20,7 @@ namespace FSM.Nodes.States
         protected NavMeshAgent Agent;
 
         // Called when the script instance is being loaded
-        private void Start()
+        private void Awake()
         {
             // Get the NavMeshAgent component attached to the same GameObject as this script
             Agent = GetComponent<NavMeshAgent>();

@@ -93,9 +93,7 @@ namespace EditorWindow.FSMSystem.Utilities
 
             scriptContent += "\t\tprivate void Start()\n";
             scriptContent += "\t\t{\n";
-            scriptContent += $"\t\t\tCurrentState = FsmStates.{saveData.InitialState};\n";
-            scriptContent +=
-                "\t\t\tGetComponent<Animator>().SetFloat(\"Speed\", GetComponent<NavMeshAgent>().speed);\n";
+            scriptContent += $"\t\t\tChange{saveData.InitialState}State();\n";
             scriptContent += "\t\t}\n";
 
             scriptContent += "\t\tvoid Update()\n";
@@ -146,28 +144,6 @@ namespace EditorWindow.FSMSystem.Utilities
                     scriptContent += "\t\t{\n";
                     scriptContent +=
                         $"\t\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.Execute();\n";
-                    if (node.AnimatorSaveData.TriggerEnable)
-                    {
-                        switch (node.AnimatorSaveData.ParameterType)
-                        {
-                            case "Float":
-                                scriptContent +=
-                                    $"\t\t\tGetComponent<Animator>().SetFloat(\"{node.AnimatorSaveData.ParameterName}\", {node.AnimatorSaveData.Value});\n";
-                                break;
-                            case "Int":
-                                scriptContent +=
-                                    $"\t\t\tGetComponent<Animator>().SetInteger(\"{node.AnimatorSaveData.ParameterName}\", {node.AnimatorSaveData.Value});\n";
-                                break;
-                            case "Bool":
-                                scriptContent +=
-                                    $"\t\t\tGetComponent<Animator>().SetBool(\"{node.AnimatorSaveData.ParameterName}\", {char.ToLowerInvariant(node.AnimatorSaveData.Value[0]) + node.AnimatorSaveData.Value.Substring(1)});\n";
-                                break;
-                            case "Trigger":
-                                scriptContent +=
-                                    $"\t\t\tGetComponent<Animator>().SetTrigger(\"{node.AnimatorSaveData.ParameterName}\");\n";
-                                break;
-                        }
-                    }
                     if (saveData.HitData.HitEnable)
                     {
                         if (node.HitNodeSaveData.HasHitOverride)
@@ -217,6 +193,28 @@ namespace EditorWindow.FSMSystem.Utilities
                     scriptContent += "\t\t{\n";
                     scriptContent += $"\t\t\tCurrentState = FsmStates.{node.Name};\n";
                     scriptContent += $"\t\t\t_previousState = CurrentState;\n";
+                    if (node.AnimatorSaveData.TriggerEnable)
+                    {
+                        switch (node.AnimatorSaveData.ParameterType)
+                        {
+                            case "Float":
+                                scriptContent +=
+                                    $"\t\t\tGetComponent<Animator>().SetFloat(\"{node.AnimatorSaveData.ParameterName}\", {node.AnimatorSaveData.Value});\n";
+                                break;
+                            case "Int":
+                                scriptContent +=
+                                    $"\t\t\tGetComponent<Animator>().SetInteger(\"{node.AnimatorSaveData.ParameterName}\", {node.AnimatorSaveData.Value});\n";
+                                break;
+                            case "Bool":
+                                scriptContent +=
+                                    $"\t\t\tGetComponent<Animator>().SetBool(\"{node.AnimatorSaveData.ParameterName}\", {char.ToLowerInvariant(node.AnimatorSaveData.Value[0]) + node.AnimatorSaveData.Value.Substring(1)});\n";
+                                break;
+                            case "Trigger":
+                                scriptContent +=
+                                    $"\t\t\tGetComponent<Animator>().SetTrigger(\"{node.AnimatorSaveData.ParameterName}\");\n";
+                                break;
+                        }
+                    }
                     scriptContent += "\t\t}\n";
                 }
             }

@@ -138,7 +138,7 @@ namespace EditorWindow.FSMSystem.Elements
             {
                 foreach (StateScriptData enemyState in DataObjects)
                 {
-                    if (enemyState.GetStateName() == StateName)
+                    if (enemyState.GetStateName() == StateName.Split(" ")[0])
                     {
                         StateScript = enemyState;
                     }
@@ -195,6 +195,7 @@ namespace EditorWindow.FSMSystem.Elements
             var animatorParameters = GetAllAnimatorParameters();
             animatorParameters.Insert(0, "");
             var defaultIndex = _animatorParameter == null ? "" : _animatorParameter;
+            if(!animatorParameters.Contains(_animatorParameter)) defaultIndex = "";
             var dropdown = new DropdownField("Select Parameter", animatorParameters, defaultIndex);
             dropdown.AddToClassList("fsm-node_animator-dropdown");
             container.Add(dropdown);
@@ -347,11 +348,7 @@ namespace EditorWindow.FSMSystem.Elements
         }
         private Animator GetAnimatorComponent()
         {
-            var inspectorJson = EditorPrefs.GetString("FSMInspectorData");
-            var pattern = @"\s*\([^)]*\)";
-            var result = Regex.Replace(inspectorJson, pattern, "");
-
-            var gameObject = GameObject.Find(result);
+            var gameObject = Selection.activeGameObject;
             return gameObject.GetComponent<Animator>();
         }
         public FsmAnimatorSaveData GetAnimatorSaveData()

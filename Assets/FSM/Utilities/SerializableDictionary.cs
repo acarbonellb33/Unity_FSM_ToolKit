@@ -5,11 +5,17 @@ namespace FSM.Utilities
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
-
+    /// <summary>
+    /// Base class for serializable dictionaries.
+    /// </summary>
     public class SerializableDictionary
     {
     }
-
+    /// <summary>
+    /// Serializable dictionary implementation using a list of key-value pairs.
+    /// </summary>
+    /// <typeparam name="TKey">Type of the keys.</typeparam>
+    /// <typeparam name="TValue">Type of the values.</typeparam>
     [Serializable]
     public class SerializableDictionary<TKey, TValue> : SerializableDictionary, IDictionary<TKey, TValue>,
         ISerializationCallbackReceiver
@@ -36,12 +42,17 @@ namespace FSM.Utilities
 
         private Dictionary<TKey, uint> KeyPositions => _keyPositions.Value;
         private Lazy<Dictionary<TKey, uint>> _keyPositions;
-
+        /// <summary>
+        /// Constructor for SerializableDictionary.
+        /// </summary>
         public SerializableDictionary()
         {
             _keyPositions = new Lazy<Dictionary<TKey, uint>>(MakeKeyPositions);
         }
-
+        /// <summary>
+        /// Constructor for SerializableDictionary with initial dictionary.
+        /// </summary>
+        /// <param name="dictionary">Initial dictionary to populate.</param>
         public SerializableDictionary(IDictionary<TKey, TValue> dictionary)
         {
             _keyPositions = new Lazy<Dictionary<TKey, uint>>(MakeKeyPositions);
@@ -77,7 +88,6 @@ namespace FSM.Utilities
 
         public void OnAfterDeserialize()
         {
-            // After deserialization, the key positions might be changed
             _keyPositions = new Lazy<Dictionary<TKey, uint>>(MakeKeyPositions);
         }
 

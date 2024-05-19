@@ -14,6 +14,9 @@ namespace EditorWindow.FSMSystem.Windows
     using Utilities;
     using FSM.Enumerations;
     using FSM.Utilities;
+    /// <summary>
+    /// The graph view that hold the content for the FSM system.
+    /// </summary>
     public class FsmGraphView : GraphView
     {
         private FsmSearchWindow _searchWindow;
@@ -37,7 +40,10 @@ namespace EditorWindow.FSMSystem.Windows
                     _window.DisableSaving();
             }
         }
-
+        /// <summary>
+        /// Constructor for the FSM graph view. Uses the <see cref="FsmEditorWindow"/> as a parameter, and loads the content of the graph view inside the window.
+        /// </summary>
+        /// <param name="window"></param>
         public FsmGraphView(FsmEditorWindow window)
         {
             _window = window;
@@ -81,11 +87,11 @@ namespace EditorWindow.FSMSystem.Windows
                 choiceData2.NodeId = id2;
                 choiceData2.Text = text2;
 
-                node.Choices.Clear();
-                node.Choices.Add(choiceData);
+                node.Connections.Clear();
+                node.Connections.Add(choiceData);
 
-                newNode.Choices.Clear();
-                newNode.Choices.Add(choiceData2);
+                newNode.Connections.Clear();
+                newNode.Connections.Add(choiceData2);
 
                 AddElement(newNode);
                 
@@ -127,6 +133,15 @@ namespace EditorWindow.FSMSystem.Windows
         }
 
         #region Nodes
+        /// <summary>
+        /// Creates a new node in the graph view.
+        /// </summary>
+        /// <param name="nodeName">The name of the node.</param>
+        /// <param name="position">The position of the node.</param>
+        /// <param name="nodeT">The type of the node.</param>
+        /// <param name="fixName">Should the name be fixed?</param>
+        /// <param name="shouldDraw">Should the node be drawn?</param>
+        /// <returns>Returns the <see cref="FsmNode"/> that you just created.</returns>
         public FsmNode CreateNode(string nodeName, Vector2 position, FsmNodeType nodeT, bool fixName = true,
             bool shouldDraw = true)
         {
@@ -247,19 +262,14 @@ namespace EditorWindow.FSMSystem.Windows
         }
         private void DeleteUnconnectedExtensionNodes()
         {
-            // Iterate through all elements in the graph
             foreach (var element in graphElements)
             {
-                // Check if the element is a node
                 if (element is FsmNode node)
                 {
-                    // Check if the node is an Extension node
                     if (node.NodeType is FsmNodeType.Extension)
                     {
-                        // Check if the Extension node has unconnected ports
                         if (HasUnconnectedPorts(node))
                         {
-                            // Delete the Extension node
                             RemoveNode(node);
                             node.DisconnectAllPorts();
                             RemoveElement(node);
@@ -270,10 +280,8 @@ namespace EditorWindow.FSMSystem.Windows
         }
         private void SetPortColorToEmptyNodes()
         {
-            // Iterate through all elements in the graph
             foreach (var element in graphElements)
             {
-                // Check if the element is a node
                 if (element is FsmNode node)
                 {
                     if (((FsmNode)element).NodeType == FsmNodeType.Initial)
@@ -395,8 +403,8 @@ namespace EditorWindow.FSMSystem.Windows
                         var nodeToDelete = node.Key.inputContainer.Children().OfType<Port>().ToList()[0].connections.ToList()[0].output.node as FsmNode;
                         if (nodeToDelete == null) continue;
                         
-                        var nextNodeId = nodeToDelete.Choices[0].NodeId;
-                        var nextNodeName = nodeToDelete.Choices[0].Text;
+                        var nextNodeId = nodeToDelete.Connections[0].NodeId;
+                        var nextNodeName = nodeToDelete.Connections[0].Text;
 
                         var choiceData = new FsmConnectionSaveData
                         {
@@ -408,8 +416,8 @@ namespace EditorWindow.FSMSystem.Windows
                         node.Key.DisconnectAllPorts();
                         RemoveElement(node.Key);
 
-                        nodeToDelete.Choices.Clear();
-                        nodeToDelete.Choices.Add(choiceData);
+                        nodeToDelete.Connections.Clear();
+                        nodeToDelete.Connections.Add(choiceData);
                     }
                     else
                     {
@@ -456,8 +464,8 @@ namespace EditorWindow.FSMSystem.Windows
                 return startNode;
     
             var previousNode = connections[0].output;
-            var nextNodeId = startNode.Choices[0].NodeId;
-            var nextNodeName = startNode.Choices[0].Text;
+            var nextNodeId = startNode.Connections[0].NodeId;
+            var nextNodeName = startNode.Connections[0].Text;
             
             var choiceData = new FsmConnectionSaveData
             {
@@ -466,11 +474,11 @@ namespace EditorWindow.FSMSystem.Windows
             };
 
             var nextPreviousNode = (FsmNode)previousNode.node;
-            nextPreviousNode.Choices.Clear();
-            nextPreviousNode.Choices.Add(choiceData);
+            nextPreviousNode.Connections.Clear();
+            nextPreviousNode.Connections.Add(choiceData);
 
             var prePort = nextPreviousNode.outputContainer.Children().OfType<Port>().ToList()[0];
-            var nextNewNode = GetNodeFromGraphById(startNode.Choices[0].NodeId);
+            var nextNewNode = GetNodeFromGraphById(startNode.Connections[0].NodeId);
 
             var nextPort = nextNewNode.inputContainer.Children().OfType<Port>().ToList()[0];
 

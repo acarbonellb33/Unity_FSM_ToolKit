@@ -2,23 +2,24 @@ namespace FSM.Utilities
 {
     using System;
     using UnityEngine;
-
+    /// <summary>
+    /// Class for generating unique IDs for GameObjects.
+    /// </summary>
     public class IDGenerator : MonoBehaviour
     {
-        // This will hold the unique ID for the object
         public string uniqueID;
 
-        // Call this method to get the unique ID
+        /// <summary>
+        /// Call this method to get the unique ID. If the unique ID is not generated yet, it will generate it. Else, it will return the existing unique ID.
+        /// </summary>
+        /// <returns>The generated unique ID.</returns>
         public string GetUniqueID()
         {
-            // If the unique ID is not generated yet, generate it
             if (string.IsNullOrEmpty(uniqueID))
             {
-                // Generate a unique ID using a combination of GameObject name and a random number
                 uniqueID = Guid.NewGuid().ToString();
                 hideFlags = HideFlags.HideInInspector;
             }
-
             return uniqueID;
         }
     }

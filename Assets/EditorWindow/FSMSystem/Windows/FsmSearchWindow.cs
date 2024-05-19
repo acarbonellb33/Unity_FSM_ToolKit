@@ -6,11 +6,17 @@ namespace EditorWindow.FSMSystem.Windows
     using UnityEngine;
     using Elements;
     using FSM.Enumerations;
+    /// <summary>
+    /// ScriptableObject used to create the search window for adding nodes to the FSM graph.
+    /// </summary>
     public class FsmSearchWindow : ScriptableObject, ISearchWindowProvider
     {
         private FsmGraphView _graphView;
         private Texture2D _indentationIcon;
-
+        /// <summary>
+        /// Initializes the search window with the specified FSM graph view.
+        /// </summary>
+        /// <param name="graphView">The FSM graph view to initialize the search window with.</param>
         public void Initialize(FsmGraphView graphView)
         {
             _graphView = graphView;
@@ -18,10 +24,14 @@ namespace EditorWindow.FSMSystem.Windows
             _indentationIcon.SetPixel(0, 0, Color.clear);
             _indentationIcon.Apply();
         }
-
+        /// <summary>
+        /// Creates the search tree for the search window.
+        /// </summary>
+        /// <param name="context">The search window context.</param>
+        /// <returns>The search tree entries.</returns>
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
-            List<SearchTreeEntry> tree = new List<SearchTreeEntry>()
+            var tree = new List<SearchTreeEntry>()
             {
                 new SearchTreeGroupEntry(new GUIContent("Create Node")),
                 new SearchTreeGroupEntry(new GUIContent("State Nodes"), 1),
@@ -111,7 +121,12 @@ namespace EditorWindow.FSMSystem.Windows
             };
             return tree;
         }
-
+        /// <summary>
+        /// Handles the selection of an entry in the search window. Creating a node based on the selected entry.
+        /// </summary>
+        /// <param name="searchTreeEntry">The selected search tree entry.</param>
+        /// <param name="context">The search window context.</param>
+        /// <returns>True if the entry was successfully selected, otherwise false.</returns>
         public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
         {
             Vector2 localMousePosition = _graphView.GetLocalMousePosition(context.screenMousePosition, true);

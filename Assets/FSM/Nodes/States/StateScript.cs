@@ -6,51 +6,55 @@ namespace FSM.Nodes.States
     using System.Reflection;
     using UnityEngine;
     using UnityEngine.AI;
-
-    // StateScript is an abstract class that inherits from MonoBehaviour
-    // It provides functionalities related to managing states in the FSM
+    /// <summary>
+    /// Abstract base class for state scripts.
+    /// </summary>
     [Serializable]
     public abstract class StateScript : MonoBehaviour
     {
-        // Private variable to store the state name
         private string _stateName;
-
-        // Protected variables for player and agent references
+        /// <summary>
+        /// Reference to the player GameObject.
+        /// </summary>
         protected GameObject Player;
+        /// <summary>
+        /// Reference to the NavMeshAgent component.
+        /// </summary>
         protected NavMeshAgent Agent;
-
-        // Called when the script instance is being loaded
+        
         private void Awake()
         {
             // Get the NavMeshAgent component attached to the same GameObject as this script
             Agent = GetComponent<NavMeshAgent>();
 
             // Find the "Player" GameObject in the scene and assign it to the player variable
-            GameObject playerObject = GameObject.FindWithTag("Player");
+            var playerObject = GameObject.FindWithTag("Player");
             if (playerObject != null)
             {
                 Player = playerObject;
             }
         }
-
-        // InspectVariables method inspects and returns a list of public variables and their values as strings
+        /// <summary>
+        /// Inspects public variables of the StateScript and returns their values.
+        /// </summary>
+        /// <returns>A list of strings representing the inspected variables.</returns>
         public List<string> InspectVariables()
         {
-            List<string> result = new List<string>();
-            Type targetType = this.GetType();
-            FieldInfo[] fields = targetType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+            var result = new List<string>();
+            var targetType = this.GetType();
+            var fields = targetType.GetFields(BindingFlags.Instance | BindingFlags.Public);
 
-            foreach (FieldInfo field in fields)
+            foreach (var field in fields)
             {
                 // Check if the field is a List<GameObject>
                 if (field.FieldType.ToString() == "System.Collections.Generic.List`1[UnityEngine.GameObject]")
                 {
-                    List<GameObject> list = (List<GameObject>)field.GetValue(this);
+                    var list = (List<GameObject>)field.GetValue(this);
                     object newValue = "";
                     if (list != null && list.Count > 0)
                     {
                         // Concatenate GameObject names in the list
-                        for (int i = 0; i < list.Count; i++)
+                        for (var i = 0; i < list.Count; i++)
                         {
                             if (i + 1 == list.Count)
                                 newValue += list[i].name;
@@ -68,36 +72,40 @@ namespace FSM.Nodes.States
                 else
                 {
                     // Get the value of the field and add it to the result list
-                    object value = field.GetValue(this);
+                    var value = field.GetValue(this);
                     result.Add($"{field.Name},{field.FieldType},{value}");
                 }
             }
 
             return result;
         }
-
-        // GetVariables method returns a dictionary of all public variables and their values
+        /// <summary>
+        /// Retrieves public variables of the StateScript and returns them in a dictionary.
+        /// </summary>
+        /// <returns>A dictionary containing variable names and their values.</returns>
         public Dictionary<string, object> GetVariables()
         {
-            Dictionary<string, object> variables = new Dictionary<string, object>();
-            Type type = GetType();
-            FieldInfo[] fields = type.GetFields();
+            var variables = new Dictionary<string, object>();
+            var type = GetType();
+            var fields = type.GetFields();
 
-            foreach (FieldInfo field in fields)
+            foreach (var field in fields)
             {
-                // Get the value of the field and add it to the dictionary
-                object value = field.GetValue(this);
+                var value = field.GetValue(this);
                 variables.Add(field.Name, value);
             }
 
             return variables;
         }
-
-        // SetVariableValue method sets the value of a specified variable
+        /// <summary>
+        /// Sets the value of a public variable in the StateScript.
+        /// </summary>
+        /// <param name="variableName">The name of the variable to set.</param>
+        /// <param name="newValue">The new value to assign to the variable.</param>
         public void SetVariableValue(string variableName, object newValue)
         {
-            Type type = GetType();
-            FieldInfo field = type.GetField(variableName);
+            var type = GetType();
+            var field = type.GetField(variableName);
 
             if (field != null)
             {
@@ -107,7 +115,7 @@ namespace FSM.Nodes.States
                     if (newValue.GetType().ToString() == "UnityEngine.GameObject")
                     {
                         // Cast newValue to List<GameObject> and add a new GameObject
-                        List<GameObject> list = (List<GameObject>)field.GetValue(this);
+                        var list = (List<GameObject>)field.GetValue(this);
                         list.Add((GameObject)newValue);
                         field.SetValue(this, list);
                     }
@@ -119,30 +127,36 @@ namespace FSM.Nodes.States
                 }
                 else
                 {
-                    // Set the value of the field to the new value
                     field.SetValue(this, newValue);
                 }
             }
             else
             {
-                // Log an error if the variable does not exist
                 Debug.LogError($"{variableName} does not exist in the ScriptableObject.");
             }
         }
-
-        // SetStateName method sets the state name
+        
+        /// <summary>
+        /// Sets the name of the state.
+        /// </summary>
+        /// <param name="newName">The new name of the state.</param>
         public void SetStateName(string newName)
         {
             _stateName = newName;
         }
 
-        // GetStateName method returns the state name
+        /// <summary>
+        /// Gets the name of the state.
+        /// </summary>
+        /// <returns>The name of the state.</returns>
         public string GetStateName()
         {
             return _stateName;
         }
-        
-        // HideFlagsInspector method hides the HideFlags property in the Inspector
+
+        /// <summary>
+        /// Hides the StateScript from the inspector.
+        /// </summary>
         public void HideFlagsInspector()
         {
             hideFlags = HideFlags.HideInInspector;

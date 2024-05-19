@@ -69,7 +69,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 		public void UpdateAttackState()
 		{
 			attack.Execute();
-			SetHitData(true, 2f, false);
+			SetHitData(true, 8f, false);
 			if(distance1.Condition())
 			{
 				ChangeChaseState();
@@ -78,7 +78,7 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 		public void UpdateChaseState()
 		{
 			chase.Execute();
-			SetHitData(true, 2f, false);
+			SetHitData(false, 0f, false);
 			if(distance0.Condition())
 			{
 				ChangeAttackState();
@@ -102,13 +102,11 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 		{
 			CurrentState = FsmStates.Attack;
 			_previousState = CurrentState;
-			GetComponent<Animator>().SetTrigger("Punch");
 		}
 		private void ChangeChaseState()
 		{
 			CurrentState = FsmStates.Chase;
 			_previousState = CurrentState;
-			GetComponent<Animator>().SetTrigger("Run");
 		}
 		private void ChangeHitState()
 		{

@@ -1,6 +1,3 @@
-using FSM.Utilities;
-using Unity.VisualScripting;
-
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Inspectors
 {
@@ -14,6 +11,9 @@ namespace EditorWindow.FSMSystem.Inspectors
     using FSM.Enumerations;
     using FSM.Nodes;
     using FSM.Nodes.States;
+    /// <summary>
+    /// Custom inspector for FSM graphs, enabling interaction with FSM graph data in the Unity Editor.
+    /// </summary>
     [CustomEditor(typeof(FsmGraph))]
     public class FsmInspector : Editor
     {
@@ -24,7 +24,9 @@ namespace EditorWindow.FSMSystem.Inspectors
         {
             _graphContainerProperty = serializedObject.FindProperty("graphContainer");
         }
-
+        /// <summary>
+        /// Overrides the default Inspector GUI to add custom drawing logic. This way you can add your created FSM Graphs to the GameObject. If the FSM Graph has saved data, the behavior will be added to the GameObject as well. You can swap graph or edit the current one by clicking the button "Open FSM Graph".
+        /// </summary>
         public override void OnInspectorGUI()
         {
             serializedObject.Update();

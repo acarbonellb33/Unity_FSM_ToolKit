@@ -23,7 +23,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 4
     <Position>k__BackingField: {x: 243, y: 524}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
@@ -41,7 +41,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 4
     <Position>k__BackingField: {x: 1049, y: 524}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
@@ -59,7 +59,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 4
     <Position>k__BackingField: {x: 617, y: 711}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
@@ -77,7 +77,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 4
     <Position>k__BackingField: {x: 1414, y: 711}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
@@ -95,7 +95,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 1
     <Position>k__BackingField: {x: 698, y: 207}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
@@ -114,7 +114,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 2
     <Position>k__BackingField: {x: 100, y: 100}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
@@ -132,14 +132,14 @@ MonoBehaviour:
     <NodeType>k__BackingField: 0
     <Position>k__BackingField: {x: 1126, y: 268}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 1
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: Punch
       <ParameterType>k__BackingField: Trigger
       <Value>k__BackingField: True
     <HitNodeSaveData>k__BackingField:
-      <HasHitOverride>k__BackingField: 0
-      <CanGetHit>k__BackingField: 0
-      <TimeToWait>k__BackingField: 0
+      <HasHitOverride>k__BackingField: 1
+      <CanGetHit>k__BackingField: 1
+      <TimeToWait>k__BackingField: 8
       <CanDie>k__BackingField: 0
     <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
       5.0\n}"
@@ -151,7 +151,7 @@ MonoBehaviour:
     <NodeType>k__BackingField: 1
     <Position>k__BackingField: {x: 701, y: 565}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 0
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: 
       <ParameterType>k__BackingField: 
       <Value>k__BackingField: 
@@ -168,14 +168,14 @@ MonoBehaviour:
     - <Text>k__BackingField: Condition
       <NodeId>k__BackingField: 87a9f557-e326-4d16-88fc-031889aaf7a7
     <NodeType>k__BackingField: 0
-    <Position>k__BackingField: {x: 332, y: 88}
+    <Position>k__BackingField: {x: 333, y: 88}
     <AnimatorSaveData>k__BackingField:
-      <TriggerEnable>k__BackingField: 1
+      <AnimationTrigger>k__BackingField: 0
       <ParameterName>k__BackingField: Run
       <ParameterType>k__BackingField: Trigger
       <Value>k__BackingField: True
     <HitNodeSaveData>k__BackingField:
-      <HasHitOverride>k__BackingField: 0
+      <HasHitOverride>k__BackingField: 1
       <CanGetHit>k__BackingField: 0
       <TimeToWait>k__BackingField: 0
       <CanDie>k__BackingField: 0

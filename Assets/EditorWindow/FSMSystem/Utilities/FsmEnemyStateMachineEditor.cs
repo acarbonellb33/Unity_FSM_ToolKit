@@ -1,5 +1,3 @@
-using UnityEngine;
-
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Utilities
 {
@@ -10,11 +8,18 @@ namespace EditorWindow.FSMSystem.Utilities
     using Data.Save;
     using UnityEditor;
     using FSM.Enumerations;
+    using UnityEngine;
+    /// <summary>
+    /// Utility class for generating enemy state machine scripts.
+    /// </summary>
     public static class FsmEnemyStateMachineEditor
     {
         private static List<FsmNodeSaveData> _states;
         private static bool _hasPatrolState;
-
+        /// <summary>
+        /// Generates and saves the script files based on the FSM graph data.
+        /// </summary>
+        /// <param name="saveData">The save data containing FSM graph information.</param>
         public static void GenerateScript(FsmGraphSaveData saveData)
         {
             string scriptContent = GenerateScriptContent(saveData);
@@ -31,7 +36,11 @@ namespace EditorWindow.FSMSystem.Utilities
 
             AssetDatabase.Refresh();
         }
-
+        /// <summary>
+        /// Generates the main script content for the FSM.
+        /// </summary>
+        /// <param name="saveData">The save data containing FSM graph information.</param>
+        /// <returns>The generated script content as a string.</returns>
         private static string GenerateScriptContent(FsmGraphSaveData saveData)
         {
             string scriptContent = "namespace EditorWindow.FSMSystem.BehaviorScripts\n";
@@ -193,7 +202,7 @@ namespace EditorWindow.FSMSystem.Utilities
                     scriptContent += "\t\t{\n";
                     scriptContent += $"\t\t\tCurrentState = FsmStates.{node.Name};\n";
                     scriptContent += $"\t\t\t_previousState = CurrentState;\n";
-                    if (node.AnimatorSaveData.TriggerEnable)
+                    if (node.AnimatorSaveData.AnimationTrigger)
                     {
                         switch (node.AnimatorSaveData.ParameterType)
                         {
@@ -324,7 +333,11 @@ namespace EditorWindow.FSMSystem.Utilities
                 return GenerateConditionsRecursive(nodeSaveData, test, false, check, pastFalse);
             }
         }
-
+        /// <summary>
+        /// Generates the editor script content for the FSM.
+        /// </summary>
+        /// <param name="saveData">The save data containing FSM graph information.</param>
+        /// <returns>The generated editor script content as a string.</returns>
         private static string GenerateEditorScriptContent(FsmGraphSaveData saveData)
         {
             string scriptContent = "#if UNITY_EDITOR\n";

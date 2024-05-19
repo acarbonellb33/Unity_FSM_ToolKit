@@ -1,6 +1,4 @@
-﻿using FSM.Utilities;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace FSM.Nodes
 {
     using System;
@@ -14,7 +12,9 @@ namespace FSM.Nodes
     using Enemy;
     using Enumerations;
     using States;
-    
+    /// <summary>
+    /// Represents the finite state machine graph attached to a GameObject.
+    /// </summary>
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(CapsuleCollider))]
@@ -24,7 +24,9 @@ namespace FSM.Nodes
     public class FsmGraph : MonoBehaviour
     {
         [SerializeField] private FsmGraphSaveData graphContainer;
-
+        /// <summary>
+        /// Updates the components of the GameObject based on the FSM graph.
+        /// </summary>
         public void UpdateComponentOfGameObject()
         {
             FsmGraph fsmGraph = this;

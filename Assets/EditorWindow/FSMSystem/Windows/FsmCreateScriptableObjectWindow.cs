@@ -10,6 +10,9 @@ namespace EditorWindow.FSMSystem.Windows
     using System.Collections.Generic;
     using FSM.Nodes;
     using UnityEditor.Animations;
+    /// <summary>
+    /// Editor window for creating FSM Graph scriptable objects and configuring enemy setup.
+    /// </summary>
     public class FsmCreateScriptableObjectWindow : EditorWindow
     {
         private string _savePath;
@@ -115,7 +118,7 @@ namespace EditorWindow.FSMSystem.Windows
                 {
                     Id = node.Id,
                     Name = node.StateName,
-                    Connections = node.Choices,
+                    Connections = node.Connections,
                     NodeType = node.NodeType,
                     Position = new Vector2(100, 100),
                     DataObject = null,

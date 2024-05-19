@@ -16,8 +16,18 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Nodes.States;
     using FSM.Nodes.States.StatesData;
     using FSM.Utilities;
+
+    /// <summary>
+    /// Represents a transition node in an FSM graph, inheriting from <see cref="FsmNode"/>.
+    /// </summary>
     public class FsmTransitionNode : FsmNode
     {
+        /// <summary>
+        /// Initializes the FSM transition node.
+        /// </summary>
+        /// <param name="nodeName">The name of the node.</param>
+        /// <param name="graphView">The graph view this node belongs to.</param>
+        /// <param name="vectorPos">The position of the node in the graph.</param>
         public override void Initialize(string nodeName, FsmGraphView graphView, Vector2 vectorPos)
         {
             base.Initialize(nodeName, graphView, vectorPos);
@@ -30,16 +40,19 @@ namespace EditorWindow.FSMSystem.Elements
             {
                 Text = "Next Action",
             };
-            Choices.Add(connectionSaveData);
+            Connections.Add(connectionSaveData);
             mainContainer.AddToClassList("fsm-node_main-container");
             extensionContainer.AddToClassList("fsm-node_extension-container");
         }
 
+        /// <summary>
+        /// Draws the node, adding ports and custom state attributes.
+        /// </summary>
         public override void Draw()
         {
             base.Draw();
 
-            foreach (var connection in Choices)
+            foreach (var connection in Connections)
             {
                 OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
                 if (!OutputPort.connected)
@@ -97,8 +110,8 @@ namespace EditorWindow.FSMSystem.Elements
                         enumField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(enumField);
                         break;
-                    case "UnityEngine.GameObject":
 
+                    case "UnityEngine.GameObject":
                         var input = result[2];
                         var output = Regex.Replace(input, @"\s*\([^()]*\)", "");
 
@@ -116,6 +129,7 @@ namespace EditorWindow.FSMSystem.Elements
                         objectField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(objectField);
                         break;
+
                     case "System.Single":
                         var floatField = new FloatField()
                         {
@@ -129,6 +143,7 @@ namespace EditorWindow.FSMSystem.Elements
                         floatField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(floatField);
                         break;
+
                     case "System.Int32":
                         var integerField = new IntegerField()
                         {
@@ -142,6 +157,7 @@ namespace EditorWindow.FSMSystem.Elements
                         integerField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(integerField);
                         break;
+
                     case "System.Boolean":
                         var toggle = new Toggle()
                         {
@@ -155,6 +171,7 @@ namespace EditorWindow.FSMSystem.Elements
                         toggle.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(toggle);
                         break;
+
                     case "System.String":
                         var textField = new TextField()
                         {
@@ -198,8 +215,8 @@ namespace EditorWindow.FSMSystem.Elements
                         enumField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(enumField);
                         break;
-                    case "UnityEngine.GameObject":
 
+                    case "UnityEngine.GameObject":
                         var input = result[2];
                         var output = Regex.Replace(input, @"\s*\([^()]*\)", "");
 
@@ -217,6 +234,7 @@ namespace EditorWindow.FSMSystem.Elements
                         objectField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(objectField);
                         break;
+
                     case "System.Single":
                         var floatField = new FloatField()
                         {
@@ -229,6 +247,7 @@ namespace EditorWindow.FSMSystem.Elements
                         floatField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(floatField);
                         break;
+
                     case "System.Int32":
                         var integerField = new IntegerField()
                         {
@@ -242,6 +261,7 @@ namespace EditorWindow.FSMSystem.Elements
                         integerField.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(integerField);
                         break;
+
                     case "System.Boolean":
                         var toggle = new Toggle()
                         {
@@ -255,6 +275,7 @@ namespace EditorWindow.FSMSystem.Elements
                         toggle.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(toggle);
                         break;
+
                     case "System.String":
                         var textField = new TextField()
                         {

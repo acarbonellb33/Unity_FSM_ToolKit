@@ -3139,6 +3139,7 @@ GameObject:
   - component: {fileID: 1320758051}
   - component: {fileID: 1320758050}
   - component: {fileID: 1320758048}
+  - component: {fileID: 1320758061}
   - component: {fileID: 1320758060}
   - component: {fileID: 1320758059}
   - component: {fileID: 1320758058}
@@ -3439,6 +3440,19 @@ MonoBehaviour:
   attack: {fileID: 1320758058}
   distance1: {fileID: 1320758057}
   chase: {fileID: 1320758056}
+--- !u!114 &1320758061
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320758042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc2449f543b019d498dcc05415a82a02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueID: ab22fb03-1754-4340-9b36-3197e7e3beb6
 --- !u!1 &1332046179
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,8 +16,17 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Nodes.States;
     using FSM.Nodes.States.StatesData;
     using FSM.Utilities;
+    /// <summary>
+    /// Represents a dual transition node in an FSM graph, inheriting from <see cref="FsmNode"/>. In this case, there are two possible transitions, one for true and one for false.
+    /// </summary>
     public class FsmDualTransitionNode : FsmNode
     {
+        /// <summary>
+        /// Initializes the FSM dual transition node.
+        /// </summary>
+        /// <param name="nodeName">The name of the node.</param>
+        /// <param name="graphView">The graph view this node belongs to.</param>
+        /// <param name="vectorPos">The position of the node in the graph.</param>
         public override void Initialize(string nodeName, FsmGraphView fsmGraphView, Vector2 vectorPos)
         {
             base.Initialize(nodeName, fsmGraphView, vectorPos);
@@ -34,17 +43,19 @@ namespace EditorWindow.FSMSystem.Elements
             {
                 Text = "False",
             };
-            Choices.Add(connectionSaveData1);
-            Choices.Add(connectionSaveData2);
+            Connections.Add(connectionSaveData1);
+            Connections.Add(connectionSaveData2);
             mainContainer.AddToClassList("fsm-node_main-container");
             extensionContainer.AddToClassList("fsm-node_extension-container");
         }
-
+        /// <summary>
+        /// Draws the node, adding ports and custom state attributes.
+        /// </summary>
         public override void Draw()
         {
             base.Draw();
 
-            foreach (var connection in Choices)
+            foreach (var connection in Connections)
             {
                 OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
                 if (!OutputPort.connected)

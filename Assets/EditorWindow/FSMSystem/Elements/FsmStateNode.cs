@@ -16,13 +16,26 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Nodes.States;
     using FSM.Nodes.States.StatesData;
     using FSM.Utilities;
+    using UnityEditor;
+    /// <summary>
+    /// Represents a state node in an FSM graph, inheriting from <see cref="FsmNode"/>.
+    /// </summary>
     public class FsmStateNode : FsmNode
     {
-        public override void Initialize(string nodeName, FsmGraphView graphView, Vector2 postition)
+        private Toggle _hitPopupToggle;
+        private readonly FsmHoverPopupWindow _hoverPopup = new();
+        /// <summary>
+        /// Initializes the FSM state node.
+        /// </summary>
+        /// <param name="nodeName">The name of the node.</param>
+        /// <param name="graphView">The graph view this node belongs to.</param>
+        /// <param name="posVector2">The position of the node in the graph.</param>
+        public override void Initialize(string nodeName, FsmGraphView graphView, Vector2 posVector2)
         {
-            base.Initialize(nodeName, graphView, postition);
+            base.Initialize(nodeName, graphView, posVector2);
             NodeType = FsmNodeType.State;
-
+            // Inside your Initialize method
+            
             DataObjects = new List<StateScriptData>()
                 { new PatrolData(), new ChaseData(), new AttackData(), new SearchData() };
 
@@ -30,16 +43,19 @@ namespace EditorWindow.FSMSystem.Elements
             {
                 Text = "Condition",
             };
-            Choices.Add(connectionSaveData);
+            Connections.Add(connectionSaveData);
 
             mainContainer.AddToClassList("fsm-node_main-container");
             extensionContainer.AddToClassList("fsm-node_extension-container");
         }
+        /// <summary>
+        /// Draws the node, adding ports, toggles, and any state attributes.
+        /// </summary>
         public override void Draw()
         {
             base.Draw();
 
-            foreach (var connection in Choices)
+            foreach (var connection in Connections)
             {
                 OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output,
                     Port.Capacity.Multi);
@@ -62,14 +78,16 @@ namespace EditorWindow.FSMSystem.Elements
             animatorPopupToggle.RegisterValueChangedCallback(_ => { ShowAnimatorParameterDropdown(animatorPopupToggle); });
             animatorPopupToggle.AddToClassList("fsm-node_toggle-bold");
 
-            var hitPopupToggle = new Toggle()
+            _hitPopupToggle = new Toggle()
             {
                 label = "Override Hit State",
                 value = HasHitStateOverride,
             };
-            hitPopupToggle.RegisterValueChangedCallback(_ => { ShowHitStateOverrideToggle(hitPopupToggle); });
-            hitPopupToggle.AddToClassList("fsm-node_toggle-bold");
-            
+            _hitPopupToggle.RegisterValueChangedCallback(_ => { ShowHitStateOverrideToggle(_hitPopupToggle); });
+            _hitPopupToggle.AddToClassList("fsm-node_toggle-bold");
+            _hitPopupToggle.RegisterCallback<MouseEnterEvent>((evt) => ShowPopupWindow(evt, _hitPopupToggle));
+            _hitPopupToggle.RegisterCallback<MouseLeaveEvent>((evt) => ClosePopupWindow());
+
             var horizontalLine = new VisualElement();
             horizontalLine.AddToClassList("horizontal-line");
             
@@ -87,9 +105,15 @@ namespace EditorWindow.FSMSystem.Elements
             extensionContainer.Add(animatorPopupToggle);
             extensionContainer.Add(horizontalLine2);
             if (animatorPopupToggle.value) ShowAnimatorParameterDropdown(animatorPopupToggle);
-            extensionContainer.Add(hitPopupToggle);
-            if (hitPopupToggle.value) ShowHitStateOverrideToggle(hitPopupToggle);
-
+            extensionContainer.Add(_hitPopupToggle);
+            if (EditorPrefs.GetBool("EnableHitState"))
+            {
+                _hitPopupToggle.SetEnabled(true);
+                if (_hitPopupToggle.value) ShowHitStateOverrideToggle(_hitPopupToggle);
+            }
+            else _hitPopupToggle.SetEnabled(false);
+            
+            
             mainContainer.style.backgroundColor = new Color(200f / 255f, 250f / 255f, 100f / 255f);
 
             RefreshExpandedState();
@@ -312,6 +336,35 @@ namespace EditorWindow.FSMSystem.Elements
             }
 
             customDataContainer.Add(stateAttributeContainer);
+        }
+        public override void UpdateHitEnable(bool value)
+        {
+            if (!value)
+            {
+                if (!_hitPopupToggle.value)
+                {
+                    _hitPopupToggle.SetEnabled(false);
+                }
+                _hitPopupToggle.value = false;
+            }
+        }
+        private void ShowPopupWindow(EventBase evt, VisualElement targetElement)
+        {
+            if (!_hitPopupToggle.value && !_hitPopupToggle.enabledSelf)
+            {
+                var elementRect = targetElement.worldBound;
+                UnityEditor.PopupWindow.Show(new Rect(elementRect.x + 10f, elementRect.y - 77.5f, 250, 100), _hoverPopup);
+            }
+        }
+        private void ClosePopupWindow()
+        {
+            if (!_hitPopupToggle.value && !_hitPopupToggle.enabledSelf)
+            {
+                if (_hoverPopup != null)
+                {
+                    _hoverPopup.editorWindow.Close();
+                }
+            }
         }
     }
 }

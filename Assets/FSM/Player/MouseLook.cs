@@ -1,7 +1,9 @@
 namespace FSM.Player
 {
     using UnityEngine;
-
+    /// <summary>
+    /// Controls the player's mouse look behavior.
+    /// </summary>
     public class MouseLook : MonoBehaviour
     {
         [SerializeField] float mouseSensivity = 100f;

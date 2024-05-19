@@ -14,17 +14,37 @@ namespace EditorWindow.FSMSystem.Elements
     using System.Globalization;
     using System.Text.RegularExpressions;
     using UnityEditor;
+    /// <summary>
+    /// Represents the base class for all FSM node elements.
+    /// </summary>
     public class FsmNode : Node
     {
+        /// <summary>
+        /// Gets or sets the unique identifier of the FSM node.
+        /// </summary>
         public string Id { get; set; }
+        /// <summary>
+        /// Gets or sets the name of the state associated with the FSM node.
+        /// </summary>
         public string StateName { get; set; }
-        public List<FsmConnectionSaveData> Choices { get; set; }
+        /// <summary>
+        /// Gets or sets the list of connections associated with the FSM node.
+        /// </summary>
+        public List<FsmConnectionSaveData> Connections { get; set; }
+        /// <summary>
+        /// Gets or sets the type of the FSM node.
+        /// </summary>
         public FsmNodeType NodeType { get; set; }
-        private FsmGraphView _graphView;
-        protected List<StateScriptData> DataObjects;
+        /// <summary>
+        /// Gets or sets the script data associated with the behaviour of the FSM node.
+        /// </summary>
         public StateScriptData StateScript { get; set; }
-        private Label _stateNameField;
+        
+        protected List<StateScriptData> DataObjects;
         protected Port InputPort, OutputPort;
+        
+        private FsmGraphView _graphView;
+        private Label _stateNameField;
         
         //Animator Trigger
         protected bool HasAnimatorTrigger;
@@ -37,12 +57,17 @@ namespace EditorWindow.FSMSystem.Elements
         private bool _canGetHit;
         private float _timeToWait;
         private bool _canDie;
-
+        /// <summary>
+        /// Initializes the FSM node with the provided name, FSM graph view, and position.
+        /// </summary>
+        /// <param name="nodeName">The name of the FSM node.</param>
+        /// <param name="graphView">The FSM graph view where the node will be placed.</param>
+        /// <param name="vectorPos">The position of the node within the FSM graph view.</param>
         public virtual void Initialize(string nodeName, FsmGraphView graphView, Vector2 vectorPos)
         {
             Id = Guid.NewGuid().ToString();
             StateName = nodeName;
-            Choices = new List<FsmConnectionSaveData>();
+            Connections = new List<FsmConnectionSaveData>();
             _graphView = graphView;
             SetPosition(new Rect(vectorPos, Vector2.zero));
 
@@ -50,18 +75,11 @@ namespace EditorWindow.FSMSystem.Elements
 
             AddManipulators();
         }
-
-        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
-        {
-            evt.menu.AppendAction("Disconnect Input Ports", _ => DisconnectPorts(inputContainer));
-            evt.menu.AppendAction("Disconnect Output Ports", _ => DisconnectPorts(outputContainer));
-            evt.menu.AppendSeparator();
-            base.BuildContextualMenu(evt);
-        }
-
+        /// <summary>
+        /// Virtual method to draw the FSM node. This method will be overridden by the derived classes. Acts as a base node and the derived classes will implement their own logic.
+        /// </summary>
         public virtual void Draw()
         {
-
             _stateNameField = FsmElementUtility.CreateLabel(StateName, callback =>
             {
                 StateName = callback.newValue;
@@ -75,6 +93,17 @@ namespace EditorWindow.FSMSystem.Elements
             inputContainer.AddToClassList("fsm-node_input-output-container");
         }
 
+        /// <summary>
+        /// Overrides the method to build a contextual menu for the FSM node. In this case, the menu will contain options to disconnect input and output ports.
+        /// </summary>
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendAction("Disconnect Input Ports", _ => DisconnectPorts(inputContainer));
+            evt.menu.AppendAction("Disconnect Output Ports", _ => DisconnectPorts(outputContainer));
+            evt.menu.AppendSeparator();
+            base.BuildContextualMenu(evt);
+        }
+        
         #region Ports
 
         public void DisconnectAllPorts()
@@ -96,12 +125,17 @@ namespace EditorWindow.FSMSystem.Elements
         #endregion
 
         #region Styles
-
+        /// <summary>
+        /// Sets the error style of the main container.
+        /// </summary>
+        /// <param name="color">The color to set as the background color.</param>
         public void SetErrorStyle(Color color)
         {
             mainContainer.style.backgroundColor = color;
         }
-
+        /// <summary>
+        /// Resets the style of the main container to its default color.
+        /// </summary>
         public void ResetStyle()
         {
             mainContainer.style.backgroundColor = new Color(29f / 255f, 29f / 255f, 30f / 255f);
@@ -123,11 +157,18 @@ namespace EditorWindow.FSMSystem.Elements
 
             return contextualMenuManipulator;
         }
+        /// <summary>
+        /// Sets the name of the state and updates the displayed state name field.
+        /// </summary>
+        /// <param name="stateName">The new name of the state.</param>
         public virtual void SetStateName(string stateName)
         {
             StateName = stateName;
             _stateNameField.text = stateName;
         }
+        /// <summary>
+        /// Retrieves the StateScriptData object associated with the current state.
+        /// </summary>
         protected void GetScriptableObject()
         {
             try
@@ -145,6 +186,11 @@ namespace EditorWindow.FSMSystem.Elements
                 }
             }
         }
+        /// <summary>
+        /// Updates the naming style of a string from camel case to a readable format with spaces between words.
+        /// </summary>
+        /// <param name="newName">The string to be formatted.</param>
+        /// <returns>The formatted string.</returns>
         protected string UpdateNameStyle(string newName)
         {
             var fullName = Regex.Split(newName, @"(?=[A-Z])");
@@ -164,6 +210,11 @@ namespace EditorWindow.FSMSystem.Elements
 
             return resultString;
         }
+        /// <summary>
+        /// Sets the color of a port based on its direction (input or output).
+        /// </summary>
+        /// <param name="color">The color to set.</param>
+        /// <param name="direction">The direction of the port (input or output).</param>
         public void SetPortColor(Color color, Direction direction)
         {
             if (direction == Direction.Input)
@@ -178,6 +229,10 @@ namespace EditorWindow.FSMSystem.Elements
         #endregion
 
         #region Animator Methods
+        /// <summary>
+        /// Shows a dropdown menu for selecting an animator parameter and provides fields for configuring its value based on the parameter type.
+        /// </summary>
+        /// <param name="toggle">The toggle representing the state of showing the dropdown.</param>
         protected void ShowAnimatorParameterDropdown(Toggle toggle)
         {
             if (!toggle.value)
@@ -312,6 +367,11 @@ namespace EditorWindow.FSMSystem.Elements
 
             RefreshExpandedState();
         }
+        /// <summary>
+        /// Gets the type of the specified animator parameter.
+        /// </summary>
+        /// <param name="parameterName">The name of the animator parameter.</param>
+        /// <returns>The type of the animator parameter.</returns>
         private string GetParameterType(string parameterName)
         {
             var animator = GetAnimatorComponent();
@@ -351,15 +411,23 @@ namespace EditorWindow.FSMSystem.Elements
             var gameObject = Selection.activeGameObject;
             return gameObject.GetComponent<Animator>();
         }
+        /// <summary>
+        /// Retrieves the saved animator data.
+        /// </summary>
+        /// <returns>The saved animator data.</returns>
         public FsmAnimatorSaveData GetAnimatorSaveData()
         {
             var animatorSaveData = new FsmAnimatorSaveData();
             animatorSaveData.Initialize(HasAnimatorTrigger, _animatorParameter, _parameterType, _animatorValue);
             return animatorSaveData;
         }
+        /// <summary>
+        /// Sets the animator save data.
+        /// </summary>
+        /// <param name="animatorSaveData">The animator save data to set.</param>
         public void SetAnimatorSaveData(FsmAnimatorSaveData animatorSaveData)
         {
-            HasAnimatorTrigger = animatorSaveData.TriggerEnable;
+            HasAnimatorTrigger = animatorSaveData.AnimationTrigger;
             _animatorParameter = animatorSaveData.ParameterName;
             _parameterType = animatorSaveData.ParameterType;
             _animatorValue = animatorSaveData.Value;
@@ -368,9 +436,13 @@ namespace EditorWindow.FSMSystem.Elements
         
         #region Hit State Override Methods
         private bool _secondIteration;
+        /// <summary>
+        /// If enabled adds the parameters to be able to override the hit values.
+        /// </summary>
+        /// <param name="toggle">The toggle to show override hit parameters.</param>
         protected void ShowHitStateOverrideToggle(Toggle toggle)
         {
-            if (!_secondIteration)
+            /*if (!_secondIteration)
             {
                 if(!EditorPrefs.GetBool("EnableHitState"))
                 {
@@ -388,7 +460,7 @@ namespace EditorWindow.FSMSystem.Elements
             {
                 _secondIteration = false;
                 return;
-            }
+            }*/
             
             if (!toggle.value)
             {
@@ -396,11 +468,11 @@ namespace EditorWindow.FSMSystem.Elements
                 {
                     HasHitStateOverride = false;
                 }
-
                 extensionContainer.RemoveAt(extensionContainer.childCount - 1);
+                if(!EditorPrefs.GetBool("EnableHitState"))toggle.SetEnabled(false);
                 return;
             }
-            
+            toggle.SetEnabled(true);
             var visualElement = new VisualElement();
             
             var canGetHitToggle = new Toggle
@@ -443,15 +515,23 @@ namespace EditorWindow.FSMSystem.Elements
             extensionContainer.Add(visualElement);
             
             HasHitStateOverride = true;
-
+            //toggle.SetEnabled(true);
             RefreshExpandedState();
         }
+        /// <summary>
+        /// Gets the save data from the hit information.
+        /// </summary>
+        /// <returns>The hit node save data.</returns>
         public FsmHitNodeSaveData GetHitNodeSaveData()
         {
             var hitNodeSaveData = new FsmHitNodeSaveData();
             hitNodeSaveData.Initialize(HasHitStateOverride, _canGetHit, _timeToWait, _canDie);
             return hitNodeSaveData;
         }
+        /// <summary>
+        /// Sets the hit node save data.
+        /// </summary>
+        /// <param name="animatorSaveData">The hit node save data to set.</param>
         public void SetHitNodeSaveData(FsmHitNodeSaveData animatorSaveData)
         {
             HasHitStateOverride = animatorSaveData.HasHitOverride;
@@ -459,6 +539,7 @@ namespace EditorWindow.FSMSystem.Elements
             _timeToWait = animatorSaveData.TimeToWait;
             _canDie = animatorSaveData.CanDie;
         }
+        public virtual void UpdateHitEnable(bool canGetHit){}
         #endregion
     }
 }

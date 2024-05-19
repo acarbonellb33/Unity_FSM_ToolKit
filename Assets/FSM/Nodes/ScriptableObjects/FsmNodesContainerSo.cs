@@ -2,7 +2,6 @@ namespace FSM.Nodes.ScriptableObjects
 {
     using System.Collections.Generic;
     using UnityEngine;
-    using Utilities;
     public class FsmNodesContainerSo : ScriptableObject
     {
         [field: SerializeField] public string FileName { get; set; }

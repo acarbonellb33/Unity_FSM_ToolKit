@@ -18,6 +18,9 @@ namespace EditorWindow.FSMSystem.Utilities
     using FSM.Nodes.States;
     using FSM.Nodes.States.StatesData;
     using FSM.Utilities;
+    /// <summary>
+    /// Utility class for saving and loading FSM graphs and associated data.
+    /// </summary>
     public static class FsmIOUtility
     {
         private static FsmGraphView _graphView;
@@ -31,7 +34,13 @@ namespace EditorWindow.FSMSystem.Utilities
         private static Dictionary<string, FsmNode> _loadedNodes;
 
         private static string _stateDataObject;
-
+        /// <summary>
+        /// Initializes the FSM IO utility with necessary parameters.
+        /// </summary>
+        /// <param name="graphName">Name of the FSM graph.</param>
+        /// <param name="fsmGraphView">Reference to the FSM graph view.</param>
+        /// <param name="initialState">Name of the initial state.</param>
+        /// <param name="hitData">Hit data associated with the FSM.</param>
         public static void Initialize(string graphName, FsmGraphView fsmGraphView, string initialState,
             FsmHitSaveData hitData)
         {
@@ -47,14 +56,17 @@ namespace EditorWindow.FSMSystem.Utilities
         }
 
         #region SaveMethods
-
+        /// <summary>
+        /// Saves the FSM graph and associated data.
+        /// </summary>
+        /// <returns>True if saving was successful, false otherwise.</returns>
         public static bool Save()
         {
             GetElementsFromGraphView();
 
             foreach (FsmNode node in _nodes)
             {
-                foreach (FsmConnectionSaveData choice in node.Choices)
+                foreach (FsmConnectionSaveData choice in node.Connections)
                 {
                     if (String.IsNullOrEmpty(choice.NodeId))
                     {
@@ -104,7 +116,7 @@ namespace EditorWindow.FSMSystem.Utilities
         private static void SaveNodeToGraph(FsmNode node, FsmGraphSaveData graphSaveData,
             FsmNodesContainerSo nodesContainer)
         {
-            List<FsmConnectionSaveData> connections = CloneNodeConnections(node.Choices);
+            List<FsmConnectionSaveData> connections = CloneNodeConnections(node.Connections);
             _stateDataObject = CreateJsonDataObject(node, nodesContainer);
 
             FsmNodeSaveData nodeSaveData = new FsmNodeSaveData()
@@ -141,9 +153,9 @@ namespace EditorWindow.FSMSystem.Utilities
             foreach (FsmNode node in _nodes)
             {
                 FsmNodeSo nodeSelected = _createdNodes[node.Id];
-                for (int index = 0; index < node.Choices.Count; index++)
+                for (int index = 0; index < node.Connections.Count; index++)
                 {
-                    FsmConnectionSaveData connection = node.Choices[index];
+                    FsmConnectionSaveData connection = node.Connections[index];
                     if (string.IsNullOrEmpty(connection.NodeId))
                     {
                         continue;
@@ -176,7 +188,9 @@ namespace EditorWindow.FSMSystem.Utilities
         #endregion
 
         #region LoadMethods
-
+        /// <summary>
+        /// Loads the FSM graph and associated data.
+        /// </summary>
         public static void Load()
         {
             FsmGraphSaveData graphSaveData =
@@ -195,7 +209,6 @@ namespace EditorWindow.FSMSystem.Utilities
             LoadConnections();
             LoadHitData(graphSaveData.HitData);
         }
-
         private static void LoadNodes(List<FsmNodeSaveData> nodes)
         {
             foreach (FsmNodeSaveData nodeData in nodes)
@@ -205,7 +218,7 @@ namespace EditorWindow.FSMSystem.Utilities
                 FsmNode node = _graphView.CreateNode(nodeData.Name, nodeData.Position, nodeData.NodeType, false, false);
                 node.Id = nodeData.Id;
                 node.StateName = nodeData.Name;
-                node.Choices = connections;
+                node.Connections = connections;
                 node.StateScript = LoadFromJson(node);
                 if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
                 {
@@ -219,7 +232,12 @@ namespace EditorWindow.FSMSystem.Utilities
                 _loadedNodes.Add(node.Id, node);
             }
         }
-
+        /// <summary>
+        /// Loads a node from its saved data.
+        /// </summary>
+        /// <param name="nodeData">Node save data object.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>The loaded FSM node.</returns>
         public static FsmNode LoadNode(FsmNodeSaveData nodeData, string fileName)
         {
             var connections = CloneNodeConnections(nodeData.Connections);
@@ -227,7 +245,7 @@ namespace EditorWindow.FSMSystem.Utilities
             {
                 Id = nodeData.Id,
                 StateName = nodeData.Name,
-                Choices = connections,
+                Connections = connections,
                 NodeType = nodeData.NodeType
             };
             if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
@@ -422,7 +440,7 @@ namespace EditorWindow.FSMSystem.Utilities
             nodeSo.Initialize(
                 node.StateName,
                 "Text",
-                ConvertNodeConnection(node.Choices),
+                ConvertNodeConnection(node.Connections),
                 node.NodeType,
                 json
             );
@@ -430,7 +448,11 @@ namespace EditorWindow.FSMSystem.Utilities
             SaveAsset(nodeSo);
             return json;
         }
-
+        /// <summary>
+        /// Creates a JSON file for the specified state script.
+        /// </summary>
+        /// <param name="stateScript">State script to serialize.</param>
+        /// <param name="className">Name of the class associated with the state script.</param>
         public static void CreateJson(StateScript stateScript, string className)
         {
             string json = JsonUtility.ToJson(stateScript, true);
@@ -461,37 +483,14 @@ namespace EditorWindow.FSMSystem.Utilities
             }
         }
 
-        public static void UpdateJson(string className, string fileName, string variableName, object newValue)
-        {
-            string jsonFilePath = Path.Combine(Application.dataPath + $"/FSMSystem/FSMs/{className}/Global/Nodes",
-                $"{fileName.Replace(" ", "")}DataFile.json");
-            string jsonString = File.ReadAllText(jsonFilePath);
-
-            int startIndex = jsonString.IndexOf($"\"{variableName}\"", StringComparison.Ordinal) + variableName.Length + 4;
-
-            if (startIndex > variableName.Length + 4)
-            {
-                int endIndex = jsonString.IndexOf(',', startIndex);
-                if (endIndex == -1)
-                {
-                    endIndex = jsonString.IndexOf('}', startIndex);
-                }
-
-                string updatedJsonString = jsonString.Substring(0, startIndex) + newValue +
-                                           jsonString.Substring(endIndex);
-
-                File.WriteAllText(jsonFilePath, updatedJsonString);
-            }
-            else
-            {
-                Debug.LogError($"Variable \"{variableName}\" not found in the JSON file.");
-            }
-        }
-
         #endregion
 
         #region UtilityMethods
-
+        /// <summary>
+        /// Creates a folder in the specified path if it doesn't already exist.
+        /// </summary>
+        /// <param name="path">Path where the folder should be created.</param>
+        /// <param name="folderName">Name of the folder to create.</param>
         public static void CreateFolder(string path, string folderName)
         {
             if (AssetDatabase.IsValidFolder($"{path}/{folderName}"))
@@ -506,21 +505,17 @@ namespace EditorWindow.FSMSystem.Utilities
         {
             try
             {
-                // Check if the directory exists
                 if (Directory.Exists(folderPath))
                 {
-                    // Delete all ScriptableObject files (files with .asset extension)
-                    string[] scriptableObjectFiles = Directory.GetFiles(folderPath, "*.asset");
-                    foreach (string file in scriptableObjectFiles)
+                    var scriptableObjectFiles = Directory.GetFiles(folderPath, "*.asset");
+                    foreach (var file in scriptableObjectFiles)
                     {
                         File.Delete(file);
                         File.Delete($"{file}.meta");
                         AssetDatabase.Refresh();
                     }
-
-                    // Delete all JSON files
-                    string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
-                    foreach (string file in jsonFiles)
+                    var jsonFiles = Directory.GetFiles(folderPath, "*.json");
+                    foreach (var file in jsonFiles)
                     {
                         File.Delete(file);
                         File.Delete($"{file}.meta");
@@ -532,13 +527,6 @@ namespace EditorWindow.FSMSystem.Utilities
             {
                 Debug.LogError("Error cleaning folder: " + ex.Message);
             }
-        }
-
-
-        public static void RemoveFolder(string path)
-        {
-            FileUtil.DeleteFileOrDirectory($"{path}.meta");
-            FileUtil.DeleteFileOrDirectory($"{path}/");
         }
 
         private static T CreateAsset<T>(string path, string assetName) where T : ScriptableObject
@@ -587,34 +575,44 @@ namespace EditorWindow.FSMSystem.Utilities
 
             return clonedConnections;
         }
-
+        /// <summary>
+        /// Finds a GameObject with a specified ID in its IDGenerator component.
+        /// </summary>
+        /// <typeparam name="T">Type of MonoBehaviour to search for.</typeparam>
+        /// <param name="id">The ID to search for.</param>
+        /// <returns>The GameObject with the specified ID, if found; otherwise, null.</returns>
         public static GameObject FindGameObjectWithId<T>(string id) where T : MonoBehaviour
         {
-            // Find all GameObjects with the component of type T
-            T[] components = GameObject.FindObjectsOfType<T>();
-
-            // Iterate through each GameObject and check if it has the specified ID
-            foreach (T component in components)
+            var components = GameObject.FindObjectsOfType<T>();
+            
+            foreach (var component in components)
             {
-                // Check if the component has an IDGenerator attached
-                IDGenerator idGenerator = component.GetComponent<IDGenerator>();
+                var idGenerator = component.GetComponent<IDGenerator>();
                 if (idGenerator != null && idGenerator.GetUniqueID() == id)
                 {
-                    // Return the GameObject if the ID matches
                     return component.gameObject;
                 }
             }
-
-            // Return null if no matching GameObject is found
             return null;
         }
-
+        public static void UpdateHitEnableOverrides(bool enableHitState)
+        {
+            GetElementsFromGraphView();
+            foreach (var node in _nodes)
+            {
+                if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
+                {
+                    node.UpdateHitEnable(enableHitState);
+                }
+            }
+        }
         #endregion
 
         #region GetMethods
 
         private static void GetElementsFromGraphView()
         {
+            _nodes.Clear();
             _graphView.graphElements.ForEach(graphElement =>
             {
                 if (graphElement is FsmNode node)

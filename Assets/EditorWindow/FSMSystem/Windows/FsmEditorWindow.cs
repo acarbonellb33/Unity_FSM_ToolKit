@@ -1,10 +1,7 @@
-using Unity.VisualScripting;
-
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Windows
 {
     using System;
-    using System.Text.RegularExpressions;
     using UnityEditor;
     using UnityEditor.UIElements;
     using UnityEngine;
@@ -14,6 +11,9 @@ namespace EditorWindow.FSMSystem.Windows
     using Utilities;
     using FSM.Nodes;
     using FSM.Utilities;
+    /// <summary>
+    /// Represents an editor window for managing finite state machines. This window contains a graph view for creating and editing FSMs. The window also contains a toolbar with buttons for saving, reloading, clearing, and toggling the minimap.
+    /// </summary>
     public class FsmEditorWindow : EditorWindow
     {
         private static FsmGraphView _graphView;
@@ -29,7 +29,10 @@ namespace EditorWindow.FSMSystem.Windows
 
         private bool _isCompiling;
         private bool _shouldClose;
-
+        /// <summary>
+        /// Opens the FSM editor window with the provided save data.
+        /// </summary>
+        /// <param name="saveData">The save data containing information about the FSM graph.</param>
         public static void OpenWithSaveData(FsmGraphSaveData saveData)
         {
             _saveData = saveData;
@@ -52,20 +55,10 @@ namespace EditorWindow.FSMSystem.Windows
             if (string.IsNullOrEmpty(assetPath)) return;
             _graphView.ClearGraph();
             FsmIOUtility.Initialize(saveData.FileName, _graphView, saveData.InitialState, saveData.HitData);
+            EditorPrefs.SetBool("EnableHitState", _saveData.HitData.HitEnable);
             FsmIOUtility.Load();
         }
-
-        private static GameObject FindGameObjectWithClass<T>() where T : MonoBehaviour
-        {
-            T[] components = GameObject.FindObjectsOfType<T>();
-            if (components == null || components.Length == 0)
-            {
-                return null;
-            }
-
-            return components[0].gameObject;
-        }
-
+        // Called when the window is enabled
         private void OnEnable()
         {
             AddGraphView();
@@ -78,14 +71,14 @@ namespace EditorWindow.FSMSystem.Windows
 
             EditorApplication.hierarchyChanged += OnHierarchyChanged;
         }
-
+        // Called when the window is disabled
         private void OnDisable()
         {
             EditorApplication.update -= OnEditorUpdate;
 
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
         }
-
+        // Called every frame to check if the script is compiling
         private void OnEditorUpdate()
         {
             if (_isCompiling && !EditorApplication.isCompiling)
@@ -95,7 +88,7 @@ namespace EditorWindow.FSMSystem.Windows
                 PerformActionAfterCompilation();
             }
         }
-
+        // Called after the script has been compiled
         private void PerformActionAfterCompilation()
         {
             var gameObject = Selection.activeGameObject;
@@ -104,10 +97,9 @@ namespace EditorWindow.FSMSystem.Windows
             gameObject.GetComponent<FsmGraph>().UpdateComponentOfGameObject();
             _shouldClose = false;
         }
-
+        // Ensures that all GameObjects in the scene have an IDGenerator component
         private static void OnHierarchyChanged()
         {
-            // Get all root GameObjects in the scene
             GameObject[] rootGameObjects =
                 UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
 
@@ -116,7 +108,6 @@ namespace EditorWindow.FSMSystem.Windows
                 EnsureIDGeneratorRecursive(rootGameObject);
             }
         }
-
         private static void EnsureIDGeneratorRecursive(GameObject gameObject)
         {
             if (gameObject.GetComponent<IDGenerator>() == null)
@@ -132,19 +123,7 @@ namespace EditorWindow.FSMSystem.Windows
                 EnsureIDGeneratorRecursive(child.gameObject);
             }
         }
-
-        private void AddGraphView()
-        {
-            _graphView = new FsmGraphView(this);
-            _graphView.StretchToParentSize();
-            rootVisualElement.Add(_graphView);
-        }
-
-        private void AddStyles()
-        {
-            rootVisualElement.AddStyleSheets("FSMSystem/FSMVariables.uss");
-        }
-
+        // Adds the toolbar to the window
         private void AddToolbar()
         {
             var toolbar = new Toolbar();
@@ -175,9 +154,20 @@ namespace EditorWindow.FSMSystem.Windows
             box.AddStyleSheets("FSMSystem/FSMToolbarStyle.uss");
             rootVisualElement.Add(box);
         }
+        // Called when the window is closed to override the default behavior
+        private void OnDestroy()
+        {
+            if(_shouldClose) return;
+            // Prompt the user to save changes before closing
+            var option = EditorUtility.DisplayDialog("Save Changes",
+                "Do you want to save changes before closing?",
+                "Save", "Discard");
 
+            if (option) Save();
+        }
+        
         #region Toolbar Actions
-
+        //Event handlers for toolbar buttons
         private void Save()
         {
             if (String.IsNullOrEmpty(initialState))
@@ -208,69 +198,53 @@ namespace EditorWindow.FSMSystem.Windows
                 FsmEnemyStateMachineEditor.GenerateScript(_saveData);
             }
         }
-
         private void Clear()
         {
             _graphView.ClearGraph();
         }
-
         private void Reload()
         {
             Clear();
 
             FsmIOUtility.Initialize(_saveData.FileName, _graphView, initialState, _saveData.HitData);
+            EditorPrefs.SetBool("EnableHitState", _saveData.HitData.HitEnable);
             FsmIOUtility.Load();
         }
-
         private void ToggleMiniMap()
         {
             _graphView.ToggleMiniMap();
             _miniMapButton.ToggleInClassList("fsm-toolbar__button__selected");
         }
-
         private void OpenHitPopup(VisualElement buttonElement)
         {
             Rect buttonRect = buttonElement.worldBound;
             PopupWindow.Show(new Rect(buttonRect.x - 187.5f, buttonRect.y - 77.5f, 250, 100), _hitStatePopup);
         }
-
         #endregion
-
-        private void OnDestroy()
-        {
-            if(_shouldClose) return;
-            // Prompt the user to save changes before closing
-            var option = EditorUtility.DisplayDialog("Save Changes",
-                "Do you want to save changes before closing?",
-                "Save", "Discard");
-
-            if (option) Save();
-        }
-
+        
         #region Utilities
-
+        private void AddGraphView()
+        {
+            _graphView = new FsmGraphView(this);
+            _graphView.StretchToParentSize();
+            rootVisualElement.Add(_graphView);
+        }
+        private void AddStyles()
+        {
+            rootVisualElement.AddStyleSheets("FSMSystem/FSMVariables.uss");
+        }
         public void EnableSaving()
         {
             _saveButton.SetEnabled(true);
-            //_generateScriptButton.SetEnabled(true);
         }
-
         public void DisableSaving()
         {
             _saveButton.SetEnabled(false);
-            //_generateScriptButton.SetEnabled(false);
         }
-
-        public string GetFileName()
-        {
-            return _fileName;
-        }
-
         public FsmHitStatePopup GetHitStatePopup()
         {
             return _hitStatePopup;
         }
-
         #endregion
     }
 }

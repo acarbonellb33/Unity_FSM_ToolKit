@@ -1,7 +1,9 @@
 namespace FSM.Player
 {
     using UnityEngine;
-
+    /// <summary>
+    /// Controls the movement of the player character.
+    /// </summary>
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] CharacterController controller;

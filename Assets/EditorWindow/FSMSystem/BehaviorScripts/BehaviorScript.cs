@@ -7,12 +7,19 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
     using FSM.Nodes.States;
     using FSM.Nodes.States.StateScripts;
     using UnityEngine;
+    /// <summary>
+    /// Represents an abstract behavior script for managing state options.
+    /// </summary>
     public abstract class BehaviorScript : MonoBehaviour
     {
         public List<StateScript> options;
         public int selectedOptionIndex = 0;
         protected FsmStates CurrentState = FsmStates.Idle;
-
+        
+        /// <summary>
+        /// Retrieves variables and their values from the behavior script.
+        /// </summary>
+        /// <returns>A dictionary containing variable names and their values.</returns>
         public virtual Dictionary<string, object> GetVariables()
         {
             Dictionary<string, object> variables = new Dictionary<string, object>();
@@ -27,7 +34,12 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
 
             return variables;
         }
-
+        
+        /// <summary>
+        /// Sets the value of a specified variable in the behavior script.
+        /// </summary>
+        /// <param name="variableName">The name of the variable to set.</param>
+        /// <param name="newValue">The new value to assign to the variable.</param>
         public virtual void SetVariableValue(string variableName, object newValue)
         {
             var type = GetType();

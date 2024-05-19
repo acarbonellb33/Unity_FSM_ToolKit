@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Elements
 {
-    using System;
     using System.Collections.Generic;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -16,37 +15,51 @@ namespace EditorWindow.FSMSystem.Elements
     using FSM.Nodes.States.StatesData;
     using FSM.Utilities;
     using FSM.Nodes.States;
+    using UnityEditor;
+    /// <summary>
+    /// Represents a custom state node in an FSM graph, inheriting from <see cref="FsmNode"/>. With this node you are able to add and execute a function from any GameObject.
+    /// </summary>
     public class FsmCustomStateNode : FsmNode
     {
-        //Custom State Attributes
+        private Toggle _hitPopupToggle;
+        // Custom State Attributes
         private GameObject _selectedGameObject;
         private Component _selectedComponent;
         private string _selectedFunction;
         private DropdownField _componentDropdown = new();
         private readonly DropdownField _functionDropdown = new();
 
+        /// <summary>
+        /// Initializes the FSM custom state node.
+        /// </summary>
+        /// <param name="nodeName">The name of the node.</param>
+        /// <param name="fsmGraphView">The graph view this node belongs to.</param>
+        /// <param name="vectorPos">The position of the node in the graph.</param>
         public override void Initialize(string nodeName, FsmGraphView fsmGraphView, Vector2 vectorPos)
         {
             base.Initialize(nodeName, fsmGraphView, vectorPos);
             NodeType = FsmNodeType.CustomState;
-            
-            DataObjects = new List<StateScriptData> {new CustomData()};
+
+            DataObjects = new List<StateScriptData> { new CustomData() };
 
             var connectionSaveData = new FsmConnectionSaveData()
             {
                 Text = "Condition",
             };
-            Choices.Add(connectionSaveData);
+            Connections.Add(connectionSaveData);
 
             mainContainer.AddToClassList("fsm-node_main-container");
             extensionContainer.AddToClassList("fsm-node_extension-container");
         }
 
+        /// <summary>
+        /// Draws the node, adding ports and custom state attributes.
+        /// </summary>
         public override void Draw()
         {
             base.Draw();
 
-            foreach (var connection in Choices)
+            foreach (var connection in Connections)
             {
                 OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output,
                     Port.Capacity.Multi);
@@ -61,14 +74,27 @@ namespace EditorWindow.FSMSystem.Elements
                 outputContainer.AddToClassList("fsm-node_input-output-container");
             }
 
-            var showPopupToggle = new Toggle()
+            var animatorPopupToggle = new Toggle()
             {
-                label = "Enable Animator Trigger",
+                label = "Animator Trigger",
                 value = HasAnimatorTrigger,
             };
-            showPopupToggle.RegisterValueChangedCallback(_ => { ShowAnimatorParameterDropdown(showPopupToggle); });
-            showPopupToggle.AddToClassList("fsm-node_toggle");
+            animatorPopupToggle.RegisterValueChangedCallback(_ => { ShowAnimatorParameterDropdown(animatorPopupToggle); });
+            animatorPopupToggle.AddToClassList("fsm-node_toggle-bold");
 
+            _hitPopupToggle = new Toggle()
+            {
+                label = "Override Hit State",
+                value = HasHitStateOverride,
+            };
+            _hitPopupToggle.RegisterValueChangedCallback(_ => { ShowHitStateOverrideToggle(_hitPopupToggle); });
+            _hitPopupToggle.AddToClassList("fsm-node_toggle-bold");
+            
+            var horizontalLine = new VisualElement();
+            horizontalLine.AddToClassList("horizontal-line");
+            
+            var horizontalLine2 = new VisualElement();
+            horizontalLine2.AddToClassList("horizontal-line");
 
             var customDataContainer = new VisualElement();
 
@@ -76,10 +102,21 @@ namespace EditorWindow.FSMSystem.Elements
 
             CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
-            extensionContainer.Add(showPopupToggle);
-            if (showPopupToggle.value) ShowAnimatorParameterDropdown(showPopupToggle);
             extensionContainer.Add(customDataContainer);
+            extensionContainer.Add(horizontalLine);
+            extensionContainer.Add(animatorPopupToggle);
+            extensionContainer.Add(horizontalLine2);
+            if (animatorPopupToggle.value) ShowAnimatorParameterDropdown(animatorPopupToggle);
+            extensionContainer.Add(_hitPopupToggle);
 
+            if (EditorPrefs.GetBool("EnableHitState"))
+            {
+                _hitPopupToggle.SetEnabled(true);
+                if (_hitPopupToggle.value) ShowHitStateOverrideToggle(_hitPopupToggle);
+            }
+            else _hitPopupToggle.SetEnabled(false);
+            
+            
             mainContainer.style.backgroundColor = new Color(200f / 255f, 250f / 255f, 100f / 255f);
 
             RefreshExpandedState();
@@ -87,6 +124,9 @@ namespace EditorWindow.FSMSystem.Elements
 
         #region Custom State Methods
 
+        /// <summary>
+        /// Populates the component dropdown based on the selected GameObject.
+        /// </summary>
         private void PopulateComponentDropdown()
         {
             if (_selectedGameObject == null)
@@ -102,12 +142,13 @@ namespace EditorWindow.FSMSystem.Elements
             }
 
             _componentDropdown ??= new DropdownField("Select Component", new List<string>(), 0);
-
             _componentDropdown.choices = componentNames;
         }
 
-
-        // Method to populate the dropdown menu with function options
+        /// <summary>
+        /// Populates the function dropdown based on the selected component.
+        /// </summary>
+        /// <param name="dropdown">The dropdown field to populate.</param>
         private void PopulateFunctionDropdown(DropdownField dropdown)
         {
             if (_selectedGameObject == null)
@@ -116,11 +157,11 @@ namespace EditorWindow.FSMSystem.Elements
             }
 
             dropdown ??= new DropdownField("Select Function", new List<string>(), 0);
-            
+
             var methods = _selectedComponent.GetType().GetMethods(BindingFlags.Instance |
-                                                                           BindingFlags.Public |
-                                                                           BindingFlags.IgnoreReturn |
-                                                                           BindingFlags.DeclaredOnly);
+                                                                  BindingFlags.Public |
+                                                                  BindingFlags.IgnoreReturn |
+                                                                  BindingFlags.DeclaredOnly);
             List<string> methodNames = new();
             foreach (var method in methods)
             {
@@ -131,13 +172,17 @@ namespace EditorWindow.FSMSystem.Elements
             dropdown.RegisterValueChangedCallback(evt => { _selectedFunction = evt.newValue; });
         }
 
-
         #endregion
 
         #region ScriptableObject Attributes
+
+        /// <summary>
+        /// Creates state attributes in the custom data container.
+        /// </summary>
+        /// <param name="attributes">The list of state attributes.</param>
+        /// <param name="customDataContainer">The custom data container element.</param>
         private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
         {
-
             var stateAttributeContainer = new VisualElement();
             stateAttributeContainer.AddToClassList("fsm-node_state-attribute-container");
 
@@ -148,7 +193,6 @@ namespace EditorWindow.FSMSystem.Elements
                 switch (result[0])
                 {
                     case "selectedGameObject":
-
                         var input = result[2];
                         var output = Regex.Replace(input, @"\s*\([^()]*\)", "");
 
@@ -170,8 +214,7 @@ namespace EditorWindow.FSMSystem.Elements
                         });
                         if (objectField.value != null)
                         {
-                            StateScript.SetVariableValue(result[0],
-                                ((GameObject)objectField.value).GetComponent<IDGenerator>().GetUniqueID());
+                            StateScript.SetVariableValue(result[0], ((GameObject)objectField.value).GetComponent<IDGenerator>().GetUniqueID());
                             _selectedGameObject = (GameObject)objectField.value;
                             PopulateComponentDropdown();
                         }
@@ -182,7 +225,7 @@ namespace EditorWindow.FSMSystem.Elements
                     case "selectedComponent":
                         _componentDropdown.label = UpdateNameStyle(result[0]);
                         _componentDropdown.value = result[2];
-                        if (!String.IsNullOrEmpty(_componentDropdown.value))
+                        if (!string.IsNullOrEmpty(_componentDropdown.value))
                         {
                             _selectedComponent = _selectedGameObject.GetComponent(_componentDropdown.value);
                             StateScript.SetVariableValue(result[0], _componentDropdown.value);
@@ -199,6 +242,7 @@ namespace EditorWindow.FSMSystem.Elements
                         _componentDropdown.AddToClassList("fsm-node_state-attribute-field");
                         stateAttributeContainer.Add(_componentDropdown);
                         break;
+
                     case "selectedFunction":
                         _functionDropdown.label = UpdateNameStyle(result[0]);
                         _functionDropdown.value = result[2];
@@ -216,6 +260,7 @@ namespace EditorWindow.FSMSystem.Elements
 
             customDataContainer.Add(stateAttributeContainer);
         }
+
         #endregion
     }
 }

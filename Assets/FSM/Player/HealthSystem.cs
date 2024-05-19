@@ -1,7 +1,9 @@
 namespace FSM.Player
 {
     using UnityEngine;
-
+    /// <summary>
+    /// Manages the health system of a player character.
+    /// </summary>
     public class HealthSystem : MonoBehaviour
     {
         public float maxHealth = 100f;
@@ -14,14 +16,19 @@ namespace FSM.Player
             _currentHealth = maxHealth;
             healthBar.UpdateHealthBar(maxHealth, _currentHealth);
         }
-
+        /// <summary>
+        /// Inflicts damage to the player.
+        /// </summary>
+        /// <param name="amount">Amount of damage to inflict.</param>
         public void TakeDamage(float amount)
         {
             _currentHealth -= amount;
             if (_currentHealth <= 0) Die();
             healthBar.UpdateHealthBar(maxHealth, _currentHealth);
         }
-
+        /// <summary>
+        /// Heals the player to full health.
+        /// </summary>
         public void Heal()
         {
             _currentHealth = maxHealth;
@@ -33,12 +40,16 @@ namespace FSM.Player
         }
 
         #region Getters
-
+        /// <summary>
+        /// Returns the maximum health value.
+        /// </summary>
         public float GetMaxHealth()
         {
             return maxHealth;
         }
-
+        /// <summary>
+        /// Returns the current health value.
+        /// </summary>
         public float GetCurrentHealth()
         {
             return _currentHealth;

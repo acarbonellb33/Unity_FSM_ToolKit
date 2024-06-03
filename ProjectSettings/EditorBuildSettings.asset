@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scene/DemoScene URPP.unity
-    guid: 771097964d23a954783ff5648e4915dc
+    path: Assets/Demo/Scenes/DemoScene URP.unity
+    guid: a449c75750e199d47a55653331103d87
   m_configObjects: {}

@@ -10,6 +10,8 @@ namespace FSM.Enumerations
         Initial,
         DualTransition,
         Extension,
-        CustomState
+        CustomState,
+        CustomCondition,
+        Variable
     }
 }

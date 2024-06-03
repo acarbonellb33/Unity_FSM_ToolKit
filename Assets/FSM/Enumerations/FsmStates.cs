@@ -12,6 +12,8 @@ namespace FSM.Enumerations
         Hit,
         Die,
         Search,
+        Flee,
+        Variable,
         Custom,
         Alert
     }

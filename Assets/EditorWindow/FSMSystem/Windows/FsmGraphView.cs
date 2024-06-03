@@ -79,7 +79,7 @@ namespace EditorWindow.FSMSystem.Windows
 
                 choiceData.NodeId = id;
                 choiceData.Text = text;
-
+                
                 FsmConnectionSaveData choiceData2 = new FsmConnectionSaveData();
                 string id2 = ((FsmNode)inputPort.node).Id;
                 string text2 = ((FsmNode)inputPort.node).StateName;
@@ -87,8 +87,22 @@ namespace EditorWindow.FSMSystem.Windows
                 choiceData2.NodeId = id2;
                 choiceData2.Text = text2;
 
-                node.Connections.Clear();
-                node.Connections.Add(choiceData);
+                
+                if(((FsmConnectionSaveData)edge.output.userData).Text == "True" || ((FsmConnectionSaveData)edge.output.userData).Text == "False")
+                {
+                    foreach (var saveData in node.Connections)
+                    {
+                        if(saveData.Text == ((FsmConnectionSaveData)edge.output.userData).Text)
+                        {
+                            saveData.NodeId = id;
+                        }
+                    }
+                }
+                else
+                {
+                    node.Connections.Clear();
+                    node.Connections.Add(choiceData);
+                }
 
                 newNode.Connections.Clear();
                 newNode.Connections.Add(choiceData2);
@@ -148,11 +162,11 @@ namespace EditorWindow.FSMSystem.Windows
             Type nodeType = Type.GetType($"EditorWindow.FSMSystem.Elements.Fsm{nodeT}Node");
             FsmNode node = new FsmNode();
             if (nodeType != null) node = (FsmNode)Activator.CreateInstance(nodeType);
-
+            
             if (fixName)
             {
                 if (nodeT == FsmNodeType.Transition || nodeT == FsmNodeType.DualTransition ||
-                    nodeT == FsmNodeType.Extension)
+                    nodeT == FsmNodeType.Extension || nodeT == FsmNodeType.CustomCondition)
                 {
                     int count = 0;
 
@@ -174,7 +188,7 @@ namespace EditorWindow.FSMSystem.Windows
             }
 
             node.Initialize(nodeName, this, position);
-
+            
             if (shouldDraw)
             {
                 node.Draw();
@@ -226,7 +240,7 @@ namespace EditorWindow.FSMSystem.Windows
             if (ungroupedNodesList.Count == 0)
             {
                 _ungroupedNodes.Remove(nodeName);
-                if (node.NodeType == FsmNodeType.Transition || node.NodeType == FsmNodeType.DualTransition)
+                if (node.NodeType == FsmNodeType.Transition || node.NodeType == FsmNodeType.DualTransition || node.NodeType == FsmNodeType.CustomCondition)
                 {
                     int count = 0;
                     foreach (string stateName in _ungroupedNodes.Keys)
@@ -256,8 +270,6 @@ namespace EditorWindow.FSMSystem.Windows
                     }
                 }
             }
-
-            Debug.Log("Node Name: " + nodeName);
             return null;
         }
         private void DeleteUnconnectedExtensionNodes()
@@ -411,13 +423,16 @@ namespace EditorWindow.FSMSystem.Windows
                             NodeId = nextNodeId,
                             Text = nextNodeName
                         };
-
+                        
                         RemoveNode(node.Key);
                         node.Key.DisconnectAllPorts();
                         RemoveElement(node.Key);
 
-                        nodeToDelete.Connections.Clear();
-                        nodeToDelete.Connections.Add(choiceData);
+                        if (nodeToDelete.Connections.Count < 2)
+                        {
+                           nodeToDelete.Connections.Clear();
+                           nodeToDelete.Connections.Add(choiceData); 
+                        }
                     }
                     else
                     {
@@ -472,19 +487,37 @@ namespace EditorWindow.FSMSystem.Windows
                 NodeId = nextNodeId,
                 Text = nextNodeName
             };
-
+            
             var nextPreviousNode = (FsmNode)previousNode.node;
-            nextPreviousNode.Connections.Clear();
-            nextPreviousNode.Connections.Add(choiceData);
-
             var prePort = nextPreviousNode.outputContainer.Children().OfType<Port>().ToList()[0];
+            var edgeName = ((FsmConnectionSaveData)previousNode.userData).Text;
+       
+            if(edgeName == "True" || edgeName == "False")
+            {
+                var count = 0;
+                foreach (var saveData in nextPreviousNode.Connections)
+                {
+                    if(saveData.Text == edgeName)
+                    {
+                        saveData.NodeId = nextNodeId;
+                        prePort = nextPreviousNode.outputContainer.Children().OfType<Port>().ToList()[count];
+                    }
+                    count++;
+                }
+            }
+            else
+            {
+                nextPreviousNode.Connections.Clear();
+                nextPreviousNode.Connections.Add(choiceData);
+            }
+            
             var nextNewNode = GetNodeFromGraphById(startNode.Connections[0].NodeId);
-
+           
             var nextPort = nextNewNode.inputContainer.Children().OfType<Port>().ToList()[0];
-
+          
             ConnectPorts(prePort, nextPort);
             MarkDirtyRepaint();
-    
+
             return startNode;
         }
         private FsmNode GetNodeFromGraphById(string nodeId)
@@ -510,7 +543,8 @@ namespace EditorWindow.FSMSystem.Windows
             {
                 if (element is FsmNode startNode && (startNode.NodeType == FsmNodeType.Transition ||
                                                      startNode.NodeType == FsmNodeType.DualTransition ||
-                                                     startNode.NodeType == FsmNodeType.Extension))
+                                                     startNode.NodeType == FsmNodeType.Extension ||
+                                                     startNode.NodeType == FsmNodeType.CustomCondition))
                 {
                     startNode.inputContainer.Children().OfType<Port>().ToList().ForEach(port =>
                     {
@@ -596,7 +630,8 @@ namespace EditorWindow.FSMSystem.Windows
                     {
                         if (nextNode.NodeType != FsmNodeType.Transition &&
                             nextNode.NodeType != FsmNodeType.DualTransition &&
-                            nextNode.NodeType != FsmNodeType.Extension)
+                            nextNode.NodeType != FsmNodeType.Extension &&
+                            nextNode.NodeType != FsmNodeType.CustomCondition)
                         {
                             return new HashSet<FsmNode>();
                         }
@@ -622,15 +657,20 @@ namespace EditorWindow.FSMSystem.Windows
 
                         var choiceData = (FsmConnectionSaveData)edge.output.userData;
                         var previousNode = (FsmNode)edge.output.node;
-                        previousNode.SetPortColor(Color.white, Direction.Output);
+                        previousNode.SetPortColor(Color.white, Direction.Output, choiceData.Text);
                         AddToSelection(previousNode);
                         RemoveFromSelection(previousNode);
 
                         choiceData.NodeId = nextNode.Id;
-
+                        
                         if (choiceData.Text == "Initial Node")
                         {
                             _window.initialState = nextNode.StateName;
+                        }
+
+                        if (choiceData.Text == "Override")
+                        {
+                            ((FsmVariableNode)previousNode).ConnectToStateScript(nextNode.StateScript);
                         }
                     }
                 }
@@ -664,7 +704,7 @@ namespace EditorWindow.FSMSystem.Windows
                         }
 
                         var choiceData = (FsmConnectionSaveData)edge.output.userData;
-                        choiceData.NodeId = "";
+                        //choiceData.NodeId = "";
 
 
                         if (choiceData.Text == "Initial Node")
@@ -726,21 +766,26 @@ namespace EditorWindow.FSMSystem.Windows
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(CreateStateItemMenu("Attack"));
+            this.AddManipulator(CreateStateItemMenu("Idle"));
             this.AddManipulator(CreateStateItemMenu("Patrol"));
             this.AddManipulator(CreateStateItemMenu("Chase"));
+            this.AddManipulator(CreateStateItemMenu("Flee"));
             this.AddManipulator(CreateStateItemMenu("Search"));
+            
+            this.AddManipulator(CreateCustomStateItemMenu("Custom"));
+            this.AddManipulator(CreateCustomConditionItemMenu("CustomCondition"));
+            this.AddManipulator(CreateOverrideItemMenu("Variable"));
+            
             this.AddManipulator(CreateTransitionItemMenu("Hearing"));
             this.AddManipulator(CreateTransitionItemMenu("Seeing"));
             this.AddManipulator(CreateTransitionItemMenu("Distance"));
             this.AddManipulator(CreateTransitionItemMenu("Health"));
+            this.AddManipulator(CreateTransitionItemMenu("NextState"));
+            
             this.AddManipulator(CreateDualTransitionStateItemMenu("Hearing"));
             this.AddManipulator(CreateDualTransitionStateItemMenu("Seeing"));
             this.AddManipulator(CreateDualTransitionStateItemMenu("Distance"));
             this.AddManipulator(CreateDualTransitionStateItemMenu("Health"));
-            this.AddManipulator(CreateExtensionNodeMenu("Extension Node"));
-            this.AddManipulator(CreateTransitionItemMenu("NextState"));
-            this.AddManipulator(CreateDualTransitionStateItemMenu("NextState"));
-            this.AddManipulator(CreateCustomStateItemMenu("Custom"));
         }
         private void AddSearchWindow()
         {
@@ -787,19 +832,27 @@ namespace EditorWindow.FSMSystem.Windows
                     AddElement(CreateNode(transitionName,
                         GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition),
                         FsmNodeType.DualTransition))));
-
+            
             return contextualMenuManipulator;
         }
-        private IManipulator CreateExtensionNodeMenu(string transitionName)
+        private IManipulator CreateCustomConditionItemMenu(string transitionName)
         {
             ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
-                menuEvent => menuEvent.menu.AppendAction($"Create Extension Node", menuActionEvent =>
+                menuEvent => menuEvent.menu.AppendAction($"Create Custom Condition", menuActionEvent =>
                     AddElement(CreateNode(transitionName,
-                        GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FsmNodeType.Extension))));
+                        GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FsmNodeType.CustomCondition))));
 
             return contextualMenuManipulator;
         }
+        private IManipulator CreateOverrideItemMenu(string transitionName)
+        {
+            ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(
+                menuEvent => menuEvent.menu.AppendAction($"Create Override Node", menuActionEvent =>
+                    AddElement(CreateNode(transitionName,
+                        GetLocalMousePosition(menuActionEvent.eventInfo.localMousePosition), FsmNodeType.Variable))));
 
+            return contextualMenuManipulator;
+        }
         public Vector2 GetLocalMousePosition(Vector2 mousePosition, bool isSearchWindow = false)
         {
             Vector2 worldMousePosition = mousePosition;

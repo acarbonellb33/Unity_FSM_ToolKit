@@ -28,13 +28,13 @@ namespace FSM.Nodes.States.StateScripts
 
             // Set the agent's destination to a random position within the search area
             // 'agent' and 'searchArea' are inherited from the parent class StateScript
-            if (Vector3.Distance(transform.position, _randomDestination) < 1f)
+            if (HasReachedDestination())
             {
                 SetRandomDestination();
             }
         }
 
-        void SetRandomDestination()
+        private void SetRandomDestination()
         {
             // Generate a random direction within the explore radius
             Vector3 randomDirection = Random.insideUnitSphere * exploreRadius;
@@ -47,6 +47,10 @@ namespace FSM.Nodes.States.StateScripts
             // Set the random destination to the point on the NavMesh and set the agent's destination
             _randomDestination = hit.position;
             Agent.SetDestination(_randomDestination);
+        }
+        public bool HasReachedDestination()
+        {
+            return !Agent.pathPending && Agent.remainingDistance <= 0.2f;
         }
     }
 }

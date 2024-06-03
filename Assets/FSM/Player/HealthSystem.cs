@@ -7,6 +7,7 @@ namespace FSM.Player
     public class HealthSystem : MonoBehaviour
     {
         public float maxHealth = 100f;
+        public RespawnSystem respawnSystem;
         private float _currentHealth;
 
         [SerializeField] private HealthBar healthBar;
@@ -32,11 +33,14 @@ namespace FSM.Player
         public void Heal()
         {
             _currentHealth = maxHealth;
+            healthBar.UpdateHealthBar(maxHealth, _currentHealth);
         }
 
         private void Die()
         {
             //Destroy(gameObject);
+            GetComponent<PlayerMovement>().enabled = false;
+            respawnSystem.ShowDeathScreen();
         }
 
         #region Getters

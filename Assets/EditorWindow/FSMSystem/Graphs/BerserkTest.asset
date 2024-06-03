@@ -1,0 +1,240 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b664ecc41c97a804395c2672b001d2d7, type: 3}
+  m_Name: BerserkTest
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: BerserkTest
+  <InitialState>k__BackingField: Idle
+  <Nodes>k__BackingField:
+  - <Id>k__BackingField: cf047117-8c3a-4f58-9022-ef18f326f4a4
+    <Name>k__BackingField: Extension 0
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Extension 1
+      <NodeId>k__BackingField: 1b3c3798-7d5a-4984-a15d-f1823f74d1f4
+    <NodeType>k__BackingField: 4
+    <Position>k__BackingField: {x: 3024, y: 992}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: 
+  - <Id>k__BackingField: 1b3c3798-7d5a-4984-a15d-f1823f74d1f4
+    <Name>k__BackingField: Extension 1
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Idle
+      <NodeId>k__BackingField: 3851f61b-7c96-4619-8ce3-96696ffa1e9b
+    <NodeType>k__BackingField: 4
+    <Position>k__BackingField: {x: 154, y: 1000}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: 
+  - <Id>k__BackingField: d137af9e-1898-4193-a492-8978d86108cb
+    <Name>k__BackingField: Variable
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Override
+      <NodeId>k__BackingField: f4a1aa10-1fb0-482e-a4bc-10dfe522a1b1
+    <NodeType>k__BackingField: 7
+    <Position>k__BackingField: {x: 2059, y: 675}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"selectedVariable\": \"attackDamage\",\n   
+      \"value\": \"20\"\n}"
+  - <Id>k__BackingField: 20c0672d-f0d2-4bac-909d-dc37ac929bd0
+    <Name>k__BackingField: Health
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: True
+      <NodeId>k__BackingField: f4a1aa10-1fb0-482e-a4bc-10dfe522a1b1
+    - <Text>k__BackingField: False
+      <NodeId>k__BackingField: d137af9e-1898-4193-a492-8978d86108cb
+    <NodeType>k__BackingField: 3
+    <Position>k__BackingField: {x: 1770, y: 503}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"health\": 50.0\n}"
+  - <Id>k__BackingField: 740a2049-c69a-46f9-b4f8-d0dac28364e0
+    <Name>k__BackingField: Initial State
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Initial Node
+      <NodeId>k__BackingField: 3851f61b-7c96-4619-8ce3-96696ffa1e9b
+    <NodeType>k__BackingField: 2
+    <Position>k__BackingField: {x: 100, y: 100}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: 
+  - <Id>k__BackingField: 4f201d17-27d9-4ef9-9aeb-f9a41e62d183
+    <Name>k__BackingField: Distance 0
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: a7612675-1ca7-48e4-ae8a-de88bc3c7149
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 588, y: 177}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"operand\": 1,\n    \"distanceFromPlayer\":
+      10.0\n}"
+  - <Id>k__BackingField: a7612675-1ca7-48e4-ae8a-de88bc3c7149
+    <Name>k__BackingField: Chase
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: b810be76-2e16-4348-a661-00bb9f871b1d
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 989, y: 222}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 1
+      <ParameterName>k__BackingField: Run
+      <ParameterType>k__BackingField: Trigger
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"chaseSpeed\": 5.0,\n    \"chaseRange\":
+      10.0\n}"
+  - <Id>k__BackingField: b810be76-2e16-4348-a661-00bb9f871b1d
+    <Name>k__BackingField: Distance 1
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Next Action
+      <NodeId>k__BackingField: 20c0672d-f0d2-4bac-909d-dc37ac929bd0
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 1305, y: 286}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"operand\": 1,\n    \"distanceFromPlayer\":
+      2.0\n}"
+  - <Id>k__BackingField: f4a1aa10-1fb0-482e-a4bc-10dfe522a1b1
+    <Name>k__BackingField: Attack
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 528e9b55-a4b2-478b-a638-ad106f89ccf9
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 2341, y: 503}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 1
+      <ParameterName>k__BackingField: Punch
+      <ParameterType>k__BackingField: Trigger
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"attackDamage\": 10.0,\n    \"attackFrequency\":
+      1.0\n}"
+  - <Id>k__BackingField: 3851f61b-7c96-4619-8ce3-96696ffa1e9b
+    <Name>k__BackingField: Idle
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Condition
+      <NodeId>k__BackingField: 4f201d17-27d9-4ef9-9aeb-f9a41e62d183
+    <NodeType>k__BackingField: 0
+    <Position>k__BackingField: {x: 273, y: 125}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 1
+      <ParameterName>k__BackingField: Idle
+      <ParameterType>k__BackingField: Trigger
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: '{}'
+  - <Id>k__BackingField: 528e9b55-a4b2-478b-a638-ad106f89ccf9
+    <Name>k__BackingField: Distance 2
+    <Connections>k__BackingField:
+    - <Text>k__BackingField: Extension
+      <NodeId>k__BackingField: cf047117-8c3a-4f58-9022-ef18f326f4a4
+    <NodeType>k__BackingField: 1
+    <Position>k__BackingField: {x: 2662, y: 503}
+    <AnimatorSaveData>k__BackingField:
+      <AnimationTrigger>k__BackingField: 0
+      <ParameterName>k__BackingField: 
+      <ParameterType>k__BackingField: 
+      <Value>k__BackingField: 
+    <HitNodeSaveData>k__BackingField:
+      <HasHitOverride>k__BackingField: 0
+      <CanGetHit>k__BackingField: 0
+      <TimeToWait>k__BackingField: 0
+      <CanDie>k__BackingField: 0
+    <DataObject>k__BackingField: "{\n    \"operand\": 0,\n    \"distanceFromPlayer\":
+      2.0\n}"
+  <OldNodeNames>k__BackingField:
+  - Extension 0
+  - Extension 1
+  - Variable
+  - Health
+  - Initial State
+  - Distance 0
+  - Chase
+  - Distance 1
+  - Attack
+  - Idle
+  - Distance 2
+  <GameObject>k__BackingField: BerserkEnemy
+  <HitData>k__BackingField:
+    <HitEnable>k__BackingField: 0
+    <TimeToWait>k__BackingField: 0
+    <CanDie>k__BackingField: 0

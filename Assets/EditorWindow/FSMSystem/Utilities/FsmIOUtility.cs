@@ -204,7 +204,6 @@ namespace EditorWindow.FSMSystem.Utilities
                     $"Ok");
                 return;
             }
-            
             LoadNodes(graphSaveData.Nodes);
             LoadConnections();
             LoadHitData(graphSaveData.HitData);
@@ -220,6 +219,7 @@ namespace EditorWindow.FSMSystem.Utilities
                 node.StateName = nodeData.Name;
                 node.Connections = connections;
                 node.StateScript = LoadFromJson(node);
+                node.NodeType = nodeData.NodeType;
                 if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
                 {
                     node.SetAnimatorSaveData(nodeData.AnimatorSaveData);
@@ -275,6 +275,10 @@ namespace EditorWindow.FSMSystem.Utilities
                     PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
                     node.StateScript = patrolData;
                     break;
+                case "Idle":
+                    IdleData idleData = JsonUtility.FromJson<IdleData>(json);
+                    node.StateScript = idleData;
+                    break;
                 case "Attack":
                     AttackData attackData = JsonUtility.FromJson<AttackData>(json);
                     node.StateScript = attackData;
@@ -282,6 +286,10 @@ namespace EditorWindow.FSMSystem.Utilities
                 case "Chase":
                     ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);
                     node.StateScript = chaseData;
+                    break;
+                case "Flee":
+                    FleeData fleeData = JsonUtility.FromJson<FleeData>(json);
+                    node.StateScript = fleeData;
                     break;
                 case "Search":
                     SearchData searchData = JsonUtility.FromJson<SearchData>(json);
@@ -310,6 +318,14 @@ namespace EditorWindow.FSMSystem.Utilities
                 case "Custom":
                     CustomData customData = JsonUtility.FromJson<CustomData>(json);
                     node.StateScript = customData;
+                    break;
+                case "CustomCondition":
+                    CustomConditionData customConditionData = JsonUtility.FromJson<CustomConditionData>(json);
+                    node.StateScript = customConditionData;
+                    break;
+                case "Variable":
+                    VariableData variableData = JsonUtility.FromJson<VariableData>(json);
+                    node.StateScript = variableData;
                     break;
             }
 
@@ -328,6 +344,10 @@ namespace EditorWindow.FSMSystem.Utilities
                     PatrolData patrolData = JsonUtility.FromJson<PatrolData>(json);
                     node.StateScript = patrolData;
                     break;
+                case "Idle":
+                    IdleData idleData = JsonUtility.FromJson<IdleData>(json);
+                    node.StateScript = idleData;
+                    break;
                 case "Attack":
                     AttackData attackData = JsonUtility.FromJson<AttackData>(json);
                     node.StateScript = attackData;
@@ -335,6 +355,10 @@ namespace EditorWindow.FSMSystem.Utilities
                 case "Chase":
                     ChaseData chaseData = JsonUtility.FromJson<ChaseData>(json);
                     node.StateScript = chaseData;
+                    break;
+                case "Flee":
+                    FleeData fleeData = JsonUtility.FromJson<FleeData>(json);
+                    node.StateScript = fleeData;
                     break;
                 case "Search":
                     SearchData searchData = JsonUtility.FromJson<SearchData>(json);
@@ -363,6 +387,14 @@ namespace EditorWindow.FSMSystem.Utilities
                 case "Custom":
                     CustomData customData = JsonUtility.FromJson<CustomData>(json);
                     node.StateScript = customData;
+                    break;
+                case "CustomCondition":
+                    CustomConditionData customConditionData = JsonUtility.FromJson<CustomConditionData>(json);
+                    node.StateScript = customConditionData;
+                    break;
+                case "Variable":
+                    VariableData variableData = JsonUtility.FromJson<VariableData>(json);
+                    node.StateScript = variableData;
                     break;
             }
 
@@ -397,6 +429,10 @@ namespace EditorWindow.FSMSystem.Utilities
                                     Edge edge = choicePort.ConnectTo(nextNodeInputPort);
                                     _graphView.AddElement(edge);
                                     loadedNode.Value.RefreshPorts();
+                                    if (loadedNode.Value.NodeType == FsmNodeType.Variable)
+                                    {
+                                        ((FsmVariableNode)loadedNode.Value).ConnectToStateScript(nextNode.StateScript);
+                                    }
                                 }
                             }
                         }
@@ -407,7 +443,7 @@ namespace EditorWindow.FSMSystem.Utilities
 
         private static void LoadHitData(FsmHitSaveData hitData)
         {
-            _graphView.GetWindow().GetHitStatePopup().Initialize(hitData);
+            if(_graphView.GetWindow().GetHitStatePopup() != null)_graphView.GetWindow().GetHitStatePopup().Initialize(hitData);
         }
 
         #endregion

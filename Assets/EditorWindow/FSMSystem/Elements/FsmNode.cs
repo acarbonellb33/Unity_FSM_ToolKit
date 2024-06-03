@@ -41,7 +41,8 @@ namespace EditorWindow.FSMSystem.Elements
         public StateScriptData StateScript { get; set; }
         
         protected List<StateScriptData> DataObjects;
-        protected Port InputPort, OutputPort;
+        protected Port InputPort;
+        protected List<Port> OutputPort;
         
         private FsmGraphView _graphView;
         private Label _stateNameField;
@@ -71,6 +72,7 @@ namespace EditorWindow.FSMSystem.Elements
             _graphView = graphView;
             SetPosition(new Rect(vectorPos, Vector2.zero));
 
+            OutputPort = new List<Port>();
             StateScript = null;
 
             AddManipulators();
@@ -215,7 +217,8 @@ namespace EditorWindow.FSMSystem.Elements
         /// </summary>
         /// <param name="color">The color to set.</param>
         /// <param name="direction">The direction of the port (input or output).</param>
-        public void SetPortColor(Color color, Direction direction)
+        /// <param name="portName">The name of the port.</param>
+        public void SetPortColor(Color color, Direction direction, string portName = "")
         {
             if (direction == Direction.Input)
             {
@@ -223,7 +226,10 @@ namespace EditorWindow.FSMSystem.Elements
             }
             else
             {
-                OutputPort.portColor = color;
+                foreach (var nodeOutputPort in OutputPort)
+                {
+                    if(nodeOutputPort.portName == portName)nodeOutputPort.portColor = color;
+                }
             }
         }
         #endregion
@@ -288,17 +294,6 @@ namespace EditorWindow.FSMSystem.Elements
                 toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
                 container.Add(toggleField);
             }
-            else if (_parameterType == "Trigger")
-            {
-                var toggleField = new Toggle()
-                {
-                    label = dropdown.value,
-                    value = bool.Parse(_animatorValue)
-                };
-                toggleField.AddToClassList("fsm-node_state-attribute-field");
-                toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString(); });
-                container.Add(toggleField);
-            }
 
             dropdown.RegisterValueChangedCallback(evt =>
             {
@@ -348,16 +343,9 @@ namespace EditorWindow.FSMSystem.Elements
                 }
                 else if (parameterType == "Trigger")
                 {
-                    var toggleField = new Toggle()
-                    {
-                        label = selectedParameter
-                    };
                     _animatorParameter = selectedParameter;
                     _parameterType = parameterType;
-                    _animatorValue = toggleField.value.ToString();
-                    toggleField.AddToClassList("fsm-node_state-attribute-field");
-                    toggleField.RegisterValueChangedCallback(e => { _animatorValue = e.newValue.ToString();});
-                    container.Insert(1, toggleField);
+                    _animatorValue = "";
                 }
                 HasAnimatorTrigger = true;
             });

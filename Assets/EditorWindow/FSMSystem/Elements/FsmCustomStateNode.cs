@@ -61,16 +61,17 @@ namespace EditorWindow.FSMSystem.Elements
 
             foreach (var connection in Connections)
             {
-                OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output,
+                var outputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output,
                     Port.Capacity.Multi);
-                if (!OutputPort.connected)
+                if (!outputPort.connected)
                 {
-                    OutputPort.portColor = Color.red;
+                    outputPort.portColor = Color.red;
                 }
 
-                OutputPort.userData = connection;
+                outputPort.userData = connection;
 
-                outputContainer.Add(OutputPort);
+                OutputPort.Add(outputPort);
+                outputContainer.Add(outputPort);
                 outputContainer.AddToClassList("fsm-node_input-output-container");
             }
 
@@ -98,7 +99,7 @@ namespace EditorWindow.FSMSystem.Elements
 
             var customDataContainer = new VisualElement();
 
-            GetScriptableObject();
+            StateScript = new CustomData();
 
             CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
@@ -184,6 +185,9 @@ namespace EditorWindow.FSMSystem.Elements
         private void CreateStateAttribute(List<string> attributes, VisualElement customDataContainer)
         {
             var stateAttributeContainer = new VisualElement();
+            var stateAttributeLabel = FsmElementUtility.CreateLabel("State Attributes Fields");    
+            stateAttributeLabel.AddToClassList("fsm-node_state-attribute-label");
+            stateAttributeContainer.Add(stateAttributeLabel);
             stateAttributeContainer.AddToClassList("fsm-node_state-attribute-container");
 
             foreach (var attribute in attributes)

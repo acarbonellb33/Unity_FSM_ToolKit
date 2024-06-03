@@ -2,8 +2,8 @@ Image
 {
     margin-top: 10px;
     margin-bottom: 5px;
-    width:50;
-    height:50;
+    width:100;
+    height:100;
     align-self: center;
 }
 .customLabelClass  > .unity-text-field__input {

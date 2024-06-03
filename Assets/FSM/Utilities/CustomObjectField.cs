@@ -1,4 +1,5 @@
-﻿namespace FSM.Utilities
+﻿#if UNITY_EDITOR
+namespace FSM.Utilities
 {
     using UnityEngine;
     using UnityEditor.UIElements;
@@ -37,3 +38,4 @@
         }
     }
 }
+#endif

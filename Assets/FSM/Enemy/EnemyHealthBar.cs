@@ -31,7 +31,7 @@ namespace FSM.Enemy
         private void Update()
         {
             transform.rotation = _playerCamera.transform.rotation;
-            transform.position = _target.position + new Vector3(0, 2, 0);
+            transform.position = _target.position;
         }
     }
 }

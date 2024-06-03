@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7b1ca387027062478ec3e0de58f6412, type: 3}
+  m_Name: AmbushTest
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: AmbushTest
+  <UngroupedNodes>k__BackingField:
+  - {fileID: 11400000, guid: 50a467c8e1950054f9f689e385983ee2, type: 2}
+  - {fileID: 11400000, guid: bac16460edd01ba4daefa7f6238c68a9, type: 2}
+  - {fileID: 11400000, guid: 2c8c65a76b48bcb42b66c774a501fb85, type: 2}
+  - {fileID: 11400000, guid: f8400c0f6b91e954c92fb75e6ac6d6a0, type: 2}
+  - {fileID: 11400000, guid: 7b83ad13b160e5143b4a8c0be3054db4, type: 2}
+  - {fileID: 11400000, guid: bcf526516db416146a73c4256a0e7ebb, type: 2}
+  - {fileID: 11400000, guid: 14b02f64b4477e547b4929caf940453b, type: 2}
+  - {fileID: 11400000, guid: 5f911015e7dc98b4ba3b428458018cb0, type: 2}
+  - {fileID: 11400000, guid: 2e10852c0569f9b46b39c0868d8f96b1, type: 2}
+  - {fileID: 11400000, guid: 7f2198f94bb94474895c0a54311ef2af, type: 2}

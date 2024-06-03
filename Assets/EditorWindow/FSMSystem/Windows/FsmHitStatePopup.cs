@@ -1,12 +1,10 @@
-using EditorWindow.FSMSystem.Utilities;
-
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Windows
 {
     using UnityEditor;
     using UnityEngine;
     using Data.Save;
-
+    using Utilities;
     /// <summary>
     /// Popup window content for configuring hit state settings.
     /// </summary>

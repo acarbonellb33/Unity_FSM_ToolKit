@@ -59,9 +59,18 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             patrol.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, patrol);
                         options.Add(patrol);
+                        break;
+                    case "IdleData":
+                        IdleStateScript idle = gameObject.AddComponent<IdleStateScript>();
+                        idle.HideFlagsInspector();
+                        foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                        {
+                            idle.SetVariableValue(variable.Key, variable.Value);
+                        }
+                        field.SetValue(this, idle);
+                        options.Add(idle);
                         break;
                     case "ChaseData":
                         ChaseStateScript chase = gameObject.AddComponent<ChaseStateScript>();
@@ -70,9 +79,18 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             chase.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, chase);
                         options.Add(chase);
+                        break;
+                    case "FleeData":
+                        FleeStateScript flee = gameObject.AddComponent<FleeStateScript>();
+                        flee.HideFlagsInspector();
+                        foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                        {
+                            flee.SetVariableValue(variable.Key, variable.Value);
+                        }
+                        field.SetValue(this, flee);
+                        options.Add(flee);
                         break;
                     case "AttackData":
                         AttackStateScript attack = gameObject.AddComponent<AttackStateScript>();
@@ -81,7 +99,6 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             attack.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, attack);
                         options.Add(attack);
                         break;
@@ -92,7 +109,6 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             search.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, search);
                         options.Add(search);
                         break;
@@ -103,7 +119,6 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             hearing.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, hearing);
                         options.Add(hearing);
                         break;
@@ -114,7 +129,6 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             distance.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, distance);
                         options.Add(distance);
                         break;
@@ -125,7 +139,6 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             seeing.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, seeing);
                         options.Add(seeing);
                         break;
@@ -136,7 +149,6 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             health.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, health);
                         options.Add(health);
                         break;
@@ -147,7 +159,6 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             next.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, next);
                         options.Add(next);
                         break;
@@ -158,9 +169,28 @@ namespace EditorWindow.FSMSystem.BehaviorScripts
                         {
                             custom.SetVariableValue(variable.Key, variable.Value);
                         }
-
                         field.SetValue(this, custom);
                         options.Add(custom);
+                        break;
+                    case "CustomConditionData":
+                        CustomConditionScript customCondition = gameObject.AddComponent<CustomConditionScript>();
+                        customCondition.HideFlagsInspector();
+                        foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                        {
+                            customCondition.SetVariableValue(variable.Key, variable.Value);
+                        }
+                        field.SetValue(this, customCondition);
+                        options.Add(customCondition);
+                        break;
+                    case "VariableData":
+                        VariableConditionScript variableCondition = gameObject.AddComponent<VariableConditionScript>();
+                        variableCondition.HideFlagsInspector();
+                        foreach (var variable in ((StateScriptData)newValue).GetVariables())
+                        {
+                            variableCondition.SetVariableValue(variable.Key, variable.Value);
+                        }
+                        field.SetValue(this, variableCondition);
+                        options.Add(variableCondition);
                         break;
                 }
             }

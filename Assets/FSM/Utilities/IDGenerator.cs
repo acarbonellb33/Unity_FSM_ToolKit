@@ -22,5 +22,15 @@ namespace FSM.Utilities
             }
             return uniqueID;
         }
+        /// <summary>
+        /// Call this method to generate a new unique ID.
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateNewID()
+        {
+            uniqueID = Guid.NewGuid().ToString();
+            hideFlags = HideFlags.HideInInspector;
+            return uniqueID;
+        }
     }
 }

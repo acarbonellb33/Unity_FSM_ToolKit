@@ -22,7 +22,7 @@ namespace FSM.Nodes.States.StateScripts
             {
                 RaycastHit hit;
                 if (Physics.Raycast(transform.GetChild(0).position, transform.GetChild(0).transform.forward, out hit,
-                        50f))
+                        50f, LayerMask.GetMask("Player")))
                 {
                     HealthSystem target = hit.transform.GetComponent<HealthSystem>();
                     if (target != null)

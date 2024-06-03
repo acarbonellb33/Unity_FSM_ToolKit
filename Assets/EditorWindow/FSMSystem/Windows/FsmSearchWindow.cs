@@ -56,6 +56,11 @@ namespace EditorWindow.FSMSystem.Windows
                     userData = FsmNodeType.State,
                     level = 2
                 },
+                new SearchTreeEntry(new GUIContent("Flee", _indentationIcon))
+                {
+                    userData = FsmNodeType.State,
+                    level = 2
+                },
                 new SearchTreeEntry(new GUIContent("Search", _indentationIcon))
                 {
                     userData = FsmNodeType.State,
@@ -117,6 +122,16 @@ namespace EditorWindow.FSMSystem.Windows
                 {
                     userData = FsmNodeType.CustomState,
                     level = 1
+                },
+                new SearchTreeEntry(new GUIContent("Create Custom Condition", _indentationIcon))
+                {
+                    userData = FsmNodeType.CustomCondition,
+                    level = 1
+                },
+                new SearchTreeEntry(new GUIContent("Create Variable Node", _indentationIcon))
+                {
+                    userData = FsmNodeType.Variable,
+                    level = 1
                 }
             };
             return tree;
@@ -152,6 +167,16 @@ namespace EditorWindow.FSMSystem.Windows
                     FsmCustomStateNode customStateNode = (FsmCustomStateNode)_graphView.CreateNode(searchTreeEntry.name,
                         localMousePosition, FsmNodeType.CustomState);
                     _graphView.AddElement(customStateNode);
+                    return true;
+                case FsmNodeType.CustomCondition:
+                    FsmCustomConditionNode customConditionNode = (FsmCustomConditionNode)_graphView.CreateNode(searchTreeEntry.name,
+                        localMousePosition, FsmNodeType.CustomCondition);
+                    _graphView.AddElement(customConditionNode);
+                    return true;
+                case FsmNodeType.Variable:
+                    FsmVariableNode variableNode = (FsmVariableNode)_graphView.CreateNode(searchTreeEntry.name,
+                        localMousePosition, FsmNodeType.Variable);
+                    _graphView.AddElement(variableNode);
                     return true;
                 default:
                     return false;

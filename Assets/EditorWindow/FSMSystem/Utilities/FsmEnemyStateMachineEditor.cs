@@ -1,3 +1,7 @@
+using FSM.Nodes.States.StateScripts;
+using FSM.Utilities;
+using UnityEngine;
+
 #if UNITY_EDITOR
 namespace EditorWindow.FSMSystem.Utilities
 {
@@ -8,7 +12,6 @@ namespace EditorWindow.FSMSystem.Utilities
     using Data.Save;
     using UnityEditor;
     using FSM.Enumerations;
-    using UnityEngine;
     /// <summary>
     /// Utility class for generating enemy state machine scripts.
     /// </summary>
@@ -66,7 +69,6 @@ namespace EditorWindow.FSMSystem.Utilities
             {
                 if (state.Name == "Patrol")
                 {
-                    Debug.Log("aaaaaaaaaaaaaas");
                     _hasPatrolState = true;
                 }
 
@@ -79,9 +81,17 @@ namespace EditorWindow.FSMSystem.Utilities
                 {
                     scriptContent += $"\t\t[Header(\"" + node.Name + "\")]\n";
                     scriptContent += "\t\t[SerializeField]\n";
-                    string variableName = node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState
-                        ? node.Name + "State"
-                        : node.Name + "Condition";
+                    string variableName;
+                    if (node.NodeType == FsmNodeType.CustomCondition)
+                    {
+                        variableName = node.Name;
+                    }
+                    else
+                    {
+                        variableName = node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState
+                            ? node.Name + "State"
+                            : node.Name + "Condition";
+                    }
                     string name = char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1);
                     name = name.Replace(" ", "");
                     variableName = Regex.Replace(variableName, @"[\s\d]", "");
@@ -112,10 +122,10 @@ namespace EditorWindow.FSMSystem.Utilities
 
             foreach (var node in _states.Distinct())
             {
-                if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
+                if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState || node.NodeType == FsmNodeType.Variable)
                 {
                     scriptContent += $"\t\t\t\tcase FsmStates.{node.Name}:\n";
-                    scriptContent += $"\t\t\t\t\tUpdate{node.Name}State();\n";
+                    scriptContent += $"\t\t\t\t\tUpdate{node.Name.Replace(" ", "")}State();\n";
                     scriptContent += "\t\t\t\t\tbreak;\n";
                 }
             }
@@ -147,12 +157,10 @@ namespace EditorWindow.FSMSystem.Utilities
 
             foreach (var node in _states.Distinct())
             {
-                if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
+                if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState || node.NodeType == FsmNodeType.Variable)
                 {
                     scriptContent += $"\t\tpublic void Update{node.Name}State()\n";
                     scriptContent += "\t\t{\n";
-                    scriptContent +=
-                        $"\t\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.Execute();\n";
                     if (saveData.HitData.HitEnable)
                     {
                         if (node.HitNodeSaveData.HasHitOverride)
@@ -170,7 +178,18 @@ namespace EditorWindow.FSMSystem.Utilities
                     FsmNodeSaveData nodeSaveData = GetNodeData(GetState(node.Connections[0].NodeId));
                     bool check = nodeSaveData.Connections.Count == 2;
 
-                    scriptContent += GenerateConditionsRecursive(nodeSaveData, conditions, true, check, "");
+                    if (node.NodeType == FsmNodeType.Variable)
+                    {
+                        string nextNode = GetState(node.Connections[0].NodeId);
+                        scriptContent += $"\t\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.SetStateScript({char.ToLowerInvariant(nextNode[0]) + nextNode.Substring(1)});\n";
+                        scriptContent += $"\t\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.Execute();\n";
+                        scriptContent += $"\t\t\tChange{nextNode}State();\n";
+                    }
+                    else
+                    {
+                        scriptContent += $"\t\t\t{char.ToLowerInvariant(node.Name[0]) + node.Name.Substring(1)}.Execute();\n";
+                        scriptContent += GenerateConditionsRecursive(nodeSaveData, conditions, true, check, "");
+                    }
                     scriptContent += "\t\t}\n";
                 }
             }
@@ -196,7 +215,7 @@ namespace EditorWindow.FSMSystem.Utilities
 
             foreach (var node in _states.Distinct())
             {
-                if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState)
+                if (node.NodeType == FsmNodeType.State || node.NodeType == FsmNodeType.CustomState || node.NodeType == FsmNodeType.Variable)
                 {
                     scriptContent += $"\t\tprivate void Change{node.Name.Replace(" ", "")}State()\n";
                     scriptContent += "\t\t{\n";
@@ -257,13 +276,16 @@ namespace EditorWindow.FSMSystem.Utilities
                 scriptContent += "\t\t\t}\n";
                 scriptContent += "\t\t}\n";
             }
-            
-            scriptContent += "\t\tprivate void SetHitData(bool canGetHit, float timeToWait, bool canDie)\n";
-            scriptContent += "\t\t{\n";
-            scriptContent += "\t\t\t_canGetHit = canGetHit;\n";
-            scriptContent += "\t\t\t_waitHitTime = timeToWait;\n";
-            scriptContent += "\t\t\t_canDie = canDie;\n";
-            scriptContent += "\t\t}\n";
+
+            if (saveData.HitData.HitEnable)
+            {
+                scriptContent += "\t\tprivate void SetHitData(bool canGetHit, float timeToWait, bool canDie)\n";
+                scriptContent += "\t\t{\n";
+                scriptContent += "\t\t\t_canGetHit = canGetHit;\n";
+                scriptContent += "\t\t\t_waitHitTime = timeToWait;\n";
+                scriptContent += "\t\t\t_canDie = canDie;\n";
+                scriptContent += "\t\t}\n";
+            }
 
             scriptContent += "\t\tprivate void OnFootstep() {}\n";
 
@@ -275,8 +297,9 @@ namespace EditorWindow.FSMSystem.Utilities
         private static string GenerateConditionsRecursive(FsmNodeSaveData node, string test, bool isFirst, bool isElse,
             string pastFalse)
         {
+
             if (node.NodeType == FsmNodeType.Initial || node.NodeType == FsmNodeType.State ||
-                node.NodeType == FsmNodeType.CustomState)
+                node.NodeType == FsmNodeType.CustomState || node.NodeType == FsmNodeType.Variable)
             {
                 test += ")\n";
                 test += "\t\t\t{\n";
@@ -326,7 +349,11 @@ namespace EditorWindow.FSMSystem.Utilities
             }
             else
             {
-                pastFalse += $"\t\t\telse if({conditionName}.Condition()";
+                if (pastFalse == "")
+                {
+                    pastFalse = $"\t\t\telse if({conditionName}.Condition()";
+                }
+                else pastFalse += $" && {conditionName}.Condition()";
 
                 FsmNodeSaveData nodeSaveData = GetNodeData(GetState(node.Connections[0].NodeId));
                 bool check = nodeSaveData.Connections.Count == 2;
@@ -351,7 +378,8 @@ namespace EditorWindow.FSMSystem.Utilities
             scriptContent += "\tusing Utilities;\n";
             scriptContent += "\tusing UnityEngine;\n";
             scriptContent += "\tusing FSM.Nodes.States;\n";
-            scriptContent += "\tusing FSM.Utilities;\n\n";
+            scriptContent += "\tusing FSM.Utilities;\n";
+            scriptContent += "\tusing FSM.Nodes.States.StateScripts;\n\n";
             
             string stringWithSpaces = saveData.FileName;
             string stringWithoutSpaces = stringWithSpaces.Replace(" ", "");
@@ -371,7 +399,14 @@ namespace EditorWindow.FSMSystem.Utilities
             scriptContent += "\t\tprivate SerializedProperty selectedOptionIndexProp;\n";
             scriptContent += "\t\tprivate float lastClickedIndex = -1;\n";
             scriptContent +=
-                "\t\tDictionary<string, StateScript> optionToObjectMap = new Dictionary<string, StateScript>();\n";
+                "\t\tDictionary<string, StateScript> optionToObjectMap = new();\n";
+            scriptContent += "\t\tprivate GameObject _selectedGameObject;\n";
+            scriptContent += "\t\tprivate Component _selectedComponent;\n";
+            scriptContent += "\t\tprivate string _selectedFunction;\n";
+            scriptContent += "\t\tprivate readonly List<string> _componentNames = new();\n";
+            scriptContent += "\t\tprivate readonly List<string> _functionNames = new();\n";
+            scriptContent += "\t\tprivate int _selectedComponentIndex = 0;\n";
+            scriptContent += "\t\tprivate int _selectedFunctionIndex = 0;\n";
 
             scriptContent += "\t\tvoid OnEnable()\n";
             scriptContent += "\t\t{\n";
@@ -441,11 +476,11 @@ namespace EditorWindow.FSMSystem.Utilities
             scriptContent += "\t\t\t\tbool isSelected = selectedOptionIndexProp.intValue == i;\n";
             scriptContent += "\t\t\t\tif (isSelected || lastClickedIndex == i)\n";
             scriptContent += "\t\t\t\t{\n";
-            scriptContent += "\t\t\t\t\tGUI.backgroundColor = new Color(0.89f, 0.716f, 0.969f);\n";
+            scriptContent += "\t\t\t\t\tGUI.backgroundColor = new Color(0.666f, 0.768f, 1f);\n";
             scriptContent += "\t\t\t\t}\n";
             scriptContent += "\t\t\t\telse\n";
             scriptContent += "\t\t\t\t{\n";
-            scriptContent += "\t\t\t\t\tGUI.backgroundColor = new Color(0.575f, 0f, 0.671f);\n";
+            scriptContent += "\t\t\t\t\tGUI.backgroundColor = new Color(0.91f, 0.91f, 0.91f);\n";
             scriptContent += "\t\t\t\t}\n";
             scriptContent += "\t\t\t\tGUILayout.FlexibleSpace();\n";
             scriptContent += "\t\t\t\tif (GUILayout.Button(options[i], buttonStyle))\n";
@@ -463,8 +498,6 @@ namespace EditorWindow.FSMSystem.Utilities
 
             scriptContent += "\t\t\tif (optionToObjectMap.ContainsKey(selectedOptionName))\n";
             scriptContent += "\t\t\t{\n";
-            scriptContent +=
-                "\t\t\t\tEditorGUILayout.LabelField($\"{selectedOptionName} Attributes:\", EditorStyles.boldLabel);\n";
             scriptContent += "\t\t\t\tStateScript selectedObject = optionToObjectMap[selectedOptionName];\n";
             scriptContent +=
                 "\t\t\t\tSerializedObject selectedObjectSerialized = new SerializedObject(selectedObject);\n";
@@ -472,92 +505,254 @@ namespace EditorWindow.FSMSystem.Utilities
             scriptContent += "\t\t\t\tEditorGUI.BeginChangeCheck();\n";
             scriptContent += "\t\t\t\tSerializedProperty iterator = selectedObjectSerialized.GetIterator();\n";
             scriptContent += "\t\t\t\tbool nextVisible = iterator.NextVisible(true);\n";
+            scriptContent += "\t\t\t\tnextVisible = iterator.NextVisible(false);\n";
+            scriptContent += "\t\t\t\tif (nextVisible)EditorGUILayout.LabelField($\"{selectedOptionName} Attributes:\", EditorStyles.boldLabel);\n";
             scriptContent += "\t\t\t\twhile (nextVisible)\n";
             scriptContent += "\t\t\t\t{\n";
-            scriptContent += "\t\t\t\t\tif (iterator.name != \"m_Script\")\n";
-            scriptContent += "\t\t\t\t\t{\n";
             if (_hasPatrolState)
             {
-                scriptContent += "\t\t\t\t\t\tif (iterator.isArray)\n";
-                scriptContent += "\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.Space();\n";
-                scriptContent +=
-                    "\t\t\t\t\t\t\tEditorGUILayout.LabelField(\"Create a Patrol Waypoint\", EditorStyles.boldLabel);\n";
-                scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.Space();\n";
-                scriptContent += "\t\t\t\t\t\t\tfor (int i = 0; i < iterator.arraySize; i++)\n";
-                scriptContent += "\t\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\t\tEditorGUILayout.BeginHorizontal();\n";
-                scriptContent +=
-                    "\t\t\t\t\t\t\t\tSerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);\n";
-                scriptContent += "\t\t\t\t\t\t\t\tif (gameObjectElementProperty.stringValue != null)\n";
-                scriptContent += "\t\t\t\t\t\t\t\t{\n";
-                scriptContent +=
-                    "\t\t\t\t\t\t\t\t\tGameObject gameObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
-                scriptContent +=
-                    "\t\t\t\t\t\t\t\t\tgameObject = EditorGUILayout.ObjectField(\"Patrol Point\", gameObject, typeof(GameObject), true) as GameObject;\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\tif (gameObject != null)\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t{\n";
-                scriptContent +=
-                    "\t\t\t\t\t\t\t\t\t\t\tIDGenerator idGenerator = gameObject.GetComponent<IDGenerator>();\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t\tif (idGenerator.GetUniqueID() != null)\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t\t{\n";
-                scriptContent +=
-                    "\t\t\t\t\t\t\t\t\t\t\t\tgameObjectElementProperty.stringValue = idGenerator.GetUniqueID();\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\telse\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t\tgameObjectElementProperty.stringValue = string.Empty;\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
-                scriptContent +=
-                    $"\t\t\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\tif (GUILayout.Button(\"Remove\", GUILayout.Width(70)))\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\tRemovePatrolPoint(gameObjectElementProperty.stringValue);\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
-                scriptContent +=
-                    $"\t\t\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
-                scriptContent += "\t\t\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t\t\tEditorGUILayout.EndHorizontal();\n";
-                scriptContent += "\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t\tif (GUILayout.Button(\"Create and Add a Patrol Point\"))\n";
-                scriptContent += "\t\t\t\t\t\t\t{\n";
-                scriptContent += $"\t\t\t\t\t\t\t\tCreateAndAddGameObject({nameLowerCapital});\n";
-                scriptContent += "\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
-                scriptContent +=
-                    $"\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
-                scriptContent += "\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\telse\n";
-                scriptContent += "\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
-                scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n";
-                scriptContent += "\t\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
-                scriptContent += "\t\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
-                scriptContent +=
-                    $"\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
-                scriptContent += "\t\t\t\t\t\t\t}\n";
-                scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent +=
+		            "\t\t\t\t\tif (iterator.isArray && iterator.name != \"selectedGameObject\" && iterator.name != \"selectedComponent\" && iterator.name != \"selectedFunction\")\n";
+	            scriptContent += "\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\tEditorGUILayout.Space();\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\tEditorGUILayout.LabelField(\"Create a Patrol Waypoint\", EditorStyles.boldLabel);\n";
+	            scriptContent += "\t\t\t\t\t\tEditorGUILayout.Space();\n";
+	            scriptContent += "\t\t\t\t\t\tfor (int i = 0; i < iterator.arraySize; i++)\n";
+	            scriptContent += "\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.BeginHorizontal();\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\tSerializedProperty gameObjectElementProperty = iterator.GetArrayElementAtIndex(i);\n";
+	            scriptContent += "\t\t\t\t\t\t\tif (gameObjectElementProperty.stringValue != null)\n";
+	            scriptContent += "\t\t\t\t\t\t\t{\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\tGameObject gameObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(gameObjectElementProperty.stringValue);\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\tgameObject = EditorGUILayout.ObjectField(\"Patrol Point\", gameObject, typeof(GameObject), true) as GameObject;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tif (gameObject != null)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t{\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t\t\tIDGenerator idGenerator = gameObject.GetComponent<IDGenerator>();\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t\tif (idGenerator.GetUniqueID() != null)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t\t{\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t\t\t\tgameObjectElementProperty.stringValue = idGenerator.GetUniqueID();\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\telse\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t\tgameObjectElementProperty.stringValue = string.Empty;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
+	            scriptContent += $"\t\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject,  \"{stringWithoutSpaces}\");\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tif (GUILayout.Button(\"Remove\", GUILayout.Width(70)))\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tRemovePatrolPoint(gameObjectElementProperty.stringValue);\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
+	            scriptContent += $"\t\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject,  \"{stringWithoutSpaces}\");\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.EndHorizontal();\n";
+	            scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\tif (GUILayout.Button(\"Create and Add a Patrol Point\"))\n";
+	            scriptContent += "\t\t\t\t\t\t{\n";
+	            scriptContent += $"\t\t\t\t\t\t\tCreateAndAddGameObject({nameLowerCapital});\n";
+	            scriptContent += "\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
+	            scriptContent += $"\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject,  \"{stringWithoutSpaces}\");\n";
+	            scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\telse\n";
+	            scriptContent += "\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
+	            scriptContent += "\t\t\t\t\t\tif (iterator.name == \"selectedGameObject\")\n";
+	            scriptContent += "\t\t\t\t\t\t{\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t_selectedGameObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(iterator.stringValue);\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t_selectedGameObject = (GameObject)EditorGUILayout.ObjectField(\"Selected GameObject\", _selectedGameObject, typeof(GameObject), true);\n";
+	            scriptContent += "\t\t\t\t\t\t\tif (_selectedGameObject != null)\n";
+	            scriptContent += "\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tPopulateComponentDropdown();\n";
+	            scriptContent += "\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\telse if (iterator.name == \"selectedComponent\")\n";
+	            scriptContent += "\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\tif (_componentNames.Count > 0)\n";
+	            scriptContent += "\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tvar count = 0;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tforeach(var comp in _componentNames)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tif (comp == iterator.stringValue)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t\t_selectedComponentIndex = count;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tcount++;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t_selectedComponentIndex = EditorGUILayout.Popup(\"Select Component\", _selectedComponentIndex, _componentNames.ToArray());\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\tif (_selectedComponentIndex >= 0 && _selectedComponentIndex < _componentNames.Count)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t\t_selectedComponent = _selectedGameObject.GetComponent(_componentNames[_selectedComponentIndex]);\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tPopulateFunctionDropdown();\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\telse if (iterator.name == \"selectedFunction\")\n";
+	            scriptContent += "\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\tif (_functionNames.Count > 0)\n";
+	            scriptContent += "\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tvar count = 0;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tforeach(var comp in _functionNames)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tif (comp == iterator.stringValue)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t\t_selectedFunctionIndex = count;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\tcount++;\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t_selectedFunctionIndex = EditorGUILayout.Popup(\"Select Function\", _selectedFunctionIndex, _functionNames.ToArray());\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\tif (_selectedFunctionIndex >= 0 && _selectedFunctionIndex < _functionNames.Count)\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t\t_selectedFunction = _functionNames[_selectedFunctionIndex];\n";
+	            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\telse\n";
+	            scriptContent += "\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n";
+	            scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
+	            scriptContent += "\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\tselectedObject.SetStateName(selectedOptionName);\n";
+	            scriptContent += "\t\t\t\t\t\t\tif (selectedObject.GetStateName().StartsWith(\"CustomCondition\"))\n";
+	            scriptContent += "\t\t\t\t\t\t\t{\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\tCustomConditionScript customCondition = (CustomConditionScript)selectedObject;\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\tcustomCondition.selectedGameObject = _selectedGameObject.GetComponent<IDGenerator>().GetUniqueID();\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tif (_componentNames.Count > 0)\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t\tcustomCondition.selectedComponent = _componentNames[_selectedComponentIndex];\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tif (_functionNames.Count > 0)\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t\tcustomCondition.selectedFunction = _functionNames[_selectedFunctionIndex];\n";
+	            scriptContent += $"\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
+	            scriptContent += "\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\telse if (selectedObject.GetStateName().StartsWith(\"Custom\"))\n";
+	            scriptContent += "\t\t\t\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tCustomStateScript customState = (CustomStateScript)selectedObject;\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\tcustomState.selectedGameObject = _selectedGameObject.GetComponent<IDGenerator>().GetUniqueID();\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tif (_componentNames.Count > 0)\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t\tcustomState.selectedComponent = _componentNames[_selectedComponentIndex];\n";
+	            scriptContent += "\t\t\t\t\t\t\t\tif (_functionNames.Count > 0)\n";
+	            scriptContent +=
+		            "\t\t\t\t\t\t\t\t\tcustomState.selectedFunction = _functionNames[_selectedFunctionIndex];\n";
+	            scriptContent += $"\t\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
+	            scriptContent += "\t\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
+	            scriptContent += $"\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
+	            scriptContent += "\t\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\t\tnextVisible = iterator.NextVisible(false);\n";
+	            scriptContent += "\t\t\t\t}\n";
+	            scriptContent += "\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
+	            scriptContent += "\t\t\t\t{\n";
+	            scriptContent += "\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
+	            scriptContent += "\t\t\t\t}\n";
+	            scriptContent += "\t\t\t}\n";
+	            scriptContent += "\t\t\tserializedObject.ApplyModifiedProperties();\n";
+	            scriptContent += "\t\t}\n";
             }
             else
             {
-                scriptContent += "\t\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
-                scriptContent += "\t\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n";
-                scriptContent += "\t\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
-                scriptContent += "\t\t\t\t\t\t{\n";
-                scriptContent += "\t\t\t\t\t\t\tselectedObject.SetStateName(selectedOptionName);\n";
-                scriptContent += "\t\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
-                scriptContent += $"\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
-                scriptContent += "\t\t\t\t\t\t}\n";
-            }
-
+	            scriptContent += "\t\t\t\t\tEditorGUI.BeginChangeCheck();\n";
+            scriptContent += "\t\t\t\t\tif (iterator.name == \"selectedGameObject\")\n";
+            scriptContent += "\t\t\t\t\t{\n";
+            scriptContent +=
+                "\t\t\t\t\t\t_selectedGameObject = FsmIOUtility.FindGameObjectWithId<IDGenerator>(iterator.stringValue);\n";
+            scriptContent +=
+                "\t\t\t\t\t\t_selectedGameObject = (GameObject)EditorGUILayout.ObjectField(\"Selected GameObject\", _selectedGameObject, typeof(GameObject), true);\n";
+            scriptContent += "\t\t\t\t\t\tif (_selectedGameObject != null)\n";
+            scriptContent += "\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\tPopulateComponentDropdown();\n";
+            scriptContent += "\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\telse if (iterator.name == \"selectedComponent\")\n";
+            scriptContent += "\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\tif (_componentNames.Count > 0)\n";
+            scriptContent += "\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\tvar count = 0;\n";
+            scriptContent += "\t\t\t\t\t\t\tforeach(var comp in _componentNames)\n";
+            scriptContent += "\t\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\t\tif (comp == iterator.stringValue)\n";
+            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\t\t\t_selectedComponentIndex = count;\n";
+            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\t\t\tcount++;\n";
+            scriptContent += "\t\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\t\t_selectedComponentIndex = EditorGUILayout.Popup(\"Select Component\", _selectedComponentIndex, _componentNames.ToArray());\n";
+            scriptContent += "\t\t\t\t\t\t\tif (_selectedComponentIndex >= 0 && _selectedComponentIndex < _componentNames.Count)\n";
+            scriptContent += "\t\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\t\t_selectedComponent = _selectedGameObject.GetComponent(_componentNames[_selectedComponentIndex]);\n";
+            scriptContent += "\t\t\t\t\t\t\t\tPopulateFunctionDropdown();\n";
+            scriptContent += "\t\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\telse if (iterator.name == \"selectedFunction\")\n";
+            scriptContent += "\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\tif (_functionNames.Count > 0)\n";
+            scriptContent += "\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\tvar count = 0;\n";
+            scriptContent += "\t\t\t\t\t\t\tforeach(var comp in _functionNames)\n";
+            scriptContent += "\t\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\t\tif (comp == iterator.stringValue)\n";
+            scriptContent += "\t\t\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\t\t\t_selectedFunctionIndex = count;\n";
+            scriptContent += "\t\t\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\t\t\tcount++;\n";
+            scriptContent += "\t\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\t\t_selectedFunctionIndex = EditorGUILayout.Popup(\"Select Function\", _selectedFunctionIndex, _functionNames.ToArray());\n";
+            scriptContent += "\t\t\t\t\t\t\tif (_selectedFunctionIndex >= 0 && _selectedFunctionIndex < _functionNames.Count)\n";
+            scriptContent += "\t\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\t\t_selectedFunction = _functionNames[_selectedFunctionIndex];\n";
+            scriptContent += "\t\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\telse\n";
+            scriptContent += "\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\tEditorGUILayout.PropertyField(iterator, true);\n";
+            scriptContent += "\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\tif (EditorGUI.EndChangeCheck())\n";
+            scriptContent += "\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\tselectedObject.SetStateName(selectedOptionName);\n";
+            scriptContent += "\t\t\t\t\t\tif(selectedObject.GetStateName().StartsWith(\"CustomCondition\"))\n";
+            scriptContent += "\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\tCustomConditionScript customCondition = (CustomConditionScript)selectedObject;\n";
+            scriptContent += "\t\t\t\t\t\t\tcustomCondition.selectedGameObject = _selectedGameObject.GetComponent<IDGenerator>().GetUniqueID();\n";
+            scriptContent += "\t\t\t\t\t\t\tif (_componentNames.Count > 0)customCondition.selectedComponent = _componentNames[_selectedComponentIndex];\n";
+            scriptContent += "\t\t\t\t\t\t\tif (_functionNames.Count > 0)customCondition.selectedFunction = _functionNames[_selectedFunctionIndex];\n";
+            scriptContent += $"\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
+            scriptContent += "\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\telse if (selectedObject.GetStateName().StartsWith(\"CustomState\"))\n";
+            scriptContent += "\t\t\t\t\t\t{\n";
+            scriptContent += "\t\t\t\t\t\t\tCustomStateScript customState = (CustomStateScript)selectedObject;\n";
+            scriptContent += "\t\t\t\t\t\t\tcustomState.selectedGameObject = _selectedGameObject.GetComponent<IDGenerator>().GetUniqueID();\n";
+            scriptContent += "\t\t\t\t\t\t\tif (_componentNames.Count > 0)customState.selectedComponent = _componentNames[_selectedComponentIndex];\n";
+            scriptContent += "\t\t\t\t\t\t\tif (_functionNames.Count > 0)customState.selectedFunction = _functionNames[_selectedFunctionIndex];\n";
+            scriptContent += $"\t\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
+            scriptContent += "\t\t\t\t\t\t}\n";
+            scriptContent += "\t\t\t\t\t\tselectedObjectSerialized.ApplyModifiedProperties();\n";
+            scriptContent += $"\t\t\t\t\t\tFsmIOUtility.CreateJson(selectedObject, \"{stringWithoutSpaces}\");\n";
             scriptContent += "\t\t\t\t\t}\n";
             scriptContent += "\t\t\t\t\tnextVisible = iterator.NextVisible(false);\n";
             scriptContent += "\t\t\t\t}\n";
@@ -568,6 +763,7 @@ namespace EditorWindow.FSMSystem.Utilities
             scriptContent += "\t\t\t}\n";
             scriptContent += "\t\t\tserializedObject.ApplyModifiedProperties();\n";
             scriptContent += "\t\t}\n";
+            }
 
             if (_hasPatrolState)
             {
@@ -592,7 +788,34 @@ namespace EditorWindow.FSMSystem.Utilities
             scriptContent += "\t\t{\n";
             scriptContent += "\t\t\treturn char.ToUpperInvariant(oldName[0]) + oldName.Substring(1);\n";
             scriptContent += "\t\t}\n";
-
+            scriptContent += "\t\tprivate void PopulateComponentDropdown()\n";
+            scriptContent += "\t\t{\n";
+            scriptContent += "\t\t\tvar components = _selectedGameObject.GetComponents<Component>();\n";
+            scriptContent += "\t\t\t_componentNames.Clear();\n";
+            scriptContent += "\t\t\tforeach (var comp in components)\n";
+            scriptContent += "\t\t\t{\n";
+            scriptContent += "\t\t\t\t_componentNames.Add(comp.GetType().Name);\n";
+            scriptContent += "\t\t\t}\n";
+            scriptContent += "\t\t\t_selectedComponentIndex = 0;\n";
+            scriptContent += "\t\t\tif (_componentNames.Count > 0)\n";
+            scriptContent += "\t\t\t{\n";
+            scriptContent += "\t\t\t\t_selectedComponent = _selectedGameObject.GetComponent(_componentNames[_selectedComponentIndex]);\n";
+            scriptContent += "\t\t\t\tPopulateFunctionDropdown();\n";
+            scriptContent += "\t\t\t}\n";
+            scriptContent += "\t\t}\n";
+            scriptContent += "\t\tprivate void PopulateFunctionDropdown()\n";
+            scriptContent += "\t\t{\n";
+            scriptContent += "\t\t\tif (_selectedComponent == null)\n";
+            scriptContent += "\t\t\t{\n";
+            scriptContent += "\t\t\t\treturn;\n";
+            scriptContent += "\t\t\t}\n";
+            scriptContent += "\t\t\tvar methods = _selectedComponent.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);\n";
+            scriptContent += "\t\t\t_functionNames.Clear();\n";
+            scriptContent += "\t\t\tforeach (var method in methods)\n";
+            scriptContent += "\t\t\t{\n";
+            scriptContent += "\t\t\t\t_functionNames.Add(method.Name);\n";
+            scriptContent += "\t\t\t}\n";
+            scriptContent += "\t\t}\n";
             scriptContent += "\t}\n";
             scriptContent += "}\n";
             scriptContent += "#endif\n";

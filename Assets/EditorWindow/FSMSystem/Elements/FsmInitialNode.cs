@@ -47,18 +47,20 @@ namespace EditorWindow.FSMSystem.Elements
 
             stateNameField.AddClasses("fsm-node_label");
             titleContainer.Insert(0, stateNameField);
-
+            
             foreach (var connection in Connections)
             {
-                OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
-                if (!OutputPort.connected)
+                var outputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output,
+                    Port.Capacity.Multi);
+                if (!outputPort.connected)
                 {
-                    OutputPort.portColor = Color.red;
+                    outputPort.portColor = Color.red;
                 }
 
-                OutputPort.userData = connection;
+                outputPort.userData = connection;
 
-                outputContainer.Add(OutputPort);
+                OutputPort.Add(outputPort);
+                outputContainer.Add(outputPort);
                 outputContainer.AddToClassList("fsm-node_input-output-container");
             }
 

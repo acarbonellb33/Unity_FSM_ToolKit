@@ -9,8 +9,7 @@ namespace EditorWindow.FSMSystem.Windows
     using PopupWindow = UnityEditor.PopupWindow;
     using Data.Save;
     using Utilities;
-    using FSM.Nodes;
-    using FSM.Utilities;
+    using Inspectors;
     /// <summary>
     /// Represents an editor window for managing finite state machines. This window contains a graph view for creating and editing FSMs. The window also contains a toolbar with buttons for saving, reloading, clearing, and toggling the minimap.
     /// </summary>
@@ -40,8 +39,6 @@ namespace EditorWindow.FSMSystem.Windows
             _hitStatePopup = new FsmHitStatePopup();
             _hitStatePopup.Initialize(saveData.HitData);
 
-            OnHierarchyChanged();
-
             if (_window == null)
             {
                 _window = CreateWindow<FsmEditorWindow>("FSM Graph");
@@ -68,15 +65,11 @@ namespace EditorWindow.FSMSystem.Windows
             AddStyles();
 
             EditorApplication.update += OnEditorUpdate;
-
-            EditorApplication.hierarchyChanged += OnHierarchyChanged;
         }
         // Called when the window is disabled
         private void OnDisable()
         {
             EditorApplication.update -= OnEditorUpdate;
-
-            EditorApplication.hierarchyChanged -= OnHierarchyChanged;
         }
         // Called every frame to check if the script is compiling
         private void OnEditorUpdate()
@@ -97,32 +90,7 @@ namespace EditorWindow.FSMSystem.Windows
             gameObject.GetComponent<FsmGraph>().UpdateComponentOfGameObject();
             _shouldClose = false;
         }
-        // Ensures that all GameObjects in the scene have an IDGenerator component
-        private static void OnHierarchyChanged()
-        {
-            GameObject[] rootGameObjects =
-                UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-
-            foreach (GameObject rootGameObject in rootGameObjects)
-            {
-                EnsureIDGeneratorRecursive(rootGameObject);
-            }
-        }
-        private static void EnsureIDGeneratorRecursive(GameObject gameObject)
-        {
-            if (gameObject.GetComponent<IDGenerator>() == null)
-            {
-                // Add IDGenerator component if not present
-                IDGenerator generator = gameObject.AddComponent<IDGenerator>();
-                generator.GetUniqueID();
-            }
-
-            // Recursively check child GameObjects
-            foreach (Transform child in gameObject.transform)
-            {
-                EnsureIDGeneratorRecursive(child.gameObject);
-            }
-        }
+  
         // Adds the toolbar to the window
         private void AddToolbar()
         {
@@ -244,6 +212,10 @@ namespace EditorWindow.FSMSystem.Windows
         public FsmHitStatePopup GetHitStatePopup()
         {
             return _hitStatePopup;
+        }
+        public static FsmEditorWindow GetWindow()
+        {
+            return _window;
         }
         #endregion
     }

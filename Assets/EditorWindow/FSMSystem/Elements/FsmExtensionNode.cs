@@ -45,15 +45,18 @@ namespace EditorWindow.FSMSystem.Elements
             InputPort = this.CreatePort();
             inputContainer.Add(InputPort);
             inputContainer.AddToClassList("fsm-node_input-output-container-extension");
-
+            
             foreach (var connection in Connections)
             {
-                OutputPort = this.CreatePort("", Orientation.Horizontal, Direction.Output);
-                OutputPort.userData = connection;
-                outputContainer.Add(OutputPort);
+                var outputPort = this.CreatePort("", Orientation.Horizontal, Direction.Output);
+
+                outputPort.userData = connection;
+
+                OutputPort.Add(outputPort);
+                outputContainer.Add(outputPort);
                 outputContainer.AddToClassList("fsm-node_input-output-container-extension");
             }
-
+            
             mainContainer.Add(inputContainer);
             mainContainer.Add(outputContainer);
             mainContainer.AddToClassList("fsm-node_main-container");

@@ -37,7 +37,7 @@ namespace EditorWindow.FSMSystem.Elements
             // Inside your Initialize method
             
             DataObjects = new List<StateScriptData>()
-                { new PatrolData(), new ChaseData(), new AttackData(), new SearchData() };
+                {new IdleData(), new PatrolData(), new ChaseData(), new FleeData(), new AttackData(), new SearchData() };
 
             var connectionSaveData = new FsmConnectionSaveData()
             {
@@ -57,16 +57,17 @@ namespace EditorWindow.FSMSystem.Elements
 
             foreach (var connection in Connections)
             {
-                OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output,
+                var outputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output,
                     Port.Capacity.Multi);
-                if (!OutputPort.connected)
+                if (!outputPort.connected)
                 {
-                    OutputPort.portColor = Color.red;
+                    outputPort.portColor = Color.red;
                 }
 
-                OutputPort.userData = connection;
+                outputPort.userData = connection;
 
-                outputContainer.Add(OutputPort);
+                OutputPort.Add(outputPort);
+                outputContainer.Add(outputPort);
                 outputContainer.AddToClassList("fsm-node_input-output-container");
             }
 
@@ -85,8 +86,8 @@ namespace EditorWindow.FSMSystem.Elements
             };
             _hitPopupToggle.RegisterValueChangedCallback(_ => { ShowHitStateOverrideToggle(_hitPopupToggle); });
             _hitPopupToggle.AddToClassList("fsm-node_toggle-bold");
-            _hitPopupToggle.RegisterCallback<MouseEnterEvent>((evt) => ShowPopupWindow(evt, _hitPopupToggle));
-            _hitPopupToggle.RegisterCallback<MouseLeaveEvent>((evt) => ClosePopupWindow());
+            _hitPopupToggle.RegisterCallback<MouseEnterEvent>(_ => ShowPopupWindow(_hitPopupToggle));
+            _hitPopupToggle.RegisterCallback<MouseLeaveEvent>(_ => ClosePopupWindow());
 
             var horizontalLine = new VisualElement();
             horizontalLine.AddToClassList("horizontal-line");
@@ -347,8 +348,12 @@ namespace EditorWindow.FSMSystem.Elements
                 }
                 _hitPopupToggle.value = false;
             }
+            else
+            {
+                _hitPopupToggle.SetEnabled(true);
+            }
         }
-        private void ShowPopupWindow(EventBase evt, VisualElement targetElement)
+        private void ShowPopupWindow(VisualElement targetElement)
         {
             if (!_hitPopupToggle.value && !_hitPopupToggle.enabledSelf)
             {

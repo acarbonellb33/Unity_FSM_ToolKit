@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7b1ca387027062478ec3e0de58f6412, type: 3}
+  m_Name: RangeAttackTest
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: RangeAttackTest
+  <UngroupedNodes>k__BackingField:
+  - {fileID: 11400000, guid: e56a1a08c3dd5664c8950f5ed0b387a5, type: 2}
+  - {fileID: 11400000, guid: 4e558864fef32b0428ac2bc22d32b64f, type: 2}
+  - {fileID: 11400000, guid: c953d7b26ae89ff4585220b1e131e876, type: 2}
+  - {fileID: 11400000, guid: 5a1211b62a4c9d3459e5d4124f932d75, type: 2}
+  - {fileID: 11400000, guid: 9ff49f0fda2ee0b4c8d6f25b1d709ec5, type: 2}

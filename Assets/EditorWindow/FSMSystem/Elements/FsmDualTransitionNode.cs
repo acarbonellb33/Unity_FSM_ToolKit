@@ -30,7 +30,7 @@ namespace EditorWindow.FSMSystem.Elements
         public override void Initialize(string nodeName, FsmGraphView fsmGraphView, Vector2 vectorPos)
         {
             base.Initialize(nodeName, fsmGraphView, vectorPos);
-            NodeType = FsmNodeType.Transition;
+            NodeType = FsmNodeType.DualTransition;
 
             DataObjects = new List<StateScriptData>()
                 { new NextStateData(), new SeeingData(), new HearingData(), new DistanceData(), new HealthData() };
@@ -54,19 +54,18 @@ namespace EditorWindow.FSMSystem.Elements
         public override void Draw()
         {
             base.Draw();
-
             foreach (var connection in Connections)
             {
-                OutputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
-                if (!OutputPort.connected)
+                var outputPort = this.CreatePort(connection.Text, Orientation.Horizontal, Direction.Output);
+                if (!outputPort.connected)
                 {
-                    // Apply orange color to the port
-                    OutputPort.portColor = Color.red;
+                    outputPort.portColor = Color.red;
                 }
 
-                OutputPort.userData = connection;
+                outputPort.userData = connection;
 
-                outputContainer.Add(OutputPort);
+                OutputPort.Add(outputPort);
+                outputContainer.Add(outputPort);
                 outputContainer.AddToClassList("fsm-node_input-output-container");
             }
 
@@ -78,6 +77,8 @@ namespace EditorWindow.FSMSystem.Elements
             CreateStateAttribute(StateScript.InspectVariables(), customDataContainer);
 
             extensionContainer.Add(customDataContainer);
+            
+            mainContainer.style.backgroundColor = new Color(151f / 255f, 90f / 255f, 245f / 255f);
 
             RefreshExpandedState();
         }

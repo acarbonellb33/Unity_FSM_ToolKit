@@ -8,7 +8,7 @@ namespace EditorWindow.FSMSystem.Windows
     using Elements;
     using Utilities;
     using System.Collections.Generic;
-    using FSM.Nodes;
+    using Inspectors;
     using UnityEditor.Animations;
     /// <summary>
     /// Editor window for creating FSM Graph scriptable objects and configuring enemy setup.
@@ -26,10 +26,11 @@ namespace EditorWindow.FSMSystem.Windows
         private GameObject _characterModel;
         private string _characterGameObjectName;
         
-        [MenuItem("Window/FSM/FSM Graph Creator")]
+        [MenuItem("Window/FSM/FSM Graph")]
         public static void ShowWindow()
         {
-            GetWindow<FsmCreateScriptableObjectWindow>("Create Scriptable Object");
+            FsmCreateScriptableObjectWindow window = GetWindow<FsmCreateScriptableObjectWindow>("Create Scriptable Object");
+            window.minSize = new Vector2(400, 800);
         }
 
         private void OnEnable()
@@ -46,7 +47,7 @@ namespace EditorWindow.FSMSystem.Windows
             var image = new Image
             {
                 image = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/EditorWindow/FSMSystem/Textures/logo_ai.png",
-                    typeof(Texture2D))
+                    typeof(Texture2D)),
             };
             var label = FsmElementUtility.CreateLabel("Customizable AI Setup");
             

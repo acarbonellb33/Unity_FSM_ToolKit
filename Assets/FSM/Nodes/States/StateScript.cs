@@ -106,7 +106,7 @@ namespace FSM.Nodes.States
         {
             var type = GetType();
             var field = type.GetField(variableName);
-
+            
             if (field != null)
             {
                 // Check if the field is a List<GameObject>
@@ -124,6 +124,11 @@ namespace FSM.Nodes.States
                         // Set the value of the field to the new List<GameObject>
                         field.SetValue(this, (List<GameObject>)newValue);
                     }
+                }
+                else if(field.FieldType.ToString() == "System.Single")
+                {
+                    var floatValue = float.Parse(newValue.ToString());
+                    field.SetValue(this, floatValue);
                 }
                 else
                 {
